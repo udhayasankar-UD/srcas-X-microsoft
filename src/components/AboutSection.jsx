@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { theme } from '../theme';
+import MagnetLines from './MagnetLines';
 
 const STATS = [
   { value: '24h', label: 'Intense Hacking' },
@@ -86,7 +87,7 @@ export default function AboutSection() {
       marginBottom: '80px',
     },
     introInner: {
-      maxWidth: '1000px',
+      width: '100%',
     },
     label: {
       fontSize: '0.75rem',
@@ -106,8 +107,9 @@ export default function AboutSection() {
     },
     introCols: {
       display: 'grid',
-      gridTemplateColumns: '1fr 1fr',
-      gap: '3rem',
+      gridTemplateColumns: '1fr 1fr auto',
+      gap: '2.5rem',
+      alignItems: 'start',
     },
     bodyText: {
       fontSize: '1.125rem',
@@ -244,6 +246,28 @@ export default function AboutSection() {
                 Your mission is to build scalable, tech-driven solutions aligned with the 17 UN Sustainable Development Goals. While sample problem statements will be provided, the floor is completely open to your original ideas. If you have a vision to change the world, we want you to build it here.
               </p>
             </div>
+            <div
+              className="about-animate about-magnet"
+              style={{
+                transitionDelay: '0.2s',
+                background: '#f7f7f7',
+                border: '1px solid #ebebeb',
+                borderRadius: '16px',
+                padding: '28px',
+                overflow: 'hidden',
+                display: 'inline-flex',
+              }}
+            >
+              <MagnetLines
+                rows={10}
+                columns={10}
+                containerSize="280px"
+                lineColor="#222222"
+                lineWidth="1.5px"
+                lineHeight="24px"
+                baseAngle={-10}
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -260,6 +284,10 @@ export default function AboutSection() {
       </div>
 
       <style>{`
+        @media (max-width: 1200px) {
+          .about-cols-mobile { grid-template-columns: 1fr 1fr !important; }
+          .about-magnet { display: none !important; }
+        }
         @media (max-width: 1024px) {
           .about-cols-mobile { grid-template-columns: 1fr !important; gap: 1.5rem !important; }
         }

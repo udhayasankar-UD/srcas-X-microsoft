@@ -1,4 +1,5 @@
 import GlobeCanvas from './GlobeCanvas';
+import Shuffle from './Shuffle';
 import { theme } from '../theme';
 
 import srcasLogo from '../assets/logo/srcas-1-logo.png';
@@ -58,6 +59,7 @@ export default function HeroSection() {
       flexDirection: 'column',
       alignItems: 'center',
       paddingBottom: '5vh',
+      transform: 'translateY(-40px)',
     },
     heading: {
       fontFamily: theme.fonts.heading,
@@ -66,13 +68,14 @@ export default function HeroSection() {
       lineHeight: 1.1,
       color: theme.colors.textPrimary,
       marginBottom: '1.5rem',
-      letterSpacing: '-0.04em',
+      letterSpacing: '0.02em',
     },
     wordSpaced: {
       fontFamily: theme.fonts.pixel,
-      fontWeight: 60,
       color: theme.colors.microsoftBlue,
-      fontSize: 'clamp(4rem, 8vw, 7rem)',
+      fontSize: 'clamp(2rem, 5vw, 4.5rem)',
+      display: 'inline-block',
+      marginTop: '0.5rem',
     },
     subtext: {
       fontSize: '1.125rem',
@@ -140,13 +143,28 @@ export default function HeroSection() {
 
       <div style={styles.content}>
         <h1 style={styles.heading} id="hero-heading">
-          What's the Next 
-          <span style={styles.wordSpaced}> Big Idea</span>
-           !
+          What's the Next <br />
+          <Shuffle
+            text="Big Idea"
+            shuffleDirection="right"
+            duration={0.35}
+            animationMode="evenodd"
+            shuffleTimes={1}
+            ease="power3.out"
+            stagger={0.03}
+            threshold={0.1}
+            triggerOnce={true}
+            triggerOnHover
+            respectReducedMotion={true}
+            loop={false}
+            loopDelay={0}
+            style={styles.wordSpaced}
+          />
+          !
         </h1>
 
         <p style={styles.subtext}>
-          The world is changing faster than ever, and everyone can <br/> see it through the rise of AI.
+          The world is changing faster than ever, and everyone can <br /> see it through the rise of AI.
         </p>
 
         <div style={styles.btnWrap}>
@@ -154,10 +172,10 @@ export default function HeroSection() {
           <span style={{ ...styles.bracket, top: 0, right: 0, borderLeft: 'none', borderBottom: 'none' }}></span>
           <span style={{ ...styles.bracket, bottom: 0, left: 0, borderRight: 'none', borderTop: 'none' }}></span>
           <span style={{ ...styles.bracket, bottom: 0, right: 0, borderLeft: 'none', borderTop: 'none' }}></span>
-          
-          <a 
-            href="#about" 
-            style={styles.cta} 
+
+          <a
+            href="#about"
+            style={styles.cta}
             id="hero-learn-more-btn"
             onMouseEnter={(e) => {
               e.target.style.backgroundColor = theme.colors.microsoftBlueHover;
@@ -178,7 +196,7 @@ export default function HeroSection() {
       </div>
 
       <div style={styles.bottomFade} aria-hidden="true" />
-      
+
       <style>{`
         @media (max-width: 768px) {
           .hero-partners-hide-mobile { display: none !important; }

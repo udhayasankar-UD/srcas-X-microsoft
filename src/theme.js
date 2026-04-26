@@ -15,7 +15,7 @@ export const theme = {
   fonts: {
     heading: "'Plus Jakarta Sans', sans-serif",
     body: "'Plus Jakarta Sans', sans-serif",
-    pixel: "'Bitcount Single', sans-serif",
+    pixel: "'Press Start 2P', system-ui",
   },
   transitions: {
     standard: '0.35s ease',
