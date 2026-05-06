@@ -259,8 +259,8 @@ export default function HeroSection2() {
   return (
     <div
       ref={ref}
+      className="hero2-wrapper"
       style={{
-        height: "200vh",
         background: "#ffffff",
         width: "100%",
         position: "relative",
@@ -515,7 +515,9 @@ export default function HeroSection2() {
       </div>
 
       <style>{`
+        .hero2-wrapper { height: 200vh; }
         @media (max-width: 768px) {
+          .hero2-wrapper { height: 110vh !important; }
           .hero2-partners-hide-mobile { display: none !important; }
           .hero2-calendar-hide-mobile { display: none !important; }
           .h2-tags-desktop { display: none !important; }

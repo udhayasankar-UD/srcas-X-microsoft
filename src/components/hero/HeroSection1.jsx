@@ -32,16 +32,17 @@ function Particle({ x, y, size, duration, delay, color }) {
 // Animated grid lines in background
 function GridLines() {
   return (
-    <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', opacity: 0.04, pointerEvents: 'none' }}>
-      {Array.from({ length: 12 }).map((_, i) => (
-        <line key={`v${i}`} x1={`${(i + 1) * 8.33}%`} y1="0" x2={`${(i + 1) * 8.33}%`} y2="100%"
-          stroke="#111" strokeWidth="1" />
-      ))}
-      {Array.from({ length: 8 }).map((_, i) => (
-        <line key={`h${i}`} x1="0" y1={`${(i + 1) * 12.5}%`} x2="100%" y2={`${(i + 1) * 12.5}%`}
-          stroke="#111" strokeWidth="1" />
-      ))}
-    </svg>
+    <div style={{
+      position: 'absolute',
+      inset: 0,
+      opacity: 0.04,
+      pointerEvents: 'none',
+      backgroundImage: `
+        linear-gradient(to right, #111 1px, transparent 1px),
+        linear-gradient(to bottom, #111 1px, transparent 1px)
+      `,
+      backgroundSize: 'clamp(40px, 5vw, 80px) clamp(40px, 5vw, 80px)',
+    }} />
   );
 }
 
