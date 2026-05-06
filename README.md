@@ -1,4 +1,9 @@
 Project Brief: National-Level SDG Hackathon 2026
+
+Organizing a national-level hackathon with partners like Microsoft and Igenius AI is a massive opportunity, and highlighting the 17 UN Sustainable Development Goals (SDGs) gives it a strong, purpose-driven foundation.
+
+Since you are responsible for the website and the exact problem statements are still pending the MoU, your best approach right now is to build a high-energy, visually striking landing page that builds anticipation and handles registrations.
+
 1. Event Overview
 
 Event Name: SRMS

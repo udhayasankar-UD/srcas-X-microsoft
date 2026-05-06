@@ -1,6 +1,8 @@
-import { useEffect, useRef } from 'react';
-import { theme } from '../theme';
-import MagnetLines from './MagnetLines';
+import { useEffect, useRef, useState } from 'react';
+import { theme } from '../../theme';
+import MagnetLines from '../ui/MagnetLines';
+import { motion } from 'framer-motion';
+import MagneticButton from '../ui/MagneticButton';
 
 const STATS = [
   { value: '24h', label: 'Intense Hacking' },
@@ -80,8 +82,24 @@ export default function AboutSection() {
       position: 'relative',
       padding: '80px 2.5rem 60px',
       backgroundColor: theme.colors.bg,
+      maxWidth: '100%',
+      margin: '0 auto',
+      overflow: 'hidden',
+    },
+    overlay: {
+      position: 'absolute',
+      inset: 0,
+      opacity: 0.4,
+      pointerEvents: 'none',
+      backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23000' fill-opacity='0.05' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='3'/%3E%3Ccircle cx='13' cy='13' r='3'/%3E%3Cpath d='M3 3 L13 13' stroke='%23000' stroke-opacity='0.05' stroke-width='1'/%3E%3C/g%3E%3C/svg%3E")`,
+      backgroundSize: '80px 80px',
+      zIndex: 0,
+    },
+    innerWrap: {
       maxWidth: '1440px',
       margin: '0 auto',
+      position: 'relative',
+      zIndex: 1,
     },
     intro: {
       marginBottom: '80px',
@@ -109,7 +127,18 @@ export default function AboutSection() {
       display: 'grid',
       gridTemplateColumns: '1fr 1fr auto',
       gap: '2.5rem',
-      alignItems: 'start',
+      alignItems: 'stretch',
+    },
+    card: {
+      background: 'rgba(255, 255, 255, 0.7)',
+      backdropFilter: 'blur(12px)',
+      border: '1px solid rgba(0,0,0,0.05)',
+      borderRadius: '24px',
+      padding: '40px',
+      boxShadow: '0 10px 30px rgba(0,0,0,0.02)',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'flex-start',
     },
     bodyText: {
       fontSize: '1.125rem',
@@ -221,31 +250,43 @@ export default function AboutSection() {
 
   return (
     <section style={styles.section} id="about" ref={sectionRef} aria-labelledby="about-heading">
-      <div style={styles.intro}>
-        <div style={styles.introInner}>
-          <p style={styles.label} className="about-animate">ABOUT THE HACKATHON</p>
-          <h2 style={{ ...styles.heading, marginBottom: '5rem' }} className="about-animate" id="about-heading">
-            Innovation Meets Impact.
-          </h2>
-          <div style={styles.introCols} className="about-cols-mobile">
-            <div className="about-animate">
-              <p style={styles.label}>THE VISION</p>
-              <h2 style={{ ...styles.heading, fontSize: 'clamp(2rem, 4vw, 3.2rem)', marginBottom: '2rem' }}>
-                What's the Next Big Idea?
-              </h2>
-              <p style={styles.bodyText}>
-                We believe that the next generation of tech leaders will be defined not just by the code they write, but by the global problems they solve. In collaboration with Microsoft and Igenius AI, SRCAS is hosting a premier national-level hackathon dedicated to open innovation and real-world impact.
-              </p>
-            </div>
-            <div className="about-animate" style={{ transitionDelay: '0.1s' }}>
-              <p style={styles.label}>THE CHALLENGE</p>
-              <h2 style={{ ...styles.heading, fontSize: 'clamp(2rem, 4vw, 3.2rem)', marginBottom: '2rem' }}>
-                Code for the SDGs
-              </h2>
-              <p style={styles.bodyText}>
-                Your mission is to build scalable, tech-driven solutions aligned with the 17 UN Sustainable Development Goals. While sample problem statements will be provided, the floor is completely open to your original ideas. If you have a vision to change the world, we want you to build it here.
-              </p>
-            </div>
+      <div style={styles.overlay} />
+      <div style={styles.innerWrap}>
+        <div style={styles.intro}>
+          <div style={styles.introInner}>
+            <p style={styles.label} className="about-animate">ABOUT THE HACKATHON</p>
+            <h2 style={{ ...styles.heading, marginBottom: '5rem' }} className="about-animate" id="about-heading">
+              Innovation Meets Impact.
+            </h2>
+            <div style={styles.introCols} className="about-cols-mobile">
+              <motion.div 
+                className="about-animate"
+                whileHover={{ y: -5, boxShadow: '0 20px 40px rgba(0,0,0,0.06)' }}
+                transition={{ duration: 0.3 }}
+                style={styles.card}
+              >
+                <p style={styles.label}>THE VISION</p>
+                <h2 style={{ ...styles.heading, fontSize: 'clamp(2rem, 4vw, 3.2rem)', marginBottom: '2rem' }}>
+                  What's the Next Big Idea?
+                </h2>
+                <p style={styles.bodyText}>
+                  We believe that the next generation of tech leaders will be defined not just by the code they write, but by the global problems they solve. In collaboration with Microsoft and Igenius AI, SRCAS is hosting a premier national-level hackathon dedicated to open innovation and real-world impact.
+                </p>
+              </motion.div>
+              <motion.div 
+                className="about-animate" 
+                whileHover={{ y: -5, boxShadow: '0 20px 40px rgba(0,0,0,0.06)' }}
+                transition={{ duration: 0.3 }}
+                style={{ ...styles.card, transitionDelay: '0.1s' }}
+              >
+                <p style={styles.label}>THE CHALLENGE</p>
+                <h2 style={{ ...styles.heading, fontSize: 'clamp(2rem, 4vw, 3.2rem)', marginBottom: '2rem' }}>
+                  Code for the SDGs
+                </h2>
+                <p style={styles.bodyText}>
+                  Your mission is to build scalable, tech-driven solutions aligned with the 17 UN Sustainable Development Goals. While sample problem statements will be provided, the floor is completely open to your original ideas. If you have a vision to change the world, we want you to build it here.
+                </p>
+              </motion.div>
             <div
               className="about-animate about-magnet"
               style={{
@@ -260,27 +301,50 @@ export default function AboutSection() {
             >
               <MagnetLines
                 rows={10}
-                columns={10}
+                columns={5}
                 containerSize="280px"
                 lineColor="#222222"
                 lineWidth="1.5px"
-                lineHeight="24px"
+                lineHeight="41px"
                 baseAngle={-10}
               />
             </div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div style={styles.statsWrap} className="about-animate">
-        <div style={styles.stats}>
-          {STATS.map((s) => (
-            <div style={styles.stat} key={s.value}>
-              <span style={styles.statValue}>{s.value}</span>
-              <span style={styles.statLabel}>{s.label}</span>
-            </div>
-          ))}
+        <div style={styles.statsWrap} className="about-animate">
+          <div style={styles.stats}>
+            {STATS.map((s) => (
+              <div style={styles.stat} key={s.value}>
+                <span style={styles.statValue}>{s.value}</span>
+                <span style={styles.statLabel}>{s.label}</span>
+              </div>
+            ))}
+          </div>
         </div>
+
+        {/* CTA row */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-40px' }}
+          transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
+          style={{
+            display: 'flex', alignItems: 'center', gap: 14,
+            flexWrap: 'wrap', marginTop: 16,
+          }}
+        >
+          <MagneticButton href="#problems" variant="dark" size="lg">
+            Explore Problems
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </MagneticButton>
+          <MagneticButton href="#prizes" variant="outline" size="lg">
+            View Prizes
+          </MagneticButton>
+        </motion.div>
       </div>
 
       <style>{`

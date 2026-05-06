@@ -1,0 +1,601 @@
+import React, { useState, useRef, useEffect } from 'react';
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
+import { theme } from '../../theme';
+
+// Inlined so Vite doesn't choke on the space in "problem statements/" during peer-import resolution
+const SDGs = [
+  {
+    id: 1, num: '01', title: 'No Poverty',
+    color: '#E5243B',
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Sustainable_Development_Goal_01NoPoverty.svg/200px-Sustainable_Development_Goal_01NoPoverty.svg.png',
+    imageUrl: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600&q=80',
+    description: 'End poverty in all its forms everywhere by 2030.',
+    challenges: [
+      'Build a digital platform connecting low-income families to financial aid, food banks, and government schemes using AI-driven eligibility matching.',
+      'Design a micro-finance app that uses alternative credit-scoring to provide loans to those without bank accounts or formal credit history.',
+    ],
+  },
+  {
+    id: 2, num: '02', title: 'Zero Hunger',
+    color: '#DDA63A',
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Sustainable_Development_Goal_02ZeroHunger.svg/200px-Sustainable_Development_Goal_02ZeroHunger.svg.png',
+    imageUrl: 'https://images.unsplash.com/photo-1536329583941-14287ec6fc4e?w=600&q=80',
+    description: 'End hunger, achieve food security and improved nutrition.',
+    challenges: [
+      'Create an AI-powered crop yield prediction system that helps smallholder farmers optimize planting schedules and reduce food waste.',
+      'Build a food redistribution network that connects surplus food from restaurants and markets to shelters and food banks in real-time.',
+    ],
+  },
+  {
+    id: 3, num: '03', title: 'Good Health',
+    color: '#4C9F38',
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Sustainable_Development_Goal_03GoodHealth.svg/200px-Sustainable_Development_Goal_03GoodHealth.svg.png',
+    imageUrl: 'https://images.unsplash.com/photo-1505751172107-573957a24369?w=600&q=80',
+    description: 'Ensure healthy lives and promote well-being for all at all ages.',
+    challenges: [
+      'Develop low-cost AI diagnostic tools for rural clinics that detect common diseases from basic images or symptoms with high accuracy.',
+      'Build a mental health companion app with crisis detection, anonymous peer support, and integration with licensed therapists.',
+    ],
+  },
+  {
+    id: 4, num: '04', title: 'Quality Education',
+    color: '#C5192D',
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Sustainable_Development_Goal_04QualityEducation.svg/200px-Sustainable_Development_Goal_04QualityEducation.svg.png',
+    imageUrl: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&q=80',
+    description: 'Ensure inclusive, equitable quality education for all.',
+    challenges: [
+      'Build an adaptive AI tutor that adjusts lesson complexity in real-time based on student comprehension, supporting 10+ regional languages.',
+      'Create an offline-first learning platform for schools in bandwidth-limited areas, with teacher dashboards and progress analytics.',
+    ],
+  },
+  {
+    id: 5, num: '05', title: 'Gender Equality',
+    color: '#FF3A21',
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Sustainable_Development_Goal_05GenderEquality.svg/200px-Sustainable_Development_Goal_05GenderEquality.svg.png',
+    imageUrl: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=600&q=80',
+    description: 'Achieve gender equality and empower all women and girls.',
+    challenges: [
+      'Develop an anonymous reporting and legal aid platform for survivors of gender-based violence, with AI-powered case documentation.',
+      'Build a bias-detection tool that audits job listings and HR practices for discriminatory language and patterns.',
+    ],
+  },
+  {
+    id: 6, num: '06', title: 'Clean Water',
+    color: '#26BDE2',
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Sustainable_Development_Goal_06CleanWater.svg/200px-Sustainable_Development_Goal_06CleanWater.svg.png',
+    imageUrl: 'https://images.unsplash.com/photo-1548932813-71ede3462674?w=600&q=80',
+    description: 'Ensure access to water and sanitation for all.',
+    challenges: [
+      'Design an IoT water quality monitoring network that flags contamination events in real-time and alerts municipalities and households.',
+      'Build a community sanitation tracker that maps open-defecation-free zones and guides NGOs to areas needing urgent intervention.',
+    ],
+  },
+  {
+    id: 7, num: '07', title: 'Clean Energy',
+    color: '#FCC30B',
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Sustainable_Development_Goal_07CleanEnergy.svg/200px-Sustainable_Development_Goal_07CleanEnergy.svg.png',
+    imageUrl: 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=600&q=80',
+    description: 'Ensure access to affordable, reliable, sustainable energy.',
+    challenges: [
+      'Create an AI energy management system for micro-grids in rural villages powered by solar, balancing load and predicting demand.',
+      'Build a marketplace platform for peer-to-peer renewable energy trading between prosumers and consumers in urban neighbourhoods.',
+    ],
+  },
+  {
+    id: 8, num: '08', title: 'Decent Work',
+    color: '#A21942',
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Sustainable_Development_Goal_08DecentWork.svg/200px-Sustainable_Development_Goal_08DecentWork.svg.png',
+    imageUrl: 'https://images.unsplash.com/photo-1521737852567-6949f3f9f2b5?w=600&q=80',
+    description: 'Promote inclusive economic growth and decent work for all.',
+    challenges: [
+      'Develop a skills-matching platform for informal-sector workers that translates vernacular experience into verified digital credentials.',
+      'Build a gig-worker wellbeing app that tracks income volatility, suggests diversification, and provides safety-net micro-insurance options.',
+    ],
+  },
+  {
+    id: 9, num: '09', title: 'Industry & Innovation',
+    color: '#FD6925',
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Sustainable_Development_Goal_09Industry.svg/200px-Sustainable_Development_Goal_09Industry.svg.png',
+    imageUrl: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=600&q=80',
+    description: 'Build resilient infrastructure and foster innovation.',
+    challenges: [
+      'Design an AI-driven predictive maintenance system for public infrastructure (bridges, roads) using sensor data and computer vision.',
+      'Build a startup incubator platform connecting rural entrepreneurs with mentors, funding, and markets using AI-based opportunity matching.',
+    ],
+  },
+  {
+    id: 10, num: '10', title: 'Reduced Inequalities',
+    color: '#DD1367',
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Sustainable_Development_Goal_10ReducedInequalities.svg/200px-Sustainable_Development_Goal_10ReducedInequalities.svg.png',
+    imageUrl: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600&q=80',
+    description: 'Reduce inequality within and among countries.',
+    challenges: [
+      'Develop an algorithmic audit tool that detects racial, gender, or socioeconomic bias in lending, hiring, or admissions AI systems.',
+      'Build an accessible digital-public-services navigator for immigrants and refugees, supporting 20+ languages with step-by-step guidance.',
+    ],
+  },
+  {
+    id: 11, num: '11', title: 'Sustainable Cities',
+    color: '#FD9D24',
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Sustainable_Development_Goal_11SustainableCities.svg/200px-Sustainable_Development_Goal_11SustainableCities.svg.png',
+    imageUrl: 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=600&q=80',
+    description: 'Make cities inclusive, safe, resilient and sustainable.',
+    challenges: [
+      'Create a smart traffic orchestration system using real-time sensor feeds and ML to reduce congestion and lower urban emissions.',
+      'Build a civic engagement platform where residents can report infrastructure issues, vote on local budgets, and track government responses.',
+    ],
+  },
+  {
+    id: 12, num: '12', title: 'Responsible Consumption',
+    color: '#BF8B2E',
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Sustainable_Development_Goal_12ResponsibleConsumption.svg/200px-Sustainable_Development_Goal_12ResponsibleConsumption.svg.png',
+    imageUrl: 'https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=600&q=80',
+    description: 'Ensure sustainable consumption and production patterns.',
+    challenges: [
+      'Design a product lifecycle tracker (using QR/blockchain) showing consumers the full environmental cost of a product from factory to disposal.',
+      'Build an AI-powered waste sorting assistant for homes and businesses that gamifies recycling and tracks diversion rates.',
+    ],
+  },
+  {
+    id: 13, num: '13', title: 'Climate Action',
+    color: '#3F7E44',
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Sustainable_Development_Goal_13ClimateAction.svg/200px-Sustainable_Development_Goal_13ClimateAction.svg.png',
+    imageUrl: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=600&q=80',
+    description: 'Take urgent action to combat climate change.',
+    challenges: [
+      'Build a personal carbon footprint dashboard that integrates travel, diet, and energy data, then suggests and tracks offset actions.',
+      'Develop an early-warning system for extreme weather events using satellite imagery and ML to protect vulnerable communities.',
+    ],
+  },
+  {
+    id: 14, num: '14', title: 'Life Below Water',
+    color: '#0A97D9',
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Sustainable_Development_Goal_14LifeBelowWater.svg/200px-Sustainable_Development_Goal_14LifeBelowWater.svg.png',
+    imageUrl: 'https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?w=600&q=80',
+    description: 'Conserve and sustainably use oceans and marine resources.',
+    challenges: [
+      'Create a computer-vision system for fishing vessels that automatically identifies and rejects bycatch species before they are hauled aboard.',
+      'Build a coral-reef health monitoring platform using underwater drone imagery and AI to predict bleaching events and guide restoration.',
+    ],
+  },
+  {
+    id: 15, num: '15', title: 'Life on Land',
+    color: '#56C02B',
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Sustainable_Development_Goal_15LifeOnLand.svg/200px-Sustainable_Development_Goal_15LifeOnLand.svg.png',
+    imageUrl: 'https://images.unsplash.com/photo-1448375240586-882707db888b?w=600&q=80',
+    description: 'Protect, restore and promote sustainable use of ecosystems.',
+    challenges: [
+      'Develop a real-time deforestation alert system using satellite data and ML that notifies rangers and authorities within hours of illegal clearing.',
+      'Build a biodiversity mapping app that lets citizen scientists log wildlife sightings, auto-classifies species via camera, and feeds open datasets.',
+    ],
+  },
+  {
+    id: 16, num: '16', title: 'Peace & Justice',
+    color: '#00689D',
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Sustainable_Development_Goal_16PeaceJustice.svg/200px-Sustainable_Development_Goal_16PeaceJustice.svg.png',
+    imageUrl: 'https://images.unsplash.com/photo-1589578527966-fdac0f44566c?w=600&q=80',
+    description: 'Promote just, peaceful and inclusive societies.',
+    challenges: [
+      'Build a transparent public-procurement tracker that uses ML to flag anomalous contracts and potential corruption in government spending.',
+      'Design a legal-aid chatbot for low-income users that navigates jurisdictional law, drafts basic documents, and connects to pro-bono lawyers.',
+    ],
+  },
+  {
+    id: 17, num: '17', title: 'Partnerships',
+    color: '#19486A',
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Sustainable_Development_Goal_17Partnerships.svg/200px-Sustainable_Development_Goal_17Partnerships.svg.png',
+    imageUrl: 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=600&q=80',
+    description: 'Strengthen global partnerships for sustainable development.',
+    challenges: [
+      'Create a cross-sector collaboration platform matching NGOs, governments, and startups based on complementary resources and shared SDG targets.',
+      'Build an open data aggregator that standardises development metrics from 50+ countries, enabling transparent progress tracking toward the 2030 Agenda.',
+    ],
+  },
+];
+
+export default function ProblemStatements() {
+  const targetRef = useRef(null);
+  const { scrollYProgress } = useScroll({ target: targetRef });
+
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // For horizontal sliding of the filmstrip track (desktop only)
+  const x = useTransform(scrollYProgress, [0, 1], ['5%', '-85%']);
+
+  const [activeSDG, setActiveSDG] = useState(SDGs[0]);
+  const [mobileIndex, setMobileIndex] = useState(0);
+  const isHoveringRef = useRef(false);
+  const mobileScrollRef = useRef(null);
+
+  // ── One-card-at-a-time swipe ─────────────────────────────────────────────────
+  const touchStartX = useRef(0);
+  const touchStartY = useRef(0);
+  const isSwiping   = useRef(false);   // locked to horizontal once determined
+
+  const goToIndex = (idx) => {
+    const next = Math.max(0, Math.min(idx, SDGs.length - 1));
+    setMobileIndex(next);
+    setActiveSDG(SDGs[next]);
+    const el = mobileScrollRef.current;
+    if (!el) return;
+    // Each card slot = container width (one card fills the view)
+    const slotWidth = el.clientWidth;
+    el.scrollTo({ left: next * slotWidth, behavior: 'smooth' });
+  };
+
+  const onTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+    isSwiping.current = false;
+  };
+
+  const onTouchMove = (e) => {
+    const dx = e.touches[0].clientX - touchStartX.current;
+    const dy = e.touches[0].clientY - touchStartY.current;
+    // Lock axis on first significant move
+    if (!isSwiping.current && (Math.abs(dx) > 6 || Math.abs(dy) > 6)) {
+      isSwiping.current = Math.abs(dx) > Math.abs(dy);
+    }
+    // Prevent page scroll only when swiping horizontally
+    if (isSwiping.current) e.preventDefault();
+  };
+
+  const onTouchEnd = (e) => {
+    if (!isSwiping.current) return;
+    const dx = e.changedTouches[0].clientX - touchStartX.current;
+    const THRESHOLD = 40; // px — any swipe beyond this = advance one card
+    if (dx < -THRESHOLD) goToIndex(mobileIndex + 1);
+    else if (dx > THRESHOLD) goToIndex(mobileIndex - 1);
+    else goToIndex(mobileIndex); // snap back if not far enough
+    isSwiping.current = false;
+  };
+
+  // Attach passive:false so we can call preventDefault in onTouchMove
+  useEffect(() => {
+    const el = mobileScrollRef.current;
+    if (!el || !isMobile) return;
+    el.addEventListener('touchstart', onTouchStart, { passive: true });
+    el.addEventListener('touchmove',  onTouchMove,  { passive: false });
+    el.addEventListener('touchend',   onTouchEnd,   { passive: true });
+    return () => {
+      el.removeEventListener('touchstart', onTouchStart);
+      el.removeEventListener('touchmove',  onTouchMove);
+      el.removeEventListener('touchend',   onTouchEnd);
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isMobile, mobileIndex]);
+
+  useEffect(() => {
+    const unsubscribe = scrollYProgress.on('change', (latest) => {
+      if (isHoveringRef.current || isMobile) return;
+      const index = Math.max(0, Math.min(Math.floor(latest * SDGs.length * 1.1), SDGs.length - 1));
+      setActiveSDG(SDGs[index]);
+    });
+    return () => unsubscribe();
+  }, [scrollYProgress, isMobile]);
+
+  const handleHoverStart = (sdg) => {
+    if (isMobile) return;
+    isHoveringRef.current = true;
+    setActiveSDG(sdg);
+  };
+
+  const handleHoverEnd = () => {
+    if (isMobile) return;
+    isHoveringRef.current = false;
+  };
+
+  const handleMobilePrev = () => goToIndex(mobileIndex - 1);
+  const handleMobileNext = () => goToIndex(mobileIndex + 1);
+
+  return (
+    <section
+      id="problem-statements"
+      ref={targetRef}
+      style={{
+        height: isMobile ? 'auto' : '400vh',
+        background: '#ffffff',
+        position: 'relative',
+        fontFamily: "'Plus Jakarta Sans', sans-serif",
+      }}
+    >
+        <div style={{
+          position: isMobile ? 'relative' : 'sticky',
+          top: 0,
+          height: isMobile ? 'auto' : '100vh',
+          overflow: isMobile ? 'auto' : 'hidden',
+          overflowX: isMobile ? 'auto' : undefined,
+          overflowY: isMobile ? 'hidden' : undefined,
+          display: 'flex',
+          flexDirection: 'column',
+          background: '#ffffff',
+        }}>
+        {/* Title area */}
+        <div style={{
+          padding: isMobile ? '32px 6vw 16px' : '40px 6vw',
+          flexShrink: 0,
+          background: '#ffffff',
+          zIndex: 10,
+          borderBottom: '1px solid #f0f0f0',
+        }}>
+          <p style={{
+            fontSize: '0.85rem', fontWeight: 700, letterSpacing: '0.22em',
+            color: '#999', marginBottom: '0.5rem', textTransform: 'uppercase',
+          }}>
+            Problem Statements
+          </p>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
+            <h2 style={{
+              fontFamily: theme.fonts.heading,
+              fontSize: 'clamp(1.8rem, 3.8vw, 3.4rem)',
+              fontWeight: 800, color: '#111111',
+              letterSpacing: '-0.03em', lineHeight: 1.1, margin: 0,
+            }}>
+              The SDG <span style={{ color: activeSDG.color, transition: 'color 0.4s ease' }}>Filmstrip</span>
+            </h2>
+            {/* Mobile nav buttons */}
+            {isMobile && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <button
+                  onClick={handleMobilePrev}
+                  disabled={mobileIndex === 0}
+                  aria-label="Previous SDG"
+                  style={{
+                    width: 40, height: 40, borderRadius: '50%',
+                    border: `2px solid ${mobileIndex === 0 ? '#e0e0e0' : activeSDG.color}`,
+                    background: mobileIndex === 0 ? '#f5f5f5' : activeSDG.color,
+                    color: mobileIndex === 0 ? '#bbb' : '#fff',
+                    fontSize: '18px', cursor: mobileIndex === 0 ? 'not-allowed' : 'pointer',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    transition: 'all 0.25s ease',
+                  }}
+                >‹</button>
+                <span style={{ fontSize: '13px', fontWeight: 700, color: '#666', minWidth: '48px', textAlign: 'center' }}>
+                  {mobileIndex + 1} / {SDGs.length}
+                </span>
+                <button
+                  onClick={handleMobileNext}
+                  disabled={mobileIndex === SDGs.length - 1}
+                  aria-label="Next SDG"
+                  style={{
+                    width: 40, height: 40, borderRadius: '50%',
+                    border: `2px solid ${mobileIndex === SDGs.length - 1 ? '#e0e0e0' : activeSDG.color}`,
+                    background: mobileIndex === SDGs.length - 1 ? '#f5f5f5' : activeSDG.color,
+                    color: mobileIndex === SDGs.length - 1 ? '#bbb' : '#fff',
+                    fontSize: '18px', cursor: mobileIndex === SDGs.length - 1 ? 'not-allowed' : 'pointer',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    transition: 'all 0.25s ease',
+                  }}
+                >›</button>
+              </div>
+            )}
+          </div>
+          {!isMobile && (
+            <p style={{ margin: '10px 0 0', fontSize: '13px', color: '#999' }}>
+              ↕ Scroll down to explore all 17 goals — hover a card to preview
+            </p>
+          )}
+        </div>
+
+        {/* Filmstrip Track */}
+        {isMobile ? (
+          // Mobile: one-card-at-a-time gallery swipe
+          <div
+            ref={mobileScrollRef}
+            style={{
+              display: 'flex',
+              overflowX: 'hidden',   // hide scrollbar, we control scroll programmatically
+              padding: '24px 0',
+              WebkitOverflowScrolling: 'touch',
+              userSelect: 'none',
+            }}
+            className="mobile-filmstrip"
+          >
+            {SDGs.map((sdg, idx) => {
+              const isActive = activeSDG.id === sdg.id;
+              return (
+                <div
+                  key={sdg.id}
+                  style={{
+                    // Each slot is exactly the container width — true gallery behavior
+                    minWidth: '100%',
+                    padding: '0 6vw',
+                    boxSizing: 'border-box',
+                    flexShrink: 0,
+                    display: 'flex',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <div
+                    style={{
+                      width: '100%',
+                      maxWidth: '340px',
+                      height: '320px',
+                      borderRadius: '24px',
+                      position: 'relative',
+                      overflow: 'hidden',
+                      boxShadow: isActive
+                        ? `0 20px 40px ${sdg.color}50`
+                        : '0 8px 20px rgba(0,0,0,0.10)',
+                      border: `2px solid ${isActive ? sdg.color : 'rgba(0,0,0,0.06)'}`,
+                      transition: 'box-shadow 0.3s ease, border-color 0.3s ease, transform 0.3s ease',
+                      transform: isActive ? 'scale(1.02)' : 'scale(0.96)',
+                    }}
+                  >
+                    <img
+                      src={sdg.imageUrl}
+                      alt={sdg.title}
+                      draggable={false}
+                      style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+                    />
+                    <div style={{
+                      position: 'absolute', inset: 0,
+                      background: `linear-gradient(0deg, ${sdg.color}CC 0%, rgba(0,0,0,0.45) 80%)`,
+                    }} />
+                    <div style={{
+                      position: 'absolute', bottom: 0, left: 0, width: '100%', padding: '16px',
+                      zIndex: 2, color: '#fff',
+                    }}>
+                      <div style={{
+                        background: 'rgba(0,0,0,0.35)',
+                        padding: '4px 8px', borderRadius: '4px',
+                        fontSize: '12px', fontWeight: 800,
+                        display: 'inline-block', marginBottom: '6px',
+                      }}>SDG {sdg.num}</div>
+                      <h3 style={{ margin: 0, fontSize: '20px', fontWeight: 700, lineHeight: 1.2 }}>{sdg.title}</h3>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          // Desktop: horizontal scroll filmstrip
+          <div style={{ flex: 1, display: 'flex', alignItems: 'center', position: 'relative', zIndex: 5, overflow: 'hidden' }}>
+            <motion.div
+              style={{ x, display: 'flex', gap: '30px', padding: '0 6vw', alignItems: 'center' }}
+            >
+              {SDGs.map(sdg => {
+                const isActive = activeSDG.id === sdg.id;
+                return (
+                  <motion.div
+                    key={sdg.id}
+                    onMouseEnter={() => handleHoverStart(sdg)}
+                    onMouseLeave={handleHoverEnd}
+                    animate={{
+                      scale: isActive ? 1.05 : 0.95,
+                      opacity: isActive ? 1 : 0.65,
+                      y: isActive ? -10 : 0,
+                    }}
+                    transition={{ duration: 0.3 }}
+                    style={{
+                      width: '280px', height: '380px',
+                      borderRadius: '24px', position: 'relative',
+                      overflow: 'hidden', cursor: 'pointer', flexShrink: 0,
+                      boxShadow: isActive ? `0 20px 40px ${sdg.color}40` : '0 8px 20px rgba(0,0,0,0.12)',
+                      border: `1px solid ${isActive ? sdg.color : 'rgba(0,0,0,0.08)'}`,
+                    }}
+                  >
+                    <img src={sdg.imageUrl} alt={sdg.title}
+                      style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 0 }} />
+                    <div style={{
+                      position: 'absolute', inset: 0,
+                      background: `linear-gradient(0deg, ${sdg.color}CC 0%, rgba(0,0,0,0.45) 60%)`, zIndex: 1,
+                    }} />
+                    <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', padding: '20px', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                      <div style={{
+                        background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(10px)',
+                        color: '#fff', fontSize: '12px', fontWeight: 800,
+                        padding: '3px 10px', borderRadius: '6px', alignSelf: 'flex-start',
+                      }}>SDG {sdg.num}</div>
+                      <h3 style={{ color: '#fff', fontSize: '22px', fontWeight: 700, margin: 0, lineHeight: 1.2 }}>{sdg.title}</h3>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </motion.div>
+          </div>
+        )}
+
+        {/* Dedicated Bottom Panel */}
+        <div style={{
+          height: '35vh',
+          minHeight: '280px',
+          background: '#ffffff',
+          borderTopLeftRadius: '40px',
+          borderTopRightRadius: '40px',
+          boxShadow: '0 -20px 40px rgba(0,0,0,0.3)',
+          position: 'relative',
+          zIndex: 20,
+          overflow: 'hidden',
+        }}>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeSDG.id}
+              initial={{ y: 60, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: -40, opacity: 0 }}
+              transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+              style={{
+                padding: '40px 6vw',
+                height: '100%',
+                display: 'flex',
+                gap: '40px',
+              }}
+              className="bottom-panel-inner"
+            >
+              <div style={{ flex: '0 0 30%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px' }}>
+                  <div style={{
+                    width: '64px', height: '64px',
+                    borderRadius: '16px', background: `${activeSDG.color}15`,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  }}>
+                    <img src={activeSDG.logoUrl} alt="Logo" style={{ width: '40px', height: '40px', objectFit: 'contain' }} />
+                  </div>
+                  <div>
+                    <h3 style={{ fontSize: '24px', fontWeight: 800, color: '#111', margin: 0 }}>{activeSDG.title}</h3>
+                    <p style={{ fontSize: '14px', color: activeSDG.color, fontWeight: 700, margin: 0 }}>SDG {activeSDG.num}</p>
+                  </div>
+                </div>
+                <p style={{ fontSize: '15px', color: '#555', lineHeight: 1.6, margin: 0 }}>
+                  {activeSDG.description}
+                </p>
+              </div>
+
+              <div style={{ width: '1px', background: '#eee', margin: '0 10px' }} className="panel-divider" />
+
+              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                <p style={{
+                  fontSize: '11px', fontWeight: 700, color: '#999',
+                  letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '16px', margin: 0,
+                }}>
+                  Challenge Statements
+                </p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '16px' }}>
+                  {activeSDG.challenges.map((c, i) => (
+                    <div key={i} style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
+                      <div style={{
+                        width: '28px', height: '28px', borderRadius: '50%',
+                        background: activeSDG.color, color: '#fff',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        fontSize: '12px', fontWeight: 800, flexShrink: 0,
+                        marginTop: '2px'
+                      }}>
+                        {i + 1}
+                      </div>
+                      <p style={{ fontSize: '15px', color: '#333', lineHeight: 1.6, margin: 0 }}>
+                        {c}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </div>
+
+      <style>{`
+        .mobile-filmstrip::-webkit-scrollbar { display: none; }
+        @media (max-width: 900px) {
+          .bottom-panel-inner {
+            flex-direction: column !important;
+            gap: 16px !important;
+            padding: 24px 6vw !important;
+            overflow-y: auto !important;
+          }
+          .panel-divider {
+            display: none !important;
+          }
+        }
+      `}</style>
+    </section>
+  );
+}
