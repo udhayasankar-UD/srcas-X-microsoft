@@ -466,7 +466,7 @@ export default function HeroSection1() {
             </span>
           </a>
           <motion.a
-            href="#problem-statements"
+            href="#problems"
             whileHover={{ borderColor: '#2563EB', color: '#2563EB' }}
             style={{
               display: 'inline-flex', alignItems: 'center',

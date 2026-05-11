@@ -296,7 +296,7 @@ export default function ProblemStatements() {
 
   return (
     <section
-      id="problem-statements"
+      id="problems"
       ref={targetRef}
       style={{
         height: isMobile ? 'auto' : '400vh',
