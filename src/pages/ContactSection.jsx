@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Phone, MapPin, User, ExternalLink, Copy, Check } from 'lucide-react';
-import MagneticButton from '../ui/MagneticButton';
+import MagneticButton from '../components/ui/MagneticButton';
 
 const fadeInUp = {
     hidden: { opacity: 0, y: 30 },

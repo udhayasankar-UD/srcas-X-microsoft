@@ -1,66 +1,74 @@
+import React, { useEffect, useState } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from './components/layout/Navbar';
-import ScrollProgressUI from './components/ui/ScrollProgressUI';
-import HeroSection1 from './components/hero/HeroSection1';
-import HeroSection2 from './components/hero/HeroSection2';
-import HeroSection3 from './components/hero/HeroSection3';
-import HeroSection4 from './components/hero/HeroSection4';
-import HeroSection5 from './components/hero/HeroSection5';
-import HeroSection6 from './components/hero/HeroSection6';  
-import DesignLabel from './components/ui/DesignLabel';
-import AboutSection from './components/sections/AboutSection';
-import { PrizesSection } from './components/sections/PrizesSection';
-import ProblemStatements from './components/problem-statements/ProblemStatements';
-import TimelineSection from './components/sections/TimelineSection';
-import GuidelinesSection from './components/sections/GuidelinesSection';
-import InteractiveSection from './components/sections/InteractiveSection';
-import FaqSection from './components/sections/FaqSection';
-import ContactSection from './components/sections/ContactSection';
+import Footer from './components/layout/Footer';
+
+// Pages
+import HomePage from './pages/HomePage';
+import PrizesPage from './pages/PrizesPage';
+import HighlightsPage from './pages/HighlightsPage';
+import PartnersPage from './pages/PartnersPage';
+import ContactSection from './pages/ContactSection';
+import FaqSection from './pages/FaqSection';
+
+// Scroll-to-top FAB
+function ScrollToTop() {
+  const [show, setShow] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setShow(window.scrollY > 420);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+  return (
+    <AnimatePresence>
+      {show && (
+        <motion.button
+          initial={{ opacity: 0, scale: 0.7, y: 16 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.7, y: 16 }}
+          transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          title="Back to top"
+          style={{
+            position: 'fixed', bottom: 32, right: 32,
+            width: 44, height: 44, borderRadius: '50%',
+            background: '#111', color: '#fff', border: 'none',
+            cursor: 'pointer', display: 'flex',
+            alignItems: 'center', justifyContent: 'center',
+            boxShadow: '0 6px 24px rgba(0,0,0,0.18)', zIndex: 900,
+          }}
+          onMouseEnter={e => e.currentTarget.style.background = '#333'}
+          onMouseLeave={e => e.currentTarget.style.background = '#111'}
+        >
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 19V5M5 12l7-7 7 7"/>
+          </svg>
+        </motion.button>
+      )}
+    </AnimatePresence>
+  );
+}
 
 function App() {
   return (
-    <div className="app" style={{ minHeight: '100vh' }}>
-      <ScrollProgressUI />
-      <Navbar />
-      <main>
+    <Router>
+      <div className="app" style={{ minHeight: '100vh' }}>
+        <ScrollToTop />
+        <Navbar />
 
-        {/* ── Design 1 — Typewriter + Globe ── */}
-        <DesignLabel number={1} total={4} />
-        <HeroSection1 />
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/prizes" element={<PrizesPage />} />
+          <Route path="/highlights" element={<HighlightsPage />} />
+          <Route path="/partners" element={<PartnersPage />} />
+          <Route path="/faq" element={<FaqSection />} />
+          <Route path="/contact" element={<ContactSection />} />
+        </Routes>
 
-        {/* ── Design 2 — Gemini lines, white background ── */}
-        <DesignLabel number={2} total={4} />
-        <HeroSection2 />
-
-        {/* ── Design 3 — Modern Premium ── */}
-        {/* <DesignLabel number={3} total={4} />
-        <HeroSection3 />
-
-        {/* ── Design 4 — Editorial Split, White/Black/Blue ── 
-        <DesignLabel number={4} total={5} />
-        <HeroSection4 /> */}
-
-        {/* ── Design 5 — MagnetLines Background ── */}
-        <DesignLabel number={5} total={5} />
-        <HeroSection5 />
-
-        {/* ── Design 6 — MagnetLines Background ──
-        <DesignLabel number={6} total={6} />
-        <HeroSection6 /> */}
-
-
-
-        {/* ── Rest of the page ── */}
-        <AboutSection />
-        <PrizesSection />
-        <ProblemStatements />
-        <GuidelinesSection />
-        <TimelineSection />
-        <InteractiveSection />
-        <FaqSection />
-        <ContactSection />
-
-      </main>
-    </div>
+        <Footer />
+      </div>
+    </Router>
   );
 }
 

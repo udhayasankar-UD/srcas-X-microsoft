@@ -1,243 +1,158 @@
-import { useRef } from "react";
+import { useRef, useState, useCallback, useMemo, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Trophy, Users, Cloud, ArrowRight, Zap } from "lucide-react";
-import { ScratchCard } from "../ui/ScratchCard.jsx";
-import { GrandPrizeTicket } from "../ui/GrandPrizeTicket.jsx";
+import { useNavigate } from "react-router-dom";
+import { InternshipTicket } from "../ui/InternshipTicket";
 
-const PRIZES = [
-  {
-    icon: Trophy,
-    label: "01",
-    title: "Cash Prize Pool",
-    desc: "₹5,00,000+ across categories",
-  },
-  {
-    icon: Users,
-    label: "02",
-    title: "1:1 Mentorship",
-    desc: "From Microsoft & Igenius AI engineers",
-  },
-  {
-    icon: Cloud,
-    label: "03",
-    title: "Azure Cloud Credits",
-    desc: "For every shipping team",
-  },
-];
-
-export const PrizesSection = () => {
+/* ─── Wave mesh ─── */
+const WaveMesh = () => {
+  const lines = useMemo(() => {
+    const result = [];
+    for (let l = 0; l < 36; l++) {
+      const baseY = (l / 36) * 400;
+      const points = [];
+      for (let s = 0; s <= 60; s++) {
+        const x = (s / 60) * 500;
+        const t = s / 60;
+        const y = baseY
+          + Math.sin(t * Math.PI * 3 + l * 0.3) * (20 + l * 0.8)
+          + Math.sin(t * Math.PI * 5 + l * 0.15) * (8 + l * 0.3)
+          + Math.cos(t * Math.PI * 2.5 + l * 0.5) * (12 + l * 0.5)
+          - Math.exp(-Math.pow((t - 0.5) * 2.5, 2)) * 30;
+        points.push(`${x.toFixed(1)},${y.toFixed(1)}`);
+      }
+      result.push(
+        <polyline key={l} points={points.join(" ")} fill="none"
+          stroke="#fff" strokeWidth={0.7} opacity={0.12 + (l / 36) * 0.35} />
+      );
+    }
+    return result;
+  }, []);
   return (
-    <section
-      id="prizes"
-      style={{
-        position: "relative",
-        padding: "100px 2.5rem 120px",
-        backgroundColor: "#fff",
-        overflow: "hidden",
-        fontFamily: "'Plus Jakarta Sans', sans-serif",
-      }}
-    >
-      {/* Fine grid lines background */}
-      <svg
-        aria-hidden
-        style={{ position: "absolute", inset: 0, width: "100%", height: "100%", opacity: 0.035, pointerEvents: "none" }}
-      >
+    <svg viewBox="0 0 500 400" preserveAspectRatio="xMidYMid slice"
+      style={{ width:"100%", height:"100%", display:"block" }} aria-hidden>
+      <defs>
+        <radialGradient id="wf2" cx="50%" cy="60%" r="55%">
+          <stop offset="0%" stopColor="#fff" stopOpacity="1" />
+          <stop offset="100%" stopColor="#fff" stopOpacity="0" />
+        </radialGradient>
+        <mask id="wm2"><rect width="500" height="400" fill="url(#wf2)" /></mask>
+      </defs>
+      <g mask="url(#wm2)">{lines}</g>
+    </svg>
+  );
+};
+
+/* ─── Main Section ─── */
+export const PrizesSection = () => {
+  const navigate = useNavigate();
+
+  return (
+    <section id="prizes" style={{
+      position:"relative",
+      padding:"100px 2.5rem 120px",
+      backgroundColor:"#fff",
+      overflow:"hidden",
+      fontFamily:"'Plus Jakarta Sans', sans-serif",
+    }}>
+      {/* Grid background */}
+      <svg aria-hidden style={{
+        position:"absolute", inset:0, width:"100%", height:"100%",
+        opacity:0.035, pointerEvents:"none",
+      }}>
         {Array.from({ length: 14 }).map((_, i) => (
-          <line key={`v${i}`} x1={`${(i + 1) * 7.14}%`} y1="0" x2={`${(i + 1) * 7.14}%`} y2="100%" stroke="#000" strokeWidth="1" />
+          <line key={`v${i}`} x1={`${(i+1)*7.14}%`} y1="0" x2={`${(i+1)*7.14}%`} y2="100%" stroke="#000" strokeWidth="1"/>
         ))}
         {Array.from({ length: 10 }).map((_, i) => (
-          <line key={`h${i}`} x1="0" y1={`${(i + 1) * 10}%`} x2="100%" y2={`${(i + 1) * 10}%`} stroke="#000" strokeWidth="1" />
+          <line key={`h${i}`} x1="0" y1={`${(i+1)*10}%`} x2="100%" y2={`${(i+1)*10}%`} stroke="#000" strokeWidth="1"/>
         ))}
       </svg>
 
-      <div style={{ maxWidth: 1200, margin: "0 auto", position: "relative", zIndex: 1 }}>
+      <div style={{ maxWidth:1100, margin:"0 auto", position:"relative", zIndex:1 }}>
 
-        {/* ── Header ── */}
+        {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          style={{ marginBottom: 72 }}
+          initial={{ opacity:0, y:24 }}
+          whileInView={{ opacity:1, y:0 }}
+          viewport={{ once:true, margin:"-60px" }}
+          transition={{ duration:0.7, ease:[0.22,1,0.36,1] }}
+          style={{ marginBottom:64 }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20 }}>
-            <div style={{ width: 28, height: 1, background: "#111" }} />
+          <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:18 }}>
+            <div style={{ width:28, height:1, background:"#111" }} />
             <p style={{
-              fontSize: "0.7rem",
-              fontWeight: 700,
-              letterSpacing: "0.22em",
-              color: "#111",
-              textTransform: "uppercase",
-              margin: 0,
-            }}>
-              The Prizes
-            </p>
+              fontSize:"0.7rem", fontWeight:700, letterSpacing:"0.22em",
+              color:"#111", textTransform:"uppercase", margin:0,
+            }}>The Prizes</p>
           </div>
           <h2 style={{
-            fontFamily: "'Plus Jakarta Sans', sans-serif",
-            fontSize: "clamp(2.8rem, 6vw, 5rem)",
-            fontWeight: 800,
-            lineHeight: 1.05,
-            letterSpacing: "-0.04em",
-            color: "#111",
-            margin: 0,
+            fontSize:"clamp(2.8rem,6vw,5rem)", fontWeight:800,
+            lineHeight:1.05, letterSpacing:"-0.04em", color:"#111", margin:0,
           }}>
             Win more than<br />bragging rights.
           </h2>
-          <p style={{
-            fontSize: "1.1rem",
-            color: "#666",
-            maxWidth: 500,
-            marginTop: 16,
-            lineHeight: 1.6,
-          }}>
+          <p style={{ fontSize:"1.05rem", color:"#666", maxWidth:480, marginTop:14, lineHeight:1.6 }}>
             Exclusive prizes, life-changing opportunities and perks that set you ahead.
           </p>
         </motion.div>
 
-        {/* ── Grand Prize Ticket ── */}
+        {/* 3D Ticket */}
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          style={{ marginBottom: 24, width: "100%" }}
+          initial={{ opacity:0, y:40 }}
+          whileInView={{ opacity:1, y:0 }}
+          viewport={{ once:true, margin:"-80px" }}
+          transition={{ duration:0.8, ease:[0.22,1,0.36,1] }}
+          style={{ marginBottom:40 }}
         >
-          <GrandPrizeTicket />
+          <InternshipTicket />
         </motion.div>
 
-        {/* ── Bottom: prize list + Mystery Benefit Ticket ── */}
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: 20,
-          alignItems: "stretch",
-        }} className="prizes-bottom-grid">
-
-          {/* Prize list (White rounded cards) */}
-          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            {PRIZES.map((p, i) => (
-              <motion.div
-                key={p.title}
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, margin: "-40px" }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
-                whileHover={{ x: 5 }}
-                style={{
-                  background: "#fff",
-                  border: "1px solid #e8e8e8",
-                  borderRadius: 20,
-                  padding: "20px 24px",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 20,
-                  cursor: "default",
-                  transition: "border-color 0.25s, box-shadow 0.25s",
-                  boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
-                }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.borderColor = "#111";
-                  e.currentTarget.style.boxShadow = "0 4px 24px rgba(0,0,0,0.09)";
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.borderColor = "#e8e8e8";
-                  e.currentTarget.style.boxShadow = "0 1px 4px rgba(0,0,0,0.04)";
-                }}
-              >
-                {/* Number tag */}
-                <span style={{
-                  fontFamily: "monospace",
-                  fontSize: "0.7rem",
-                  fontWeight: 800,
-                  color: "#111",
-                  flexShrink: 0,
-                  width: 24,
-                }}>
-                  {p.label}
-                </span>
-
-                {/* Icon */}
-                <div style={{
-                  width: 52,
-                  height: 52,
-                  borderRadius: 14,
-                  background: "#f5f5f5",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  flexShrink: 0,
-                }}>
-                  <p.icon size={22} color="#111" strokeWidth={1.8} />
-                </div>
-
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: "1.05rem", fontWeight: 800, color: "#111", marginBottom: 4, letterSpacing: "-0.01em" }}>
-                    {p.title}
-                  </div>
-                  <div style={{ fontSize: "0.85rem", color: "#666" }}>{p.desc}</div>
-                </div>
-
-                <ArrowRight size={16} color="#ccc" style={{ flexShrink: 0 }} />
-              </motion.div>
-            ))}
-
-            {/* "And more" pill */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.4 }}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 8,
-                padding: "16px 24px",
-                borderRadius: 20,
-                border: "1px dashed #ddd",
-                color: "#888",
-                fontSize: "0.85rem",
-                fontWeight: 600,
-              }}
-            >
-              <Zap size={16} color="#aaa" />
-              + Goodies, certificates & more surprises
-            </motion.div>
-          </div>
-
-          {/* Mystery Benefit Ticket (ScratchCard) */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-40px" }}
-            transition={{ duration: 0.6, delay: 0.15 }}
-            style={{ display: "flex", flexDirection: "column" }}
+        {/* View more button */}
+        <motion.div
+          initial={{ opacity:0, y:16 }}
+          whileInView={{ opacity:1, y:0 }}
+          viewport={{ once:true }}
+          transition={{ duration:0.5, delay:0.2 }}
+          style={{ display:"flex", justifyContent:"center" }}
+        >
+          <button
+            onClick={() => { navigate("/prizes"); window.scrollTo({ top: 0, behavior: 'instant' }); }}
+            style={{
+              display:"inline-flex", alignItems:"center", gap:10,
+              padding:"14px 32px",
+              background:"#111", color:"#fff",
+              fontSize:"0.85rem", fontWeight:700,
+              letterSpacing:"0.06em", textTransform:"uppercase",
+              border:"2px solid #111", borderRadius:100,
+              cursor:"pointer",
+              transition:"background 0.2s, color 0.2s, transform 0.2s, box-shadow 0.2s",
+              boxShadow:"0 4px 20px rgba(0,0,0,0.12)",
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.background = "#fff";
+              e.currentTarget.style.color = "#111";
+              e.currentTarget.style.transform = "translateY(-3px)";
+              e.currentTarget.style.boxShadow = "0 8px 28px rgba(0,0,0,0.18)";
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.background = "#111";
+              e.currentTarget.style.color = "#fff";
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.boxShadow = "0 4px 20px rgba(0,0,0,0.12)";
+            }}
           >
-            <ScratchCard />
-          </motion.div>
-        </div>
+            <span>💸</span>
+            Show Me The Money
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </button>
+        </motion.div>
+
       </div>
 
       <style>{`
-        /* ── ScratchCard ticket holes ── */
-        .ticket-small-holes::after {
-          content: "";
-          position: absolute;
-          inset: 0;
-          pointer-events: none;
-          background-image:
-            radial-gradient(circle at 0px 50%, #fff 18px, transparent 18.5px),
-            radial-gradient(circle at 100% 50%, #fff 18px, transparent 18.5px);
-          background-size: 100% 100%;
-          background-repeat: no-repeat;
-          z-index: 20;
-          border-radius: 20px;
-        }
-
-        @media (max-width: 900px) {
-          .prizes-bottom-grid { grid-template-columns: 1fr !important; }
-        }
-        @media (max-width: 640px) {
+        @media (max-width: 768px) {
           #prizes { padding: 72px 1.25rem 80px !important; }
         }
       `}</style>

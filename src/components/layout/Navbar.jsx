@@ -1,123 +1,309 @@
-import React, { useState, useRef, useEffect } from "react";
+'use client';
+
+import {
+  Children,
+  cloneElement,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+import {
+  motion,
+  useMotionValue,
+  useSpring,
+  useTransform,
+  AnimatePresence,
+} from 'motion/react';
 import {
   House,
   Handshake,
-  Trophy,
   Star,
-  Calendar,
-  Users,
-  Info,
+  Trophy,
+  BookOpen,
+  ClipboardList,
+  HelpCircle,
   Phone,
   Menu,
   X,
-} from "lucide-react";
+} from 'lucide-react';
+import { useNavigate, useLocation } from 'react-router-dom';
 
+// ─── Site color tokens (black & white) ──────────────────────────────────────
+const ACTIVE    = '#111111';
+const ACTIVE_BG = '#F3F3F3';
+const BG_PANEL  = 'rgba(255,255,255,0.88)';
+const BORDER    = 'rgba(0,0,0,0.12)';
+
+// ─── Nav items ────────────────────────────────────────────────────────────────
 const NAV_ITEMS = [
-  { id: "home",      label: "Home",      icon: House,     href: "#home" },
-  { id: "about",     label: "About",     icon: Users,     href: "#about" },
-  { id: "problems",  label: "Problems",  icon: Handshake, href: "#problems" },
-  { id: "prizes",    label: "Prizes",    icon: Trophy,    href: "#prizes" },
-  { id: "finalists", label: "Finalists", icon: Star,      href: "#finalists" },
-  { id: "timeline",  label: "Timeline",  icon: Calendar,  href: "#timeline" },
-  { id: "faq",       label: "FAQs",      icon: Info,      href: "#faq" },
-  { id: "contact",   label: "Contact",   icon: Phone,     href: "#contact" },
+  { id: 'home',       label: 'Home',               icon: House,         path: '/', hash: '#home' },
+  { id: 'partners',   label: 'Partners',            icon: Handshake,     path: '/partners', hash: '' },
+  { id: 'highlights', label: 'Highlights',          icon: Star,          path: '/highlights', hash: '' },
+  { id: 'prizes',     label: 'Prizes',              icon: Trophy,        path: '/prizes', hash: '' },
+  { id: 'problems',   label: 'Problem Statements',  icon: BookOpen,      path: '/', hash: '#problems' },
+  // { id: 'guidelines', label: 'Guidelines',          icon: ClipboardList, path: '/', hash: '#guidelines' },
+  { id: 'faq',        label: 'FAQ',                 icon: HelpCircle,    path: '/faq', hash: '' },
+  { id: 'contact',    label: 'Contact',             icon: Phone,         path: '/contact', hash: '' },
 ];
 
+// ─── Active-section tracker ───────────────────────────────────────────────────
 function useActiveSection() {
-  const [activeSection, setActiveSection] = useState("home");
+  const [active, setActive] = useState('home');
+  const location = useLocation();
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
-          }
-        });
-      },
-      { threshold: 0.4, rootMargin: "-10% 0px -10% 0px" }
-    );
-
-    NAV_ITEMS.forEach((item) => {
-      const id = item.href.replace("#", "");
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    });
-
-    const handleScroll = () => {
-      if (window.scrollY < 80) setActiveSection("home");
+    // Non-home routes — set immediately from pathname
+    const routeMap = {
+      '/prizes':     'prizes',
+      '/highlights': 'highlights',
+      '/partners':   'partners',
+      '/faq':        'faq',
+      '/contact':    'contact',
     };
-    window.addEventListener("scroll", handleScroll, { passive: true });
 
-    return () => {
-      observer.disconnect();
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+    if (routeMap[location.pathname]) {
+      setActive(routeMap[location.pathname]);
+      return;
+    }
 
-  return activeSection;
+    // Home route — track sections via scroll
+    if (location.pathname === '/') {
+      // Always start at home
+      setActive('home');
+
+      const onScroll = () => {
+        if (window.scrollY < 80) {
+          setActive('home');
+          return;
+        }
+        // Find which section is most visible
+        const sections = NAV_ITEMS.filter(i => i.path === '/').map(i => i.hash.replace('#', '')).filter(Boolean);
+        let current = 'home';
+        for (const id of sections) {
+          const el = document.getElementById(id);
+          if (!el) continue;
+          const rect = el.getBoundingClientRect();
+          if (rect.top <= window.innerHeight * 0.45) current = id;
+        }
+        setActive(current);
+      };
+
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll(); // run once on mount
+      return () => window.removeEventListener('scroll', onScroll);
+    }
+  }, [location.pathname]);
+
+  return active;
 }
 
-// Desktop Navbar
-const DesktopNavBar = () => {
-  const activeSection = useActiveSection();
-  const [hoveredTab, setHoveredTab] = useState(null);
+// ─── Single Dock Item (magnifies on Y proximity) ──────────────────────────────
+function NavDockItem({
+  children,
+  className = '',
+  onClick,
+  mouseY,
+  spring,
+  distance,
+  magnification,
+  baseItemSize,
+  isActive,
+}) {
+  const ref       = useRef(null);
+  const isHovered = useMotionValue(0);
+
+  const mouseDistance = useTransform(mouseY, (val) => {
+    const rect = ref.current?.getBoundingClientRect() ?? { y: 0, height: baseItemSize };
+    return val - rect.y - baseItemSize / 2;
+  });
+
+  const targetSize = useTransform(
+    mouseDistance,
+    [-distance, 0, distance],
+    [baseItemSize, magnification, baseItemSize]
+  );
+  const size = useSpring(targetSize, spring);
 
   return (
-    <div className="fixed hidden sm:block top-8 left-10 z-50">
-      <nav className="flex flex-col gap-4">
+    <motion.div
+      ref={ref}
+      style={{
+        width: size,
+        height: size,
+        background: isActive ? ACTIVE : 'rgba(255,255,255,0.95)',
+        boxShadow: isActive
+          ? '0 4px 14px rgba(0,0,0,0.22)'
+          : '0 1px 4px rgba(0,0,0,0.07)',
+        border: isActive
+          ? '2px solid #111'
+          : '2px solid rgba(0,0,0,0.10)',
+      }}
+      onHoverStart={() => isHovered.set(1)}
+      onHoverEnd={() => isHovered.set(0)}
+      onFocus={() => isHovered.set(1)}
+      onBlur={() => isHovered.set(0)}
+      onClick={onClick}
+      whileHover={{
+        background: isActive ? ACTIVE : ACTIVE_BG,
+        borderColor: '#111',
+        boxShadow: '0 4px 18px rgba(0,0,0,0.15)',
+      }}
+      className={`relative inline-flex items-center justify-center rounded-full cursor-pointer transition-colors ${className}`}
+      tabIndex={0}
+      role="button"
+    >
+      {Children.map(children, (child) => cloneElement(child, { isHovered }))}
+    </motion.div>
+  );
+}
+
+// ─── Tooltip label (appears to the RIGHT of the icon) ────────────────────────
+function NavDockLabel({ children, className = '', ...rest }) {
+  const { isHovered } = rest;
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const unsub = isHovered.on('change', (v) => setVisible(v === 1));
+    return () => unsub();
+  }, [isHovered]);
+
+  return (
+    <AnimatePresence>
+      {visible && (
+        <motion.div
+          initial={{ opacity: 0, x: -4 }}
+          animate={{ opacity: 1, x: 6 }}
+          exit={{ opacity: 0, x: -4 }}
+          transition={{ duration: 0.16 }}
+          className={`${className} pointer-events-none absolute left-full ml-4 top-1/2 -translate-y-1/2 w-fit whitespace-pre rounded-xl border z-50 px-4 py-2 text-sm font-semibold shadow-md`}
+          style={{
+            background: '#fff',
+            border: `1px solid rgba(0,0,0,0.12)`,
+            color: '#111',
+            boxShadow: '0 4px 14px rgba(0,0,0,0.10)',
+          }}
+          role="tooltip"
+        >
+          {children}
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
+
+// ─── Icon wrapper ─────────────────────────────────────────────────────────────
+function NavDockIcon({ children, className = '' }) {
+  return (
+    <div className={`flex items-center justify-center ${className}`}>
+      {children}
+    </div>
+  );
+}
+
+// ─── Desktop: Vertical Dock on the left ──────────────────────────────────────
+const DesktopNavBar = () => {
+  const activeSection = useActiveSection();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const spring        = { mass: 0.1, stiffness: 150, damping: 12 };
+  const baseItemSize  = 52;
+  const magnification = 82;
+  const distance      = 130;
+  const panelWidth    = baseItemSize + 28;
+
+  const mouseY    = useMotionValue(Infinity);
+  const isHovered = useMotionValue(0);
+
+  const handleNav = (item) => {
+    if (item.path !== location.pathname) {
+      navigate(item.path);
+      // Wait for navigation and then scroll if hash exists
+      if (item.hash) {
+        setTimeout(() => {
+          const el = document.getElementById(item.hash.replace('#', ''));
+          if (el) el.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      }
+    } else if (item.hash) {
+      const el = document.getElementById(item.hash.replace('#', ''));
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  return (
+    <div className="fixed hidden sm:flex flex-col items-center top-1/2 -translate-y-1/2 left-5 z-50">
+      {/* White frosted-glass pill panel */}
+      <motion.div
+        onMouseMove={({ clientY }) => {
+          isHovered.set(1);
+          mouseY.set(clientY);
+        }}
+        onMouseLeave={() => {
+          isHovered.set(0);
+          mouseY.set(Infinity);
+        }}
+        className="relative flex flex-col items-center gap-4 rounded-2xl py-6 px-3"
+        style={{
+          width: panelWidth,
+          background: BG_PANEL,
+          backdropFilter: 'blur(16px)',
+          WebkitBackdropFilter: 'blur(16px)',
+          border: `1.5px solid ${BORDER}`,
+          boxShadow: '0 8px 32px rgba(0,0,0,0.08), 0 1px 0 rgba(255,255,255,0.9) inset',
+        }}
+        role="toolbar"
+        aria-label="Site navigation"
+      >
+        {/* Left accent line */}
+        <div
+          className="absolute left-0 top-8 bottom-8 w-[3px] rounded-full"
+          style={{ background: 'linear-gradient(to bottom, transparent, #111, transparent)', opacity: 0.18 }}
+        />
+
         {NAV_ITEMS.map((item) => {
-          const sectionId = item.href.replace("#", "");
-          const isActive = activeSection === sectionId;
-          const isHovered = hoveredTab === item.id;
+          const isActive   = activeSection === item.id;
           const LucideIcon = item.icon;
 
           return (
-            <a
+            <NavDockItem
               key={item.id}
-              href={item.href}
-              onMouseEnter={() => setHoveredTab(item.id)}
-              onMouseLeave={() => setHoveredTab(null)}
-              className={[
-                "relative flex items-center h-12 rounded-full",
-                "transition-all duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1.0)]",
-                "overflow-hidden backdrop-blur-xl border",
-                isActive
-                  ? "bg-[#005CAA] text-white border-[#005CAA] shadow-lg shadow-blue-900/20"
-                  : "bg-white/70 text-gray-600 border-white/40 hover:bg-white/90 hover:border-white/60 shadow-sm",
-              ].join(" ")}
-              style={{
-                width: isHovered || isActive ? "auto" : "48px",
-                paddingRight: isHovered || isActive ? "20px" : "0",
-              }}
+              isActive={isActive}
+              onClick={() => handleNav(item)}
+              mouseY={mouseY}
+              spring={spring}
+              distance={distance}
+              magnification={magnification}
+              baseItemSize={baseItemSize}
             >
-              <div className="w-12 h-12 flex items-center justify-center shrink-0">
-                <LucideIcon size={22} strokeWidth={2} />
-              </div>
-              <span
-                className={[
-                  "whitespace-nowrap font-medium text-sm transition-all duration-300",
-                  isHovered || isActive
-                    ? "opacity-100 translate-x-0"
-                    : "opacity-0 -translate-x-4 w-0",
-                ].join(" ")}
-              >
-                {item.label}
-              </span>
-            </a>
+              <NavDockIcon>
+                <LucideIcon
+                  size={22}
+                  color={isActive ? '#ffffff' : '#111111'}
+                  strokeWidth={isActive ? 2.2 : 1.8}
+                  style={{ opacity: isActive ? 1 : 0.5 }}
+                />
+              </NavDockIcon>
+              <NavDockLabel>{item.label}</NavDockLabel>
+            </NavDockItem>
           );
         })}
-      </nav>
+      </motion.div>
     </div>
   );
 };
 
-// Mobile Navbar
+// ─── Mobile: Floating hamburger bottom-right ──────────────────────────────────
 const MobileNavBar = () => {
-  const activeSection = useActiveSection();
-  const [isOpen, setIsOpen] = useState(false);
+  const activeSection  = useActiveSection();
+  const [isOpen, setIsOpen]         = useState(false);
   const [showLabels, setShowLabels] = useState(false);
   const menuRef = useRef(null);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const handleToggle = () => {
     if (isOpen) {
@@ -125,111 +311,113 @@ const MobileNavBar = () => {
       setTimeout(() => setIsOpen(false), 200);
     } else {
       setIsOpen(true);
-      setTimeout(() => setShowLabels(true), 300);
+      setTimeout(() => setShowLabels(true), 280);
     }
   };
 
-  const handleLinkClick = () => {
+  const handleNav = (item) => {
     setShowLabels(false);
     setTimeout(() => setIsOpen(false), 200);
+    
+    if (item.path !== location.pathname) {
+      navigate(item.path);
+      if (item.hash) {
+        setTimeout(() => {
+          const el = document.getElementById(item.hash.replace('#', ''));
+          if (el) el.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      }
+    } else if (item.hash) {
+      const el = document.getElementById(item.hash.replace('#', ''));
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
   useEffect(() => {
     if (!isOpen) return;
-    const handleClickOutside = (e) => {
+    const handler = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target)) {
         setShowLabels(false);
         setTimeout(() => setIsOpen(false), 200);
       }
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
   }, [isOpen]);
 
   return (
-    <div className="fixed sm:hidden top-8 right-4 z-50">
+    <div className="fixed sm:hidden top-4 right-4 z-50">
       <div
         ref={menuRef}
         className={[
-          "relative flex flex-col rounded-3xl bg-white backdrop-blur-[20px]",
-          "border border-[#E2E8F0] shadow-lg transition-all duration-300 ease-out overflow-hidden",
-          isOpen ? "p-3 gap-2" : "p-0",
-          showLabels ? "w-48" : isOpen ? "w-16" : "w-14",
-        ].join(" ")}
+          'relative flex flex-col rounded-3xl transition-all duration-300 ease-out overflow-hidden',
+          isOpen ? 'p-3 gap-2' : 'p-0',
+          showLabels ? 'w-52' : isOpen ? 'w-14' : 'w-14',
+        ].join(' ')}
+        style={{
+          background: BG_PANEL,
+          backdropFilter: 'blur(16px)',
+          WebkitBackdropFilter: 'blur(16px)',
+          border: `1.5px solid ${BORDER}`,
+          boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
+        }}
       >
-        {/* Partial border accent */}
-        <svg
-          className="absolute inset-0 w-full h-full pointer-events-none"
-          style={{ overflow: "visible" }}
-        >
-          <rect
-            x="0" y="0"
-            width="calc(100% + 0.3px)"
-            height="calc(100% + 0.3px)"
-            rx="24"
-            fill="none"
-            stroke="rgba(0, 92, 170, 0.3)"
-            strokeWidth="0.6"
-            strokeDasharray="90% 80%"
-            strokeDashoffset="20%"
-          />
-        </svg>
-
         {/* Hamburger / Close */}
         <button
           onClick={handleToggle}
           className={[
-            "flex items-center justify-center shrink-0 rounded-2xl bg-[#005CAA]",
-            "transition-all duration-300 ease-out active:scale-95",
-            isOpen ? "w-10 h-10 self-end" : "w-14 h-14",
-          ].join(" ")}
+            'flex items-center justify-center shrink-0 rounded-2xl transition-all duration-300 ease-out active:scale-95',
+            isOpen ? 'w-10 h-10 self-end' : 'w-14 h-14',
+          ].join(' ')}
+          style={{ background: '#111' }}
         >
-          {isOpen ? (
-            <X size={20} className="text-white" />
-          ) : (
-            <Menu size={24} className="text-white" />
-          )}
+          {isOpen
+            ? <X    size={18} color="#fff" />
+            : <Menu size={22} color="#fff" />
+          }
         </button>
 
-        {/* Nav Items */}
+        {/* Nav items */}
         <div
           className={[
-            "flex flex-col gap-1 transition-all duration-300 ease-out overflow-hidden",
-            isOpen ? "max-h-125 opacity-100 pt-2" : "max-h-0 opacity-0",
-          ].join(" ")}
+            'flex flex-col gap-1 transition-all duration-300 ease-out overflow-hidden',
+            isOpen ? 'max-h-[600px] opacity-100 pt-2' : 'max-h-0 opacity-0',
+          ].join(' ')}
         >
           {NAV_ITEMS.map((item) => {
-            const sectionId = item.href.replace("#", "");
-            const isActive = activeSection === sectionId;
+            const isActive   = activeSection === item.id;
             const LucideIcon = item.icon;
 
             return (
-              <a
+              <button
                 key={item.id}
-                href={item.href}
-                onClick={handleLinkClick}
-                className="flex items-center gap-4 h-10 px-2 rounded-xl transition-all duration-300 ease-out focus:outline-none hover:bg-[#005CAA]/10"
+                onClick={() => handleNav(item)}
+                className="flex items-center gap-3 h-10 px-2 rounded-xl transition-all duration-200 focus:outline-none w-full text-left"
+                style={{
+                  background: isActive ? ACTIVE_BG : 'transparent',
+                }}
+                onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.background = ACTIVE_BG; }}
+                onMouseLeave={(e) => { if (!isActive) e.currentTarget.style.background = 'transparent'; }}
               >
-                <div
-                  className={[
-                    "shrink-0 flex items-center justify-center w-6 h-6 transition-all duration-300",
-                    isActive ? "text-[#005CAA]" : "text-[#003366]/60",
-                  ].join(" ")}
-                >
-                  <LucideIcon size={24} strokeWidth={1.5} />
+                <div className="shrink-0 flex items-center justify-center w-6 h-6">
+                  <LucideIcon
+                    size={18}
+                    color={isActive ? '#111' : '#aaaaaa'}
+                    strokeWidth={isActive ? 2.2 : 1.6}
+                  />
                 </div>
                 <span
                   className={[
-                    "text-base font-medium whitespace-nowrap transition-all duration-300",
-                    isActive ? "text-[#005CAA] font-semibold" : "text-[#003366]/80",
-                    showLabels
-                      ? "opacity-100 translate-x-0"
-                      : "opacity-0 translate-x-4 pointer-events-none",
-                  ].join(" ")}
+                    'text-sm font-medium whitespace-nowrap transition-all duration-300',
+                    showLabels ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4 pointer-events-none',
+                  ].join(' ')}
+                  style={{ color: isActive ? '#111' : '#888', fontWeight: isActive ? 700 : 500 }}
                 >
                   {item.label}
                 </span>
-              </a>
+              </button>
             );
           })}
         </div>
@@ -238,10 +426,11 @@ const MobileNavBar = () => {
   );
 };
 
+// ─── Export ───────────────────────────────────────────────────────────────────
 const Navbar = () => (
   <>
-    {/* <DesktopNavBar />
-    <MobileNavBar /> */}
+    <DesktopNavBar />
+    <MobileNavBar />
   </>
 );
 

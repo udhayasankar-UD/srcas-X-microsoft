@@ -6,11 +6,90 @@ import srcasLogo from '../../assets/logo/srcas-1-logo.png';
 import msLogo from '../../assets/logo/microsoft.png';
 import pcLogo from '../../assets/logo/programming-club-2-logo.png';
 
+// ── Icons ───────────────────────────────────────────────────────────────────────
+const StarIcon = ({ size = 20, color = "currentColor", fill = "none" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill={fill} stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+  </svg>
+);
+const TrophyIcon = ({ size = 20, color = "currentColor" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+    <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
+    <path d="M4 22h16"></path>
+    <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path>
+    <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path>
+    <path d="M18 2H6v7a6 6 0 0 0 12 0V2z"></path>
+  </svg>
+);
+const BrainIcon = ({ size = 20, color = "currentColor" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z"></path>
+    <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z"></path>
+  </svg>
+);
+const PinIcon = ({ size = 20, color = "currentColor" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+    <circle cx="12" cy="10" r="3"></circle>
+  </svg>
+);
+const BulbIcon = ({ size = 20, color = "currentColor" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1.3.5 2.6 1.5 3.5.8.8 1.3 1.5 1.5 2.5"></path>
+    <path d="M9 18h6"></path>
+    <path d="M10 22h4"></path>
+  </svg>
+);
+const CalendarIcon = ({ size = 20, color = "currentColor" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+    <line x1="16" y1="2" x2="16" y2="6"></line>
+    <line x1="8" y1="2" x2="8" y2="6"></line>
+    <line x1="3" y1="10" x2="21" y2="10"></line>
+  </svg>
+);
+
 const LINE1 = "What's the Next";
 const LINE2 = "Big Idea!";
 const CHAR_DELAY = 75;
 const LINE_PAUSE = 160;
 const REVEAL_DELAY = 300;
+
+// ── Floating word that reacts to cursor ──────────────────────────────────────
+function FloatingWord({ word, x, y, fontSize, color, delay }) {
+  const ref = useRef(null);
+  const [pos, setPos] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const onMove = (e) => {
+      const dx = (e.clientX / window.innerWidth  - 0.5) * 18;
+      const dy = (e.clientY / window.innerHeight - 0.5) * 18;
+      setPos({ x: dx, y: dy });
+    };
+    window.addEventListener('pointermove', onMove);
+    return () => window.removeEventListener('pointermove', onMove);
+  }, []);
+
+  return (
+    <motion.span
+      ref={ref}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 0.07, x: pos.x, y: pos.y }}
+      transition={{ opacity: { delay, duration: 0.8 }, x: { type: 'spring', stiffness: 30, damping: 15 }, y: { type: 'spring', stiffness: 30, damping: 15 } }}
+      style={{
+        position: 'absolute', left: x, top: y,
+        fontSize, fontWeight: 900,
+        color, pointerEvents: 'none',
+        letterSpacing: '-0.04em', lineHeight: 1,
+        userSelect: 'none', zIndex: 0,
+        whiteSpace: 'nowrap',
+      }}
+    >
+      {word}
+    </motion.span>
+  );
+}
 
 // Floating particle
 function Particle({ x, y, size, duration, delay, color }) {
@@ -74,6 +153,7 @@ function ScrambleTag({ text }) {
     <span onMouseEnter={scramble} style={{ fontFamily: 'monospace', cursor: 'default', letterSpacing: '0.08em' }}>
       {display}
     </span>
+    
   );
 }
 
@@ -163,6 +243,94 @@ export default function HeroSection1() {
         fontFamily: theme.fonts.body,
       }}
     >
+
+      {/* Ghost words in background */}
+      <FloatingWord word="HACKATHON" x="2%"   y="12%"  fontSize="clamp(3rem,7vw,6rem)"  color="#111" delay={0.3} />
+      <FloatingWord word="SRCAS"     x="68%"  y="8%"   fontSize="clamp(2rem,5vw,4.5rem)" color="#2563EB" delay={0.5} />
+      <FloatingWord word="2026"      x="5%"   y="68%"  fontSize="clamp(2rem,5vw,4rem)"  color="#111" delay={0.7} />
+      <FloatingWord word="SDG"       x="72%"  y="75%"  fontSize="clamp(2rem,4vw,3.5rem)" color="#111" delay={0.4} />
+
+      {/* Centre vignette so text is readable */}
+      <div style={{
+        position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none',
+        background: 'radial-gradient(ellipse 55% 55% at 50% 48%, rgba(255,255,255,0.82) 0%, rgba(255,255,255,0.45) 60%, rgba(255,255,255,0.0) 100%)',
+      }} />
+
+      {/* Blue top stripe */}
+      <div style={{
+        position: 'absolute', top: 0, left: 0, right: 0, height: 4, zIndex: 10,
+        background: 'linear-gradient(90deg,#1d4ed8,#2563EB,#3b82f6)',
+      }} />
+
+      {/* Header */}
+      <header style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        padding: "24px 40px",
+        position: "absolute",
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 10
+      }}>
+        {/* Center: Pills */}
+        <div className="h1-pills-mobile-hide" style={{ display: "flex", alignItems: "center" }}>
+          <div style={{
+            backgroundColor: "#111",
+            color: "#fff",
+            padding: "8px 20px",
+            borderRadius: "30px 0 0 30px",
+            fontSize: "0.75rem",
+            fontWeight: 700,
+            letterSpacing: "0.05em",
+            display: "flex",
+            alignItems: "center",
+            gap: "6px"
+          }}>
+            <StarIcon size={12} fill="#fff" /> NATIONAL HACKATHON 2026
+          </div>
+          <div style={{
+            backgroundColor: "#fff",
+            color: "#6b7280",
+            padding: "8px 20px",
+            borderRadius: "0 30px 30px 0",
+            fontSize: "0.75rem",
+            fontWeight: 600,
+            letterSpacing: "0.05em",
+            border: "1px solid #e5e7eb",
+            borderLeft: "none"
+          }}>
+            #BUILD THE FUTURE
+          </div>
+        </div>
+
+        {/* Right: Logos */}
+        <div className="h1-logos-mobile-hide" style={{ display: "flex", alignItems: "center", gap: "24px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px", fontWeight: 800, fontSize: "1.2rem" }}>
+            SDG
+            <div style={{
+              width: "24px", height: "24px", borderRadius: "50%",
+              background: "conic-gradient(#e5243b 0 21deg, #dda63a 21deg 42deg, #4c9f38 42deg 64deg, #c5192d 64deg 85deg, #ff3a21 85deg 107deg, #26bde2 107deg 128deg, #fcc30b 128deg 150deg, #a21942 150deg 171deg, #fd6925 171deg 193deg, #dd1367 193deg 214deg, #fd9d24 214deg 236deg, #bf8b2e 236deg 257deg, #3f7e44 257deg 279deg, #0a97d9 279deg 300deg, #56c02b 300deg 321deg, #00689d 321deg 343deg, #19486a 343deg 360deg)"
+            }} />
+          </div>
+          <div style={{ width: "1px", height: "30px", background: "#e5e7eb" }}></div>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <span style={{ fontSize: "0.6rem", color: "#6b7280", textTransform: "uppercase", fontWeight: 600, display: "flex", flexDirection: "column" }}>
+              Organized by
+            </span>
+            <img src={srcasLogo} alt="SRCAS" style={{ height: "32px", objectFit: "contain" }} />
+          </div>
+          <div style={{ width: "1px", height: "30px", background: "#e5e7eb" }}></div>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <span style={{ fontSize: "0.6rem", color: "#6b7280", textTransform: "uppercase", fontWeight: 600, display: "flex", flexDirection: "column" }}>
+              Partner
+            </span>
+            <img src={msLogo} alt="Microsoft" style={{ height: "24px", objectFit: "contain" }} />
+          </div>
+        </div>
+      </header>
+
       <GridLines />
 
       {/* Parallax ambient blobs */}
@@ -194,59 +362,6 @@ export default function HeroSection1() {
       {/* Floating particles */}
       {PARTICLES.map((p, i) => <Particle key={i} {...p} />)}
 
-      {/* Partner logos */}
-      <motion.div
-        initial={{ opacity: 0, y: -16 }}
-        animate={{ opacity: revealed ? 1 : 0, y: revealed ? 0 : -16 }}
-        transition={{ duration: 0.6, delay: 0.1 }}
-        style={{
-          position: 'absolute', top: '1.5rem', right: '2.5rem',
-          zIndex: 50, display: 'flex', alignItems: 'center', gap: '1.2rem',
-        }}
-        className="h1-partners"
-      >
-        {[
-          { src: srcasLogo, alt: 'SRCAS' },
-          { src: msLogo,    alt: 'Microsoft' },
-          { src: pcLogo,    alt: 'Programming Club' },
-        ].map(({ src, alt }, i) => (
-          <span key={i} style={{ display: 'flex', alignItems: 'center', gap: '1.2rem' }}>
-            {i > 0 && <div style={{ width: 1, height: 18, background: '#e5e7eb' }} />}
-            <motion.img
-              src={src} alt={alt}
-              whileHover={{ scale: 1.08, filter: 'grayscale(0)' }}
-              style={{ height: 30, width: 'auto', filter: 'grayscale(0.4)', transition: 'filter 0.3s' }}
-            />
-          </span>
-        ))}
-      </motion.div>
-
-      {/* Live badge top left */}
-      <motion.div
-        initial={{ opacity: 0, x: -20 }}
-        animate={{ opacity: revealed ? 1 : 0, x: revealed ? 0 : -20 }}
-        transition={{ duration: 0.6, delay: 0.2 }}
-        style={{
-          position: 'absolute', top: '1.6rem', left: '2.5rem',
-          display: 'flex', alignItems: 'center', gap: 8,
-          padding: '6px 14px',
-          border: '1px solid #e5e7eb', borderRadius: 100,
-          fontSize: '10px', fontWeight: 700, letterSpacing: '0.16em',
-          color: '#111', textTransform: 'uppercase',
-          background: '#fff',
-          zIndex: 50,
-        }}
-        className="h1-partners"
-      >
-        <span style={{
-          width: 6, height: 6, borderRadius: '50%', background: '#2563EB',
-          boxShadow: '0 0 0 3px #dbeafe',
-          animation: 'h1pulse 1.8s infinite',
-          display: 'inline-block',
-        }} />
-        <ScrambleTag text="Registrations Open" />
-      </motion.div>
-
       {/* Main content */}
       <div style={{
         position: 'relative', zIndex: 10,
@@ -255,18 +370,31 @@ export default function HeroSection1() {
         paddingBottom: '5vh',
         transform: 'translateY(-40px)',
       }}>
-        {/* Eyebrow */}
-        <motion.p
-          initial={{ opacity: 0, y: 10 }}
+        
+        {/* Event badge */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.55, delay: 0.1 }}
           style={{
-            fontSize: '10px', fontWeight: 700, letterSpacing: '0.26em',
-            color: '#9ca3af', textTransform: 'uppercase', marginBottom: '1.2rem',
+            display: 'inline-flex', alignItems: 'center', gap: 8,
+            padding: '6px 16px',
+            border: '1.5px solid #e5e7eb', borderRadius: 100,
+            background: 'rgba(255,255,255,0.9)', backdropFilter: 'blur(8px)',
+            marginBottom: '1.6rem',
+            flexWrap: 'wrap', justifyContent: 'center',
           }}
         >
-          National Hackathon 2026 · SRCAS × Microsoft × Igenius AI
-        </motion.p>
+          <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#7eeb25ff', display: 'inline-block', flexShrink: 0 }} />
+          <span style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '0.14em', color: '#25eb3fff', textTransform: 'uppercase' }}>
+            Registration Open!
+          </span>
+          {/* <span style={{ width: 1, height: 10, background: '#e5e7eb', display: 'inline-block' }} />
+          <span style={{ fontSize: '10px', fontWeight: 600, letterSpacing: '0.1em', color: '#9ca3af', textTransform: 'uppercase' }}>
+            SRCAS × Microsoft
+          </span> */}
+        </motion.div>
+        
 
         {/* Heading */}
         <h1 style={{
@@ -352,27 +480,68 @@ export default function HeroSection1() {
           </motion.a>
         </div>
 
-        {/* Stats strip */}
-        <motion.div
+
+        {/* Row 2 */}
+        {/* <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: revealed ? 1 : 0, y: revealed ? 0 : 20 }}
+          transition={{ duration: 0.6, delay: 0.6 }}
           style={{
-            ...reveal(240),
-            display: 'flex', gap: 32, marginTop: '2.5rem',
-            borderTop: '1px solid #f3f4f6', paddingTop: '1.5rem',
+            backgroundColor: "#fff",
+            borderRadius: "16px",
+            padding: "20px 30px",
+            boxShadow: "0 10px 40px rgba(0,0,0,0.04)",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            flexWrap: "wrap",
+            gap: "12px",
+            marginTop: "20px",
+            width: "100%",
+            maxWidth: "1200px"
           }}
-          className="h1-stats"
+          className="h1-row2"
         >
-          {[
-            { val: '24h', label: 'Hacking' },
-            { val: '17',  label: 'UN SDGs' },
-            { val: '₹5L+', label: 'Prizes' },
-            { val: 'Aug 14', label: '2026' },
-          ].map((s, i) => (
-            <div key={i} style={{ textAlign: 'center' }}>
-              <p style={{ fontSize: '1.1rem', fontWeight: 900, color: '#111', letterSpacing: '-0.02em' }}>{s.val}</p>
-              <p style={{ fontSize: '10px', fontWeight: 600, color: '#9ca3af', letterSpacing: '0.1em', textTransform: 'uppercase' }}>{s.label}</p>
-            </div>
-          ))}
-        </motion.div>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "0.75rem", fontWeight: 700, color: "#111" }}>
+            <TrophyIcon size={18} /> 4TH HACKATHON
+          </div>
+          <div style={{ width: "1px", height: "20px", background: "#e5e7eb" }}></div>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "0.75rem", fontWeight: 700, color: "#111" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2px" }}>
+              <div style={{width: 8, height: 8, background: "#f25022"}}></div>
+              <div style={{width: 8, height: 8, background: "#7fba00"}}></div>
+              <div style={{width: 8, height: 8, background: "#00a4ef"}}></div>
+              <div style={{width: 8, height: 8, background: "#ffb900"}}></div>
+            </div> MICROSOFT PARTNER
+          </div>
+          <div style={{ width: "1px", height: "20px", background: "#e5e7eb" }}></div>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "0.75rem", fontWeight: 700, color: "#111" }}>
+            <BrainIcon size={18} /> GENIUS AI
+          </div>
+          <div style={{ width: "1px", height: "20px", background: "#e5e7eb" }}></div>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "0.75rem", fontWeight: 700, color: "#111" }}>
+            <div style={{
+              width: "18px", height: "18px", borderRadius: "50%",
+              background: "conic-gradient(#e5243b 0 21deg, #dda63a 21deg 42deg, #4c9f38 42deg 64deg, #c5192d 64deg 85deg, #ff3a21 85deg 107deg, #26bde2 107deg 128deg, #fcc30b 128deg 150deg, #a21942 150deg 171deg, #fd6925 171deg 193deg, #dd1367 193deg 214deg, #fd9d24 214deg 236deg, #bf8b2e 236deg 257deg, #3f7e44 257deg 279deg, #0a97d9 279deg 300deg, #56c02b 300deg 321deg, #00689d 321deg 343deg, #19486a 343deg 360deg)"
+            }} /> 17 UN SDGS
+          </div>
+          <div style={{ width: "1px", height: "20px", background: "#e5e7eb" }}></div>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "0.75rem", fontWeight: 700, color: "#111" }}>
+            <PinIcon size={18} /> NATIONAL LEVEL
+          </div>
+          <div style={{ width: "1px", height: "20px", background: "#e5e7eb" }}></div>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "0.75rem", fontWeight: 700, color: "#111" }}>
+            <BulbIcon size={18} /> OPEN INNOVATION
+          </div>
+          <div style={{ width: "1px", height: "20px", background: "#e5e7eb" }}></div>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "0.75rem", fontWeight: 700, color: "#111" }}>
+            <StarIcon size={18} /> SRCAS 2026
+          </div>
+          <div style={{ width: "1px", height: "20px", background: "#e5e7eb" }}></div>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "0.75rem", fontWeight: 700, color: "#111" }}>
+            <CalendarIcon size={18} /> AUG 14–16 2026
+          </div>
+        </motion.div> */}
       </div>
 
       {/* Globe */}
@@ -399,9 +568,15 @@ export default function HeroSection1() {
           0%,100%{box-shadow:0 0 0 3px #dbeafe}
           50%{box-shadow:0 0 0 6px #bfdbfe}
         }
+        @media(max-width:1200px){
+          .h1-logos-mobile-hide{display:none!important}
+        }
         @media(max-width:768px){
           .h1-partners{display:none!important}
           .h1-stats{gap:16px!important}
+          .h1-pills-mobile-hide{display:none!important}
+          .h1-magnetbg{display:none!important}
+          .h1-row2{display:none!important}
         }
         .hero-btn-learn-more{position:relative;display:inline-block;cursor:pointer;outline:none;border:0;vertical-align:middle;text-decoration:none;background:transparent;padding:0;font-size:inherit;font-family:inherit;width:13rem;height:auto}
         .hero-btn-circle{transition:all .45s cubic-bezier(.65,0,.076,1);position:relative;display:block;margin:0;width:3rem;height:3rem;background:#111;border-radius:1.625rem}

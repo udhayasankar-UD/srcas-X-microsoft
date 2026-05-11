@@ -73,7 +73,7 @@ export const ScratchCard = () => {
     const rect = canvas.getBoundingClientRect();
     ctx.globalCompositeOperation = "destination-out";
     ctx.beginPath();
-    ctx.arc(x - rect.left, y - rect.top, 32, 0, Math.PI * 2);
+    ctx.arc(x - rect.left, y - rect.top, 60, 0, Math.PI * 2);
     ctx.fill();
     checkReveal();
   };

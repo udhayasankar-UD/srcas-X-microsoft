@@ -335,7 +335,7 @@ export default function AboutSection() {
             flexWrap: 'wrap', marginTop: 16,
           }}
         >
-          <MagneticButton href="#problems" variant="dark" size="lg">
+          {/* <MagneticButton href="#problems" variant="dark" size="lg">
             Explore Problems
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -343,7 +343,7 @@ export default function AboutSection() {
           </MagneticButton>
           <MagneticButton href="#prizes" variant="outline" size="lg">
             View Prizes
-          </MagneticButton>
+          </MagneticButton> */}
         </motion.div>
       </div>
 
