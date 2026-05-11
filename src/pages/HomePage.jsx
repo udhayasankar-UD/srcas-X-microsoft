@@ -6,6 +6,7 @@ import { PrizesSection } from '../components/sections/PrizesSection';
 import ProblemStatements from '../components/problem-statements/ProblemStatements';
 import GuidelinesSection from '../components/sections/GuidelinesSection';
 import TimelineSection from '../components/sections/TimelineSection';
+import PPTSection from '../components/sections/PPTSection';
 import InteractiveSection from '../components/sections/InteractiveSection';
 // import FaqSection from '../components/sections/FaqSection';
 // import ContactSection from '../components/sections/ContactSection';
@@ -22,6 +23,7 @@ function HomePage() {
       <ProblemStatements />
       <GuidelinesSection />
       <TimelineSection />
+      <PPTSection />
       <InteractiveSection />
       {/* <FaqSection />
       <ContactSection /> */}

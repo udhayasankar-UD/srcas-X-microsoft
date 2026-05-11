@@ -37,7 +37,7 @@ const BORDER    = 'rgba(0,0,0,0.12)';
 
 // ─── Nav items ────────────────────────────────────────────────────────────────
 const NAV_ITEMS = [
-  { id: 'home',       label: 'Home',               icon: House,         path: '/', hash: '#home' },
+  { id: 'home',       label: 'Home',               icon: House,         path: '/', hash: '#hero' },
   { id: 'partners',   label: 'Partners',            icon: Handshake,     path: '/partners', hash: '' },
   { id: 'highlights', label: 'Highlights',          icon: Star,          path: '/highlights', hash: '' },
   { id: 'prizes',     label: 'Prizes',              icon: Trophy,        path: '/prizes', hash: '' },
@@ -219,16 +219,20 @@ const DesktopNavBar = () => {
   const handleNav = (item) => {
     if (item.path !== location.pathname) {
       navigate(item.path);
-      // Wait for navigation and then scroll if hash exists
-      if (item.hash) {
+      // Our global ScrollToTop component in App.jsx will handle scrolling to top.
+      if (item.hash && item.id !== 'home') {
         setTimeout(() => {
           const el = document.getElementById(item.hash.replace('#', ''));
           if (el) el.scrollIntoView({ behavior: 'smooth' });
-        }, 100);
+        }, 150); // Slightly longer delay for page load
       }
-    } else if (item.hash) {
+    } else if (item.hash && item.id !== 'home') {
       const el = document.getElementById(item.hash.replace('#', ''));
-      if (el) el.scrollIntoView({ behavior: 'smooth' });
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
     } else {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -321,15 +325,19 @@ const MobileNavBar = () => {
     
     if (item.path !== location.pathname) {
       navigate(item.path);
-      if (item.hash) {
+      if (item.hash && item.id !== 'home') {
         setTimeout(() => {
           const el = document.getElementById(item.hash.replace('#', ''));
           if (el) el.scrollIntoView({ behavior: 'smooth' });
-        }, 100);
+        }, 250); // Mobile might need a bit more time
       }
-    } else if (item.hash) {
+    } else if (item.hash && item.id !== 'home') {
       const el = document.getElementById(item.hash.replace('#', ''));
-      if (el) el.scrollIntoView({ behavior: 'smooth' });
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
     } else {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }

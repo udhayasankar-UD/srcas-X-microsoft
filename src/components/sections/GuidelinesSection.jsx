@@ -41,8 +41,8 @@ const guidelinesPart2 = [
     icon: Users
   },
   {
-    id: '07', title: 'Zero Fees & Free Food',
-    description: 'No cost to participate, plus free meals and refreshments at SRCAS campus.',
+    id: '07', title: 'Food and refreshments',
+    description: 'Food and refreshments will be provided throughout the event.',
     icon: Coffee
   },
   {

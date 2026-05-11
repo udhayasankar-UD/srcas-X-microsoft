@@ -200,7 +200,7 @@ export const InternshipTicket = () => {
                 letterSpacing: "-0.03em", transformStyle: "preserve-3d",
               }}
             >
-              Win a Microsoft<br />Internship!
+              Win a Ticket<br />to Singapore!
             </motion.h3>
 
             {/* Description — pops out */}
@@ -214,9 +214,7 @@ export const InternshipTicket = () => {
                 transformStyle: "preserve-3d",
               }}
             >
-              The winning team gets a fast-track interview for a Microsoft summer
-              internship — plus dedicated mentorship from Genius AI to help you
-              ship your idea to the world.
+              Top three teams will qualify for the Science and Innovation Competition held in Singapore, with all expenses fully covered. Outstanding performers will also receive opportunities for Microsoft internships.
             </motion.p>
 
             {/* CTA — pops out the most */}

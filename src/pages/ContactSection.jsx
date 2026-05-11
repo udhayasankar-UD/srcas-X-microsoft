@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Phone, MapPin, User, ExternalLink, Copy, Check } from 'lucide-react';
 import MagneticButton from '../components/ui/MagneticButton';
+import PPTSection from '../components/sections/PPTSection';
 
 const fadeInUp = {
     hidden: { opacity: 0, y: 30 },
@@ -161,12 +162,12 @@ const ContactSection = () => {
 
                             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "24px" }}>
                                 <div style={{ padding: "24px", borderRadius: "16px", backgroundColor: "#fafafa", border: "1px solid #eee", transition: "all 0.3s ease" }}>
-                                    <p style={{ fontWeight: 700, color: "#111", fontSize: "1.1rem", margin: "0 0 8px 0" }}>name<br/><span style={{ fontSize: "0.9rem", color: "#666", fontWeight: 500 }}>(role)</span></p>
-                                    <CopyPhone number="+919176070393" display="+91 00000 00000" />
+                                    <p style={{ fontWeight: 700, color: "#111", fontSize: "1.1rem", margin: "0 0 8px 0" }}>Dr.N.Sumathi<br/><span style={{ fontSize: "0.9rem", color: "#666", fontWeight: 500 }}>Programming Club Staff Coordinator</span></p>
+                                    <CopyPhone number="+919894090549" display="+91 98940 90549" />
                                 </div>
                                 <div style={{ padding: "24px", borderRadius: "16px", backgroundColor: "#fafafa", border: "1px solid #eee", transition: "all 0.3s ease" }}>
-                                    <p style={{ fontWeight: 700, color: "#111", fontSize: "1.1rem", margin: "0 0 8px 0" }}>name<br /><span style={{ fontSize: "0.9rem", color: "#666", fontWeight: 500 }}>(role)</span></p>
-                                    <CopyPhone number="+919629924052" display="+91 00000 00000" />
+                                    <p style={{ fontWeight: 700, color: "#111", fontSize: "1.1rem", margin: "0 0 8px 0" }}>Dr.M.Praneesh<br /><span style={{ fontSize: "0.9rem", color: "#666", fontWeight: 500 }}>Programming Club Staff Coordinator</span></p>
+                                    <CopyPhone number="+919629924052" display="+91 96299 24052" />
                                 </div>
                             </div>
                         </motion.div>
@@ -216,6 +217,7 @@ const ContactSection = () => {
                     </motion.div>
                 </div>
             </div>
+            <PPTSection />
         </section>
     );
 };

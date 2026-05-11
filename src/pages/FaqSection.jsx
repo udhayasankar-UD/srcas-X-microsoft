@@ -1,35 +1,70 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+import PPTSection from '../components/sections/PPTSection';
+
 const faqs = [
   {
     question: "How do I register?",
-    answer: "Register through our official portal at srcas.ac.in/hackathon. Fill in your team details, upload your college ID, and you're in. Registrations close 7 days before the event."
+    answer:
+      "You can register through the official hackathon registration portal at srcas.ac.in/hackathon. Fill in your team details, upload your college ID, and complete the form. Registrations close 7 days before the event.",
   },
   {
     question: "How many team members do I need?",
-    answer: "Teams must have 2 to 4 members. Solo participation is not allowed. All members must be currently enrolled college students with a valid ID."
+    answer:
+      "Teams must have 2 to 4 members. Solo participation is not allowed. All members must be currently enrolled college students with a valid ID.",
   },
   {
     question: "Can team members be from different colleges?",
-    answer: "Yes! Cross-college teams are welcome and encouraged. Diversity of thought leads to better solutions — mix it up."
+    answer:
+      "Yes, cross-college teams are allowed and encouraged. Participants from different institutions can collaborate freely.",
   },
   {
     question: "Who is eligible to participate in the hackathon?",
-    answer: "Any undergraduate or postgraduate student from any college in India is eligible. No prior hackathon experience is required — just bring your ideas and energy."
+    answer:
+      "Any undergraduate or postgraduate student from any college is eligible to participate. No prior hackathon experience is required.",
   },
   {
-    question: "Is there a registration fee?",
-    answer: "No. Participation is completely free. We also provide meals, snacks, and refreshments throughout the 24-hour event."
+    question: "How much are the participation fees?",
+    answer:
+      "Participation is completely free. Food, refreshments, and basic facilities will be provided during the event.",
   },
   {
-    question: "Can we work on our project before the event?",
-    answer: "You can come with ideas, research, and wireframes — but all core coding must happen during the 24-hour window. We run plagiarism and prior-work checks."
+    question: "Will the hackathon be in person or online?",
+    answer:
+      "The hackathon format (online or offline) will be confirmed in the official announcement. Please refer to the event page for updates.",
   },
   {
-    question: "What should we bring?",
-    answer: "Bring your laptop, chargers, extension cords, and any hardware your project needs. We provide high-speed Wi-Fi, power strips, and working spaces."
+    question: "What is the schedule of the hackathon?",
+    answer:
+      "The schedule includes registration, opening ceremony, coding phase, mentorship sessions, and final presentations. Detailed timings will be shared before the event.",
   },
+  {
+    question: "Where is the hackathon being held?",
+    answer:
+      "The venue will be announced officially by the organizers. It is typically conducted at the host institution campus.",
+  },
+  {
+    question: "What are the prerequisites to participate in this hackathon?",
+    answer:
+      "Basic programming knowledge and problem-solving skills are recommended. Specific requirements, if any, will be shared beforehand.",
+  },
+  {
+    question: "What should I bring?",
+    answer:
+      "Participants should bring a laptop, charger, valid college ID, and any required hardware or software for their project.",
+  },
+  {
+    question: "Will there be mentors or experts available during the hackathon?",
+    answer:
+      "Yes, mentors and industry experts will be available throughout the event to guide and support participants.",
+  },
+  {
+    question: "Who can I contact for further information or assistance?",
+    answer:
+      "You can contact proclub@srcas.ac.in or visit the official contact page for any queries or support.",
+  },
+
 ];
 
 const FaqItem = ({ faq, isOpen, onClick, index }) => (
@@ -280,6 +315,8 @@ export default function FaqSection() {
           </div>
         </div>
       </div>
+
+      <PPTSection />
 
       <style>{`
         @media (max-width: 900px) {

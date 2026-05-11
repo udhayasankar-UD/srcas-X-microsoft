@@ -12,8 +12,8 @@ function MagneticBtn({ children, href, primary }) {
   const ref = useRef(null);
   const onMove = (e) => {
     const r = ref.current.getBoundingClientRect();
-    const x = (e.clientX - r.left - r.width  / 2) * 0.35;
-    const y = (e.clientY - r.top  - r.height / 2) * 0.35;
+    const x = (e.clientX - r.left - r.width / 2) * 0.35;
+    const y = (e.clientY - r.top - r.height / 2) * 0.35;
     ref.current.style.transform = `translate(${x}px,${y}px)`;
   };
   const onLeave = () => { ref.current.style.transform = 'translate(0,0)'; };
@@ -34,8 +34,8 @@ function TiltCard({ children, style }) {
   const ref = useRef(null);
   const onMove = (e) => {
     const r = ref.current.getBoundingClientRect();
-    const x = ((e.clientX - r.left) / r.width  - 0.5) * 16;
-    const y = ((e.clientY - r.top)  / r.height - 0.5) * 16;
+    const x = ((e.clientX - r.left) / r.width - 0.5) * 16;
+    const y = ((e.clientY - r.top) / r.height - 0.5) * 16;
     ref.current.style.transform = `perspective(600px) rotateX(${-y}deg) rotateY(${x}deg) scale(1.02)`;
   };
   const onLeave = () => { ref.current.style.transform = 'perspective(600px) rotateX(0) rotateY(0) scale(1)'; };
@@ -80,7 +80,7 @@ export default function HeroSection3() {
         const t = setInterval(() => {
           f++;
           setCount({
-            sdgs:  Math.min(Math.round(f * 17 / 60), 17),
+            sdgs: Math.min(Math.round(f * 17 / 60), 17),
             teams: Math.min(Math.round(f * 500 / 60), 500),
             prize: Math.min(Math.round(f * 5 / 60), 5),
           });
@@ -280,9 +280,9 @@ export default function HeroSection3() {
           borderTop: '1px solid #f3f4f6', paddingTop: '2rem',
         }}>
           {[
-            { icon: <Calendar size={18} />, label: 'Date',      val: 'Aug 14–15, 2026' },
-            { icon: <MapPin   size={18} />, label: 'Venue',     val: 'SRCAS Campus' },
-            { icon: <Sparkles size={18} />, label: 'Prize Pool', val: '₹5,00,000+' },
+            { icon: <Calendar size={18} />, label: 'Date', val: 'Aug 14–15, 2026' },
+            { icon: <MapPin size={18} />, label: 'Venue', val: 'SRCAS Campus' },
+            { icon: <Sparkles size={18} />, label: 'Prize Pool', val: '₹60,000+' },
           ].map((s, i) => (
             <TiltCard key={i} style={{
               display: 'flex', alignItems: 'center', gap: 12,
@@ -310,8 +310,8 @@ export default function HeroSection3() {
           display: 'flex', gap: 32, marginTop: '2rem', paddingBottom: '2.5rem',
         }}>
           {[
-            { val: count.sdgs,  suffix: '',   label: 'UN SDG Tracks' },
-            { val: count.teams, suffix: '+',  label: 'Expected Teams' },
+            { val: count.sdgs, suffix: '', label: 'UN SDG Tracks' },
+            { val: count.teams, suffix: '+', label: 'Expected Teams' },
             { val: count.prize, suffix: 'L+', label: 'Prize Pool (₹)' },
           ].map((s, i) => (
             <div key={i} style={{ textAlign: 'center' }}>

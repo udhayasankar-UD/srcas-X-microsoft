@@ -279,9 +279,9 @@ export const GrandPrizeTicket = () => {
               letterSpacing: "-0.02em",
             }}
           >
-            Win a Microsoft
+            Win a Ticket
             <br />
-            Internship!
+            to Singapore!
           </h3>
 
           {/* Description */}
@@ -297,9 +297,7 @@ export const GrandPrizeTicket = () => {
               fontWeight: 400,
             }}
           >
-            The winning team gets a fast-track interview for a Microsoft summer
-            internship — plus dedicated mentorship from Genius AI to help you
-            ship your idea to the world.
+            Top three teams will qualify for the Science and Innovation Competition held in Singapore, with all expenses fully covered. Outstanding performers will also receive opportunities for Microsoft internships.
           </p>
 
           {/* CTA + label row */}

@@ -1,8 +1,8 @@
 import { useRef, useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import srcasLogo from '../../assets/logo/srcas-1-logo.png';
-import msLogo    from '../../assets/logo/microsoft.png';
-import pcLogo    from '../../assets/logo/programming-club-2-logo.png';
+import msLogo from '../../assets/logo/microsoft.png';
+import pcLogo from '../../assets/logo/programming-club-2-logo.png';
 
 // ── Icons ───────────────────────────────────────────────────────────────────────
 const CodeBracket = ({ size = 20, color = "currentColor" }) => (
@@ -74,12 +74,12 @@ function MagnetBg() {
     const tick = () => {
       items.forEach(item => {
         const rect = item.getBoundingClientRect();
-        const cx = rect.left + rect.width  / 2;
-        const cy = rect.top  + rect.height / 2;
-        const b  = mouseX - cx;
-        const a  = mouseY - cy;
-        const c  = Math.sqrt(a * a + b * b) || 1;
-        const r  = ((Math.acos(b / c) * 180) / Math.PI) * (mouseY > cy ? 1 : -1);
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+        const b = mouseX - cx;
+        const a = mouseY - cy;
+        const c = Math.sqrt(a * a + b * b) || 1;
+        const r = ((Math.acos(b / c) * 180) / Math.PI) * (mouseY > cy ? 1 : -1);
         item.style.setProperty('--rotate', `${r}deg`);
       });
       rafId = requestAnimationFrame(tick);
@@ -133,7 +133,7 @@ function FloatingWord({ word, x, y, fontSize, color, delay }) {
 
   useEffect(() => {
     const onMove = (e) => {
-      const dx = (e.clientX / window.innerWidth  - 0.5) * 18;
+      const dx = (e.clientX / window.innerWidth - 0.5) * 18;
       const dy = (e.clientY / window.innerHeight - 0.5) * 18;
       setPos({ x: dx, y: dy });
     };
@@ -186,7 +186,7 @@ function CycleWord() {
 }
 
 // ── Ticker tape ────────────────────────────────────────────────────────────────
-const TICKER_ITEMS = ['24h Hackathon','Microsoft Partner','Igenius AI','17 UN SDGs','National Level','Open Innovation','₹5,00,000+ Prize','SRCAS 2026','Aug 14–15'];
+const TICKER_ITEMS = ['24h Hackathon', 'Microsoft Partner', 'Igenius AI', '17 UN SDGs', 'National Level', 'Open Innovation', '₹60,000+ Prize', 'SRCAS 2026', 'Aug 14–15'];
 function Ticker() {
   return (
     <div style={{
@@ -232,7 +232,7 @@ export default function HeroSection5() {
 
 
   return (
-    
+
     <section id="hero-v5" style={{
       position: 'relative', minHeight: '100vh',
       background: '#ffffff',
@@ -243,10 +243,10 @@ export default function HeroSection5() {
       <div className="h5-magnetbg"><MagnetBg /></div>
 
       {/* Ghost words in background */}
-      <FloatingWord word="HACKATHON" x="2%"   y="12%"  fontSize="clamp(3rem,7vw,6rem)"  color="#111" delay={0.3} />
-      <FloatingWord word="SRCAS"       x="68%"  y="8%"   fontSize="clamp(2rem,5vw,4.5rem)" color="#2563EB" delay={0.5} />
-      <FloatingWord word="2026"      x="5%"   y="68%"  fontSize="clamp(2rem,5vw,4rem)"  color="#111" delay={0.7} />
-      <FloatingWord word="SDG"     x="72%"  y="75%"  fontSize="clamp(2rem,4vw,3.5rem)" color="#111" delay={0.4} />
+      <FloatingWord word="HACKATHON" x="2%" y="12%" fontSize="clamp(3rem,7vw,6rem)" color="#111" delay={0.3} />
+      <FloatingWord word="SRCAS" x="68%" y="8%" fontSize="clamp(2rem,5vw,4.5rem)" color="#2563EB" delay={0.5} />
+      <FloatingWord word="2026" x="5%" y="68%" fontSize="clamp(2rem,5vw,4rem)" color="#111" delay={0.7} />
+      <FloatingWord word="SDG" x="72%" y="75%" fontSize="clamp(2rem,4vw,3.5rem)" color="#111" delay={0.4} />
 
       {/* Centre vignette so text is readable */}
       <div style={{
@@ -442,42 +442,42 @@ export default function HeroSection5() {
           <a href="#register" className="h5-primary">
             Register Now
             <svg width="13" height="13" viewBox="0 0 16 16" fill="none" style={{ marginLeft: 6 }}>
-              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </a>
           <a href="#problem-statements" className="h5-sec">View Problem Statements</a>
         </motion.div>
-        
+
 
         {/* Row 2 */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.6 }}
           style={{
-          backgroundColor: "#fff",
-          borderRadius: "16px",
-          padding: "20px 30px",
-          boxShadow: "0 10px 40px rgba(0,0,0,0.04)",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          flexWrap: "wrap",
-          gap: "12px",
-          marginTop: "20px",
-          width: "100%",
-          maxWidth: "1200px"
-        }}>
+            backgroundColor: "#fff",
+            borderRadius: "16px",
+            padding: "20px 30px",
+            boxShadow: "0 10px 40px rgba(0,0,0,0.04)",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            flexWrap: "wrap",
+            gap: "12px",
+            marginTop: "20px",
+            width: "100%",
+            maxWidth: "1200px"
+          }}>
           <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "0.75rem", fontWeight: 700, color: "#111" }}>
             <TrophyIcon size={18} /> 4TH HACKATHON
           </div>
           <div style={{ width: "1px", height: "20px", background: "#e5e7eb" }}></div>
           <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "0.75rem", fontWeight: 700, color: "#111" }}>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2px" }}>
-              <div style={{width: 8, height: 8, background: "#f25022"}}></div>
-              <div style={{width: 8, height: 8, background: "#7fba00"}}></div>
-              <div style={{width: 8, height: 8, background: "#00a4ef"}}></div>
-              <div style={{width: 8, height: 8, background: "#ffb900"}}></div>
+              <div style={{ width: 8, height: 8, background: "#f25022" }}></div>
+              <div style={{ width: 8, height: 8, background: "#7fba00" }}></div>
+              <div style={{ width: 8, height: 8, background: "#00a4ef" }}></div>
+              <div style={{ width: 8, height: 8, background: "#ffb900" }}></div>
             </div> MICROSOFT PARTNER
           </div>
           <div style={{ width: "1px", height: "20px", background: "#e5e7eb" }}></div>
@@ -510,7 +510,7 @@ export default function HeroSection5() {
         </motion.div>
 
         {/* Scroll text */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1, duration: 1 }}
@@ -519,7 +519,7 @@ export default function HeroSection5() {
         </motion.div>
 
       </div>
-      
+
 
       {/* Ticker tape — bottom of section */}
       {/* <Ticker /> */}

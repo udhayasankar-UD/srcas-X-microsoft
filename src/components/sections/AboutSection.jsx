@@ -256,7 +256,7 @@ export default function AboutSection() {
           <div style={styles.introInner}>
             <p style={styles.label} className="about-animate">ABOUT THE HACKATHON</p>
             <h2 style={{ ...styles.heading, marginBottom: '5rem' }} className="about-animate" id="about-heading">
-              Innovation Meets Impact.
+              What's the Next Big Idea?
             </h2>
             <div style={styles.introCols} className="about-cols-mobile">
               <motion.div 
@@ -267,7 +267,7 @@ export default function AboutSection() {
               >
                 <p style={styles.label}>THE VISION</p>
                 <h2 style={{ ...styles.heading, fontSize: 'clamp(2rem, 4vw, 3.2rem)', marginBottom: '2rem' }}>
-                  What's the Next Big Idea?
+                  Building the Future
                 </h2>
                 <p style={styles.bodyText}>
                   We believe that the next generation of tech leaders will be defined not just by the code they write, but by the global problems they solve. In collaboration with Microsoft and Igenius AI, SRCAS is hosting a premier national-level hackathon dedicated to open innovation and real-world impact.

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { useLocation, BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
@@ -12,8 +12,24 @@ import PartnersPage from './pages/PartnersPage';
 import ContactSection from './pages/ContactSection';
 import FaqSection from './pages/FaqSection';
 
-// Scroll-to-top FAB
+/**
+ * ScrollToTop Component
+ * Scrolls the window to (0,0) whenever the route pathname changes.
+ */
 function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    // Always scroll to top when the pathname changes.
+    // This ensures that navigating to a new page starts at the top.
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+}
+
+// Scroll-to-top FAB (Floating Action Button)
+function ScrollToTopButton() {
   const [show, setShow] = useState(false);
   useEffect(() => {
     const onScroll = () => setShow(window.scrollY > 420);
@@ -53,8 +69,9 @@ function ScrollToTop() {
 function App() {
   return (
     <Router>
+      <ScrollToTop />
       <div className="app" style={{ minHeight: '100vh' }}>
-        <ScrollToTop />
+        <ScrollToTopButton />
         <Navbar />
 
         <Routes>

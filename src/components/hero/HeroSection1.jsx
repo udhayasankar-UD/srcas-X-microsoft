@@ -4,7 +4,7 @@ import GlobeCanvas from '../ui/GlobeCanvas';
 import { theme } from '../../theme';
 import srcasLogo from '../../assets/logo/srcas-1-logo.png';
 import msLogo from '../../assets/logo/microsoft.png';
-import pcLogo from '../../assets/logo/programming-club-2-logo.png';
+import igeniusLogo from '../../assets/logo/igenius.png';
 
 // ── Icons ───────────────────────────────────────────────────────────────────────
 const StarIcon = ({ size = 20, color = "currentColor", fill = "none" }) => (
@@ -316,17 +316,18 @@ export default function HeroSection1() {
           </div>
           <div style={{ width: "1px", height: "30px", background: "#e5e7eb" }}></div>
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <span style={{ fontSize: "0.6rem", color: "#6b7280", textTransform: "uppercase", fontWeight: 600, display: "flex", flexDirection: "column" }}>
+            <span style={{ fontSize: "0.9rem", color: "#6b7280", textTransform: "uppercase", fontWeight: 600, display: "flex", flexDirection: "column" }}>
               Organized by
             </span>
             <img src={srcasLogo} alt="SRCAS" style={{ height: "32px", objectFit: "contain" }} />
           </div>
           <div style={{ width: "1px", height: "30px", background: "#e5e7eb" }}></div>
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <span style={{ fontSize: "0.6rem", color: "#6b7280", textTransform: "uppercase", fontWeight: 600, display: "flex", flexDirection: "column" }}>
+            <span style={{ fontSize: "0.9rem", color: "#6b7280", textTransform: "uppercase", fontWeight: 600, display: "flex", flexDirection: "column" }}>
               Partner
             </span>
-            <img src={msLogo} alt="Microsoft" style={{ height: "24px", objectFit: "contain" }} />
+            <img src={igeniusLogo} alt="igeniusAI" style={{ height: "24px", objectFit: "contain" }} />
+            <img src={msLogo} alt="Microsoft" style={{ height: "42px", objectFit: "contain" }} />
           </div>
         </div>
       </header>

@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { motion, useMotionValue, useSpring, AnimatePresence } from 'framer-motion';
 import srcasLogo from '../../assets/logo/srcas-1-logo.png';
-import msLogo    from '../../assets/logo/microsoft.png';
-import pcLogo    from '../../assets/logo/programming-club-2-logo.png';
+import msLogo from '../../assets/logo/microsoft.png';
+import pcLogo from '../../assets/logo/programming-club-2-logo.png';
 
 // ── Custom cursor dot ──────────────────────────────────────────────────────────
 function CursorDot() {
@@ -51,7 +51,7 @@ function Counter({ to, suffix = '' }) {
 }
 
 // ── Ticker tape ────────────────────────────────────────────────────────────────
-const TICKER_ITEMS = ['24h Hackathon','Microsoft Partner','Igenius AI','17 UN SDGs','National Level','Open Innovation','₹5,00,000+ Prize','SRCAS 2026','Aug 14–15'];
+const TICKER_ITEMS = ['24h Hackathon', 'Microsoft Partner', 'Igenius AI', '17 UN SDGs', 'National Level', 'Open Innovation', '₹60,000+ Prize', 'SRCAS 2026', 'Aug 14–15'];
 function Ticker() {
   return (
     <div style={{
@@ -219,8 +219,8 @@ export default function HeroSection4() {
     if (!sectionRef.current) return;
     const r = sectionRef.current.getBoundingClientRect();
     setMousePos({
-      x: ((e.clientX - r.left) / r.width  - 0.5) * 30,
-      y: ((e.clientY - r.top)  / r.height - 0.5) * 30,
+      x: ((e.clientX - r.left) / r.width - 0.5) * 30,
+      y: ((e.clientY - r.top) / r.height - 0.5) * 30,
     });
   }, []);
 
@@ -439,7 +439,7 @@ export default function HeroSection4() {
               >
                 Register Now
                 <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
-                  <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </motion.a>
               <motion.a
@@ -473,9 +473,9 @@ export default function HeroSection4() {
             position: 'relative', zIndex: 1,
           }}>
 
-            <StatCard num={24}  suffix="h" label="Hours of Intense Hacking" sub="Nonstop building session"      delay={0.38} icon="⚡" />
-            <StatCard num={17}  suffix=""  label="UN SDG Tracks"             sub="Choose your impact area"      delay={0.50} icon="🌍" />
-            <StatCard num={500} suffix="+" label="Expected Participants"     sub="National level competition"   delay={0.62} icon="👥" />
+            <StatCard num={24} suffix="h" label="Hours of Intense Hacking" sub="Nonstop building session" delay={0.38} icon="⚡" />
+            <StatCard num={17} suffix="" label="UN SDG Tracks" sub="Choose your impact area" delay={0.50} icon="🌍" />
+            <StatCard num={500} suffix="+" label="Expected Participants" sub="National level competition" delay={0.62} icon="👥" />
 
             {/* Info strip */}
             <motion.div
@@ -492,9 +492,9 @@ export default function HeroSection4() {
               }}
             >
               {[
-                { icon: '📅', label: 'Date',  val: 'Aug 14–15, 2026' },
+                { icon: '📅', label: 'Date', val: 'Aug 14–15, 2026' },
                 { icon: '📍', label: 'Venue', val: 'SRCAS Campus' },
-                { icon: '💰', label: 'Prize', val: '₹5,00,000+' },
+                { icon: '💰', label: 'Prize', val: '₹60,000+' },
               ].map((item, i) => (
                 <motion.div
                   key={i}
