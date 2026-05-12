@@ -309,16 +309,14 @@ export default function ProblemStatements() {
           position: isMobile ? 'relative' : 'sticky',
           top: 0,
           height: isMobile ? 'auto' : '100vh',
-          overflow: isMobile ? 'auto' : 'visible',
-          overflowX: isMobile ? 'auto' : 'hidden',
-          overflowY: isMobile ? 'hidden' : undefined,
+          overflow: 'hidden',
           display: 'flex',
           flexDirection: 'column',
           background: '#ffffff',
         }}>
         {/* Title area */}
         <div style={{
-          padding: isMobile ? '32px 6vw 16px' : '40px 6vw',
+          padding: isMobile ? '32px 6vw 16px' : 'clamp(20px, 4vh, 40px) 6vw clamp(10px, 2vh, 20px)',
           flexShrink: 0,
           background: '#ffffff',
           zIndex: 10,
@@ -469,13 +467,15 @@ export default function ProblemStatements() {
         ) : (
           // Desktop: horizontal scroll filmstrip
           <div style={{
-            height: '420px',
+            flex: '1 1 auto',
+            minHeight: '280px',
+            maxHeight: '420px',
             display: 'flex',
             alignItems: 'center',
             position: 'relative',
             zIndex: 10,
             overflow: 'hidden',
-            flexShrink: 0,
+            flexShrink: 1,
             marginBottom: '0px',
           }}>
             <motion.div
@@ -489,13 +489,13 @@ export default function ProblemStatements() {
                     onMouseEnter={() => handleHoverStart(sdg)}
                     onMouseLeave={handleHoverEnd}
                     animate={{
-                      scale: isActive ? 1.05 : 0.95,
+                      scale: isActive ? 1.01 : 0.95,
                       opacity: isActive ? 1 : 0.65,
-                      y: isActive ? -8 : 0,
+                      y: isActive ? -4 : 0,
                     }}
                     transition={{ duration: 0.3 }}
                     style={{
-                      width: '270px', height: '360px',
+                      width: 'clamp(220px, 30vh, 270px)', height: 'clamp(280px, 45vh, 360px)',
                       borderRadius: '20px', position: 'relative',
                       overflow: 'hidden', cursor: 'pointer', flexShrink: 0,
                       boxShadow: isActive ? `0 20px 40px ${sdg.color}45` : '0 6px 16px rgba(0,0,0,0.10)',
@@ -526,12 +526,12 @@ export default function ProblemStatements() {
 
         {/* Dedicated Bottom Panel */}
         <div style={{
-          minHeight: '220px',
+          minHeight: 'clamp(180px, 25vh, 220px)',
           background: '#f9f9f9',
           borderTop: '1.5px solid #ebebeb',
           borderTopLeftRadius: '24px',
           borderTopRightRadius: '24px',
-          marginTop: '56px',
+          marginTop: 'auto',
           position: 'relative',
           zIndex: 5,
           overflow: 'hidden',
@@ -545,10 +545,10 @@ export default function ProblemStatements() {
               exit={{ y: -40, opacity: 0 }}
               transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
               style={{
-                padding: '40px 6vw',
+                padding: 'clamp(20px, 4vh, 40px) 6vw',
                 height: '100%',
                 display: 'flex',
-                gap: '40px',
+                gap: 'clamp(20px, 4vw, 40px)',
               }}
               className="bottom-panel-inner"
             >
@@ -562,11 +562,11 @@ export default function ProblemStatements() {
                     <img src={activeSDG.logoUrl} alt="Logo" style={{ width: '40px', height: '40px', objectFit: 'contain' }} />
                   </div>
                   <div>
-                    <h3 style={{ fontSize: '24px', fontWeight: 800, color: '#111', margin: 0 }}>{activeSDG.title}</h3>
-                    <p style={{ fontSize: '14px', color: activeSDG.color, fontWeight: 700, margin: 0 }}>SDG {activeSDG.num}</p>
+                    <h3 style={{ fontSize: 'clamp(18px, 3vh, 24px)', fontWeight: 800, color: '#111', margin: 0 }}>{activeSDG.title}</h3>
+                    <p style={{ fontSize: 'clamp(12px, 2vh, 14px)', color: activeSDG.color, fontWeight: 700, margin: 0 }}>SDG {activeSDG.num}</p>
                   </div>
                 </div>
-                <p style={{ fontSize: '15px', color: '#555', lineHeight: 1.6, margin: 0 }}>
+                <p style={{ fontSize: 'clamp(13px, 2.2vh, 15px)', color: '#555', lineHeight: 1.6, margin: 0 }}>
                   {activeSDG.description}
                 </p>
               </div>
@@ -575,12 +575,12 @@ export default function ProblemStatements() {
 
               <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                 <p style={{
-                  fontSize: '11px', fontWeight: 700, color: '#999',
-                  letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '16px', margin: 0,
+                  fontSize: 'clamp(10px, 1.8vh, 11px)', fontWeight: 700, color: '#999',
+                  letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: 'clamp(8px, 2vh, 16px)', margin: 0,
                 }}>
                   Challenge Statements
                 </p>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '16px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(8px, 2vh, 16px)', marginTop: 'clamp(8px, 2vh, 16px)' }}>
                   {activeSDG.challenges.map((c, i) => (
                     <div key={i} style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
                       <div style={{
@@ -592,7 +592,7 @@ export default function ProblemStatements() {
                       }}>
                         {i + 1}
                       </div>
-                      <p style={{ fontSize: '15px', color: '#333', lineHeight: 1.6, margin: 0 }}>
+                      <p style={{ fontSize: 'clamp(13px, 2.2vh, 15px)', color: '#333', lineHeight: 1.6, margin: 0 }}>
                         {c}
                       </p>
                     </div>
