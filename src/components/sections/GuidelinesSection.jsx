@@ -1,10 +1,86 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useRef } from 'react';
+import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import MagneticButton from '../ui/MagneticButton';
 import {
   Clock, UserPlus, FileText, Unlock, Badge,
   Users, Coffee, Building, MapPin, ShieldCheck
 } from 'lucide-react';
+
+const SDG_IMAGES = {
+  1: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Sustainable_Development_Goal_01NoPoverty.svg/960px-Sustainable_Development_Goal_01NoPoverty.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail&_=20240924093215",
+  2: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Sustainable_Development_Goal_02ZeroHunger.svg/960px-Sustainable_Development_Goal_02ZeroHunger.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail&_=20240924093217",
+  3: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Sustainable_Development_Goal_03GoodHealth.svg/960px-Sustainable_Development_Goal_03GoodHealth.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail&_=20240924093219",
+  4: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Sustainable_Development_Goal_04QualityEducation.svg/960px-Sustainable_Development_Goal_04QualityEducation.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail&_=20240924093221",
+  5: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Sustainable_Development_Goal_05GenderEquality.svg/960px-Sustainable_Development_Goal_05GenderEquality.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail&_=20240924093223",
+  6: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Sustainable_Development_Goal_06CleanWater.svg/960px-Sustainable_Development_Goal_06CleanWater.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail&_=20240924093224",
+  15: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Sustainable_Development_Goal_15LifeOnLand.svg/960px-Sustainable_Development_Goal_15LifeOnLand.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail&_=20240924093233",
+  16: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Sustainable_Development_Goal_16Peace.svg/960px-Sustainable_Development_Goal_16Peace.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail&_=20240924093234",
+  17: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Sustainable_Development_Goals_-_logo.svg/250px-Sustainable_Development_Goals_-_logo.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail&_=20220117130803"
+};
+
+const SDGCard = ({ imgSrc, alt, style }) => (
+  <div style={{
+    width: '140px',
+    height: '140px',
+    borderRadius: '10px',
+    overflow: 'hidden',
+    boxShadow: '0 8px 30px rgba(0,0,0,0.08)',
+    background: 'white',
+    ...style
+  }}>
+    <img 
+      src={imgSrc} 
+      alt={alt} 
+      style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} 
+      onError={(e) => { e.target.style.display = 'none'; }}
+    />
+  </div>
+);
+
+const ArcGroup = ({ children, containerRef, originX, originY, startAngle = 0, endAngle = 60, yStart = 0, yEnd = -100, style }) => {
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"]
+  });
+
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 10,
+    damping: 0.9,
+    mass: 0.3
+  });
+
+  const rotate = useTransform(smoothProgress, [0, 1], [startAngle, endAngle]);
+  const y = useTransform(smoothProgress, [0, 1], [yStart, yEnd]);
+
+  return (
+    <motion.div style={{
+      ...style,
+      transformOrigin: `${originX} ${originY}`,
+      rotate,
+      y,
+    }}>
+      {children}
+    </motion.div>
+  );
+};
+
+const SpinElement = ({ children, containerRef, rotateRange = [0, 90], yRange = [0, -80], style }) => {
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"]
+  });
+
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 50,
+    damping: 18,
+    mass: 0.3
+  });
+
+  const rotate = useTransform(smoothProgress, [0, 1], rotateRange);
+  const y = useTransform(smoothProgress, [0, 1], yRange);
+
+  return <motion.div style={{ ...style, rotate, y }}>{children}</motion.div>;
+};
 
 const guidelinesPart1 = [
   {
@@ -190,8 +266,9 @@ const GuidelineItem = ({ item, accentColor, glowColor, isLast }) => {
 };
 
 export default function GuidelinesSection() {
+  const sectionRef = useRef(null);
   return (
-    <section id="finalists" style={{
+    <section ref={sectionRef} id="finalists" style={{
       position: "relative",
       padding: "100px 0 100px",
       backgroundColor: "#fff",
@@ -210,6 +287,142 @@ export default function GuidelinesSection() {
           <line key={`h${i}`} x1="0" y1={`${(i+1)*10}%`} x2="100%" y2={`${(i+1)*10}%`} stroke="#000" strokeWidth="1"/>
         ))}
       </svg>
+
+      {/* Floating Parallax SDG Cards — Half-circle arcs that rotate as a group */}
+      <div className="hidden lg:block" style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0 }}>
+        
+        {/* ── LEFT ARC: Entire group rotates ~quarter turn clockwise ── */}
+        <ArcGroup
+          containerRef={sectionRef}
+          originX="-200px"
+          originY="50%"
+          startAngle={-15}
+          endAngle={75}
+          yStart={40}
+          yEnd={-60}
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '300px',
+            height: '100%',
+            opacity: 0.35,
+          }}
+        >
+          {/* Cards positioned along the arc relative to the group */}
+          {[
+            { goal: 1, angle: -70 },
+            { goal: 2, angle: -40 },
+            { goal: 3, angle: -10 },
+            { goal: 4, angle:  20 },
+            { goal: 5, angle:  50 },
+            { goal: 6, angle:  80 },
+          ].map(({ goal, angle }) => {
+            const rad = (angle * Math.PI) / 180;
+            const radius = 350; // increased radius for more gap
+            const cx = -160;
+            const cy = 50; // %
+            const x = cx + radius * Math.cos(rad);
+            const yPct = cy + (radius * Math.sin(rad)) / 10;
+            return (
+              <div
+                key={goal}
+                style={{
+                  position: 'absolute',
+                  left: `${x}px`,
+                  top: `${yPct}%`,
+                  transform: `rotate(${angle + 90}deg)`,
+                }}
+              >
+                <SDGCard imgSrc={SDG_IMAGES[goal]} alt={`Goal ${goal}`} />
+              </div>
+            );
+          })}
+        </ArcGroup>
+
+        {/* ── RIGHT ARC: Entire group rotates ~quarter turn counter-clockwise ── */}
+        <ArcGroup
+          containerRef={sectionRef}
+          originX="calc(100% + 200px)"
+          originY="80%"
+          startAngle={15}
+          endAngle={-75}
+          yStart={30}
+          yEnd={-50}
+          style={{
+            position: 'absolute',
+            top: 0,
+            right: 0,
+            width: '300px',
+            height: '100%',
+            opacity: 0.35,
+          }}
+        >
+          {[
+            { goal: 15, angle: 150 },
+            { goal: 16, angle: 180 },
+            { goal: 17, angle: 210 },
+          ].map(({ goal, angle }) => {
+            const rad = (angle * Math.PI) / 180;
+            const radius = 280; // increased radius
+            const cx = 350;
+            const cy = 65;
+            const x = cx + radius * Math.cos(rad);
+            const yPct = cy + (radius * Math.sin(rad)) / 10;
+            return (
+              <div
+                key={goal}
+                style={{
+                  position: 'absolute',
+                  left: `${x}px`,
+                  top: `${yPct}%`,
+                  transform: `rotate(${angle + 90}deg)`,
+                }}
+              >
+                <SDGCard imgSrc={SDG_IMAGES[goal]} alt={`Goal ${goal}`} />
+              </div>
+            );
+          })}
+        </ArcGroup>
+
+        {/* SDG Wheel — Top Right */}
+        <SpinElement
+          containerRef={sectionRef}
+          rotateRange={[0, -90]}
+          yRange={[0, 40]}
+          style={{
+            position: 'absolute',
+            top: '8%',
+            right: '8%',
+            opacity: 0.15,
+          }}
+        >
+          <img
+            src={SDG_IMAGES[17]}
+            alt="SDG Wheel Top"
+            style={{ width: '120px', height: '120px', objectFit: 'contain' }}
+          />
+        </SpinElement>
+
+        {/* SDG Wheel — spins independently at bottom-right */}
+        <SpinElement
+          containerRef={sectionRef}
+          rotateRange={[0, 120]}
+          yRange={[0, -60]}
+          style={{
+            position: 'absolute',
+            bottom: '-4%',
+            right: '-3%',
+            opacity: 0.25,
+          }}
+        >
+          <img
+            src={SDG_IMAGES[17]}
+            alt="SDG Wheel"
+            style={{ width: '220px', height: '220px', objectFit: 'contain' }}
+          />
+        </SpinElement>
+      </div>
 
       <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 2.5rem", position: "relative", zIndex: 1 }}>
         

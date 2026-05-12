@@ -147,7 +147,7 @@ export default function AboutSection() {
     },
     statsWrap: {
       margin: '60px 0 100px',
-      padding: '40px 0',
+      padding: '40px 3rem',
       borderTop: `1px solid ${theme.colors.border}`,
       borderBottom: `1px solid ${theme.colors.border}`,
     },

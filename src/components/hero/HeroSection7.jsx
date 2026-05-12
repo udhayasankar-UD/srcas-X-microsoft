@@ -1,0 +1,418 @@
+import React, { useRef } from 'react';
+import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import { theme } from '../../theme';
+import srcasLogo from '../../assets/logo/srcas-1-logo.png';
+import msLogo from '../../assets/logo/microsoft.png';
+import igeniusLogo from '../../assets/logo/igenius.png';
+
+// SDG Image URLs (Official UN Icons)
+const SDG_IMAGES = {
+  3: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Sustainable_Development_Goal_03GoodHealth.svg/960px-Sustainable_Development_Goal_03GoodHealth.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail&_=20240924093219",
+  4: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Sustainable_Development_Goal_04QualityEducation.svg/960px-Sustainable_Development_Goal_04QualityEducation.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail&_=20240924093221",
+  5: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Sustainable_Development_Goal_05GenderEquality.svg/960px-Sustainable_Development_Goal_05GenderEquality.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail&_=20240924093223",
+  7: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Sustainable_Development_Goal_07CleanEnergy.svg/960px-Sustainable_Development_Goal_07CleanEnergy.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail&_=20240924093224",
+  10: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Sustainable_Development_Goal_10ReducedInequalities.svg/960px-Sustainable_Development_Goal_10ReducedInequalities.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail&_=20240924093226",
+  13: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Sustainable_Development_Goal_13Climate.svg/960px-Sustainable_Development_Goal_13Climate.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail&_=20240924093231",
+};
+
+const StarIcon = ({ size = 20, color = "currentColor", fill = "none" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill={fill} stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+  </svg>
+);
+
+const SDGWheel = ({ size = 40, blur = 0, style }) => (
+  <img 
+    src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Sustainable_Development_Goals_-_logo.svg/250px-Sustainable_Development_Goals_-_logo.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail&_=20220117130803"
+    alt="SDG Logo"
+    style={{
+      width: size,
+      height: size,
+      borderRadius: "50%",
+      filter: blur ? `blur(${blur}px)` : 'none',
+      objectFit: 'contain',
+      ...style
+    }}
+  />
+);
+
+const Leaf = ({ size = 20, blur = 0 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="#84cc16" style={{ filter: blur ? `blur(${blur}px)` : 'none' }}>
+    <path d="M12 22C12 22 4 16 4 10C4 6 7 2 12 2C17 2 20 6 20 10C20 16 12 22 12 22Z" opacity="0.8"/>
+  </svg>
+);
+
+// const LightbulbIcon = ({ size = 24, color = "currentColor", strokeWidth = 2 }) => (
+//   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">
+//     <path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1.3.5 2.6 1.5 3.5.8.8 1.3 1.5 1.5 2.5"></path>
+//     <path d="M9 18h6"></path>
+//     <path d="M10 22h4"></path>
+//   </svg>
+// );
+
+// const GraduationCapIcon = ({ size = 24, color = "currentColor", strokeWidth = 2 }) => (
+//   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">
+//     <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+//     <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+//   </svg>
+// );
+
+const SproutIcon = ({ size = 24, color = "currentColor", strokeWidth = 2 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">
+    <path d="M7 20h10"></path>
+    <path d="M10 20c5.5-2.5.8-6.4 3-10"></path>
+    <path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"></path>
+    <path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"></path>
+  </svg>
+);
+
+// const CpuIcon = ({ size = 24, color = "currentColor", strokeWidth = 2 }) => (
+//   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">
+//     <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
+//     <rect x="9" y="9" width="6" height="6"></rect>
+//     <line x1="9" y1="1" x2="9" y2="4"></line>
+//     <line x1="15" y1="1" x2="15" y2="4"></line>
+//     <line x1="9" y1="20" x2="9" y2="23"></line>
+//     <line x1="15" y1="20" x2="15" y2="23"></line>
+//     <line x1="20" y1="9" x2="23" y2="9"></line>
+//     <line x1="20" y1="14" x2="23" y2="14"></line>
+//     <line x1="1" y1="9" x2="4" y2="9"></line>
+//     <line x1="1" y1="14" x2="4" y2="14"></line>
+//   </svg>
+// );
+
+const HandshakeIcon = ({ size = 24, color = "currentColor", strokeWidth = 2 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">
+    <path d="m11 17 2 2a1 1 0 1 0 3-3"></path>
+    <path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4"></path>
+    <path d="m21 3-6 6"></path>
+    <path d="M8.4 10.4 5.3 7.3a2.8 2.8 0 0 0-3.9 3.9l5.6 5.6a2 2 0 0 0 2.8 0l2.1-2.1a2 2 0 0 0 0-2.8l-3.5-3.5"></path>
+  </svg>
+);
+
+// const UsersIcon = ({ size = 24, color = "currentColor", strokeWidth = 2 }) => (
+//   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">
+//     <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+//     <circle cx="9" cy="7" r="4"></circle>
+//     <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+//     <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+//   </svg>
+// );
+
+const BookOpenIcon = ({ size = 24, color = "currentColor", strokeWidth = 2 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">
+    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+  </svg>
+);
+
+const GenderEqualIcon = ({ size = 24, color = "currentColor", strokeWidth = 2 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="10" r="5"></circle>
+    <path d="M12 15v7"></path>
+    <path d="M9 19h6"></path>
+    <path d="M10 10h4"></path>
+    <path d="M10 8h4"></path>
+  </svg>
+);
+
+const FloatingIcon = ({ icon: Icon, color, size = 32, blur = 0, opacity = 0.8, style }) => (
+  <div style={{
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: size * 1.8,
+    height: size * 1.8,
+    borderRadius: '50%',
+    background: `linear-gradient(135deg, ${color}22, ${color}44)`,
+    border: `1px solid ${color}44`,
+    boxShadow: `0 8px 32px ${color}33`,
+    backdropFilter: 'blur(8px)',
+    filter: blur ? `blur(${blur}px)` : 'none',
+    opacity,
+    ...style
+  }}>
+    <Icon size={size} color={color} />
+  </div>
+);
+
+
+const SDGCard = ({ imgSrc, alt, style }) => (
+  <div style={{
+    width: '180px',
+    height: '180px',
+    borderRadius: '12px',
+    overflow: 'hidden',
+    boxShadow: '0 10px 40px rgba(0,0,0,0.15)',
+    background: 'white',
+    ...style
+  }}>
+    <img 
+      src={imgSrc} 
+      alt={alt} 
+      style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} 
+      onError={(e) => { e.target.style.display = 'none'; }}
+    />
+  </div>
+);
+
+const ParallaxElement = ({ children, yOffset = 100, initialRotate = 0, initialScale = 1, rotationSpeed = 0, style }) => {
+  const { scrollY } = useScroll();
+  
+  const smoothScrollY = useSpring(scrollY, {
+    stiffness: 50,
+    damping: 15,
+    mass: 0.2
+  });
+
+  const y = useTransform(smoothScrollY, [0, 1000], [0, yOffset]);
+  const rotate = useTransform(smoothScrollY, [0, 1000], [initialRotate, initialRotate + rotationSpeed]);
+
+  return <motion.div style={{ ...style, y, rotate, scale: initialScale }}>{children}</motion.div>;
+};
+
+export default function HeroSection7() {
+  const containerRef = useRef(null);
+
+  return (
+    <section ref={containerRef} id="hero" style={{ position: 'relative', width: '100%', minHeight: '100vh', background: '#ffffff', overflow: 'hidden', fontFamily: theme.fonts.body, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+      
+      {/* Background Dots */}
+      <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
+        <div style={{ position: 'absolute', top: '15%', left: '28%', width: '8px', height: '8px', borderRadius: '50%', background: '#bbf7d0' }} />
+        <div style={{ position: 'absolute', top: '55%', left: '26%', width: '8px', height: '8px', borderRadius: '50%', background: '#fed7aa' }} />
+        <div style={{ position: 'absolute', top: '25%', right: '28%', width: '6px', height: '6px', borderRadius: '50%', background: '#bfdbfe' }} />
+        <div style={{ position: 'absolute', bottom: '25%', right: '22%', width: '8px', height: '8px', borderRadius: '50%', background: '#e5e7eb' }} />
+        <div style={{ position: 'absolute', bottom: '15%', left: '48%', width: '6px', height: '6px', borderRadius: '50%', background: '#fbcfe8' }} />
+        <div style={{ position: 'absolute', top: '40%', right: '12%', width: '8px', height: '8px', borderRadius: '50%', background: '#bbf7d0' }} />
+      </div>
+
+      {/* Header */}
+      <header style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        padding: "24px 40px",
+        position: "absolute",
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 50
+      }}>
+        {/* Pills */}
+        <div className="h1-pills-mobile-hide" style={{ display: "flex", alignItems: "center" }}>
+          <div style={{
+            backgroundColor: "#111",
+            color: "#fff",
+            padding: "8px 20px",
+            borderRadius: "30px 0 0 30px",
+            fontSize: "0.75rem",
+            fontWeight: 700,
+            letterSpacing: "0.05em",
+            display: "flex",
+            alignItems: "center",
+            gap: "6px"
+          }}>
+            <StarIcon size={12} fill="#fff" /> NATIONAL HACKATHON 2026
+          </div>
+          <div style={{
+            backgroundColor: "#fff",
+            color: "#6b7280",
+            padding: "8px 20px",
+            borderRadius: "0 30px 30px 0",
+            fontSize: "0.75rem",
+            fontWeight: 600,
+            letterSpacing: "0.05em",
+            border: "1px solid #e5e7eb",
+            borderLeft: "none"
+          }}>
+            #BUILD THE FUTURE
+          </div>
+        </div>
+
+        {/* Logos */}
+        <div className="h1-logos-mobile-hide" style={{ display: "flex", alignItems: "center", gap: "24px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px", fontWeight: 800, fontSize: "1.2rem", color: '#111' }}>
+            SDG
+            <SDGWheel size={24} style={{ borderRadius: '50%' }} />
+          </div>
+          <div style={{ width: "1px", height: "30px", background: "#e5e7eb" }}></div>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <span style={{ fontSize: "0.9rem", color: "#6b7280", textTransform: "uppercase", fontWeight: 600, display: "flex", flexDirection: "column" }}>
+              Organized by
+            </span>
+            <img src={srcasLogo} alt="SRCAS" style={{ height: "32px", objectFit: "contain" }} />
+          </div>
+          <div style={{ width: "1px", height: "30px", background: "#e5e7eb" }}></div>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <span style={{ fontSize: "0.9rem", color: "#6b7280", textTransform: "uppercase", fontWeight: 600, display: "flex", flexDirection: "column" }}>
+              Partner
+            </span>
+            <img src={igeniusLogo} alt="igeniusAI" style={{ height: "24px", objectFit: "contain" }} />
+            <span style={{ fontSize: "0.9rem", color: "#6b7280", textTransform: "uppercase", fontWeight: 600, display: "flex", flexDirection: "column" }}>
+              Authorized Partner
+            </span>
+            <img src={msLogo} alt="Microsoft" style={{ height: "42px", objectFit: "contain" }} />
+          </div>
+        </div>
+      </header>
+
+      {/* Floating Elements with Parallax Effect */}
+      <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 5 }}>
+        
+        {/* SDG Image Cards */}
+        <ParallaxElement yOffset={-240} initialRotate={-10} rotationSpeed={15} initialScale={0.9} style={{ position: 'absolute', top: '15%', left: '12%' }}>
+          <SDGCard imgSrc={SDG_IMAGES[3]} alt="Goal 3" />
+        </ParallaxElement>
+
+        <ParallaxElement yOffset={-180} initialRotate={12} rotationSpeed={-10} initialScale={0.85} style={{ position: 'absolute', top: '15%', right: '18%' }}>
+          <SDGCard imgSrc={SDG_IMAGES[4]} alt="Goal 4" />
+        </ParallaxElement>
+
+        <ParallaxElement yOffset={-280} initialRotate={-15} rotationSpeed={20} initialScale={0.85} style={{ position: 'absolute', bottom: '25%', left: '10%' }}>
+          <SDGCard imgSrc={SDG_IMAGES[5]} alt="Goal 5" />
+        </ParallaxElement>
+
+        <ParallaxElement yOffset={-320} initialRotate={8} rotationSpeed={-15} initialScale={0.9} style={{ position: 'absolute', bottom: '20%', right: '12%' }}>
+          <SDGCard imgSrc={SDG_IMAGES[7]} alt="Goal 7" />
+        </ParallaxElement>
+
+        <ParallaxElement yOffset={-190} initialRotate={-6} rotationSpeed={8} initialScale={0.8} style={{ position: 'absolute', bottom: '8%', right: '28%' }}>
+          <SDGCard imgSrc={SDG_IMAGES[10]} alt="Goal 10" />
+        </ParallaxElement>
+
+        <ParallaxElement yOffset={-140} initialRotate={10} rotationSpeed={-12} initialScale={0.75} style={{ position: 'absolute', bottom: '5%', left: '16%' }}>
+          <SDGCard imgSrc={SDG_IMAGES[13]} alt="Goal 13" />
+        </ParallaxElement>
+
+        {/* Blurry Wheels */}
+        <ParallaxElement yOffset={-100} initialRotate={0} rotationSpeed={45} style={{ position: 'absolute', top: '35%', left: '8%' }}>
+          <SDGWheel size={100} blur={2} />
+        </ParallaxElement>
+        
+        <ParallaxElement yOffset={-300} initialRotate={0} rotationSpeed={-30} style={{ position: 'absolute', top: '25%', right: '5%' }}>
+          <SDGWheel size={140} blur={4} />
+        </ParallaxElement>
+
+        <ParallaxElement yOffset={-250} initialRotate={0} rotationSpeed={60} style={{ position: 'absolute', bottom: '15%', left: '28%' }}>
+          <SDGWheel size={120} blur={0} />
+        </ParallaxElement>
+
+        <ParallaxElement yOffset={-180} initialRotate={0} rotationSpeed={-40} style={{ position: 'absolute', bottom: '10%', right: '48%' }}>
+          <SDGWheel size={90} blur={3} />
+        </ParallaxElement>
+        
+        <ParallaxElement yOffset={-350} initialRotate={0} rotationSpeed={25} style={{ position: 'absolute', bottom: '-8%', left: '-5%' }}>
+          <SDGWheel size={220} blur={6} />
+        </ParallaxElement>
+
+        <ParallaxElement yOffset={-200} initialRotate={0} rotationSpeed={-20} style={{ position: 'absolute', bottom: '-15%', right: '-5%' }}>
+          <SDGWheel size={280} blur={8} />
+        </ParallaxElement>
+
+        {/* Leaves */}
+        <ParallaxElement yOffset={-150} initialRotate={45} rotationSpeed={30} style={{ position: 'absolute', top: '18%', left: '10%' }}>
+          <Leaf size={32} blur={1} />
+        </ParallaxElement>
+        <ParallaxElement yOffset={-80} initialRotate={-30} rotationSpeed={-45} style={{ position: 'absolute', top: '25%', right: '26%' }}>
+          <Leaf size={28} blur={2} />
+        </ParallaxElement>
+        <ParallaxElement yOffset={-200} initialRotate={15} rotationSpeed={40} style={{ position: 'absolute', bottom: '28%', left: '22%' }}>
+          <Leaf size={45} blur={1} />
+        </ParallaxElement>
+        <ParallaxElement yOffset={-120} initialRotate={-60} rotationSpeed={-35} style={{ position: 'absolute', bottom: '22%', right: '8%' }}>
+          <Leaf size={38} blur={2} />
+        </ParallaxElement>
+
+        {/* Floating Concept Icons */}
+        {/* <ParallaxElement yOffset={-160} initialRotate={-10} rotationSpeed={20} style={{ position: 'absolute', top: '10%', left: '30%' }}>
+          <FloatingIcon icon={LightbulbIcon} color="#f59e0b" size={28} blur={0.5} opacity={0.9} />
+        </ParallaxElement>
+        <ParallaxElement yOffset={-220} initialRotate={15} rotationSpeed={-15} style={{ position: 'absolute', top: '25%', right: '35%' }}>
+          <FloatingIcon icon={GraduationCapIcon} color="#3b82f6" size={32} opacity={0.8} />
+        </ParallaxElement> */}
+        <ParallaxElement yOffset={-180} initialRotate={-5} rotationSpeed={10} style={{ position: 'absolute', bottom: '40%', left: '15%' }}>
+          <FloatingIcon icon={SproutIcon} color="#22c55e" size={24} blur={1} opacity={0.7} />
+        </ParallaxElement>
+        {/* <ParallaxElement yOffset={-250} initialRotate={20} rotationSpeed={-25} style={{ position: 'absolute', bottom: '35%', right: '20%' }}>
+          <FloatingIcon icon={CpuIcon} color="#10b981" size={36} opacity={0.85} />
+        </ParallaxElement> */}
+        <ParallaxElement yOffset={-130} initialRotate={-15} rotationSpeed={15} style={{ position: 'absolute', top: '45%', left: '20%' }}>
+          <FloatingIcon icon={HandshakeIcon} color="#8b5cf6" size={28} opacity={0.8} />
+        </ParallaxElement>
+        {/* <ParallaxElement yOffset={-210} initialRotate={5} rotationSpeed={-20} style={{ position: 'absolute', top: '15%', right: '45%' }}>
+          <FloatingIcon icon={UsersIcon} color="#ec4899" size={26} blur={0.5} opacity={0.9} />
+        </ParallaxElement> */}
+        <ParallaxElement yOffset={-260} initialRotate={-20} rotationSpeed={25} style={{ position: 'absolute', bottom: '15%', left: '35%' }}>
+          <FloatingIcon icon={BookOpenIcon} color="#06b6d4" size={30} opacity={0.8} />
+        </ParallaxElement>
+        <ParallaxElement yOffset={-140} initialRotate={10} rotationSpeed={-10} style={{ position: 'absolute', bottom: '45%', right: '10%' }}>
+          <FloatingIcon icon={GenderEqualIcon} color="#ef4444" size={24} blur={1} opacity={0.7} />
+        </ParallaxElement> 
+
+        
+      </div>
+
+      {/* Main Content */}
+      <div style={{ position: 'relative', zIndex: 10, textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        
+        {/* Center Logo & Badge */}
+        <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ delay: 0.2 }} style={{ marginBottom: '0px', display: 'flex', alignItems: 'center', gap: '16px' }}>
+          <SDGWheel size={44} />
+          
+          {/* Mini badge */}
+          <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '4px 12px', border: '1px solid #e5e7eb', borderRadius: 100, background: 'rgba(255,255,255,0.8)', backdropFilter: 'blur(10px)' }}>
+            <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#4c9f38', display: 'inline-block' }} />
+            <span style={{ fontSize: '9px', fontWeight: 700, letterSpacing: '0.14em', color: '#4c9f38', textTransform: 'uppercase' }}>
+              Registration Open!
+            </span>
+          </motion.div>
+        </motion.div>
+
+        {/* Heading */}
+        <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} style={{ fontSize: 'clamp(3.5rem, 7vw, 6.5rem)', fontWeight: 800, color: '#111', lineHeight: 1.1, letterSpacing: '-0.02em', marginTop: '24px', marginBottom: '24px' }}>
+          Where Ambitious<br/>
+          People <span style={{ color: '#2563EB', fontFamily: theme.fonts.pixel }}>Gather.</span>
+        </motion.h1>
+
+        {/* Subtext */}
+        <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} style={{ fontSize: '1.125rem', color: '#4b5563', maxWidth: '520px', lineHeight: 1.6, marginBottom: '40px' }}>
+          India's premier national-level hackathon. Build tech-driven solutions for the 17 UN Sustainable Development Goals.
+        </motion.p>
+
+        {/* Buttons */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', justifyContent: 'center' }}>
+          <a href="#register" style={{ textDecoration: 'none' }}>
+            <div style={{ display: 'flex', alignItems: 'center', background: '#4c9f38', color: 'white', padding: '6px 24px 6px 6px', borderRadius: '100px', fontWeight: 700, fontSize: '0.875rem', letterSpacing: '0.05em', transition: 'transform 0.2s, background 0.2s', boxShadow: '0 4px 14px rgba(76, 159, 56, 0.3)' }}
+              onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.background = '#459232'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.background = '#4c9f38'; }}
+            >
+              <div style={{ width: '36px', height: '36px', background: '#111', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', marginRight: '16px' }}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+              </div>
+              REGISTER NOW
+            </div>
+          </a>
+          <a href="#sdgs" style={{ textDecoration: 'none' }}>
+            <div style={{ display: 'flex', alignItems: 'center', border: '1.5px solid #e5e7eb', background: 'white', color: '#111', padding: '0 32px', height: '48px', borderRadius: '100px', fontWeight: 700, fontSize: '0.875rem', letterSpacing: '0.05em', transition: 'border-color 0.2s, transform 0.2s' }}
+              onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.borderColor = '#111'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.borderColor = '#e5e7eb'; }}
+            >
+              VIEW SDGS
+            </div>
+          </a>
+        </motion.div>
+
+      </div>
+      
+      <style>{`
+        @media(max-width:1200px){
+          .h1-logos-mobile-hide{display:none!important}
+        }
+        @media(max-width:768px){
+          .h1-pills-mobile-hide{display:none!important}
+        }
+      `}</style>
+    </section>
+  );
+}

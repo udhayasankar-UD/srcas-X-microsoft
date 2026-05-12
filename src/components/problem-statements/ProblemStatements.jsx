@@ -7,7 +7,7 @@ const SDGs = [
   {
     id: 1, num: '01', title: 'No Poverty',
     color: '#E5243B',
-    logoUrl: 'data:image/png;base64,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',
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Sustainable_Development_Goal_01NoPoverty.svg/960px-Sustainable_Development_Goal_01NoPoverty.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail&_=20240924093018',
     imageUrl: 'https://images.unsplash.com/photo-1635929114944-8bab23b98e74?q=80&w=1534&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     description: 'End poverty in all its forms everywhere by 2030.',
     challenges: [
@@ -18,7 +18,7 @@ const SDGs = [
   {
     id: 2, num: '02', title: 'Zero Hunger',
     color: '#DDA63A',
-    logoUrl: 'hhttps://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQOjS2kEOX6ix-veSKjQhYzKXXaLMIV7l07PgmAeCAsOfVGSVt6gBkQQJEaB4Nh',
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Sustainable_Development_Goal_02ZeroHunger.svg/960px-Sustainable_Development_Goal_02ZeroHunger.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail&_=20240924093219',
     imageUrl: 'https://images.unsplash.com/photo-1694286068611-d0c24cbc2cd5?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8UG92ZXJ0eSUyMEh1bmdlcnxlbnwwfHwwfHx8Mg%3D%3D',
     description: 'End hunger, achieve food security and improved nutrition.',
     challenges: [
@@ -29,7 +29,7 @@ const SDGs = [
   {
     id: 3, num: '03', title: 'Good Health',
     color: '#4C9F38',
-    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Sustainable_Development_Goal_03GoodHealth.svg/200px-Sustainable_Development_Goal_03GoodHealth.svg.png',
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Sustainable_Development_Goal_03GoodHealth.svg/960px-Sustainable_Development_Goal_03GoodHealth.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail&_=20240924093219',
     imageUrl: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8R29vZCUyMEhlYWx0aHxlbnwwfHwwfHx8Mg%3D%3D',
     description: 'Ensure healthy lives and promote well-being for all at all ages.',
     challenges: [
@@ -40,7 +40,7 @@ const SDGs = [
   {
     id: 4, num: '04', title: 'Quality Education',
     color: '#C5192D',
-    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Sustainable_Development_Goal_04QualityEducation.svg/200px-Sustainable_Development_Goal_04QualityEducation.svg.png',
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Sustainable_Development_Goal_04QualityEducation.svg/960px-Sustainable_Development_Goal_04QualityEducation.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail&_=20240924093221',
     imageUrl: 'https://images.unsplash.com/flagged/photo-1574097656146-0b43b7660cb6?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fFF1YWxpdHklMjBFZHVjYXRpb24lMjB0YW1pbHxlbnwwfHwwfHx8Mg%3D%3D',
     description: 'Ensure inclusive, equitable quality education for all.',
     challenges: [
@@ -51,7 +51,7 @@ const SDGs = [
   {
     id: 5, num: '05', title: 'Gender Equality',
     color: '#FF3A21',
-    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Sustainable_Development_Goal_05GenderEquality.svg/200px-Sustainable_Development_Goal_05GenderEquality.svg.png',
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Sustainable_Development_Goal_05GenderEquality.svg/960px-Sustainable_Development_Goal_05GenderEquality.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail&_=20240924093223',
     imageUrl: 'https://images.unsplash.com/photo-1622675205169-901710ac8643?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fEdlbmRlciUyMEVxdWFsaXR5fGVufDB8fDB8fHwy',
     description: 'Achieve gender equality and empower all women and girls.',
     challenges: [
@@ -62,7 +62,7 @@ const SDGs = [
   {
     id: 6, num: '06', title: 'Clean Water',
     color: '#26BDE2',
-    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Sustainable_Development_Goal_06CleanWater.svg/200px-Sustainable_Development_Goal_06CleanWater.svg.png',
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Sustainable_Development_Goal_06CleanWaterSanitation.svg/960px-Sustainable_Development_Goal_06CleanWaterSanitation.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail&_=20240924093223',
     imageUrl: 'https://images.unsplash.com/photo-1624948465027-6f9b51067557?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fGNsZWFuJTIwd2F0ZXJ8ZW58MHx8MHx8fDI%3D',
     description: 'Ensure access to water and sanitation for all.',
     challenges: [
@@ -73,7 +73,7 @@ const SDGs = [
   {
     id: 7, num: '07', title: 'Clean Energy',
     color: '#FCC30B',
-    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Sustainable_Development_Goal_07CleanEnergy.svg/200px-Sustainable_Development_Goal_07CleanEnergy.svg.png',
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Sustainable_Development_Goal_07CleanEnergy.svg/960px-Sustainable_Development_Goal_07CleanEnergy.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail&_=20240924093224',
     imageUrl: 'https://images.unsplash.com/photo-1521618755572-156ae0cdd74d?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8Q2xlYW4lMjBFbmVyZ3l8ZW58MHx8MHx8fDI%3D',
     description: 'Ensure access to affordable, reliable, sustainable energy.',
     challenges: [
@@ -84,7 +84,7 @@ const SDGs = [
   {
     id: 8, num: '08', title: 'Decent Work',
     color: '#A21942',
-    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Sustainable_Development_Goal_08DecentWork.svg/200px-Sustainable_Development_Goal_08DecentWork.svg.png',
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Sustainable_Development_Goal_08DecentWork.svg/960px-Sustainable_Development_Goal_08DecentWork.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail&_=20240924093225',
     imageUrl: 'https://images.unsplash.com/photo-1733826544839-2282050204e6?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8ZGVjZW50JTIwd29ya3xlbnwwfHwwfHx8Mg%3D%3D',
     description: 'Promote inclusive economic growth and decent work for all.',
     challenges: [
@@ -95,7 +95,7 @@ const SDGs = [
   {
     id: 9, num: '09', title: 'Industry & Innovation',
     color: '#FD6925',
-    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Sustainable_Development_Goal_09Industry.svg/200px-Sustainable_Development_Goal_09Industry.svg.png',
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Sustainable_Development_Goal_09Industry.svg/960px-Sustainable_Development_Goal_09Industry.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail&_=20240924093227',
     imageUrl: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=600&q=80',
     description: 'Build resilient infrastructure and foster innovation.',
     challenges: [
@@ -106,7 +106,7 @@ const SDGs = [
   {
     id: 10, num: '10', title: 'Reduced Inequalities',
     color: '#DD1367',
-    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Sustainable_Development_Goal_10ReducedInequalities.svg/200px-Sustainable_Development_Goal_10ReducedInequalities.svg.png',
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Sustainable_Development_Goal_10ReducedInequalities.svg/960px-Sustainable_Development_Goal_10ReducedInequalities.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail&_=20240924093226',
     imageUrl: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600&q=80',
     description: 'Reduce inequality within and among countries.',
     challenges: [
@@ -117,7 +117,7 @@ const SDGs = [
   {
     id: 11, num: '11', title: 'Sustainable Cities',
     color: '#FD9D24',
-    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Sustainable_Development_Goal_11SustainableCities.svg/200px-Sustainable_Development_Goal_11SustainableCities.svg.png',
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Sustainable_Development_Goal_11SustainableCities.svg/960px-Sustainable_Development_Goal_11SustainableCities.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail&_=20240924093228',
     imageUrl: 'https://images.unsplash.com/photo-1578913020856-1c5ded2ce3e9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8c3VzdGFpbmFibGUlMjBjaXRpZXN8ZW58MHx8MHx8fDI%3D',
     description: 'Make cities inclusive, safe, resilient and sustainable.',
     challenges: [
@@ -128,7 +128,7 @@ const SDGs = [
   {
     id: 12, num: '12', title: 'Responsible Consumption',
     color: '#BF8B2E',
-    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Sustainable_Development_Goal_12ResponsibleConsumption.svg/200px-Sustainable_Development_Goal_12ResponsibleConsumption.svg.png',
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Sustainable_Development_Goal_12ResponsibleConsumption.svg/960px-Sustainable_Development_Goal_12ResponsibleConsumption.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail&_=20240924093228',
     imageUrl: 'https://images.unsplash.com/vector-1738396045672-e1675c8cb1a9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cmVzcG9uc2libGUlMjBjb25zdW1wdGlvbnxlbnwwfHwwfHx8Mg%3D%3D',
     description: 'Ensure sustainable consumption and production patterns.',
     challenges: [
@@ -139,7 +139,7 @@ const SDGs = [
   {
     id: 13, num: '13', title: 'Climate Action',
     color: '#3F7E44',
-    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Sustainable_Development_Goal_13ClimateAction.svg/200px-Sustainable_Development_Goal_13ClimateAction.svg.png',
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Sustainable_Development_Goal_13Climate.svg/960px-Sustainable_Development_Goal_13Climate.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail&_=20240924093231',
     imageUrl: 'https://images.unsplash.com/photo-1570095378004-ce65d6c2d5bb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y2xpbWF0ZSUyMGFjdGlvbnxlbnwwfHwwfHx8Mg%3D%3D',
     description: 'Take urgent action to combat climate change.',
     challenges: [
@@ -150,7 +150,7 @@ const SDGs = [
   {
     id: 14, num: '14', title: 'Life Below Water',
     color: '#0A97D9',
-    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Sustainable_Development_Goal_14LifeBelowWater.svg/200px-Sustainable_Development_Goal_14LifeBelowWater.svg.png',
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Sustainable_Development_Goal_14LifeBelowWater.svg/960px-Sustainable_Development_Goal_14LifeBelowWater.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail&_=20240924093229',
     imageUrl: 'https://images.unsplash.com/photo-1583212292454-1fe6229603b7?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fGZpc2h8ZW58MHx8MHx8fDI%3D',
     description: 'Conserve and sustainably use oceans and marine resources.',
     challenges: [
@@ -161,7 +161,7 @@ const SDGs = [
   {
     id: 15, num: '15', title: 'Life on Land',
     color: '#56C02B',
-    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Sustainable_Development_Goal_15LifeOnLand.svg/200px-Sustainable_Development_Goal_15LifeOnLand.svg.png',
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Sustainable_Development_Goal_15LifeOnLand.svg/960px-Sustainable_Development_Goal_15LifeOnLand.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail&_=20240924093236',
     imageUrl: 'https://images.unsplash.com/photo-1448375240586-882707db888b?w=600&q=80',
     description: 'Protect, restore and promote sustainable use of ecosystems.',
     challenges: [
@@ -172,7 +172,7 @@ const SDGs = [
   {
     id: 16, num: '16', title: 'Peace & Justice',
     color: '#00689D',
-    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Sustainable_Development_Goal_16PeaceJustice.svg/200px-Sustainable_Development_Goal_16PeaceJustice.svg.png',
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Sustainable_Development_Goal_16PeaceJusticeInstitutions.svg/960px-Sustainable_Development_Goal_16PeaceJusticeInstitutions.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail&_=20240924093231',
     imageUrl: 'https://images.unsplash.com/photo-1589578527966-fdac0f44566c?w=600&q=80',
     description: 'Promote just, peaceful and inclusive societies.',
     challenges: [
@@ -183,7 +183,7 @@ const SDGs = [
   {
     id: 17, num: '17', title: 'Partnerships',
     color: '#19486A',
-    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Sustainable_Development_Goal_17Partnerships.svg/200px-Sustainable_Development_Goal_17Partnerships.svg.png',
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Sustainable_Development_Goal_17Partnerships.svg/960px-Sustainable_Development_Goal_17Partnerships.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail&_=20240924093233',
     imageUrl: 'https://images.unsplash.com/photo-1600880292089-90a7e086ee0c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8UGFydG5lcnNoaXBzfGVufDB8fDB8fHwy',
     description: 'Strengthen global partnerships for sustainable development.',
     challenges: [

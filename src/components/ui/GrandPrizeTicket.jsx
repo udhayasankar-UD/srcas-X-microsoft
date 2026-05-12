@@ -1,5 +1,6 @@
 import { useRef, useState, useCallback, useMemo, useEffect } from "react";
 import { motion } from "framer-motion";
+import ticketBg from "../../assets/tickets/PC_BG_ticket.png";
 
 /* ─────────────────────────────────────────────
    GRAND PRIZE TICKET — Dark premium ticket
@@ -127,7 +128,11 @@ export const GrandPrizeTicket = () => {
         style={{
           position: "relative",
           display: "flex",
-          background: "#0e0e0e",
+          backgroundImage: `url("${ticketBg}")`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          backgroundColor: "#0e0e0e",
           willChange: "transform",
           cursor: "default",
           fontFamily: SANS,
@@ -281,7 +286,7 @@ export const GrandPrizeTicket = () => {
           >
             Win a Ticket
             <br />
-            to Singapore!
+            to <span style={{ color: "#54f0ff" }}>Singapore!</span> 
           </h3>
 
           {/* Description */}

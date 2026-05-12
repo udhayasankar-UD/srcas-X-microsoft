@@ -1,6 +1,6 @@
 import React from 'react';
 import HeroSection1 from '../components/hero/HeroSection1';
-import HeroSection5 from '../components/hero/HeroSection5';
+import HeroSection7 from '../components/hero/HeroSection7';
 import AboutSection from '../components/sections/AboutSection';
 import { PrizesSection } from '../components/sections/PrizesSection';
 import ProblemStatements from '../components/problem-statements/ProblemStatements';
@@ -14,8 +14,8 @@ import InteractiveSection from '../components/sections/InteractiveSection';
 function HomePage() {
   return (
     <main>
+      <HeroSection7 />
       <HeroSection1 />
-      {/* <HeroSection5 /> */}
       
       {/* ── Rest of the page ── */}
       <AboutSection />

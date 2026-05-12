@@ -1,5 +1,7 @@
-import { useRef, useState, useCallback, useMemo } from "react";
+import { useRef, useState, useCallback, useMemo, useEffect } from "react";
 import { motion } from "framer-motion";
+import ticketBgDesktop from "../../assets/tickets/PC_BG_ticket.png";
+import ticketBgMobile from "../../assets/tickets/mobile_BG_ticket.png";
 
 /* ─── Barcode ─── */
 const Barcode = () => {
@@ -75,6 +77,15 @@ export const InternshipTicket = () => {
     setTilt({ x, y });
   }, []);
 
+  // Responsive background
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+  const currentBg = isMobile ? ticketBgMobile : ticketBgDesktop;
+
   // translateZ values for 3D pop-out layers (desktop only)
   const z = {
     icon:    hovered ? 50  : 0,
@@ -100,7 +111,11 @@ export const InternshipTicket = () => {
           style={{
             transformStyle: "preserve-3d",
             position: "relative",
-            background: "#0e0e0e",
+            backgroundImage: `url("${currentBg}")`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            backgroundColor: "#0e0e0e",
             borderRadius: 20,
             overflow: "hidden",
             boxShadow: hovered
@@ -200,7 +215,7 @@ export const InternshipTicket = () => {
                 letterSpacing: "-0.03em", transformStyle: "preserve-3d",
               }}
             >
-              Win a Ticket<br />to Singapore!
+              Win a Ticket<br />to <span style={{ color: "#59c23a" }}>Singapore!</span> 
             </motion.h3>
 
             {/* Description — pops out */}
@@ -229,10 +244,10 @@ export const InternshipTicket = () => {
             >
               <a href="#register" style={{
                 display: "inline-flex", alignItems: "center", gap: 8,
-                padding: "12px 24px", background: "#fff", color: "#0e0e0e",
+                padding: "12px 24px", background: "#59c23a", color: "#000",
                 fontSize: "0.83rem", fontWeight: 700, borderRadius: 9,
                 textDecoration: "none",
-                boxShadow: hovered ? "0 8px 28px rgba(255,255,255,0.22)" : "0 2px 8px rgba(255,255,255,0.08)",
+                boxShadow: hovered ? "0 8px 28px rgba(89, 194, 58, 0.25)" : "0 2px 8px rgba(89, 194, 58, 0.1)",
                 transition: "box-shadow 0.3s, transform 0.2s",
               }}
                 onMouseEnter={e => e.currentTarget.style.transform = "translateY(-2px)"}
@@ -248,14 +263,7 @@ export const InternshipTicket = () => {
               </span>
             </motion.div>
 
-            {/* Wave mesh bg */}
-            <div aria-hidden style={{
-              position: "absolute", right: 0, bottom: 0,
-              width: "55%", height: "75%",
-              pointerEvents: "none", zIndex: 0, opacity: 0.45, overflow: "hidden",
-            }}>
-              <WaveMesh />
-            </div>
+            {/* Wave mesh bg — removed, using BG_ticket.png instead */}
           </div>
 
           {/* ── RIGHT 32% — stub (QR + barcode) — desktop only ── */}
@@ -299,7 +307,9 @@ export const InternshipTicket = () => {
                 display: "flex", flexDirection: "column", gap: 7, alignItems: "flex-start",
               }}>
                 <span style={{ fontSize: "0.72rem", color: "#ccc", letterSpacing: "0.05em" }}>21-06-26</span>
-                <span style={{ fontSize: "0.88rem", color: "#fff", fontWeight: 600, letterSpacing: "0.02em" }}>Internship ticket</span>
+                <span style={{ fontSize: "0.88rem", color: "#fff", fontWeight: 600, letterSpacing: "0.02em" }}>
+                  <span style={{ color: "#59c23a" }}>Internship</span> ticket
+                </span>
                 <span style={{ fontSize: "0.88rem", color: "#fff", fontWeight: 600, letterSpacing: "0.02em" }}>14.00 to 16.00 Hs</span>
               </div>
             </div>
