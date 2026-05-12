@@ -62,7 +62,7 @@ const EVENTS = [
     Icon: IconAnnounce,
   },
   {
-    index: 3, num: "04", day: "20", month: "JUL", year: "2026",
+    index: 3, num: "04", day: "14-15", month: "AUG", year: "2026",
     title: "Finals & Awards",
     desc: "24 hours of intense hacking, live judging by industry experts, and the grand award ceremony.",
     tag: "Main Event", tagColor: "#fff",
