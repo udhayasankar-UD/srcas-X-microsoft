@@ -3,6 +3,7 @@ import { useLocation, BrowserRouter as Router, Routes, Route } from 'react-route
 import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
+import EntryVideoPopup from './components/ui/EntryVideoPopup';
 
 // Pages
 import HomePage from './pages/HomePage';
@@ -71,6 +72,7 @@ function App() {
     <Router>
       <ScrollToTop />
       <div className="app" style={{ minHeight: '100vh' }}>
+        <EntryVideoPopup />
         <ScrollToTopButton />
         <Navbar />
 

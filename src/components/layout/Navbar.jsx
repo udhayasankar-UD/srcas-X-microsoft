@@ -207,49 +207,80 @@ const DesktopNavBar = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const [collapsed, setCollapsed] = useState(false);
+  const [hovered,   setHovered]   = useState(false);
+  const collapseTimer = useRef(null);
+  const leaveTimer    = useRef(null);
+
+  useEffect(() => {
+    collapseTimer.current = setTimeout(() => setCollapsed(true), 7000);
+    return () => clearTimeout(collapseTimer.current);
+  }, []);
+
+  const handleMouseEnter = () => {
+    clearTimeout(leaveTimer.current);
+    setHovered(true);
+    mouseY.set(Infinity);
+  };
+
+  const handleMouseLeave = () => {
+    leaveTimer.current = setTimeout(() => {
+      setHovered(false);
+      mouseY.set(Infinity);
+    }, 200);
+  };
+
+  const expanded = !collapsed || hovered;
+
   const spring        = { mass: 0.1, stiffness: 150, damping: 12 };
   const baseItemSize  = 52;
-  const magnification = 82;
+  const magnification = 72;
   const distance      = 130;
-  const panelWidth    = baseItemSize + 28;
+  const panelWidth    = baseItemSize + 28; // 80px
+  const peekWidth     = 32;
+  const hiddenX       = -(panelWidth - peekWidth);
 
-  const mouseY    = useMotionValue(Infinity);
-  const isHovered = useMotionValue(0);
+  const mouseY = useMotionValue(Infinity);
 
   const handleNav = (item) => {
     if (item.path !== location.pathname) {
       navigate(item.path);
-      // Our global ScrollToTop component in App.jsx will handle scrolling to top.
       if (item.hash && item.id !== 'home') {
         setTimeout(() => {
           const el = document.getElementById(item.hash.replace('#', ''));
           if (el) el.scrollIntoView({ behavior: 'smooth' });
-        }, 150); // Slightly longer delay for page load
+        }, 150);
       }
     } else if (item.hash && item.id !== 'home') {
       const el = document.getElementById(item.hash.replace('#', ''));
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth' });
-      } else {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+      else window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
   return (
-    <div className="fixed hidden sm:flex flex-col items-center top-1/2 -translate-y-1/2 left-5 z-50">
-      {/* White frosted-glass pill panel */}
+    // ── Outer hover zone: covers panel + peek tab with extra padding ──
+    // This single div owns all mouse enter/leave — no gap = no flicker
+    <div
+      className="fixed hidden sm:flex flex-col items-start top-1/2 -translate-y-1/2 left-0 z-50"
+      style={{
+        // paddingLeft pushes content right so panel sits at left:20px when expanded
+        paddingLeft: 20,
+        // paddingRight extends the hover zone past the peek tab edge
+        paddingRight: peekWidth + 16,
+        // paddingTop/Bottom so mouse doesn't leave when near top/bottom of panel
+        paddingTop: 24,
+        paddingBottom: 24,
+      }}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onMouseMove={({ clientY }) => mouseY.set(clientY)}
+    >
       <motion.div
-        onMouseMove={({ clientY }) => {
-          isHovered.set(1);
-          mouseY.set(clientY);
-        }}
-        onMouseLeave={() => {
-          isHovered.set(0);
-          mouseY.set(Infinity);
-        }}
+        animate={{ x: expanded ? 0 : -(panelWidth + 20 - peekWidth) }}
+        transition={{ type: 'spring', stiffness: 200, damping: 34, mass: 1 }}
         className="relative flex flex-col items-center gap-4 rounded-2xl py-6 px-3"
         style={{
           width: panelWidth,
@@ -262,6 +293,40 @@ const DesktopNavBar = () => {
         role="toolbar"
         aria-label="Site navigation"
       >
+        {/* ── Peek tab ── */}
+        <motion.div
+          animate={{ opacity: collapsed && !hovered ? 1 : 0 }}
+          transition={{ duration: 0.25 }}
+          style={{
+            position: 'absolute',
+            right: -(peekWidth),
+            top: '50%',
+            transform: 'translateY(-50%)',
+            width: peekWidth,
+            height: 88,
+            borderRadius: '0 10px 10px 0',
+            background: '#111',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            pointerEvents: 'none',
+          }}
+        >
+          <span style={{
+            writingMode: 'vertical-rl',
+            textOrientation: 'mixed',
+            transform: 'rotate(180deg)',
+            fontSize: '9px',
+            fontWeight: 800,
+            letterSpacing: '0.18em',
+            color: '#fff',
+            textTransform: 'uppercase',
+            userSelect: 'none',
+          }}>
+            NAVBAR
+          </span>
+        </motion.div>
+
         {/* Left accent line */}
         <div
           className="absolute left-0 top-8 bottom-8 w-[3px] rounded-full"
@@ -271,7 +336,6 @@ const DesktopNavBar = () => {
         {NAV_ITEMS.map((item) => {
           const isActive   = activeSection === item.id;
           const LucideIcon = item.icon;
-
           return (
             <NavDockItem
               key={item.id}

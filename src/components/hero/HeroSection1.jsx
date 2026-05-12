@@ -327,6 +327,9 @@ export default function HeroSection1() {
               Partner
             </span>
             <img src={igeniusLogo} alt="igeniusAI" style={{ height: "24px", objectFit: "contain" }} />
+            <span style={{ fontSize: "0.9rem", color: "#6b7280", textTransform: "uppercase", fontWeight: 600, display: "flex", flexDirection: "column" }}>
+              Authorized Partner
+            </span>
             <img src={msLogo} alt="Microsoft" style={{ height: "42px", objectFit: "contain" }} />
           </div>
         </div>

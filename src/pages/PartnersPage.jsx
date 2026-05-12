@@ -26,16 +26,14 @@ const hostedBy = [
 ];
 
 const partners = [
-    {
-    logo: igeniusLogo,
-    name: 'iGenious AI',
-    role: 'Innovation Partner',
-    initials: 'AB',
-  },
   {
-    logo: microsoftLogo,
-    name: 'Microsoft',
-    role: 'Technology Partner',
+    logo: igeniusLogo,
+    name: 'iGenius AI',
+    role: 'Innovation Partner',
+    authorizedPartner: {
+      logo: microsoftLogo,
+      label: 'Authorized Partner',
+    },
   },
 ];
 
@@ -313,7 +311,7 @@ export default function PartnersPage() {
           <div
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 340px))',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 530px))',
               justifyContent: 'center',
               gap: 28,
               
@@ -332,7 +330,6 @@ export default function PartnersPage() {
                   boxShadow: '0 2px 12px rgba(0,0,0,0.05)',
                   cursor: 'default',
                   transition: 'all 0.25s ease',
-                  minHeight: 360,
                   display: 'flex',
                   flexDirection: 'column',
                 }}
@@ -341,11 +338,11 @@ export default function PartnersPage() {
                 <div
                   style={{
                     background: '#f9f9f9',
-                    height: 220,
+                    height: 440,
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    padding: 24,
+                    padding: 48,
                     borderBottom: '1px solid #f0f0f0',
                   }}
                 >
@@ -354,7 +351,7 @@ export default function PartnersPage() {
                       src={p.logo}
                       alt={p.name}
                       style={{
-                        maxHeight: 90,
+                        maxHeight: 180,
                         maxWidth: '80%',
                         objectFit: 'contain',
                       }}
@@ -379,39 +376,55 @@ export default function PartnersPage() {
                   )}
                 </div>
 
-                {/* Content */}
+                {/* Name + role */}
                 <div
                   style={{
-                    padding: '24px 18px',
+                    padding: '28px 24px',
                     textAlign: 'center',
-                    flex: 1,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
                   }}
                 >
-                  <p
-                    style={{
-                      fontSize: '1rem',
-                      fontWeight: 800,
-                      color: '#111',
-                      margin: '0 0 8px',
-                    }}
-                  >
+                  <p style={{ fontSize: '1.5rem', fontWeight: 800, color: '#111', margin: '0 0 8px' }}>
                     {p.name}
                   </p>
-
-                  <p
-                    style={{
-                      fontSize: '0.8rem',
-                      color: '#9ca3af',
-                      margin: 0,
-                      fontWeight: 600,
-                    }}
-                  >
+                  <p style={{ fontSize: '1rem', color: '#9ca3af', margin: 0, fontWeight: 600 }}>
                     {p.role}
                   </p>
                 </div>
+
+                {/* Authorized Partner sub-section */}
+                {p.authorizedPartner && (
+                  <>
+                    {/* Divider */}
+                    <div style={{ margin: '0 24px', height: 1, background: '#f0f0f0' }} />
+
+                    <div
+                      style={{
+                        padding: '24px 24px 32px',
+                        textAlign: 'center',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        gap: 14,
+                      }}
+                    >
+                      <p style={{
+                        fontSize: '0.7rem', fontWeight: 700,
+                        letterSpacing: '0.2em', textTransform: 'uppercase',
+                        color: '#9ca3af', margin: 0,
+                      }}>
+                        {p.authorizedPartner.label}
+                      </p>
+                      <img
+                        src={p.authorizedPartner.logo}
+                        alt={p.authorizedPartner.name}
+                        style={{ maxHeight: 44, maxWidth: '60%', objectFit: 'contain' }}
+                      />
+                      <p style={{ fontSize: '1rem', fontWeight: 700, color: '#111', margin: 0 }}>
+                        {p.authorizedPartner.name}
+                      </p>
+                    </div>
+                  </>
+                )}
               </motion.div>
             ))}
           </div>
