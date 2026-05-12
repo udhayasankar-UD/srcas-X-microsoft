@@ -34,30 +34,46 @@ const OutcomeCard = ({ icon, title, desc, index }) => (
 );
 
 /* ─── Prize tier card ─── */
-const PrizeTierCard = ({ rank, title, amount, desc, index }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 40 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true, margin: '-40px' }}
-    transition={{ duration: 0.6, delay: index * 0.12, ease: [0.22, 1, 0.36, 1] }}
-    style={{
-      border: '2px solid #111', borderRadius: 0, padding: '40px 32px',
-      display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
-      background: '#fff', cursor: 'default', transition: 'background 0.25s, color 0.25s',
-      fontFamily: "'Plus Jakarta Sans', sans-serif", minHeight: 280,
-    }}
-    whileHover={{ backgroundColor: '#111', color: '#fff' }}
-  >
-    <div>
-      <span style={{ fontSize: '3rem', fontWeight: 900, display: 'block', marginBottom: 16, lineHeight: 1 }}>{rank}</span>
-      <h3 style={{ fontSize: '1.4rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '-0.01em', marginBottom: 10 }}>{title}</h3>
-      <p style={{ fontSize: '0.85rem', lineHeight: 1.6, opacity: 0.6, marginBottom: 0 }}>{desc}</p>
-    </div>
-    <div style={{ marginTop: 24 }}>
-      <span style={{ fontSize: '2.2rem', fontWeight: 900, letterSpacing: '-0.03em' }}>{amount}</span>
-    </div>
-  </motion.div>
-);
+const PrizeTierCard = ({ rank, title, amount, desc, index, podiumLevel, mobileOrder }) => {
+  const isCenter = podiumLevel === 1;
+  const heights = { 1: 440, 2: 380, 3: 320 };
+  const h = podiumLevel ? heights[podiumLevel] : 280;
+
+  return (
+    <motion.div
+      className={`podium-item-${mobileOrder}`}
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-40px' }}
+      transition={{ duration: 0.6, delay: index * 0.15, ease: [0.22, 1, 0.36, 1] }}
+      style={{
+        flex: 1, width: '100%',
+        border: '2px solid #111', borderRadius: 24, padding: '40px 32px',
+        display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
+        background: isCenter ? '#111' : '#fff', color: isCenter ? '#fff' : '#111',
+        cursor: 'default', transition: 'transform 0.3s, box-shadow 0.3s',
+        fontFamily: "'Plus Jakarta Sans', sans-serif", minHeight: h,
+        position: 'relative',
+        boxShadow: isCenter ? '0 24px 48px rgba(0,0,0,0.15)' : 'none',
+      }}
+      whileHover={{ transform: 'translateY(-12px)', boxShadow: isCenter ? '0 32px 64px rgba(0,0,0,0.2)' : '0 20px 40px rgba(0,0,0,0.08)' }}
+    >
+      {isCenter && (
+        <div style={{ position: 'absolute', top: -16, left: '50%', transform: 'translateX(-50%)', background: '#fff', color: '#111', padding: '6px 16px', borderRadius: 20, fontSize: '0.75rem', fontWeight: 800, border: '2px solid #111', whiteSpace: 'nowrap' }}>
+          WINNER
+        </div>
+      )}
+      <div>
+        <span style={{ fontSize: '3.5rem', fontWeight: 900, display: 'block', marginBottom: 16, lineHeight: 1, opacity: isCenter ? 1 : 0.8 }}>{rank}</span>
+        <h3 style={{ fontSize: '1.4rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '-0.01em', marginBottom: 10 }}>{title}</h3>
+        <p style={{ fontSize: '0.85rem', lineHeight: 1.6, opacity: isCenter ? 0.8 : 0.6, marginBottom: 0 }}>{desc}</p>
+      </div>
+      <div style={{ marginTop: 32 }}>
+        <span style={{ fontSize: '2.4rem', fontWeight: 900, letterSpacing: '-0.03em' }}>{amount}</span>
+      </div>
+    </motion.div>
+  );
+};
 
 /* ─── Scrolling ticker ─── */
 const Ticker = ({ items }) => (
@@ -99,6 +115,12 @@ const PrizesPage = () => {
     { rank: '01', title: 'Grand Prize', amount: '₹30,000', desc: 'The ultimate recognition for the most innovative and impactful solution. Includes Microsoft internship fast-track.' },
     { rank: '02', title: 'First Runner Up', amount: '₹20,000', desc: 'For the team that demonstrated exceptional technical skill and a solid product-market fit.' },
     { rank: '03', title: 'Second Runner Up', amount: '₹10,000', desc: 'Awarded for creativity and a unique approach to solving the problem statement.' },
+  ];
+
+  const podiumTiers = [
+    { ...tiers[1], podiumLevel: 2, mobileOrder: 2 },
+    { ...tiers[0], podiumLevel: 1, mobileOrder: 1 },
+    { ...tiers[2], podiumLevel: 3, mobileOrder: 3 },
   ];
 
   const trackAwards = [
@@ -310,11 +332,9 @@ const PrizesPage = () => {
             </h2>
           </motion.div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 0, border: '2px solid #111' }} className="prize-tiers-grid">
-            {tiers.map((t, i) => (
-              <div key={i} style={{ borderRight: i < 2 ? '2px solid #111' : 'none' }}>
-                <PrizeTierCard {...t} index={i} />
-              </div>
+          <div className="prize-podium" style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'center', gap: '24px' }}>
+            {podiumTiers.map((t, i) => (
+              <PrizeTierCard key={i} {...t} index={i} />
             ))}
           </div>
 
@@ -431,9 +451,10 @@ const PrizesPage = () => {
       <PPTSection />
       <style>{`
         @media (max-width: 768px) {
-          .prize-tiers-grid { grid-template-columns: 1fr !important; }
-          .prize-tiers-grid > div { border-right: none !important; border-bottom: 2px solid #111; }
-          .prize-tiers-grid > div:last-child { border-bottom: none; }
+          .prize-podium { flex-direction: column !important; align-items: stretch !important; gap: 24px !important; }
+          .podium-item-1 { order: 1; }
+          .podium-item-2 { order: 2; }
+          .podium-item-3 { order: 3; }
         }
         @media (max-width: 640px) {
           section { padding-left: 20px !important; padding-right: 20px !important; }

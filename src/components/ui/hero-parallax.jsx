@@ -179,18 +179,28 @@ export const ProductCard = ({ product, translate }) => {
         md:h-96 md:w-[30rem]
       "
     >
-      <a
-        href={product.link}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="block h-full w-full"
-      >
-        <img
-          src={product.thumbnail}
-          alt={product.title}
-          className="absolute inset-0 h-full w-full object-cover object-top"
-        />
-      </a>
+      {product.link ? (
+        <a
+          href={product.link}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block h-full w-full"
+        >
+          <img
+            src={product.thumbnail}
+            alt={product.title}
+            className="absolute inset-0 h-full w-full object-cover object-top"
+          />
+        </a>
+      ) : (
+        <div className="block h-full w-full">
+          <img
+            src={product.thumbnail}
+            alt={product.title}
+            className="absolute inset-0 h-full w-full object-cover object-top"
+          />
+        </div>
+      )}
 
       {/* Overlay */}
       <div className="absolute inset-0 bg-black opacity-0 group-hover/product:opacity-70 transition-opacity duration-300 pointer-events-none" />

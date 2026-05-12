@@ -468,13 +468,13 @@ export default function ProblemStatements() {
           // Desktop: horizontal scroll filmstrip
           <div style={{
             flex: '1 1 auto',
-            minHeight: '280px',
+            minHeight: '260px',
             maxHeight: '420px',
             display: 'flex',
             alignItems: 'center',
             position: 'relative',
             zIndex: 10,
-            overflow: 'hidden',
+            overflow: 'visible',
             flexShrink: 1,
             marginBottom: '0px',
           }}>
@@ -495,7 +495,7 @@ export default function ProblemStatements() {
                     }}
                     transition={{ duration: 0.3 }}
                     style={{
-                      width: 'clamp(220px, 30vh, 270px)', height: 'clamp(280px, 45vh, 360px)',
+                      width: 'clamp(200px, 28vh, 270px)', height: 'clamp(260px, 38vh, 360px)',
                       borderRadius: '20px', position: 'relative',
                       overflow: 'hidden', cursor: 'pointer', flexShrink: 0,
                       boxShadow: isActive ? `0 20px 40px ${sdg.color}45` : '0 6px 16px rgba(0,0,0,0.10)',
