@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import copyflagImg from '../../assets/skewcards/copyflag.png';
 import revoraImg from '../../assets/skewcards/revorahealth.png';
-import spoilsafeImg from '../../assets/skewcards/spoilsafe.png';
+import SpoilSafeImg from '../../assets/skewcards/SpoilSafe.png';
 
 const cards = [
   {
@@ -23,7 +23,7 @@ const cards = [
     desc: 'SpoilSafe brings real-time visibility to food freshness across the cold chain. The startup has built a system that uses low-cost sensors to detect gases like ethylene and ammonia, paired with machine learning models on Azure to predict spoilage in real time. This shift allows teams to move from reactive monitoring to proactive decision-making, with clear insight into what is at risk and what action to take.',
     gradientFrom: '#4dff03',
     gradientTo: '#00d0ff',
-    img: spoilsafeImg,
+    img: SpoilSafeImg,
   },
 ];
 
