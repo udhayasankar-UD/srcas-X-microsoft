@@ -57,14 +57,14 @@ const Leaf = ({ size = 20, blur = 0 }) => (
 //   </svg>
 // );
 
-const SproutIcon = ({ size = 24, color = "currentColor", strokeWidth = 2 }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">
-    <path d="M7 20h10"></path>
-    <path d="M10 20c5.5-2.5.8-6.4 3-10"></path>
-    <path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"></path>
-    <path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"></path>
-  </svg>
-);
+// const SproutIcon = ({ size = 24, color = "currentColor", strokeWidth = 2 }) => (
+//   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">
+//     <path d="M7 20h10"></path>
+//     <path d="M10 20c5.5-2.5.8-6.4 3-10"></path>
+//     <path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"></path>
+//     <path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"></path>
+//   </svg>
+// );
 
 // const CpuIcon = ({ size = 24, color = "currentColor", strokeWidth = 2 }) => (
 //   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">
@@ -81,14 +81,14 @@ const SproutIcon = ({ size = 24, color = "currentColor", strokeWidth = 2 }) => (
 //   </svg>
 // );
 
-const HandshakeIcon = ({ size = 24, color = "currentColor", strokeWidth = 2 }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">
-    <path d="m11 17 2 2a1 1 0 1 0 3-3"></path>
-    <path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4"></path>
-    <path d="m21 3-6 6"></path>
-    <path d="M8.4 10.4 5.3 7.3a2.8 2.8 0 0 0-3.9 3.9l5.6 5.6a2 2 0 0 0 2.8 0l2.1-2.1a2 2 0 0 0 0-2.8l-3.5-3.5"></path>
-  </svg>
-);
+// const HandshakeIcon = ({ size = 24, color = "currentColor", strokeWidth = 2 }) => (
+//   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">
+//     <path d="m11 17 2 2a1 1 0 1 0 3-3"></path>
+//     <path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4"></path>
+//     <path d="m21 3-6 6"></path>
+//     <path d="M8.4 10.4 5.3 7.3a2.8 2.8 0 0 0-3.9 3.9l5.6 5.6a2 2 0 0 0 2.8 0l2.1-2.1a2 2 0 0 0 0-2.8l-3.5-3.5"></path>
+//   </svg>
+// );
 
 // const UsersIcon = ({ size = 24, color = "currentColor", strokeWidth = 2 }) => (
 //   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">
@@ -99,22 +99,22 @@ const HandshakeIcon = ({ size = 24, color = "currentColor", strokeWidth = 2 }) =
 //   </svg>
 // );
 
-const BookOpenIcon = ({ size = 24, color = "currentColor", strokeWidth = 2 }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">
-    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
-    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
-  </svg>
-);
+// const BookOpenIcon = ({ size = 24, color = "currentColor", strokeWidth = 2 }) => (
+//   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">
+//     <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+//     <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+//   </svg>
+// );
 
-const GenderEqualIcon = ({ size = 24, color = "currentColor", strokeWidth = 2 }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="12" cy="10" r="5"></circle>
-    <path d="M12 15v7"></path>
-    <path d="M9 19h6"></path>
-    <path d="M10 10h4"></path>
-    <path d="M10 8h4"></path>
-  </svg>
-);
+// const GenderEqualIcon = ({ size = 24, color = "currentColor", strokeWidth = 2 }) => (
+//   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">
+//     <circle cx="12" cy="10" r="5"></circle>
+//     <path d="M12 15v7"></path>
+//     <path d="M9 19h6"></path>
+//     <path d="M10 10h4"></path>
+//     <path d="M10 8h4"></path>
+//   </svg>
+// );
 
 const FloatingIcon = ({ icon: Icon, color, size = 32, blur = 0, opacity = 0.8, style }) => (
   <div style={{
@@ -302,9 +302,7 @@ export default function HeroSection7() {
           <SDGWheel size={90} blur={3} />
         </ParallaxElement>
         
-        <ParallaxElement yOffset={-350} initialRotate={0} rotationSpeed={25} style={{ position: 'absolute', bottom: '-8%', left: '-5%' }}>
-          <SDGWheel size={220} blur={6} />
-        </ParallaxElement>
+        
 
         <ParallaxElement yOffset={-200} initialRotate={0} rotationSpeed={-20} style={{ position: 'absolute', bottom: '-15%', right: '-5%' }}>
           <SDGWheel size={280} blur={8} />
@@ -331,24 +329,24 @@ export default function HeroSection7() {
         <ParallaxElement yOffset={-220} initialRotate={15} rotationSpeed={-15} style={{ position: 'absolute', top: '25%', right: '35%' }}>
           <FloatingIcon icon={GraduationCapIcon} color="#3b82f6" size={32} opacity={0.8} />
         </ParallaxElement> */}
-        <ParallaxElement yOffset={-180} initialRotate={-5} rotationSpeed={10} style={{ position: 'absolute', bottom: '40%', left: '15%' }}>
+        {/* <ParallaxElement yOffset={-180} initialRotate={-5} rotationSpeed={10} style={{ position: 'absolute', bottom: '40%', left: '15%' }}>
           <FloatingIcon icon={SproutIcon} color="#22c55e" size={24} blur={1} opacity={0.7} />
-        </ParallaxElement>
+        </ParallaxElement> */}
         {/* <ParallaxElement yOffset={-250} initialRotate={20} rotationSpeed={-25} style={{ position: 'absolute', bottom: '35%', right: '20%' }}>
           <FloatingIcon icon={CpuIcon} color="#10b981" size={36} opacity={0.85} />
         </ParallaxElement> */}
-        <ParallaxElement yOffset={-130} initialRotate={-15} rotationSpeed={15} style={{ position: 'absolute', top: '45%', left: '20%' }}>
+        {/* <ParallaxElement yOffset={-130} initialRotate={-15} rotationSpeed={15} style={{ position: 'absolute', top: '45%', left: '20%' }}>
           <FloatingIcon icon={HandshakeIcon} color="#8b5cf6" size={28} opacity={0.8} />
-        </ParallaxElement>
+        </ParallaxElement> */}
         {/* <ParallaxElement yOffset={-210} initialRotate={5} rotationSpeed={-20} style={{ position: 'absolute', top: '15%', right: '45%' }}>
           <FloatingIcon icon={UsersIcon} color="#ec4899" size={26} blur={0.5} opacity={0.9} />
         </ParallaxElement> */}
-        <ParallaxElement yOffset={-260} initialRotate={-20} rotationSpeed={25} style={{ position: 'absolute', bottom: '15%', left: '35%' }}>
+        {/* <ParallaxElement yOffset={-260} initialRotate={-20} rotationSpeed={25} style={{ position: 'absolute', bottom: '15%', left: '35%' }}>
           <FloatingIcon icon={BookOpenIcon} color="#06b6d4" size={30} opacity={0.8} />
         </ParallaxElement>
         <ParallaxElement yOffset={-140} initialRotate={10} rotationSpeed={-10} style={{ position: 'absolute', bottom: '45%', right: '10%' }}>
           <FloatingIcon icon={GenderEqualIcon} color="#ef4444" size={24} blur={1} opacity={0.7} />
-        </ParallaxElement> 
+        </ParallaxElement>  */}
 
         
       </div>
@@ -370,10 +368,30 @@ export default function HeroSection7() {
         </motion.div>
 
         {/* Heading */}
-        <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} style={{ fontSize: 'clamp(3.5rem, 7vw, 6.5rem)', fontWeight: 800, color: '#111', lineHeight: 1.1, letterSpacing: '-0.02em', marginTop: '24px', marginBottom: '24px' }}>
-          Where Ambitious<br/>
-          People <span style={{ color: '#2563EB', fontFamily: theme.fonts.pixel }}>Gather.</span>
-        </motion.h1>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '16px', marginBottom: '24px' }}>
+          <h1 style={{ fontSize: 'clamp(2rem, 3vw, 5rem)', fontWeight: 900, color: '#111', lineHeight: 1.05, letterSpacing: '-0.03em', margin: 0, textAlign: 'center' }}>
+             SRCAS Hackathon 3.0 {/*<span style={{ color: '#3b82f6', fontFamily: theme.fonts.pixel, letterSpacing: '-0.15em' }}> 3.0</span> */}
+          </h1>
+          <div style={{ position: 'relative', marginTop: '12px' }}>
+            {/* Left yellow burst lines */}
+            <svg style={{ position: 'absolute', top: '10px', left: '-50px', width: 40, height: 40, overflow: 'visible' }}>
+              <path d="M 30 10 L 10 -5" stroke="#facc15" strokeWidth="4" strokeLinecap="round" />
+              <path d="M 25 30 L 5 25" stroke="#facc15" strokeWidth="4" strokeLinecap="round" />
+              <circle cx="0" cy="5" r="3" fill="#fb923c" />
+            </svg>
+            {/* Right yellow burst lines */}
+            <svg style={{ position: 'absolute', top: '10px', right: '-50px', width: 40, height: 40, overflow: 'visible' }}>
+              <path d="M 10 10 L 30 -5" stroke="#facc15" strokeWidth="4" strokeLinecap="round" />
+              <path d="M 15 30 L 35 25" stroke="#facc15" strokeWidth="4" strokeLinecap="round" />
+            </svg>
+            {/* <h2 style={{ fontSize: 'clamp(3.5rem, 7vw, 6.5rem)', fontWeight: 800, color: '#111', lineHeight: 1.15, letterSpacing: '-0.02em', margin: 0 }}>
+              What's the <br/><span style={{ color: '#3b82f6' }}>Next Big</span> Idea!
+            </h2> */}
+            <h2 style={{ fontSize: 'clamp(3.5rem, 7vw, 6.5rem)', fontWeight: 800, color: '#111', lineHeight: 1.15, letterSpacing: '-0.02em', margin: 0 }}>
+             SRCAS <br/><span style={{ color: '#3b82f6' }}>Hackathon</span> 3.0!
+            </h2>
+          </div>
+        </motion.div>
 
         {/* Subtext */}
         <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} style={{ fontSize: '1.125rem', color: '#4b5563', maxWidth: '520px', lineHeight: 1.6, marginBottom: '40px' }}>
@@ -383,29 +401,183 @@ export default function HeroSection7() {
         {/* Buttons */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', justifyContent: 'center' }}>
           <a href="#register" style={{ textDecoration: 'none' }}>
-            <div style={{ display: 'flex', alignItems: 'center', background: '#4c9f38', color: 'white', padding: '6px 24px 6px 6px', borderRadius: '100px', fontWeight: 700, fontSize: '0.875rem', letterSpacing: '0.05em', transition: 'transform 0.2s, background 0.2s', boxShadow: '0 4px 14px rgba(76, 159, 56, 0.3)' }}
-              onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.background = '#459232'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.background = '#4c9f38'; }}
-            >
-              <div style={{ width: '36px', height: '36px', background: '#111', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', marginRight: '16px' }}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+            <div className="hero-btn">
+              <div className="hero-bg" />
+              <div className="hero-border" />
+              <div className="hero-content">
+                <div className="hero-svgBox">
+                  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width={100} height={4} className="hero-svgLine">
+                    <line className="hero-line" x1={0} y1={2} x2={100} y2={2} fill="none" strokeLinecap="round" strokeWidth={2} strokeDasharray={60} />
+                  </svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width={200} height={4} className="hero-svgLine">
+                    <line className="hero-line" x1={0} y1={2} x2={100} y2={2} fill="none" strokeLinecap="round" strokeWidth={2} strokeDasharray={60} />
+                  </svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width={100} height={4} className="hero-svgLine">
+                    <line className="hero-line" x1={0} y1={2} x2={100} y2={2} fill="none" strokeLinecap="round" strokeWidth={2} strokeDasharray={60} />
+                  </svg>
+                </div>
+                <span className="hero-text" data-text="GO">REGISTER NOW</span>
               </div>
-              REGISTER NOW
             </div>
           </a>
           <a href="#sdgs" style={{ textDecoration: 'none' }}>
-            <div style={{ display: 'flex', alignItems: 'center', border: '1.5px solid #e5e7eb', background: 'white', color: '#111', padding: '0 32px', height: '48px', borderRadius: '100px', fontWeight: 700, fontSize: '0.875rem', letterSpacing: '0.05em', transition: 'border-color 0.2s, transform 0.2s' }}
-              onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.borderColor = '#111'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.borderColor = '#e5e7eb'; }}
-            >
-              VIEW SDGS
-            </div>
+            <button className="dashboard-btn">
+              DASHBOARD
+            </button>
           </a>
         </motion.div>
 
       </div>
       
       <style>{`
+        /* Custom Hero Button Styles */
+        .hero-btn {
+          --card-w: 220px;
+          --card-h: 52px;
+          width: var(--card-w);
+          height: var(--card-h);
+          border: 2px solid #333;
+          border-radius: 8px;
+          display: grid;
+          position: relative;
+          overflow: hidden;
+          cursor: pointer;
+          background-color: #222;
+          transition: transform 0.1s ease-in-out;
+          user-select: none;
+        }
+        .hero-btn:active { transform: scale(0.95); }
+        .hero-btn:hover .hero-border { opacity: 1; }
+        .hero-btn:hover .hero-bg {
+          animation-play-state: paused;
+          filter: grayscale(0);
+        }
+        .hero-btn:hover .hero-bg::before {
+          animation-play-state: running;
+          opacity: 0.6;
+        }
+        .hero-btn:hover .hero-text { transform: skewX(-15deg); }
+        .hero-btn:hover .hero-svgBox {
+          opacity: 1;
+          width: 50px;
+        }
+
+        .hero-bg {
+          --size: calc(max(var(--card-w), var(--card-h)) * 1.25);
+          width: var(--size);
+          height: var(--size);
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          filter: grayscale(1);
+          animation: heroRotateBg 14s linear infinite;
+          animation-play-state: running;
+        }
+        .hero-bg::before {
+          content: "";
+          width: 100%;
+          height: 100%;
+          display: block;
+          background: repeating-conic-gradient(
+            from 0deg at 50% 50%,
+            rgba(246, 194, 92, 0.75) 0deg,
+            rgba(246, 194, 92, 0.75) 15deg,
+            transparent 15deg,
+            transparent 30deg
+          );
+          opacity: 0.2;
+          transition: opacity 0.3s ease-in-out;
+          animation: heroRotateBgBefore 4s linear infinite;
+          animation-play-state: paused;
+        }
+
+        @keyframes heroRotateBg { to { transform: translate(-50%, -50%) rotate(360deg); } }
+        @keyframes heroRotateBgBefore { to { transform: rotate(360deg); } }
+
+        .hero-border {
+          width: 100%;
+          height: 100%;
+          position: absolute;
+          top: 0;
+          left: 0;
+          border-radius: 8px;
+          box-shadow: inset 0 0 16px 0 rgba(194, 194, 194, 0.75);
+          opacity: 0;
+          transition: opacity 0.3s ease-in-out;
+        }
+        .hero-content {
+          width: 100%;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 6px;
+          position: absolute;
+          top: 0;
+          left: 0;
+        }
+        .hero-text {
+          display: block;
+          font-size: 18px;
+          font-weight: 900;
+          color: #fff;
+          position: relative;
+          transition: transform 0.3s ease-in-out;
+          text-transform: uppercase;
+        }
+
+        .hero-svgBox {
+          width: 0px;
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-end;
+          align-items: flex-end;
+          gap: 2px;
+          transition: all 0.3s ease-in-out;
+          opacity: 0;
+        }
+        .hero-svgLine { position: relative; }
+        .hero-line {
+          stroke: #fff;
+          animation: heroAnimLine 0.6s linear infinite;
+        }
+        .hero-svgLine:nth-child(1) { transform: translateX(4px); }
+        .hero-svgLine:nth-child(3) { transform: translateX(-4px); }
+        .hero-svgLine:nth-child(1) .hero-line { animation-delay: 0.2s; }
+        .hero-svgLine:nth-child(2) .hero-line { animation-delay: 0.1s; }
+
+        @keyframes heroAnimLine {
+          0% { stroke-dashoffset: 0; }
+          100% { stroke-dashoffset: 120; }
+        }
+
+        /* Custom Dashboard Button Styles */
+        .dashboard-btn {
+          border: 1.5px solid black;
+          padding: 12px 30px;
+          border-radius: 30px;
+          background-color: #ffffff;
+          font-weight: 800;
+          font-size: 15px;
+          color: #111;
+          box-shadow: 0px 0px 1px;
+          transition: all 0.3s ease;
+          cursor: pointer;
+          letter-spacing: 0.05em;
+          height: 52px;
+        }
+
+        .dashboard-btn:hover {
+          transform: translateY(-8px);
+          box-shadow: 0px 8px 1px rgb(0, 0, 0);
+        }
+
+        .dashboard-btn:active {
+          transform: translateY(4px);
+          box-shadow: 0px 0px 1px;
+        }
+
         @media(max-width:1200px){
           .h1-logos-mobile-hide{display:none!important}
         }

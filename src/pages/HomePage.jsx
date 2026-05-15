@@ -3,6 +3,7 @@ import HeroSection1 from '../components/hero/HeroSection1';
 import HeroSection7 from '../components/hero/HeroSection7';
 import AboutSection from '../components/sections/AboutSection';
 import { PrizesSection } from '../components/sections/PrizesSection';
+import SkewCards from '../components/sections/SkewCards';
 import ProblemStatements from '../components/problem-statements/ProblemStatements';
 import GuidelinesSection from '../components/sections/GuidelinesSection';
 import TimelineSection from '../components/sections/TimelineSection';
@@ -20,6 +21,7 @@ function HomePage() {
       {/* ── Rest of the page ── */}
       <AboutSection />
       <PrizesSection />
+      <SkewCards />
       <ProblemStatements />
       <GuidelinesSection />
       <TimelineSection />

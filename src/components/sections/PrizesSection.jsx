@@ -114,44 +114,96 @@ export const PrizesSection = () => {
           transition={{ duration:0.5, delay:0.2 }}
           style={{ display:"flex", justifyContent:"center" }}
         >
-          <button
-            onClick={() => { navigate("/prizes"); window.scrollTo({ top: 0, behavior: 'instant' }); }}
-            style={{
-              display:"inline-flex", alignItems:"center", gap:10,
-              padding:"14px 32px",
-              background:"#111", color:"#fff",
-              fontSize:"0.85rem", fontWeight:700,
-              letterSpacing:"0.06em", textTransform:"uppercase",
-              border:"2px solid #111", borderRadius:100,
-              cursor:"pointer",
-              transition:"background 0.2s, color 0.2s, transform 0.2s, box-shadow 0.2s",
-              boxShadow:"0 4px 20px rgba(0,0,0,0.12)",
-            }}
-            onMouseEnter={e => {
-              e.currentTarget.style.background = "#fff";
-              e.currentTarget.style.color = "#111";
-              e.currentTarget.style.transform = "translateY(-3px)";
-              e.currentTarget.style.boxShadow = "0 8px 28px rgba(0,0,0,0.18)";
-            }}
-            onMouseLeave={e => {
-              e.currentTarget.style.background = "#111";
-              e.currentTarget.style.color = "#fff";
-              e.currentTarget.style.transform = "translateY(0)";
-              e.currentTarget.style.boxShadow = "0 4px 20px rgba(0,0,0,0.12)";
-            }}
-          >
-            <span>💸</span>
-            view more
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M5 12h14M12 5l7 7-7 7"/>
-            </svg>
+          <button className="reward-btn" onClick={() => { navigate("/prizes"); window.scrollTo({ top: 0, behavior: 'instant' }); }}>
+            <span className="IconContainer">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 60 20" className="box-top box">
+                <path strokeLinecap="round" strokeWidth={4} stroke="#59c23a" d="M2 18L58 18" />
+                <circle strokeWidth={5} stroke="#59c23a" fill="#101218" r={7} cy="9.5" cx="20.5" />
+                <circle strokeWidth={5} stroke="#59c23a" fill="#101218" r={7} cy="9.5" cx="38.5" />
+              </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 58 44" className="box-body box">
+                <mask fill="white" id="path-1-inside-1_81_19">
+                  <rect rx={3} height={44} width={58} />
+                </mask>
+                <rect mask="url(#path-1-inside-1_81_19)" strokeWidth={8} stroke="#59c23a" fill="#101218" rx={3} height={44} width={58} />
+                <line strokeWidth={6} stroke="#59c23a" y2={29} x2={58} y1={29} x1="-3.61529e-09" />
+                <path strokeLinecap="round" strokeWidth={5} stroke="#59c23a" d="M45.0005 20L36 3" />
+                <path strokeLinecap="round" strokeWidth={5} stroke="#59c23a" d="M21 3L13.0002 19.9992" />
+              </svg>
+              <span className="coin" />
+            </span>
+            <span className="text">View More Prizes</span>
           </button>
         </motion.div>
 
       </div>
 
       <style>{`
+        .reward-btn {
+          width: max-content;
+          padding-right: 24px;
+          height: 60px;
+          background-color: #101218;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border: none;
+          border-radius: 12px;
+          cursor: pointer;
+          transition: all 0.3s;
+          box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+        }
+        .IconContainer {
+          width: 56px;
+          height: 56px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          position: relative;
+        }
+        .IconContainer svg {
+          width: 50%;
+          z-index: 3;
+        }
+        .box-top {
+          transition: all 0.3s;
+        }
+        .text {
+          width: auto;
+          white-space: nowrap;
+          height: 100%;
+          font-size: 18px;
+          color: #59c23a;
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+          font-weight: 700;
+          padding-left: 12px;
+        }
+        .reward-btn:hover .IconContainer .box-top {
+          transform: translateY(-5px);
+        }
+        .reward-btn:hover {
+          background-color: #202531;
+          transform: translateY(-3px);
+          box-shadow: 0 8px 28px rgba(0,0,0,0.18);
+        }
+        .reward-btn:hover .coin {
+          transform: translateY(-5px);
+          transition-delay: 0.2s;
+        }
+        .coin {
+          width: 28%;
+          height: 28%;
+          background-color: #FCC30B;
+          position: absolute;
+          border-radius: 50%;
+          transition: all 0.3s;
+          z-index: 1;
+          border: 2px solid #fff;
+          margin-top: 6px;
+        }
         @media (max-width: 768px) {
           #prizes { padding: 72px 1.25rem 80px !important; }
         }

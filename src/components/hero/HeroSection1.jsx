@@ -468,20 +468,11 @@ export default function HeroSection1() {
               <span className="hero-btn-text">Register Now</span>
             </span>
           </a>
-          <motion.a
-            href="#problems"
-            whileHover={{ borderColor: '#2563EB', color: '#2563EB' }}
-            style={{
-              display: 'inline-flex', alignItems: 'center',
-              padding: '0 22px', height: '3rem',
-              border: '1.5px solid #e5e7eb', borderRadius: '1.625rem',
-              fontWeight: 700, fontSize: '0.78rem', letterSpacing: '0.06em',
-              color: '#111', textDecoration: 'none', textTransform: 'uppercase',
-              transition: 'border-color 0.2s, color 0.2s',
-            }}
-          >
-            View SDGs
-          </motion.a>
+          <a href="#sdgs" style={{ textDecoration: 'none' }}>
+            <button className="dashboard-btn">
+              View SDGs
+            </button>
+          </a>
         </div>
 
 
@@ -591,6 +582,32 @@ export default function HeroSection1() {
         .hero-btn-learn-more:hover .hero-btn-circle{width:100%;background:#2563EB}
         .hero-btn-learn-more:hover .hero-btn-arrow{background:#fff;transform:translate(1rem,0)}
         .hero-btn-learn-more:hover .hero-btn-text{color:#fff}
+
+         /* Custom Dashboard Button Styles */
+        .dashboard-btn {
+          border: 1.5px solid black;
+          padding: 12px 30px;
+          border-radius: 30px;
+          background-color: #ffffff;
+          font-weight: 800;
+          font-size: 15px;
+          color: #111;
+          box-shadow: 0px 0px 1px;
+          transition: all 0.3s ease;
+          cursor: pointer;
+          letter-spacing: 0.05em;
+          height: 52px;
+        }
+
+        .dashboard-btn:hover {
+          transform: translateY(-8px);
+          box-shadow: 0px 8px 1px rgb(0, 0, 0);
+        }
+
+        .dashboard-btn:active {
+          transform: translateY(4px);
+          box-shadow: 0px 0px 1px;
+        }
       `}</style>
     </section>
   );

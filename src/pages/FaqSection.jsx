@@ -1,70 +1,33 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-
+import { Users, FileText, Headphones, Minus, Plus, Send } from 'lucide-react';
 import PPTSection from '../components/sections/PPTSection';
 
 const faqs = [
   {
     question: "How do I register?",
-    answer:
-      "You can register through the official hackathon registration portal at srcas.ac.in/hackathon. Fill in your team details, upload your college ID, and complete the form. Registrations close 7 days before the event.",
+    answer: "You can register through the official hackathon registration portal at srcas.ac.in/hackathon. Fill in your team details, upload your college ID, and complete the form. Registrations close 7 days before the event.",
   },
   {
     question: "How many team members do I need?",
-    answer:
-      "Teams must have 2 to 4 members. Solo participation is not allowed. All members must be currently enrolled college students with a valid ID.",
+    answer: "Teams must have 2 to 4 members. Solo participation is not allowed. All members must be currently enrolled college students with a valid ID.",
   },
   {
     question: "Can team members be from different colleges?",
-    answer:
-      "Yes, cross-college teams are allowed and encouraged. Participants from different institutions can collaborate freely.",
+    answer: "Yes, cross-college teams are allowed and encouraged. Participants from different institutions can collaborate freely.",
   },
   {
     question: "Who is eligible to participate in the hackathon?",
-    answer:
-      "Any undergraduate or postgraduate student from any college is eligible to participate. No prior hackathon experience is required.",
+    answer: "Any undergraduate or postgraduate student from any college is eligible to participate. No prior hackathon experience is required.",
   },
   {
     question: "How much are the participation fees?",
-    answer:
-      "Participation is completely free. Food, refreshments, and basic facilities will be provided during the event.",
+    answer: "Participation is completely free. Food, refreshments, and basic facilities will be provided during the event.",
   },
   {
     question: "Will the hackathon be in person or online?",
-    answer:
-      "The hackathon format (online or offline) will be confirmed in the official announcement. Please refer to the event page for updates.",
-  },
-  {
-    question: "What is the schedule of the hackathon?",
-    answer:
-      "The schedule includes registration, opening ceremony, coding phase, mentorship sessions, and final presentations. Detailed timings will be shared before the event.",
-  },
-  {
-    question: "Where is the hackathon being held?",
-    answer:
-      "The venue will be announced officially by the organizers. It is typically conducted at the host institution campus.",
-  },
-  {
-    question: "What are the prerequisites to participate in this hackathon?",
-    answer:
-      "Basic programming knowledge and problem-solving skills are recommended. Specific requirements, if any, will be shared beforehand.",
-  },
-  {
-    question: "What should I bring?",
-    answer:
-      "Participants should bring a laptop, charger, valid college ID, and any required hardware or software for their project.",
-  },
-  {
-    question: "Will there be mentors or experts available during the hackathon?",
-    answer:
-      "Yes, mentors and industry experts will be available throughout the event to guide and support participants.",
-  },
-  {
-    question: "Who can I contact for further information or assistance?",
-    answer:
-      "You can contact proclub@srcas.ac.in or visit the official contact page for any queries or support.",
-  },
-
+    answer: "The hackathon format (online or offline) will be confirmed in the official announcement. Please refer to the event page for updates.",
+  }
 ];
 
 const FaqItem = ({ faq, isOpen, onClick, index }) => (
@@ -74,7 +37,7 @@ const FaqItem = ({ faq, isOpen, onClick, index }) => (
     viewport={{ once: true, margin: '-20px' }}
     transition={{ duration: 0.4, delay: index * 0.05 }}
     style={{
-      borderBottom: '1px solid #e5e7eb',
+      borderBottom: index === faqs.length - 1 ? 'none' : '1px solid #f3f4f6',
       overflow: 'hidden',
     }}
   >
@@ -85,7 +48,7 @@ const FaqItem = ({ faq, isOpen, onClick, index }) => (
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '22px 0',
+        padding: '24px 0',
         background: 'transparent',
         border: 'none',
         cursor: 'pointer',
@@ -94,34 +57,36 @@ const FaqItem = ({ faq, isOpen, onClick, index }) => (
         gap: 16,
       }}
     >
-      <span style={{
-        fontFamily: "'Plus Jakarta Sans', sans-serif",
-        fontWeight: 700,
-        color: '#111',
-        fontSize: '1.05rem',
-        letterSpacing: '-0.01em',
-        lineHeight: 1.4,
-      }}>
-        {faq.question}
-      </span>
+      <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
+        {isOpen && (
+          <div style={{ width: '3px', height: '24px', background: '#111', borderRadius: '4px', marginTop: '2px' }} />
+        )}
+        <span style={{
+          fontFamily: "'Plus Jakarta Sans', sans-serif",
+          fontWeight: 700,
+          color: '#111',
+          fontSize: '1.05rem',
+          letterSpacing: '-0.01em',
+          lineHeight: 1.4,
+          paddingLeft: isOpen ? 0 : '19px'
+        }}>
+          {faq.question}
+        </span>
+      </div>
       <motion.div
-        animate={{ rotate: isOpen ? 45 : 0 }}
-        transition={{ duration: 0.25, ease: 'easeInOut' }}
+        animate={{ rotate: isOpen ? 180 : 0 }}
+        transition={{ duration: 0.3, ease: 'easeInOut' }}
         style={{
           flexShrink: 0,
-          width: 30, height: 30,
+          width: 28, height: 28,
           borderRadius: '50%',
-          border: '1.5px solid #d1d5db',
+          border: isOpen ? 'none' : '1px solid #e5e7eb',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          color: '#111',
-          background: isOpen ? '#111' : 'transparent',
-          transition: 'background 0.2s, border-color 0.2s',
+          color: isOpen ? '#fff' : '#111',
+          background: isOpen ? '#111' : '#fff',
         }}
       >
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
-          stroke={isOpen ? '#fff' : '#111'} strokeWidth="2.5" strokeLinecap="round">
-          <path d="M12 5v14M5 12h14"/>
-        </svg>
+        {isOpen ? <Minus size={16} /> : <Plus size={16} />}
       </motion.div>
     </button>
 
@@ -135,10 +100,10 @@ const FaqItem = ({ faq, isOpen, onClick, index }) => (
           style={{ overflow: 'hidden' }}
         >
           <p style={{
-            padding: '0 48px 22px 0',
+            padding: '0 48px 24px 19px',
             color: '#6b7280',
             lineHeight: 1.7,
-            fontSize: '0.92rem',
+            fontSize: '0.95rem',
             fontFamily: "'Plus Jakarta Sans', sans-serif",
             margin: 0,
           }}>
@@ -150,159 +115,227 @@ const FaqItem = ({ faq, isOpen, onClick, index }) => (
   </motion.div>
 );
 
+// CSS-based Laptop & Coffee illustration
+const LaptopGraphic = () => (
+  <div style={{ position: 'relative', marginTop: '40px', width: '100%', height: '220px', marginLeft: '-20px' }}>
+    <motion.div 
+      animate={{ y: [0, -6, 0] }} 
+      transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
+      style={{ position: 'absolute', left: '10%', top: '20%' }}
+    >
+      <div style={{ width: '200px', height: '130px', background: '#fff', border: '8px solid #111', borderRadius: '12px 12px 0 0', position: 'relative', overflow: 'hidden', boxShadow: '0 10px 20px rgba(0,0,0,0.1)' }}>
+        <div style={{ position: 'absolute', top: '15px', left: '15px', right: '15px', height: '24px', background: '#f3f4f6', borderRadius: '6px' }} />
+        <div style={{ position: 'absolute', top: '50px', left: '15px', right: '40px', height: '24px', background: '#f3f4f6', borderRadius: '6px' }} />
+        <div style={{ position: 'absolute', top: '85px', left: '15px', right: '70px', height: '24px', background: '#f3f4f6', borderRadius: '6px' }} />
+      </div>
+      <div style={{ width: '240px', height: '18px', background: '#e5e7eb', marginLeft: '-20px', borderRadius: '0 0 12px 12px', position: 'relative', boxShadow: '0 8px 16px rgba(0,0,0,0.1)' }}>
+         <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '50px', height: '5px', background: '#9ca3af', borderRadius: '0 0 4px 4px' }} />
+      </div>
+    </motion.div>
+
+    <motion.div style={{ position: 'absolute', bottom: '0%', left: '0%', zIndex: 2 }}>
+      <div style={{ width: '45px', height: '50px', background: '#fff', borderRadius: '4px 4px 12px 12px', boxShadow: '0 8px 16px rgba(0,0,0,0.08)', border: '1px solid #f3f4f6', position: 'relative' }}>
+        <div style={{ position: 'absolute', top: '12px', right: '-12px', width: '16px', height: '24px', border: '5px solid #fff', borderRadius: '8px', zIndex: -1, boxShadow: 'inset 0 0 0 1px #f3f4f6, 0 8px 16px rgba(0,0,0,0.08)' }} />
+        <div style={{ position: 'absolute', top: '5px', left: '5px', right: '5px', height: '8px', background: '#111', borderRadius: '50%' }} />
+      </div>
+    </motion.div>
+
+    <motion.div 
+      animate={{ scale: [1, 1.05, 1], rotate: [0, 2, 0] }} 
+      transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
+      style={{ position: 'absolute', top: '35%', right: '5%', background: '#111', borderRadius: '16px 16px 16px 4px', padding: '14px', display: 'flex', gap: '5px', boxShadow: '0 10px 20px rgba(0,0,0,0.15)' }}
+    >
+      <div style={{ width: 5, height: 5, borderRadius: '50%', background: '#fff' }} />
+      <div style={{ width: 5, height: 5, borderRadius: '50%', background: '#fff' }} />
+      <div style={{ width: 5, height: 5, borderRadius: '50%', background: '#fff' }} />
+    </motion.div>
+  </div>
+);
+
 export default function FaqSection() {
   const [openIndex, setOpenIndex] = useState(0);
 
   return (
     <section id="faq" style={{
       position: 'relative',
-      backgroundColor: '#ffffff',
+      backgroundColor: '#fdfdfd',
       overflow: 'hidden',
       fontFamily: "'Plus Jakarta Sans', sans-serif",
     }}>
       {/* Subtle dot grid */}
       <div aria-hidden style={{
         position: 'absolute', inset: 0, pointerEvents: 'none',
-        backgroundImage: 'radial-gradient(rgba(0,0,0,0.06) 1px, transparent 1px)',
-        backgroundSize: '28px 28px',
+        backgroundImage: 'radial-gradient(rgba(0,0,0,0.04) 1px, transparent 1px)',
+        backgroundSize: '24px 24px',
       }} />
 
       <div style={{
-        maxWidth: 1100,
+        maxWidth: 1200,
         margin: '0 auto',
-        padding: '100px 48px',
+        padding: '100px 48px 0',
         position: 'relative',
         zIndex: 1,
       }}>
 
-        {/* ── TOP ROW: heading left, icon right ── */}
+        {/* ── TOP SECTION ── */}
         <div style={{
-          display: 'flex',
-          alignItems: 'flex-start',
-          justifyContent: 'space-between',
-          gap: 32,
-          marginBottom: 16,
-        }}>
-          {/* Heading */}
-          <motion.h2
+          display: 'grid',
+          gridTemplateColumns: '1.2fr 1fr',
+          gap: '64px',
+          alignItems: 'center',
+          marginBottom: '100px',
+        }} className="faq-top-grid">
+          
+          {/* Top Left: Heading & Text */}
+          <motion.div
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            style={{
-              fontSize: 'clamp(2.6rem, 5vw, 4.2rem)',
+            transition={{ duration: 0.6 }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
+              <div style={{ width: '24px', height: '1px', background: '#d1d5db' }} />
+              <span style={{ fontSize: '0.8rem', fontWeight: 800, letterSpacing: '0.15em', color: '#4b5563' }}>SUPPORT HUB</span>
+            </div>
+            <h2 style={{
+              fontSize: 'clamp(3rem, 5vw, 4.5rem)',
               fontWeight: 900,
               color: '#111',
               letterSpacing: '-0.04em',
-              lineHeight: 1.0,
-              margin: 0,
-              maxWidth: 600,
-            }}
-          >
-            Everything you need, all in one place!
-          </motion.h2>
-
-          {/* Question mark icon — right side */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.7, rotate: -15 }}
-            whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-            style={{
-              flexShrink: 0,
-              width: 96, height: 96,
-              background: '#25D366',
-              borderRadius: '50% 50% 50% 12%',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: '2.8rem', fontWeight: 900, color: '#fff',
-              boxShadow: '0 12px 40px rgba(37,211,102,0.28)',
-              userSelect: 'none',
-            }}
-          >
-            ?
+              lineHeight: 1.05,
+              margin: '0 0 16px',
+            }}>
+              Everything you<br/>need, all in one<br/>
+              <span style={{ position: 'relative', display: 'inline-block' }}>
+                place!
+                <svg width="100%" height="20" viewBox="0 0 120 20" style={{ position: 'absolute', bottom: '-10px', left: 0, overflow: 'visible' }}>
+                  <path d="M5 15 Q 40 5, 115 15" fill="none" stroke="#111" strokeWidth="3" strokeLinecap="round" />
+                  <path d="M100 0 L 115 15" fill="none" stroke="#111" strokeWidth="2" strokeLinecap="round" />
+                  <path d="M100 25 L 115 15" fill="none" stroke="#111" strokeWidth="2" strokeLinecap="round" />
+                </svg>
+              </span>
+            </h2>
+            <p style={{
+              fontSize: '1.05rem',
+              color: '#6b7280',
+              lineHeight: 1.6,
+              maxWidth: 480,
+              marginTop: '32px'
+            }}>
+              Empowering your hacker journey with the right tools, guidance, and community. Reach out anytime to learn, collaborate, and grow together.
+            </p>
           </motion.div>
+
+          {/* Top Right: Circular Graphic */}
+          <div style={{ display: 'flex', justifyContent: 'center', position: 'relative', height: '360px', alignItems: 'center' }}>
+            <div style={{ position: 'absolute', right: '40px', top: '0px' }}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d1d5db" strokeWidth="2"><path d="M12 2v20M2 12h20"/></svg>
+            </div>
+            
+            <div style={{ position: 'relative', width: 320, height: 320 }}>
+              {/* Dashed rings */}
+              <div style={{ position: 'absolute', inset: 0, border: '1px dashed #d1d5db', borderRadius: '50%' }} />
+              <div style={{ position: 'absolute', inset: 50, border: '1px dashed #e5e7eb', borderRadius: '50%' }} />
+              
+              {/* Small floating icon containers */}
+              <motion.div animate={{ y: [0, -10, 0] }} transition={{ repeat: Infinity, duration: 4 }} style={{ position: 'absolute', top: 10, left: 30, background: '#fff', borderRadius: '50%', padding: '12px', boxShadow: '0 8px 24px rgba(0,0,0,0.06)' }}>
+                <Users size={24} color="#6b7280" strokeWidth={1.5} />
+              </motion.div>
+              <motion.div animate={{ y: [0, 10, 0] }} transition={{ repeat: Infinity, duration: 5, delay: 1 }} style={{ position: 'absolute', top: 40, right: -10, background: '#fff', borderRadius: '50%', padding: '12px', boxShadow: '0 8px 24px rgba(0,0,0,0.06)' }}>
+                <FileText size={24} color="#6b7280" strokeWidth={1.5} />
+              </motion.div>
+              <motion.div animate={{ y: [0, -8, 0] }} transition={{ repeat: Infinity, duration: 3.5, delay: 2 }} style={{ position: 'absolute', bottom: -10, left: '50%', transform: 'translateX(-50%)', background: '#fff', borderRadius: '50%', padding: '12px', boxShadow: '0 8px 24px rgba(0,0,0,0.06)' }}>
+                <Headphones size={24} color="#6b7280" strokeWidth={1.5} />
+              </motion.div>
+
+              {/* Center ? */}
+              <div style={{ position: 'absolute', inset: 60, background: '#fff', borderRadius: '50%', boxShadow: '0 24px 48px rgba(0,0,0,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <span style={{ fontSize: '6rem', fontWeight: 900, color: '#111' }}>?</span>
+              </div>
+
+              {/* Overlapping Chat bubble */}
+              <motion.div 
+                animate={{ scale: [1, 1.05, 1] }} transition={{ repeat: Infinity, duration: 3 }}
+                style={{ position: 'absolute', bottom: 40, right: 20, background: '#111', borderRadius: '32px 32px 32px 8px', padding: '20px', display: 'flex', gap: '6px', boxShadow: '0 16px 32px rgba(0,0,0,0.2)' }}
+              >
+                <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#fff' }} />
+                <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#fff' }} />
+                <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#fff' }} />
+              </motion.div>
+            </div>
+          </div>
         </div>
 
-        {/* Subtext */}
-        <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          style={{
-            fontSize: '1rem',
-            color: '#6b7280',
-            lineHeight: 1.7,
-            margin: '0 0 64px',
-            maxWidth: 560,
-          }}
-        >
-          Empowering your hacker journey with the right tools, guidance, and community. Reach out anytime to learn, collaborate, and grow together.
-        </motion.p>
-
-        {/* ── TWO COLUMNS: FAQs label left, list right ── */}
+        {/* ── BOTTOM SECTION: FAQ Accordion ── */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: '220px 1fr',
-          gap: '48px',
+          gridTemplateColumns: '1fr 1.5fr',
+          gap: '64px',
           alignItems: 'start',
-        }} className="faq-inner-grid">
+        }} className="faq-bottom-grid">
 
-          {/* Left: FAQs label + CTA */}
+          {/* Left: FAQs label + CTA + Illustration */}
           <motion.div
             initial={{ opacity: 0, x: -16 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            style={{ position: 'sticky', top: '120px' }}
+            transition={{ duration: 0.5 }}
           >
-            <p style={{
+            <h3 style={{
               fontSize: '3rem',
               fontWeight: 900,
               color: '#111',
               letterSpacing: '-0.04em',
               margin: '0 0 12px',
               lineHeight: 1,
-            }}>FAQs</p>
+            }}>FAQs</h3>
             <p style={{
-              fontSize: '0.83rem',
-              color: '#9ca3af',
+              fontSize: '1rem',
+              color: '#6b7280',
               lineHeight: 1.6,
-              margin: '0 0 24px',
+              margin: '0 0 32px',
+              maxWidth: 240,
             }}>
-              Can't find what you're after? Chat with our stellar team.
+              Can't find what you're after?<br/>Chat with our stellar team!
             </p>
             <a
               href="/contact"
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: 7,
-                padding: '10px 20px',
+                gap: 12,
+                padding: '14px 28px',
                 background: '#111',
                 color: '#fff',
-                fontSize: '0.78rem',
+                fontSize: '0.9rem',
                 fontWeight: 700,
                 borderRadius: 100,
                 textDecoration: 'none',
-                letterSpacing: '0.04em',
-                transition: 'background 0.2s, transform 0.2s',
+                transition: 'transform 0.2s, background 0.2s',
               }}
-              onMouseEnter={e => {
-                e.currentTarget.style.background = '#333';
-                e.currentTarget.style.transform = 'translateY(-2px)';
-              }}
-              onMouseLeave={e => {
-                e.currentTarget.style.background = '#111';
-                e.currentTarget.style.transform = 'translateY(0)';
-              }}
+              onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-2px)'}
+              onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
             >
-              Chat to our team →
+              Chat to our team <span style={{ fontSize: '1.2rem' }}>→</span>
             </a>
+
+            <LaptopGraphic />
           </motion.div>
 
-          {/* Right: FAQ accordion */}
-          <div style={{ borderTop: '1px solid #e5e7eb' }}>
+          {/* Right: FAQ Accordion Card */}
+          <motion.div 
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            style={{ 
+              background: '#fff', 
+              borderRadius: '24px', 
+              padding: '32px 40px', 
+              boxShadow: '0 20px 40px rgba(0,0,0,0.03), 0 1px 3px rgba(0,0,0,0.05)',
+              border: '1px solid rgba(0,0,0,0.02)'
+            }}
+          >
             {faqs.map((faq, index) => (
               <FaqItem
                 key={index}
@@ -312,6 +345,51 @@ export default function FaqSection() {
                 onClick={() => setOpenIndex(openIndex === index ? -1 : index)}
               />
             ))}
+          </motion.div>
+        </div>
+      </div>
+
+      {/* ── DARK WAVE BANNER ── */}
+      <div style={{ position: 'relative', width: '100%', backgroundColor: '#111', marginTop: '120px', overflow: 'hidden' }}>
+        {/* SVG Wave at the top */}
+        <svg viewBox="0 0 1440 120" preserveAspectRatio="none" style={{ position: 'absolute', top: '-1px', left: 0, width: '100%', height: '80px', fill: '#fdfdfd' }}>
+          <path d="M0,64L80,74.7C160,85,320,107,480,101.3C640,96,800,64,960,48C1120,32,1280,32,1360,32L1440,32L1440,0L1360,0C1280,0,1120,0,960,0C800,0,640,0,480,0C320,0,160,0,80,0L0,0Z" />
+        </svg>
+
+        {/* Topographic background lines (optional simple detail) */}
+        <div style={{ position: 'absolute', inset: 0, opacity: 0.1, backgroundImage: 'repeating-radial-gradient(circle at 100% 100%, transparent 0, transparent 40px, #fff 40px, #fff 41px)' }} />
+
+        <div style={{ maxWidth: 1100, margin: '0 auto', padding: '140px 48px 100px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'relative', zIndex: 1 }} className="banner-flex">
+          
+          <div style={{ display: 'flex', alignItems: 'center', gap: '40px' }} className="banner-left">
+            {/* Headset Icon in dashed circles */}
+            <div style={{ position: 'relative', width: '100px', height: '100px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <div style={{ position: 'absolute', inset: 0, border: '1px dashed rgba(255,255,255,0.2)', borderRadius: '50%' }} />
+              <div style={{ position: 'absolute', inset: 15, border: '1px dashed rgba(255,255,255,0.2)', borderRadius: '50%' }} />
+              <Headphones size={32} color="#fff" strokeWidth={1.5} />
+            </div>
+
+            <div>
+              <h3 style={{ color: '#fff', fontSize: '2.5rem', fontWeight: 800, margin: '0 0 8px', letterSpacing: '-0.02em' }}>Still have questions?</h3>
+              <p style={{ color: '#9ca3af', fontSize: '1.05rem', margin: 0, lineHeight: 1.6 }}>We're here to help you 24/7.<br/>Let's connect!</p>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '40px' }} className="banner-right">
+            <a href="/contact" style={{ background: '#fff', color: '#111', padding: '16px 32px', borderRadius: '100px', fontSize: '1rem', fontWeight: 700, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '12px', transition: 'transform 0.2s', flexShrink: 0 }}
+               onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.05)'}
+               onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
+            >
+              Chat with us <span style={{ fontSize: '1.4rem' }}>→</span>
+            </a>
+            
+            {/* Paper Plane Graphic */}
+            <div style={{ position: 'relative', width: '120px', height: '60px' }} className="hidden md:block">
+              <svg width="150" height="60" style={{ position: 'absolute', right: '30px', top: '10px' }}>
+                <path d="M150 10 Q 75 60 0 10" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="1.5" strokeDasharray="4 4" />
+              </svg>
+              <Send size={36} color="#fff" strokeWidth={1.5} style={{ transform: 'rotate(45deg)', position: 'absolute', right: -10, top: -10 }} />
+            </div>
           </div>
         </div>
       </div>
@@ -320,16 +398,13 @@ export default function FaqSection() {
 
       <style>{`
         @media (max-width: 900px) {
-          .faq-inner-grid {
-            grid-template-columns: 1fr !important;
-            gap: 32px !important;
-          }
-          .faq-inner-grid > div:first-child {
-            position: static !important;
-          }
+          .faq-top-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
+          .faq-bottom-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
+          .banner-flex { flex-direction: column; align-items: flex-start !important; gap: 40px; }
         }
         @media (max-width: 640px) {
-          #faq > div { padding: 72px 20px !important; }
+          #faq > div { padding-left: 24px !important; padding-right: 24px !important; }
+          .banner-left { flex-direction: column; align-items: flex-start !important; gap: 24px !important; }
         }
       `}</style>
     </section>

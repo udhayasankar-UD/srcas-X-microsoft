@@ -7,8 +7,8 @@ import {
 } from 'lucide-react';
 
 const SDG_IMAGES = {
-  1: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Sustainable_Development_Goal_01NoPoverty.svg/960px-Sustainable_Development_Goal_01NoPoverty.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail&_=20240924093215",
-  2: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Sustainable_Development_Goal_02ZeroHunger.svg/960px-Sustainable_Development_Goal_02ZeroHunger.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail&_=20240924093217",
+  1: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Sustainable_Development_Goal_01NoPoverty.svg/960px-Sustainable_Development_Goal_01NoPoverty.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail&_=20240924093018%22,",
+  2: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Sustainable_Development_Goal_02ZeroHunger.svg/960px-Sustainable_Development_Goal_02ZeroHunger.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail&_=20240924093219",
   3: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Sustainable_Development_Goal_03GoodHealth.svg/960px-Sustainable_Development_Goal_03GoodHealth.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail&_=20240924093219",
   4: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Sustainable_Development_Goal_04QualityEducation.svg/960px-Sustainable_Development_Goal_04QualityEducation.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail&_=20240924093221",
   5: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Sustainable_Development_Goal_05GenderEquality.svg/960px-Sustainable_Development_Goal_05GenderEquality.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail&_=20240924093223",
@@ -17,6 +17,8 @@ const SDG_IMAGES = {
   16: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Sustainable_Development_Goal_16Peace.svg/960px-Sustainable_Development_Goal_16Peace.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail&_=20240924093234",
   17: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Sustainable_Development_Goals_-_logo.svg/250px-Sustainable_Development_Goals_-_logo.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail&_=20220117130803"
 };
+
+
 
 const SDGCard = ({ imgSrc, alt, style }) => (
   <div style={{

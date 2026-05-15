@@ -26,6 +26,7 @@ import {
   Phone,
   Menu,
   X,
+  UserPlus,
 } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
@@ -45,6 +46,7 @@ const NAV_ITEMS = [
   // { id: 'guidelines', label: 'Guidelines',          icon: ClipboardList, path: '/', hash: '#guidelines' },
   { id: 'faq',        label: 'FAQ',                 icon: HelpCircle,    path: '/faq', hash: '' },
   { id: 'contact',    label: 'Contact',             icon: Phone,         path: '/contact', hash: '' },
+  { id: 'register',   label: 'Register',            icon: UserPlus,      path: '/register', hash: '' },
 ];
 
 // ─── Active-section tracker ───────────────────────────────────────────────────
@@ -426,7 +428,7 @@ const MobileNavBar = () => {
         className={[
           'relative flex flex-col rounded-3xl transition-all duration-300 ease-out overflow-hidden',
           isOpen ? 'p-3 gap-2' : 'p-0',
-          showLabels ? 'w-52' : isOpen ? 'w-14' : 'w-14',
+          showLabels ? 'w-56' : isOpen ? 'w-14' : 'w-14',
         ].join(' ')}
         style={{
           background: BG_PANEL,
@@ -466,9 +468,11 @@ const MobileNavBar = () => {
               <button
                 key={item.id}
                 onClick={() => handleNav(item)}
-                className="flex items-center gap-3 h-10 px-2 rounded-xl transition-all duration-200 focus:outline-none w-full text-left"
+                className="flex items-center h-11 gap-3 rounded-xl transition-all duration-300 focus:outline-none w-full text-left"
                 style={{
                   background: isActive ? ACTIVE_BG : 'transparent',
+                  paddingLeft: '16px',
+                  paddingRight: '8px',
                 }}
                 onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.background = ACTIVE_BG; }}
                 onMouseLeave={(e) => { if (!isActive) e.currentTarget.style.background = 'transparent'; }}
@@ -499,11 +503,53 @@ const MobileNavBar = () => {
 };
 
 // ─── Export ───────────────────────────────────────────────────────────────────
-const Navbar = () => (
-  <>
-    <DesktopNavBar />
-    <MobileNavBar />
-  </>
-);
+const Navbar = () => {
+  const activeSection = useActiveSection();
+
+  return (
+    <>
+      <DesktopNavBar />
+      <MobileNavBar />
+
+      {/* Floating Auth Button - Top Right */}
+      {activeSection !== 'home' && (
+        <div className="fixed top-6 right-8 z-50 hidden sm:flex items-center gap-3">
+          <a href="/register" style={{ textDecoration: 'none' }}>
+            <button className="nav-register-btn">
+              REGISTER
+            </button>
+          </a>
+        </div>
+      )}
+
+      <style>{`
+        .nav-register-btn {
+          border: 1px solid black;
+          padding: 12px 30px;
+          border-radius: 30px;
+          background-color: #ffffff;
+          font-weight: 800;
+          font-size: 15px;
+          color: #111;
+          box-shadow: 0px 0px 1px;
+          transition: all 0.3s ease;
+          cursor: pointer;
+          letter-spacing: 0.05em;
+        }
+
+        .nav-register-btn:hover {
+          transform: translateY(-10px);
+          box-shadow: 0px 7px 1px rgb(0, 0, 0);
+          border: 1px solid black;
+        }
+
+        .nav-register-btn:active {
+          transform: translateY(10px);
+          box-shadow: 0px 0px 1px;
+        }
+      `}</style>
+    </>
+  );
+};
 
 export default Navbar;
