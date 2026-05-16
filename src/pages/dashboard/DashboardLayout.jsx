@@ -28,6 +28,8 @@ const NAV = [
 export default function DashboardLayout({ activeTab, setActiveTab, children }) {
   const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
+  const [showAnnouncements, setShowAnnouncements] = useState(false);
 
   return (
     <div style={{ display:'flex', minHeight:'100vh', fontFamily:"'Inter','Segoe UI',sans-serif", background:'#f5f6fa' }}>
@@ -80,9 +82,14 @@ export default function DashboardLayout({ activeTab, setActiveTab, children }) {
             <p className="dash-subtitle" style={{ fontSize:11, color:'#9ca3af', margin:0 }}>SRCAS Hackathon 3.0 · Microsoft Imagine Cup</p>
           </div>
           <div className="dash-header-right" style={{ display:'flex', alignItems:'center', gap:10 }}>
+            {/* Notification Icon */}
+            <button onClick={() => setShowAnnouncements(true)} style={{ background:'transparent', border:'none', cursor:'pointer', position:'relative', display:'flex', alignItems:'center', justifyContent:'center', padding:4, marginRight:4 }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+              <div style={{ position:'absolute', top:2, right:4, width:8, height:8, borderRadius:'50%', background:'#E5243B', border:'2px solid #fff' }}/>
+            </button>
             <div style={{ width:8, height:8, borderRadius:'50%', background:'#4C9F38' }}/>
             <span style={{ fontSize:12, color:'#4C9F38', fontWeight:600 }}>Round 1 · Active</span>
-            <div style={{ marginLeft:8, width:34, height:34, borderRadius:'50%', background:'linear-gradient(135deg,#4C9F38,#26BDE2)', display:'flex', alignItems:'center', justifyContent:'center', color:'#fff', fontWeight:800, fontSize:13 }}>A</div>
+            <div onClick={() => setShowProfile(true)} style={{ cursor:'pointer', marginLeft:8, width:34, height:34, borderRadius:'50%', background:'linear-gradient(135deg,#4C9F38,#26BDE2)', display:'flex', alignItems:'center', justifyContent:'center', color:'#fff', fontWeight:800, fontSize:13 }}>A</div>
           </div>
         </header>
 
@@ -104,6 +111,109 @@ export default function DashboardLayout({ activeTab, setActiveTab, children }) {
           );
         })}
       </nav>
+
+      {/* Announcements Modal */}
+      {showAnnouncements && (
+        <div style={{ position:'fixed', top:0, left:0, right:0, bottom:0, background:'rgba(0,0,0,0.5)', zIndex:100, display:'flex', alignItems:'center', justifyContent:'center', padding:20 }}>
+          <div style={{ background:'#fff', borderRadius:16, width:'100%', maxWidth:500, overflow:'hidden', boxShadow:'0 20px 40px rgba(0,0,0,0.2)', position:'relative' }}>
+            <div style={{ padding:'20px 24px', borderBottom:'1px solid #f3f4f6', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+              <div style={{ fontSize:18, fontWeight:800, color:'#111' }}>Notifications</div>
+              <button onClick={() => setShowAnnouncements(false)} style={{ background:'none', border:'none', fontSize:24, cursor:'pointer', color:'#9ca3af' }}>&times;</button>
+            </div>
+            <div style={{ padding:'20px 24px', display:'flex', flexDirection:'column', gap:16, maxHeight:'70vh', overflowY:'auto' }}>
+              {[
+                { time:'2h ago', tag:'New',    text:'Mentorship sessions open — book your slot before June 3.' },
+                { time:'1d ago', tag:'Update', text:'Problem statement details updated on the Problem Statements page.' },
+                { time:'3d ago', tag:'',       text:'Welcome to SRCAS Hackathon 3.0! Registration confirmed.' },
+              ].map((a, i, arr) => (
+                <div key={i} style={{ paddingBottom: i<arr.length-1?14:0, marginBottom: i<arr.length-1?14:0, borderBottom: i<arr.length-1?'1px solid #f3f4f6':'none' }}>
+                  <div style={{ display:'flex', alignItems:'center', gap:6, marginBottom:6 }}>
+                    {a.tag && <span style={{ fontSize:10, fontWeight:700, color:'#4C9F38', background:'#f0fdf4', padding:'2px 8px', borderRadius:20 }}>{a.tag}</span>}
+                    <span style={{ fontSize:11, color:'#9ca3af', fontWeight:500 }}>{a.time}</span>
+                  </div>
+                  <p style={{ fontSize:13, color:'#374151', lineHeight:1.5, margin:0 }}>{a.text}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Profile Modal */}
+      {showProfile && (
+        <div style={{ position:'fixed', top:0, left:0, right:0, bottom:0, background:'rgba(0,0,0,0.5)', zIndex:100, display:'flex', alignItems:'center', justifyContent:'center', padding:20 }}>
+          <div style={{ background:'#fff', borderRadius:16, width:'100%', maxWidth:600, overflow:'hidden', boxShadow:'0 20px 40px rgba(0,0,0,0.2)', position:'relative' }}>
+            <div style={{ padding:'20px 24px', borderBottom:'1px solid #f3f4f6', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+              <div style={{ fontSize:18, fontWeight:800, color:'#111' }}>User Profile</div>
+              <button onClick={() => setShowProfile(false)} style={{ background:'none', border:'none', fontSize:24, cursor:'pointer', color:'#9ca3af' }}>&times;</button>
+            </div>
+            <div style={{ padding:'24px', display:'flex', flexDirection:'column', gap:16, maxHeight:'75vh', overflowY:'auto' }}>
+              <div style={{ display:'flex', gap:16, flexWrap:'wrap' }}>
+                <div style={{ flex:1, minWidth:200, display:'flex', flexDirection:'column', gap:6 }}>
+                  <label style={{ fontSize:12, fontWeight:700, color:'#111' }}>First Name</label>
+                  <div style={{ display:'flex', alignItems:'center', border:'1.5px solid #e5e7eb', borderRadius:8, padding:'10px 14px', gap:10 }}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    <input type="text" placeholder="Enter your first name" style={{ border:'none', outline:'none', width:'100%', fontSize:13 }}/>
+                  </div>
+                </div>
+                <div style={{ flex:1, minWidth:200, display:'flex', flexDirection:'column', gap:6 }}>
+                  <label style={{ fontSize:12, fontWeight:700, color:'#111' }}>Last Name</label>
+                  <div style={{ display:'flex', alignItems:'center', border:'1.5px solid #e5e7eb', borderRadius:8, padding:'10px 14px', gap:10 }}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    <input type="text" placeholder="Enter your last name" style={{ border:'none', outline:'none', width:'100%', fontSize:13 }}/>
+                  </div>
+                </div>
+              </div>
+
+              <div style={{ display:'flex', flexDirection:'column', gap:6 }}>
+                <label style={{ fontSize:12, fontWeight:700, color:'#111' }}>Email Address</label>
+                <div style={{ display:'flex', alignItems:'center', border:'1.5px solid #e5e7eb', borderRadius:8, padding:'10px 14px', gap:10 }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                  <input type="email" placeholder="Enter your email address" style={{ border:'none', outline:'none', width:'100%', fontSize:13 }}/>
+                </div>
+              </div>
+
+              <div style={{ display:'flex', flexDirection:'column', gap:6 }}>
+                <label style={{ fontSize:12, fontWeight:700, color:'#111' }}>College / Organization</label>
+                <div style={{ display:'flex', alignItems:'center', border:'1.5px solid #e5e7eb', borderRadius:8, padding:'10px 14px', gap:10 }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M12 10h.01"/><path d="M12 14h.01"/><path d="M16 10h.01"/><path d="M16 14h.01"/><path d="M8 10h.01"/><path d="M8 14h.01"/></svg>
+                  <input type="text" placeholder="Enter your college or organization" style={{ border:'none', outline:'none', width:'100%', fontSize:13 }}/>
+                </div>
+              </div>
+
+              <div style={{ display:'flex', gap:16, flexWrap:'wrap' }}>
+                <div style={{ flex:1, minWidth:200, display:'flex', flexDirection:'column', gap:6 }}>
+                  <label style={{ fontSize:12, fontWeight:700, color:'#111' }}>Phone Number</label>
+                  <div style={{ display:'flex', alignItems:'center', border:'1.5px solid #e5e7eb', borderRadius:8, overflow:'hidden' }}>
+                    <div style={{ display:'flex', alignItems:'center', gap:6, padding:'10px 14px', background:'#f9fafb', borderRight:'1px solid #e5e7eb' }}>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                      <span style={{ fontSize:13, color:'#374151' }}>+91</span>
+                    </div>
+                    <input type="tel" placeholder="Enter your phone number" style={{ border:'none', outline:'none', width:'100%', fontSize:13, padding:'10px 14px' }}/>
+                  </div>
+                </div>
+                <div style={{ flex:1, minWidth:200, display:'flex', flexDirection:'column', gap:6 }}>
+                  <label style={{ fontSize:12, fontWeight:700, color:'#111' }}>Year / Department</label>
+                  <div style={{ display:'flex', alignItems:'center', border:'1.5px solid #e5e7eb', borderRadius:8, padding:'10px 14px', gap:10 }}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                    <select style={{ border:'none', outline:'none', width:'100%', fontSize:13, background:'transparent', color:'#6b7280', appearance:'none' }}>
+                      <option>Select year / department</option>
+                      <option>1st Year</option>
+                      <option>2nd Year</option>
+                      <option>3rd Year</option>
+                    </select>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" style={{ pointerEvents:'none' }}><polyline points="6 9 12 15 18 9"/></svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div style={{ padding:'20px 24px', borderTop:'1px solid #f3f4f6', display:'flex', justifyContent:'flex-end', gap:12 }}>
+              <button onClick={() => setShowProfile(false)} style={{ padding:'10px 18px', borderRadius:10, border:'1.5px solid #e5e7eb', background:'#fff', fontWeight:600, color:'#374151', cursor:'pointer' }}>Cancel</button>
+              <button onClick={() => setShowProfile(false)} style={{ padding:'10px 24px', borderRadius:10, border:'none', background:'#4C9F38', fontWeight:700, color:'#fff', cursor:'pointer' }}>Save Profile</button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');

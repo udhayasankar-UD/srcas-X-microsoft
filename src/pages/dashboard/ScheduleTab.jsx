@@ -3,9 +3,7 @@ import React, { useState } from 'react';
 const EVENTS = [
   { date:'May 15–20', event:'Registration Open',        status:'done',    desc:'Team registration and idea brief.',       time:'All day' },
   { date:'May 25',    event:'Idea Submission Deadline', status:'done',    desc:'300-word abstract of your solution.',     time:'11:59 PM IST' },
-  { date:'Jun 1',     event:'Mentorship Begins',        status:'active',  desc:'1-on-1 mentor slots open for booking.',   time:'10:00 AM IST' },
   { date:'Jun 5',     event:'Shortlist Announced',      status:'upcoming',desc:'Top 30 teams notified via email.',        time:'12:00 PM IST' },
-  { date:'Jun 15',    event:'Prototype Submission',     status:'upcoming',desc:'Submit GitHub, demo video, slides.',      time:'11:59 PM IST' },
   { date:'Jun 25',    event:'Final 10 Announced',       status:'upcoming',desc:'Top 10 teams invited to present.',        time:'10:00 AM IST' },
   { date:'Jun 28',    event:'Grand Finale & Awards',    status:'upcoming',desc:'Live presentations and prize ceremony.',  time:'09:00 AM IST' },
 ];

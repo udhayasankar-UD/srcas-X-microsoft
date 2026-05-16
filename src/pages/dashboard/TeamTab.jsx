@@ -31,7 +31,6 @@ function ProgressBar({ label, pct, color }) {
 }
 
 export default function TeamTab() {
-  const [editing, setEditing] = useState(false);
   const [project, setProject] = useState('AquaSense');
   const [desc, setDesc] = useState('A real-time water quality monitoring system using IoT sensors and Azure ML to predict contamination before it affects communities.');
 
@@ -43,12 +42,6 @@ export default function TeamTab() {
         <div style={{ flex:1, minWidth:160 }}>
           <div style={{ fontSize:20, fontWeight:900, color:'#111' }}>Team Nova</div>
           <div style={{ fontSize:13, color:'#6b7280', marginTop:2 }}>Project: <strong style={{ color:'#4C9F38' }}>{project}</strong> · SDG 6 – Clean Water & Sanitation</div>
-        </div>
-        <div style={{ display:'flex', gap:8 }}>
-          <span style={{ background:'#f0fdf4', border:'1.5px solid #4C9F38', borderRadius:20, padding:'5px 14px', fontSize:12, fontWeight:700, color:'#4C9F38' }}>Under Review</span>
-          <button onClick={() => setEditing(!editing)} style={{ border:'1.5px solid #e5e7eb', borderRadius:10, padding:'6px 14px', fontSize:12, fontWeight:600, color:'#374151', background:'#fff', cursor:'pointer' }}>
-            {editing ? 'Save' : '✏️ Edit'}
-          </button>
         </div>
       </div>
 
@@ -72,29 +65,12 @@ export default function TeamTab() {
             </button>
           </div>
 
-          {/* Project details */}
-          <div className="dash-card" style={card()}>
-            <div style={{ fontSize:13, fontWeight:800, color:'#111', marginBottom:12 }}>📋 Project Details</div>
-            {editing ? (
-              <div style={{ display:'flex', flexDirection:'column', gap:10 }}>
-                <div>
-                  <label style={{ fontSize:12, fontWeight:600, color:'#6b7280', display:'block', marginBottom:4 }}>Project Name</label>
-                  <input value={project} onChange={e => setProject(e.target.value)} style={{ width:'100%', padding:'9px 12px', borderRadius:9, border:'1.5px solid #4C9F38', fontSize:13, outline:'none' }}/>
-                </div>
-                <div>
-                  <label style={{ fontSize:12, fontWeight:600, color:'#6b7280', display:'block', marginBottom:4 }}>Description</label>
-                  <textarea value={desc} onChange={e => setDesc(e.target.value)} rows={4} style={{ width:'100%', padding:'9px 12px', borderRadius:9, border:'1.5px solid #4C9F38', fontSize:13, outline:'none', resize:'vertical' }}/>
-                </div>
-              </div>
-            ) : (
-              <p style={{ fontSize:13, color:'#374151', lineHeight:1.6 }}>{desc}</p>
-            )}
-          </div>
+          
         </div>
 
         {/* Progress */}
         <div className="dash-card" style={card()}>
-          <div style={{ fontSize:13, fontWeight:800, color:'#111', marginBottom:16 }}>📊 Submission Progress</div>
+          <div style={{ fontSize:13, fontWeight:800, color:'#111', marginBottom:16 }}>📊 Team Progress</div>
           <div style={{ display:'flex', flexDirection:'column', gap:14 }}>
             {PROGRESS.map((p, i) => <ProgressBar key={i} {...p}/>)}
           </div>

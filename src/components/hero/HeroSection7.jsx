@@ -156,7 +156,7 @@ const SDGCard = ({ imgSrc, alt, style }) => (
   </div>
 );
 
-const ParallaxElement = ({ children, yOffset = 100, initialRotate = 0, initialScale = 1, rotationSpeed = 0, style }) => {
+const ParallaxElement = ({ children, yOffset = 100, initialRotate = 0, initialScale = 1, rotationSpeed = 0, style, className }) => {
   const { scrollY } = useScroll();
   
   const smoothScrollY = useSpring(scrollY, {
@@ -168,7 +168,7 @@ const ParallaxElement = ({ children, yOffset = 100, initialRotate = 0, initialSc
   const y = useTransform(smoothScrollY, [0, 1000], [0, yOffset]);
   const rotate = useTransform(smoothScrollY, [0, 1000], [initialRotate, initialRotate + rotationSpeed]);
 
-  return <motion.div style={{ ...style, y, rotate, scale: initialScale }}>{children}</motion.div>;
+  return <motion.div className={className} style={{ ...style, y, rotate, scale: initialScale }}>{children}</motion.div>;
 };
 
 export default function HeroSection7() {
@@ -258,68 +258,71 @@ export default function HeroSection7() {
       </header>
 
       {/* Floating Elements with Parallax Effect */}
-      <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 5 }}>
+      <div className="hero-floating-bg" style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 5 }}>
         
-        {/* SDG Image Cards */}
-        <ParallaxElement yOffset={-240} initialRotate={-10} rotationSpeed={15} initialScale={0.9} style={{ position: 'absolute', top: '15%', left: '12%' }}>
+        {/* SDG Image Cards - Top */}
+        <ParallaxElement className="hero-logo-top-left" yOffset={-240} initialRotate={-10} rotationSpeed={15} initialScale={0.9} style={{ position: 'absolute', top: '15%', left: '12%' }}>
           <SDGCard imgSrc={SDG_IMAGES[3]} alt="Goal 3" />
         </ParallaxElement>
 
-        <ParallaxElement yOffset={-180} initialRotate={12} rotationSpeed={-10} initialScale={0.85} style={{ position: 'absolute', top: '15%', right: '18%' }}>
+        <ParallaxElement className="hero-logo-top-right" yOffset={-180} initialRotate={12} rotationSpeed={-10} initialScale={0.85} style={{ position: 'absolute', top: '15%', right: '18%' }}>
           <SDGCard imgSrc={SDG_IMAGES[4]} alt="Goal 4" />
         </ParallaxElement>
 
-        <ParallaxElement yOffset={-280} initialRotate={-15} rotationSpeed={20} initialScale={0.85} style={{ position: 'absolute', bottom: '25%', left: '10%' }}>
+        {/* SDG Image Cards - Bottom */}
+        <ParallaxElement className="hero-logo-bottom-left" yOffset={-280} initialRotate={-15} rotationSpeed={20} initialScale={0.85} style={{ position: 'absolute', bottom: '25%', left: '10%' }}>
           <SDGCard imgSrc={SDG_IMAGES[5]} alt="Goal 5" />
         </ParallaxElement>
 
-        <ParallaxElement yOffset={-320} initialRotate={8} rotationSpeed={-15} initialScale={0.9} style={{ position: 'absolute', bottom: '20%', right: '12%' }}>
+        <ParallaxElement className="hero-logo-bottom-right" yOffset={-320} initialRotate={8} rotationSpeed={-15} initialScale={0.9} style={{ position: 'absolute', bottom: '20%', right: '12%' }}>
           <SDGCard imgSrc={SDG_IMAGES[7]} alt="Goal 7" />
         </ParallaxElement>
 
-        <ParallaxElement yOffset={-190} initialRotate={-6} rotationSpeed={8} initialScale={0.8} style={{ position: 'absolute', bottom: '8%', right: '28%' }}>
-          <SDGCard imgSrc={SDG_IMAGES[10]} alt="Goal 10" />
-        </ParallaxElement>
+        {/* Hidden on Mobile: Extra Cards, Wheels, Leaves */}
+        <div className="hero-hide-mobile">
+          <ParallaxElement yOffset={-190} initialRotate={-6} rotationSpeed={8} initialScale={0.8} style={{ position: 'absolute', bottom: '8%', right: '28%' }}>
+            <SDGCard imgSrc={SDG_IMAGES[10]} alt="Goal 10" />
+          </ParallaxElement>
 
-        <ParallaxElement yOffset={-140} initialRotate={10} rotationSpeed={-12} initialScale={0.75} style={{ position: 'absolute', bottom: '5%', left: '16%' }}>
-          <SDGCard imgSrc={SDG_IMAGES[13]} alt="Goal 13" />
-        </ParallaxElement>
+          <ParallaxElement yOffset={-140} initialRotate={10} rotationSpeed={-12} initialScale={0.75} style={{ position: 'absolute', bottom: '5%', left: '16%' }}>
+            <SDGCard imgSrc={SDG_IMAGES[13]} alt="Goal 13" />
+          </ParallaxElement>
 
-        {/* Blurry Wheels */}
-        <ParallaxElement yOffset={-100} initialRotate={0} rotationSpeed={45} style={{ position: 'absolute', top: '35%', left: '8%' }}>
-          <SDGWheel size={100} blur={2} />
-        </ParallaxElement>
-        
-        <ParallaxElement yOffset={-300} initialRotate={0} rotationSpeed={-30} style={{ position: 'absolute', top: '25%', right: '5%' }}>
-          <SDGWheel size={140} blur={4} />
-        </ParallaxElement>
+          {/* Blurry Wheels */}
+          <ParallaxElement yOffset={-100} initialRotate={0} rotationSpeed={45} style={{ position: 'absolute', top: '35%', left: '8%' }}>
+            <SDGWheel size={100} blur={2} />
+          </ParallaxElement>
+          
+          <ParallaxElement yOffset={-300} initialRotate={0} rotationSpeed={-30} style={{ position: 'absolute', top: '25%', right: '5%' }}>
+            <SDGWheel size={140} blur={4} />
+          </ParallaxElement>
 
-        <ParallaxElement yOffset={-250} initialRotate={0} rotationSpeed={60} style={{ position: 'absolute', bottom: '15%', left: '28%' }}>
-          <SDGWheel size={120} blur={0} />
-        </ParallaxElement>
+          <ParallaxElement yOffset={-250} initialRotate={0} rotationSpeed={60} style={{ position: 'absolute', bottom: '15%', left: '28%' }}>
+            <SDGWheel size={120} blur={0} />
+          </ParallaxElement>
 
-        <ParallaxElement yOffset={-180} initialRotate={0} rotationSpeed={-40} style={{ position: 'absolute', bottom: '10%', right: '48%' }}>
-          <SDGWheel size={90} blur={3} />
-        </ParallaxElement>
-        
-        
+          <ParallaxElement yOffset={-180} initialRotate={0} rotationSpeed={-40} style={{ position: 'absolute', bottom: '10%', right: '48%' }}>
+            <SDGWheel size={90} blur={3} />
+          </ParallaxElement>
 
-        <ParallaxElement yOffset={-200} initialRotate={0} rotationSpeed={-20} style={{ position: 'absolute', bottom: '-15%', right: '-5%' }}>
+          {/* Leaves */}
+          <ParallaxElement yOffset={-150} initialRotate={45} rotationSpeed={30} style={{ position: 'absolute', top: '18%', left: '10%' }}>
+            <Leaf size={32} blur={1} />
+          </ParallaxElement>
+          <ParallaxElement yOffset={-80} initialRotate={-30} rotationSpeed={-45} style={{ position: 'absolute', top: '25%', right: '26%' }}>
+            <Leaf size={28} blur={2} />
+          </ParallaxElement>
+          <ParallaxElement yOffset={-200} initialRotate={15} rotationSpeed={40} style={{ position: 'absolute', bottom: '28%', left: '22%' }}>
+            <Leaf size={45} blur={1} />
+          </ParallaxElement>
+          <ParallaxElement yOffset={-120} initialRotate={-60} rotationSpeed={-35} style={{ position: 'absolute', bottom: '22%', right: '8%' }}>
+            <Leaf size={38} blur={2} />
+          </ParallaxElement>
+        </div>
+
+        {/* Kept on Mobile: Large Wheel at Bottom */}
+        <ParallaxElement className="hero-wheel-bottom" yOffset={-200} initialRotate={0} rotationSpeed={-20} style={{ position: 'absolute', bottom: '-15%', right: '-5%' }}>
           <SDGWheel size={280} blur={8} />
-        </ParallaxElement>
-
-        {/* Leaves */}
-        <ParallaxElement yOffset={-150} initialRotate={45} rotationSpeed={30} style={{ position: 'absolute', top: '18%', left: '10%' }}>
-          <Leaf size={32} blur={1} />
-        </ParallaxElement>
-        <ParallaxElement yOffset={-80} initialRotate={-30} rotationSpeed={-45} style={{ position: 'absolute', top: '25%', right: '26%' }}>
-          <Leaf size={28} blur={2} />
-        </ParallaxElement>
-        <ParallaxElement yOffset={-200} initialRotate={15} rotationSpeed={40} style={{ position: 'absolute', bottom: '28%', left: '22%' }}>
-          <Leaf size={45} blur={1} />
-        </ParallaxElement>
-        <ParallaxElement yOffset={-120} initialRotate={-60} rotationSpeed={-35} style={{ position: 'absolute', bottom: '22%', right: '8%' }}>
-          <Leaf size={38} blur={2} />
         </ParallaxElement>
 
         {/* Floating Concept Icons */}
@@ -400,7 +403,7 @@ export default function HeroSection7() {
 
         {/* Buttons */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', justifyContent: 'center' }}>
-          <a href="#register" style={{ textDecoration: 'none' }}>
+          <a href="register" style={{ textDecoration: 'none' }}>
             <div className="hero-btn">
               <div className="hero-bg" />
               <div className="hero-border" />
@@ -420,9 +423,9 @@ export default function HeroSection7() {
               </div>
             </div>
           </a>
-          <a href="#sdgs" style={{ textDecoration: 'none' }}>
+          <a href="dashboard" style={{ textDecoration: 'none' }}>
             <button className="dashboard-btn">
-              DASHBOARD
+              My Dashboard
             </button>
           </a>
         </motion.div>
@@ -583,6 +586,19 @@ export default function HeroSection7() {
         }
         @media(max-width:768px){
           .h1-pills-mobile-hide{display:none!important}
+          .hero-hide-mobile { display: none !important; }
+          .hero-floating-bg { opacity: 0.35; }
+          
+          /* Position 2 logos at top edges */
+          .hero-logo-top-left { top: 5% !important; left: -15% !important; }
+          .hero-logo-top-right { top: 8% !important; right: -15% !important; left: auto !important; }
+          
+          /* Position 2 logos at bottom edges */
+          .hero-logo-bottom-left { bottom: 20% !important; left: -15% !important; top: auto !important; }
+          .hero-logo-bottom-right { bottom: 15% !important; right: -15% !important; left: auto !important; top: auto !important; }
+          
+          /* Center 1 wheel at the bottom */
+          .hero-wheel-bottom { bottom: 0% !important; left: 50% !important; right: auto !important; margin-left: -140px !important; }
         }
       `}</style>
     </section>

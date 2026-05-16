@@ -3,16 +3,14 @@ import React, { useState } from 'react';
 const RESOURCES = [
   { icon:'📄', label:'Hackathon Rulebook',       desc:'Official rules and judging criteria',   tag:'PDF',    href:'#', color:'#E5243B' },
   { icon:'🎯', label:'Problem Statements',        desc:'All 6 challenge categories explained',  tag:'PDF',    href:'#', color:'#4C9F38' },
-  { icon:'☁️', label:'Azure Student Credits',     desc:'Free $100 credits for your project',    tag:'Tool',   href:'#', color:'#26BDE2' },
-  { icon:'📅', label:'Mentorship Schedule',       desc:'Book 1-on-1 sessions with mentors',     tag:'Calendar',href:'#',color:'#FCC30B' },
   { icon:'💬', label:'Discord Community',         desc:'Connect with participants & organizers', tag:'Link',   href:'#', color:'#5865F2' },
+  { icon:'📱', label:'Whatsapp Community',       desc:'Connect with organizers all detail share there', tag:'Link',   href:'#', color:'#5865F2' },
   { icon:'🏆', label:'Prize Details',             desc:'Learn about the cash prizes & awards',  tag:'Page',   href:'/prizes', color:'#f59e0b' },
   { icon:'📹', label:'Submission Guidelines',     desc:'How to record your demo video',         tag:'Video',  href:'#', color:'#DD1367' },
-  { icon:'🤖', label:'AI & Azure Workshop',       desc:'Recorded workshop for Azure AI tools',  tag:'Video',  href:'#', color:'#0A97D9' },
 ];
 
 const FAQS = [
-  { q:'Can I change my SDG goal after registration?', a:'Yes, you can update your SDG focus until the Prototype Submission deadline (Jun 15).' },
+  { q:'Can I change my SDG goal after registration?', a:'Yes, you can update your SDG focus until the Idea Submission deadline (May 25).' },
   { q:'Is the hackathon online or offline?',          a:'The hackathon is hybrid — ideation is online, finals are at SRCAS campus on Jun 28.' },
   { q:'What Azure services can we use?',              a:'All Azure services are allowed. Use your student credits or apply for additional credits.' },
   { q:'How many members per team?',                   a:'Teams can have 2–4 members. Solo participation is not allowed.' },
