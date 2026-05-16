@@ -6,32 +6,35 @@ import { ScratchCard } from '../components/ui/ScratchCard';
 import { InternshipTicket } from '../components/ui/InternshipTicket';
 
 /* ─── Outcome card ─── */
-const OutcomeCard = ({ icon, title, desc, index }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 32 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true, margin: '-40px' }}
-    transition={{ duration: 0.55, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
-    whileHover={{ y: -4, boxShadow: '0 16px 48px rgba(0,0,0,0.12)' }}
-    style={{
-      background: '#fff', border: '1.5px solid #e5e7eb', borderRadius: 20,
-      padding: '32px 28px', display: 'flex', flexDirection: 'column', gap: 16,
-      cursor: 'default', transition: 'border-color 0.25s',
-      fontFamily: "'Plus Jakarta Sans', sans-serif",
-    }}
-    onMouseEnter={e => e.currentTarget.style.borderColor = '#111'}
-    onMouseLeave={e => e.currentTarget.style.borderColor = '#e5e7eb'}
-  >
-    <div style={{
-      width: 52, height: 52, borderRadius: 14, background: '#f5f5f5',
-      display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem',
-    }}>{icon}</div>
-    <div>
-      <h4 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#111', marginBottom: 6, letterSpacing: '-0.01em' }}>{title}</h4>
-      <p style={{ fontSize: '0.85rem', color: '#6b7280', lineHeight: 1.6, margin: 0 }}>{desc}</p>
-    </div>
-  </motion.div>
-);
+const OutcomeCard = ({ icon, title, desc, index }) => {
+  const colors = ['#eff6ff', '#fdf4ff', '#f0fdf4', '#fffbeb', '#f3e8ff'];
+  const iconBg = colors[index % colors.length];
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 32 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-40px' }}
+      transition={{ duration: 0.55, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
+      whileHover={{ y: -8, rotate: index % 2 === 0 ? 2 : -2, boxShadow: '0 20px 40px rgba(0,0,0,0.08)', borderColor: '#111' }}
+      style={{
+        background: '#fff', border: '1.5px solid #e5e7eb', borderRadius: 24,
+        padding: '36px 32px', display: 'flex', flexDirection: 'column', gap: 20,
+        cursor: 'default', transition: 'border-color 0.3s ease',
+        fontFamily: "'Plus Jakarta Sans', sans-serif",
+      }}
+    >
+      <div style={{
+        width: 64, height: 64, borderRadius: 16, background: iconBg, border: '1px solid rgba(0,0,0,0.05)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.8rem',
+      }}>{icon}</div>
+      <div>
+        <h4 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#111', marginBottom: 12, letterSpacing: '-0.02em', lineHeight: 1.3 }}>{title}</h4>
+        <p style={{ fontSize: '0.95rem', color: '#6b7280', lineHeight: 1.6, margin: 0, fontWeight: 500 }}>{desc}</p>
+      </div>
+    </motion.div>
+  );
+};
 
 /* ─── Prize tier card ─── */
 const PrizeTierCard = ({ rank, title, amount, desc, index, podiumLevel, mobileOrder }) => {
@@ -105,7 +108,7 @@ const PrizesPage = () => {
   const outcomes = [
     { icon: '✈️', title: 'Singapore Science & Innovation Competition', desc: 'Top 3 teams represent India at an international competition in Singapore — all expenses fully covered.' },
     { icon: '💼', title: 'Microsoft Internship', desc: 'Best performers get a fast-track interview for a Microsoft summer internship with dedicated mentorship.' },
-    { icon: '💰', title: 'Cash Prize Pool', desc: '₹60,000+ distributed across categories — Grand Prize, Runner-ups, and Track Awards.' },
+    { icon: '💰', title: 'Cash Prize Pool', desc: '₹1,80,000+ distributed across categories — Grand Prize, Runner-ups, and Track Awards.' },
     { icon: '🧠', title: '1:1 Mentorship', desc: 'Direct mentorship sessions with engineers from Microsoft and Igenius AI throughout the event.' },
     // { icon: '☁️', title: 'Azure Cloud Credits', desc: 'Every shipping team walks away with Azure cloud credits to keep building after the hackathon.' },
     { icon: '🎁', title: 'Goodies & Certificates', desc: 'Swag kits, certificates of participation, and surprise perks for all registered teams.' },
