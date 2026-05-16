@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import GlobeCanvas from '../ui/GlobeCanvas';
 import { theme } from '../../theme';
 import srcasLogo from '../../assets/logo/srcas-1-logo.png';
@@ -462,17 +463,17 @@ export default function HeroSection1() {
 
         {/* CTA */}
         <div style={{ ...reveal(120), display: 'flex', gap: 14, justifyContent: 'center', flexWrap: 'wrap' }}>
-          <a href="register" style={{ textDecoration: 'none' }}>
+          <Link to="/register" style={{ textDecoration: 'none' }}>
             <span className="hero-btn-learn-more">
               <span className="hero-btn-circle"><span className="hero-btn-icon hero-btn-arrow" /></span>
               <span className="hero-btn-text">Register Now</span>
             </span>
-          </a>
-          <a href="dashboard" style={{ textDecoration: 'none' }}>
+          </Link>
+          <Link to="/dashboard" style={{ textDecoration: 'none' }}>
             <button className="dashboard-btn">
               My Dashboard
             </button>
-          </a>
+          </Link>
         </div>
 
 

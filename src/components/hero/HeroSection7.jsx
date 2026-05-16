@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { theme } from '../../theme';
 import srcasLogo from '../../assets/logo/srcas-1-logo.png';
 import msLogo from '../../assets/logo/microsoft.png';
@@ -403,7 +404,7 @@ export default function HeroSection7() {
 
         {/* Buttons */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', justifyContent: 'center' }}>
-          <a href="register" style={{ textDecoration: 'none' }}>
+          <Link to="/register" style={{ textDecoration: 'none' }}>
             <div className="hero-btn">
               <div className="hero-bg" />
               <div className="hero-border" />
@@ -422,12 +423,12 @@ export default function HeroSection7() {
                 <span className="hero-text" data-text="GO">REGISTER NOW</span>
               </div>
             </div>
-          </a>
-          <a href="dashboard" style={{ textDecoration: 'none' }}>
+          </Link>
+          <Link to="/dashboard" style={{ textDecoration: 'none' }}>
             <button className="dashboard-btn">
               My Dashboard
             </button>
-          </a>
+          </Link>
         </motion.div>
 
       </div>
