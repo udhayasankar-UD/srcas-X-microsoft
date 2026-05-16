@@ -12,6 +12,8 @@ import HighlightsPage from './pages/HighlightsPage';
 import PartnersPage from './pages/PartnersPage';
 import ContactSection from './pages/ContactSection';
 import FaqSection from './pages/FaqSection';
+import AuthPage from './pages/AuthPage';
+import DashboardPage from './pages/dashboard/DashboardPage';
 
 /**
  * ScrollToTop Component
@@ -71,22 +73,31 @@ function App() {
   return (
     <Router>
       <ScrollToTop />
-      <div className="app" style={{ minHeight: '100vh' }}>
-        <EntryVideoPopup />
-        <ScrollToTopButton />
-        <Navbar />
+      <Routes>
+        {/* Auth page — standalone, no Navbar/Footer */}
+        <Route path="/register" element={<AuthPage />} />
 
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/prizes" element={<PrizesPage />} />
-          <Route path="/highlights" element={<HighlightsPage />} />
-          <Route path="/partners" element={<PartnersPage />} />
-          <Route path="/faq" element={<FaqSection />} />
-          <Route path="/contact" element={<ContactSection />} />
-        </Routes>
+        {/* Dashboard — standalone, no Navbar/Footer */}
+        <Route path="/dashboard" element={<DashboardPage />} />
 
-        <Footer />
-      </div>
+        {/* All other pages — with Navbar/Footer */}
+        <Route path="/*" element={
+          <div className="app" style={{ minHeight: '100vh' }}>
+            <EntryVideoPopup />
+            <ScrollToTopButton />
+            <Navbar />
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/prizes" element={<PrizesPage />} />
+              <Route path="/highlights" element={<HighlightsPage />} />
+              <Route path="/partners" element={<PartnersPage />} />
+              <Route path="/faq" element={<FaqSection />} />
+              <Route path="/contact" element={<ContactSection />} />
+            </Routes>
+            <Footer />
+          </div>
+        } />
+      </Routes>
     </Router>
   );
 }
