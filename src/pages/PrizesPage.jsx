@@ -112,9 +112,9 @@ const PrizesPage = () => {
   ];
 
   const tiers = [
-    { rank: '01', title: 'Grand Prize', amount: '₹30,000', desc: 'The ultimate recognition for the most innovative and impactful solution. Includes Microsoft internship fast-track.' },
-    { rank: '02', title: 'First Runner Up', amount: '₹20,000', desc: 'For the team that demonstrated exceptional technical skill and a solid product-market fit.' },
-    { rank: '03', title: 'Second Runner Up', amount: '₹10,000', desc: 'Awarded for creativity and a unique approach to solving the problem statement.' },
+    { rank: '01', title: 'Grand Prize', amount: '₹1,00,000', desc: 'The ultimate recognition for the most innovative and impactful solution. Includes Microsoft internship fast-track.' },
+    { rank: '02', title: 'First Runner Up', amount: '₹50,000', desc: 'For the team that demonstrated exceptional technical skill and a solid product-market fit.' },
+    { rank: '03', title: 'Second Runner Up', amount: '₹30,000', desc: 'Awarded for creativity and a unique approach to solving the problem statement.' },
   ];
 
   const podiumTiers = [

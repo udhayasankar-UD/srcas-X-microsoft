@@ -373,9 +373,24 @@ export default function HeroSection7() {
 
         {/* Heading */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '16px', marginBottom: '24px' }}>
-          <h1 style={{ fontSize: 'clamp(2rem, 3vw, 5rem)', fontWeight: 900, color: '#111', lineHeight: 1.05, letterSpacing: '-0.03em', margin: 0, textAlign: 'center' }}>
-             SRCAS Hackathon 3.0 {/*<span style={{ color: '#3b82f6', fontFamily: theme.fonts.pixel, letterSpacing: '-0.15em' }}> 3.0</span> */}
-          </h1>
+          
+          <h2 style={{ 
+            fontSize: 'clamp(1rem, 1.5vw, 1.5rem)', 
+            fontWeight: 800, 
+            color: '#374151', 
+            margin: 0, 
+            textAlign: 'center',
+            textTransform: 'uppercase',
+            letterSpacing: '0.05em',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '8px'
+          }}>
+            <span>What's the</span>
+            <span style={{ color: '#3b82f6', fontFamily: theme.fonts.pixel, letterSpacing: '0.02em', textTransform: 'none' }}>Next Big Idea!</span>
+          </h2>
+
           <div style={{ position: 'relative', marginTop: '12px' }}>
             {/* Left yellow burst lines */}
             <svg style={{ position: 'absolute', top: '10px', left: '-50px', width: 40, height: 40, overflow: 'visible' }}>
@@ -388,12 +403,23 @@ export default function HeroSection7() {
               <path d="M 10 10 L 30 -5" stroke="#facc15" strokeWidth="4" strokeLinecap="round" />
               <path d="M 15 30 L 35 25" stroke="#facc15" strokeWidth="4" strokeLinecap="round" />
             </svg>
-            {/* <h2 style={{ fontSize: 'clamp(3.5rem, 7vw, 6.5rem)', fontWeight: 800, color: '#111', lineHeight: 1.15, letterSpacing: '-0.02em', margin: 0 }}>
-              What's the <br/><span style={{ color: '#3b82f6' }}>Next Big</span> Idea!
-            </h2> */}
-            <h2 style={{ fontSize: 'clamp(3.5rem, 7vw, 6.5rem)', fontWeight: 800, color: '#111', lineHeight: 1.15, letterSpacing: '-0.02em', margin: 0 }}>
-             SRCAS <br/><span style={{ color: '#3b82f6' }}>Hackathon</span> 3.0!
-            </h2>
+            <h1 style={{ 
+              fontSize: 'clamp(3.5rem, 8vw, 7.5rem)', 
+              fontWeight: 900, 
+              color: '#111', 
+              lineHeight: 1.05, 
+              letterSpacing: '-0.02em', 
+              margin: 0,
+              textAlign: 'center'
+            }}>
+              SRCAS <br/>
+              <span style={{ 
+                background: 'linear-gradient(90deg, #2563eb, #3b82f6, #60a5fa)', 
+                WebkitBackgroundClip: 'text', 
+                WebkitTextFillColor: 'transparent',
+                display: 'inline-block'
+              }}>Hackathon</span> 3.0!
+            </h1>
           </div>
         </motion.div>
 
