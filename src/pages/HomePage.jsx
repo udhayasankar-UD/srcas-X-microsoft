@@ -16,7 +16,7 @@ function HomePage() {
   return (
     <main>
       <HeroSection7 />
-      <HeroSection1 />
+      {/* <HeroSection1 /> */}
       
       {/* ── Rest of the page ── */}
       <AboutSection />
