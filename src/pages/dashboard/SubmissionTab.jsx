@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 const card = (extra={}) => ({ background:'#fff', borderRadius:14, padding:'22px 24px', boxShadow:'0 1px 4px rgba(0,0,0,0.06)', border:'1.5px solid #f0f0f0', ...extra });
 
@@ -23,6 +23,70 @@ function Field({ label, value, onChange, placeholder, type='text', hint }) {
           onBlur={e  => { e.target.style.borderColor='#e5e7eb'; e.target.style.boxShadow='none'; }}
           style={{ padding:'10px 13px', borderRadius:10, border:'1.5px solid #e5e7eb', fontSize:13, color:'#111', outline:'none', transition:'border-color 0.2s' }}/>
       )}
+    </div>
+  );
+}
+
+function MarkdownField({ label, value, onChange, placeholder, hint }) {
+  const [mode, setMode] = useState('write');
+  const [saveStatus, setSaveStatus] = useState('Saved');
+  const timeoutRef = useRef(null);
+
+  const handleChange = (e) => {
+    onChange(e);
+    setSaveStatus('Saving...');
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(() => {
+      setSaveStatus('Auto-saved just now');
+    }, 1000);
+  };
+
+  return (
+    <div style={{ display:'flex', flexDirection:'column', gap:5 }}>
+      <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom: 4 }}>
+        <div style={{ display:'flex', alignItems:'center', gap: 12 }}>
+          <label style={{ fontSize:13, fontWeight:600, color:'#374151' }}>{label}</label>
+          <div style={{ display: 'flex', background: '#f3f4f6', borderRadius: 6, padding: 2 }}>
+            <button onClick={() => setMode('write')} style={{ padding: '2px 8px', fontSize: 11, fontWeight: mode==='write'?600:500, background: mode==='write'?'#fff':'transparent', border: 'none', borderRadius: 4, cursor: 'pointer', boxShadow: mode==='write'?'0 1px 2px rgba(0,0,0,0.1)':'none', color: mode==='write'?'#111':'#6b7280' }}>Write</button>
+            <button onClick={() => setMode('preview')} style={{ padding: '2px 8px', fontSize: 11, fontWeight: mode==='preview'?600:500, background: mode==='preview'?'#fff':'transparent', border: 'none', borderRadius: 4, cursor: 'pointer', boxShadow: mode==='preview'?'0 1px 2px rgba(0,0,0,0.1)':'none', color: mode==='preview'?'#111':'#6b7280' }}>Preview</button>
+          </div>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          {saveStatus === 'Saving...' && <span style={{ fontSize:11, color:'#f59e0b', fontWeight: 500 }}>Saving...</span>}
+          {saveStatus === 'Auto-saved just now' && <span style={{ fontSize:11, color:'#4C9F38', fontWeight: 500 }}>✓ Auto-saved just now</span>}
+          {saveStatus === 'Saved' && hint && <span style={{ fontSize:11, color:'#9ca3af' }}>{hint}</span>}
+        </div>
+      </div>
+      
+      {mode === 'write' ? (
+        <textarea value={value} onChange={handleChange} placeholder={placeholder} rows={6}
+          onFocus={e => { e.target.style.borderColor='#4C9F38'; e.target.style.boxShadow='0 0 0 3px rgba(76,159,56,0.1)'; }}
+          onBlur={e  => { e.target.style.borderColor='#e5e7eb'; e.target.style.boxShadow='none'; }}
+          style={{ padding:'12px 14px', borderRadius:10, border:'1.5px solid #e5e7eb', fontSize:13, color:'#111', outline:'none', resize:'vertical', transition:'border-color 0.2s', fontFamily: 'monospace' }}/>
+      ) : (
+        <div style={{ padding:'12px 14px', borderRadius:10, border:'1.5px solid #e5e7eb', fontSize:13, color:'#374151', minHeight: 120, background: '#f9fafb', whiteSpace: 'pre-wrap', lineHeight: 1.6 }}>
+          {value ? (
+            value.split('\n').map((line, i) => {
+              if (line.trim().startsWith('- ') || line.trim().startsWith('* ')) {
+                return <li key={i} style={{ marginLeft: 20 }}>{line.substring(2)}</li>;
+              }
+              if (line.trim().startsWith('# ')) return <h3 key={i} style={{ margin: '8px 0', color: '#111' }}>{line.substring(2)}</h3>;
+              // Bold formatting support: **bold**
+              const parts = line.split(/(\*\*.*?\*\*)/g);
+              return <div key={i} style={{ minHeight: 16 }}>
+                {parts.map((part, j) => 
+                  part.startsWith('**') && part.endsWith('**') 
+                    ? <strong key={j} style={{ color: '#111' }}>{part.slice(2, -2)}</strong> 
+                    : part
+                )}
+              </div>;
+            })
+          ) : (
+            <span style={{ color: '#9ca3af', fontStyle: 'italic' }}>Nothing to preview</span>
+          )}
+        </div>
+      )}
+      {mode === 'write' && <div style={{ fontSize: 10, color: '#9ca3af', marginTop: 2 }}>Supports basic Markdown: # Heading, - Lists, **bold**</div>}
     </div>
   );
 }
@@ -79,7 +143,7 @@ export default function SubmissionTab() {
               <Field label="Category"         value={form.category}    onChange={set('category')}    placeholder="e.g. AI/ML, IoT, Health"/>
               <Field label="Azure Services"   value={form.azure}       onChange={set('azure')}       placeholder="Azure services used" hint="Optional"/>
             </div>
-            <Field label="Project Description" value={form.description} onChange={set('description')} placeholder="Describe your solution..." type="textarea" hint="Min. 100 words"/>
+            <MarkdownField label="Project Description" value={form.description} onChange={set('description')} placeholder="Describe your solution using Markdown..." hint="Min. 100 words"/>
           </div>
         )}
         {step === 1 && (

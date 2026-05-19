@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 
 const RESOURCES = [
   { icon:'📄', label:'Hackathon Rulebook',       desc:'Official rules and judging criteria',   tag:'PDF',    href:'#', color:'#E5243B' },
-  { icon:'🎯', label:'Problem Statements',        desc:'All 6 challenge categories explained',  tag:'PDF',    href:'#', color:'#4C9F38' },
-  { icon:'💬', label:'Discord Community',         desc:'Connect with participants & organizers', tag:'Link',   href:'#', color:'#5865F2' },
-  { icon:'📱', label:'Whatsapp Community',       desc:'Connect with organizers all detail share there', tag:'Link',   href:'#', color:'#5865F2' },
+  { icon:'🎯', label:'Problem Statements',        desc:'All 6 challenge categories explained',  tag:'PDF',    href:'#', color:'#E5243B' },
+  { icon:'💬', label:'Discord Community',         desc:'Connect with participants & organizers', tag:'Link',   href:'#', color:'#3b82f6' },
+  { icon:'📱', label:'Whatsapp Community',       desc:'Connect with organizers all detail share there', tag:'Link',   href:'#', color:'#3b82f6' },
   { icon:'🏆', label:'Prize Details',             desc:'Learn about the cash prizes & awards',  tag:'Page',   href:'/prizes', color:'#f59e0b' },
-  { icon:'📹', label:'Submission Guidelines',     desc:'How to record your demo video',         tag:'Video',  href:'#', color:'#DD1367' },
+  { icon:'📹', label:'Submission Guidelines',     desc:'How to record your demo video',         tag:'Video',  href:'#', color:'#8b5cf6' },
 ];
 
 const FAQS = [

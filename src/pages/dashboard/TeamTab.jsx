@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 const card = (extra={}) => ({ background:'#fff', borderRadius:14, padding:'22px 24px', boxShadow:'0 1px 4px rgba(0,0,0,0.06)', border:'1.5px solid #f0f0f0', ...extra });
 
-const MEMBERS = [
+const INITIAL_MEMBERS = [
   { name:'Arjun S.', role:'Team Lead', email:'arjun@srcas.ac.in',   color:'#4C9F38' },
   { name:'Priya M.', role:'Developer', email:'priya@srcas.ac.in',   color:'#26BDE2' },
   { name:'Ravi K.',  role:'Designer',  email:'ravi@srcas.ac.in',    color:'#FCC30B' },
@@ -33,6 +33,11 @@ function ProgressBar({ label, pct, color }) {
 export default function TeamTab() {
   const [project, setProject] = useState('AquaSense');
   const [desc, setDesc] = useState('A real-time water quality monitoring system using IoT sensors and Azure ML to predict contamination before it affects communities.');
+  const [members, setMembers] = useState(INITIAL_MEMBERS);
+
+  const handleInvite = () => {
+    setMembers([...members, { name: 'New Member', role: 'Developer', email: 'pending@srcas.ac.in', color: '#9ca3af', pending: true }]);
+  };
 
   return (
     <div style={{ display:'flex', flexDirection:'column', gap:18 }}>
@@ -50,17 +55,23 @@ export default function TeamTab() {
         <div style={{ display:'flex', flexDirection:'column', gap:14 }}>
           <div className="dash-card" style={card()}>
             <div style={{ fontSize:13, fontWeight:800, color:'#111', marginBottom:14 }}>👥 Team Members</div>
-            {MEMBERS.map((m, i) => (
-              <div key={i} style={{ display:'flex', alignItems:'center', gap:12, padding:'12px 14px', background:'#f9fafb', borderRadius:12, marginBottom: i<MEMBERS.length-1?8:0 }}>
+            {members.map((m, i) => (
+              <div key={i} style={{ display:'flex', alignItems:'center', gap:12, padding:'12px 14px', background:'#f9fafb', borderRadius:12, marginBottom: i<members.length-1?8:0 }}>
                 <div style={{ width:38, height:38, borderRadius:'50%', background:m.color, display:'flex', alignItems:'center', justifyContent:'center', color:'#fff', fontWeight:800, fontSize:15, flexShrink:0 }}>{m.name[0]}</div>
                 <div style={{ flex:1 }}>
-                  <div style={{ fontSize:13, fontWeight:700, color:'#111' }}>{m.name}</div>
+                  <div style={{ fontSize:13, fontWeight:700, color:'#111', display:'flex', alignItems:'center', gap:8 }}>
+                    {m.name}
+                    {m.pending && <span style={{ fontSize:9, fontWeight:700, background:'#fef3c7', color:'#d97706', padding:'2px 6px', borderRadius:4, textTransform:'uppercase' }}>Pending</span>}
+                  </div>
                   <div style={{ fontSize:11, color:'#9ca3af' }}>{m.email}</div>
                 </div>
                 <span style={{ fontSize:11, fontWeight:600, color:'#6b7280', background:'#efefef', padding:'3px 10px', borderRadius:20 }}>{m.role}</span>
               </div>
             ))}
-            <button style={{ width:'100%', marginTop:12, padding:'10px', borderRadius:10, border:'1.5px dashed #d1d5db', background:'transparent', color:'#9ca3af', fontSize:13, fontWeight:600, cursor:'pointer' }}>
+            <button onClick={handleInvite} style={{ width:'100%', marginTop:12, padding:'10px', borderRadius:10, border:'1.5px dashed #d1d5db', background:'transparent', color:'#9ca3af', fontSize:13, fontWeight:600, cursor:'pointer', transition:'all 0.2s' }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = '#4C9F38'; e.currentTarget.style.color = '#4C9F38'; }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = '#d1d5db'; e.currentTarget.style.color = '#9ca3af'; }}
+            >
               + Invite Member
             </button>
           </div>

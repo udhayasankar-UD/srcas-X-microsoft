@@ -387,8 +387,8 @@ export default function HeroSection7() {
             justifyContent: 'center',
             gap: '8px'
           }}>
-            <span>What's the</span>
-            <span style={{ color: '#3b82f6', fontFamily: theme.fonts.pixel, letterSpacing: '0.02em', textTransform: 'none' }}>Next Big Idea!</span>
+            <span>SRCAS</span>
+            <span style={{ color: '#0562f8ff', fontFamily: theme.fonts.pixel, letterSpacing: '0.02em', textTransform: 'none' }}>Hackathon 3.0!</span>
           </h2>
 
           <div style={{ position: 'relative', marginTop: '12px' }}>
@@ -412,13 +412,11 @@ export default function HeroSection7() {
               margin: 0,
               textAlign: 'center'
             }}>
-              SRCAS <br/>
+              What's Next <br/>
               <span style={{ 
-                background: 'linear-gradient(90deg, #2563eb, #3b82f6, #60a5fa)', 
-                WebkitBackgroundClip: 'text', 
-                WebkitTextFillColor: 'transparent',
+                color: '#0562f8ff',
                 display: 'inline-block'
-              }}>Hackathon</span> 3.0!
+              }}> Big Idea!</span> 
             </h1>
           </div>
         </motion.div>

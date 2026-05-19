@@ -580,6 +580,20 @@ export default function ProblemStatements() {
                 }}>
                   Challenge Statements
                 </p>
+                {/* Open Innovation Note */}
+                  <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start', marginTop: '4px' }}>
+                    <div style={{
+                      width: '28px', height: '28px', borderRadius: '50%',
+                      background: '#fef3c7', border: '1.5px solid #fde68a',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      fontSize: '14px', flexShrink: 0, marginTop: '2px'
+                    }}>
+                      💡
+                    </div>
+                    <p style={{ fontSize: 'clamp(12px, 2vh, 14px)', color: '#6b7280', lineHeight: 1.6, margin: 0 }}>
+                      <strong style={{ color: '#111' }}>Open Innovation:</strong> These are just examples! You are completely free to choose your own problem statement as long as it aligns with this SDG.
+                    </p>
+                  </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(8px, 2vh, 16px)', marginTop: 'clamp(8px, 2vh, 16px)' }}>
                   {activeSDG.challenges.map((c, i) => (
                     <div key={i} style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
@@ -596,7 +610,7 @@ export default function ProblemStatements() {
                         {c}
                       </p>
                     </div>
-                  ))}
+                  ))}                        
                 </div>
               </div>
             </motion.div>
