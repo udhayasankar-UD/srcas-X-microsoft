@@ -299,7 +299,7 @@ useEffect(() => {
                 <div style={{ display: 'flex', gap: 10 }}>
                   
                   <a
-                    href="#register"
+                    href="/register"
                     onClick={close}
                     style={{
                       padding: '9px 22px', borderRadius: 100,

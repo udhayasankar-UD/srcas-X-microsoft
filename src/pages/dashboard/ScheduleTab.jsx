@@ -33,8 +33,12 @@ export default function ScheduleTab() {
           {EVENTS.map((ev, i) => {
             const s = STATUS_STYLE[ev.status];
             return (
-              <div key={i} style={{ display:'flex', gap:16, paddingBottom: i<EVENTS.length-1?20:0, position:'relative' }}>
-                {i < EVENTS.length-1 && <div style={{ position:'absolute', left:9, top:22, width:2, bottom:0, background:s.line }}/>}
+              <div key={i} style={{ display:'flex', gap:16, paddingBottom: i<EVENTS.length-1?24:0, position:'relative' }}>
+                {i < EVENTS.length-1 && (
+                  <div style={{ position:'absolute', left:9, top:22, width:2, bottom:0, background:'#e5e7eb' }}>
+                    <div style={{ width:'100%', height: EVENTS[i].status === 'done' ? '100%' : '0%', background:'#4C9F38', transition:'height 0.4s ease' }} />
+                  </div>
+                )}
                 <div style={{ width:20, height:20, borderRadius:'50%', background:s.dot, flexShrink:0, zIndex:1, marginTop:2, display:'flex', alignItems:'center', justifyContent:'center', border: ev.status==='active'?'3px solid #fde68a':'none' }}>
                   {ev.status==='done' && <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3.5"><polyline points="20 6 9 17 4 12"/></svg>}
                 </div>

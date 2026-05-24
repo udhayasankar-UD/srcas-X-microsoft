@@ -266,7 +266,7 @@ export default function HeroSection3() {
 
         {/* Buttons */}
         <div className="h3-fade" style={{ display: 'flex', gap: 14, flexWrap: 'wrap', justifyContent: 'center', marginBottom: '3rem' }}>
-          <MagneticBtn href="#register" primary>
+          <MagneticBtn href="/register" primary>
             Register for Hackathon <ArrowRight size={16} style={{ display: 'inline', marginLeft: 6 }} />
           </MagneticBtn>
           <MagneticBtn href="#problem-statements">

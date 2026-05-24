@@ -236,7 +236,7 @@ export default function HeroSection6() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
             style={{ display: "flex", gap: "16px", flexWrap: "wrap", marginTop: "10px" }}>
-            <a href="#register" style={{
+            <a href="/register" style={{
               display: "flex", alignItems: "center", gap: "8px",
               backgroundColor: "#111", color: "#fff",
               padding: "16px 28px", borderRadius: "12px",

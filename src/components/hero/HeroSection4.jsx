@@ -424,7 +424,7 @@ export default function HeroSection4() {
               style={{ display: 'flex', gap: 12, marginTop: '2rem', flexWrap: 'wrap' }}
             >
               <motion.a
-                href="#register"
+                href="/register"
                 className="h4-btn-primary"
                 whileHover={{ scale: 1.03, boxShadow: '0 8px 28px rgba(37,99,235,0.3)' }}
                 whileTap={{ scale: 0.97 }}

@@ -643,7 +643,7 @@ export default function TimelineSection() {
             </div>
 
             <a
-              href="#register"
+              href="/register"
               style={{
                 display: "inline-flex", alignItems: "center", gap: 10,
                 padding: "15px 30px", background: "#fff", color: "#111",

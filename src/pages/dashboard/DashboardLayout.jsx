@@ -19,11 +19,12 @@ export function SDGWheel({ size = 32 }) {
 }
 
 const NAV = [
-  { id:'overview',   icon:'⊞',  label:'Overview'   },
-  { id:'team',       icon:'◎',  label:'My Team'    },
-  { id:'submission', icon:'↑',  label:'Submission' },
-  { id:'resources',  icon:'≡',  label:'Resources'  },
-  { id:'schedule',   icon:'▤',  label:'Schedule'   },
+  { id:'overview',     icon:'⊞',   label:'Overview'      },
+  { id:'team',         icon:'◎',   label:'My Team'       },
+  { id:'submission',   icon:'↑',   label:'Submission'    },
+  { id:'resources',    icon:'≡',   label:'Resources'     },
+  { id:'schedule',     icon:'▤',   label:'Schedule'      },
+  { id:'announcements',icon:'⚑',   label:'Announcements' },
 ];
 
 export default function DashboardLayout({ activeTab, setActiveTab, children, hasTeam, announcements, user }) {
@@ -155,20 +156,11 @@ export default function DashboardLayout({ activeTab, setActiveTab, children, has
               <button onClick={() => setShowProfile(false)} style={{ background:'none', border:'none', fontSize:24, cursor:'pointer', color:'#9ca3af' }}>&times;</button>
             </div>
             <div style={{ padding:'24px', display:'flex', flexDirection:'column', gap:16, maxHeight:'75vh', overflowY:'auto' }}>
-              <div style={{ display:'flex', gap:16, flexWrap:'wrap' }}>
-                <div style={{ flex:1, minWidth:200, display:'flex', flexDirection:'column', gap:6 }}>
-                  <label style={{ fontSize:12, fontWeight:700, color:'#111' }}>First Name</label>
-                  <div style={{ display:'flex', alignItems:'center', border:'1.5px solid #e5e7eb', borderRadius:8, padding:'10px 14px', gap:10, background:'#f9fafb' }}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                    <input type="text" defaultValue={user?.user_metadata?.full_name?.split(' ')[0] || ''} placeholder="First name" readOnly style={{ border:'none', outline:'none', width:'100%', fontSize:13, background:'transparent', color:'#6b7280', cursor:'not-allowed' }}/>
-                  </div>
-                </div>
-                <div style={{ flex:1, minWidth:200, display:'flex', flexDirection:'column', gap:6 }}>
-                  <label style={{ fontSize:12, fontWeight:700, color:'#111' }}>Last Name</label>
-                  <div style={{ display:'flex', alignItems:'center', border:'1.5px solid #e5e7eb', borderRadius:8, padding:'10px 14px', gap:10, background:'#f9fafb' }}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                    <input type="text" defaultValue={user?.user_metadata?.full_name?.split(' ').slice(1).join(' ') || ''} placeholder="Last name" readOnly style={{ border:'none', outline:'none', width:'100%', fontSize:13, background:'transparent', color:'#6b7280', cursor:'not-allowed' }}/>
-                  </div>
+              <div style={{ display:'flex', flexDirection:'column', gap:6 }}>
+                <label style={{ fontSize:12, fontWeight:700, color:'#111' }}>Full Name</label>
+                <div style={{ display:'flex', alignItems:'center', border:'1.5px solid #e5e7eb', borderRadius:8, padding:'10px 14px', gap:10, background:'#f9fafb' }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                  <input type="text" defaultValue={user?.user_metadata?.full_name || ''} placeholder="Full Name" readOnly style={{ border:'none', outline:'none', width:'100%', fontSize:13, background:'transparent', color:'#6b7280', cursor:'not-allowed' }}/>
                 </div>
               </div>
 
@@ -179,44 +171,17 @@ export default function DashboardLayout({ activeTab, setActiveTab, children, has
                   <input type="email" defaultValue={user?.email || ''} readOnly style={{ border:'none', outline:'none', width:'100%', fontSize:13, background:'transparent', color:'#6b7280', cursor:'not-allowed' }}/>
                 </div>
               </div>
-
-              <div style={{ display:'flex', flexDirection:'column', gap:6 }}>
-                <label style={{ fontSize:12, fontWeight:700, color:'#111' }}>College / Organization</label>
-                <div style={{ display:'flex', alignItems:'center', border:'1.5px solid #e5e7eb', borderRadius:8, padding:'10px 14px', gap:10 }}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M12 10h.01"/><path d="M12 14h.01"/><path d="M16 10h.01"/><path d="M16 14h.01"/><path d="M8 10h.01"/><path d="M8 14h.01"/></svg>
-                  <input type="text" placeholder="Enter your college or organization" style={{ border:'none', outline:'none', width:'100%', fontSize:13 }}/>
-                </div>
-              </div>
-
-              <div style={{ display:'flex', gap:16, flexWrap:'wrap' }}>
-                <div style={{ flex:1, minWidth:200, display:'flex', flexDirection:'column', gap:6 }}>
-                  <label style={{ fontSize:12, fontWeight:700, color:'#111' }}>Phone Number</label>
-                  <div style={{ display:'flex', alignItems:'center', border:'1.5px solid #e5e7eb', borderRadius:8, overflow:'hidden' }}>
-                    <div style={{ display:'flex', alignItems:'center', gap:6, padding:'10px 14px', background:'#f9fafb', borderRight:'1px solid #e5e7eb' }}>
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                      <span style={{ fontSize:13, color:'#374151' }}>+91</span>
-                    </div>
-                    <input type="tel" placeholder="Enter your phone number" style={{ border:'none', outline:'none', width:'100%', fontSize:13, padding:'10px 14px' }}/>
-                  </div>
-                </div>
-                <div style={{ flex:1, minWidth:200, display:'flex', flexDirection:'column', gap:6 }}>
-                  <label style={{ fontSize:12, fontWeight:700, color:'#111' }}>Year / Department</label>
-                  <div style={{ display:'flex', alignItems:'center', border:'1.5px solid #e5e7eb', borderRadius:8, padding:'10px 14px', gap:10 }}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
-                    <select style={{ border:'none', outline:'none', width:'100%', fontSize:13, background:'transparent', color:'#6b7280', appearance:'none' }}>
-                      <option>Select year / department</option>
-                      <option>1st Year</option>
-                      <option>2nd Year</option>
-                      <option>3rd Year</option>
-                    </select>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" style={{ pointerEvents:'none' }}><polyline points="6 9 12 15 18 9"/></svg>
-                  </div>
-                </div>
-              </div>
             </div>
-            <div style={{ padding:'20px 24px', borderTop:'1px solid #f3f4f6', display:'flex', justifyContent:'flex-end', gap:12 }}>
-              <button onClick={() => setShowProfile(false)} style={{ padding:'10px 18px', borderRadius:10, border:'1.5px solid #e5e7eb', background:'#fff', fontWeight:600, color:'#374151', cursor:'pointer' }}>Cancel</button>
-              <button onClick={() => setShowProfile(false)} style={{ padding:'10px 24px', borderRadius:10, border:'none', background:'#4C9F38', fontWeight:700, color:'#fff', cursor:'pointer' }}>Save Profile</button>
+            
+            <div style={{ padding:'20px 24px', borderTop:'1px solid #f3f4f6', display:'flex', flexDirection:'column', gap:12 }}>
+              <button onClick={() => navigate('/')} style={{ padding:'12px 18px', borderRadius:10, border:'1.5px solid #e5e7eb', background:'#fff', fontWeight:700, color:'#374151', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', gap:8, width:'100%', transition:'all 0.2s' }}
+                onMouseEnter={e => e.currentTarget.style.background='#f9fafb'} onMouseLeave={e => e.currentTarget.style.background='#fff'}>
+                <span style={{ fontSize:16, color:'#6b7280' }}>←</span> Back to Site
+              </button>
+              <button onClick={async () => { await supabase.auth.signOut(); navigate('/'); }} style={{ padding:'12px 18px', borderRadius:10, border:'none', background:'#fef2f2', fontWeight:700, color:'#dc2626', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', gap:8, width:'100%', transition:'all 0.2s' }}
+                onMouseEnter={e => e.currentTarget.style.background='#fee2e2'} onMouseLeave={e => e.currentTarget.style.background='#fef2f2'}>
+                <span style={{ fontSize:16 }}>🚪</span> Log Out
+              </button>
             </div>
           </div>
         </div>

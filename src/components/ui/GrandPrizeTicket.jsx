@@ -316,7 +316,7 @@ export const GrandPrizeTicket = () => {
             }}
           >
             <a
-              href="#register"
+              href="/register"
               style={{
                 display: "inline-flex",
                 alignItems: "center",

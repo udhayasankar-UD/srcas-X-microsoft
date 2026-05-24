@@ -439,7 +439,7 @@ export default function HeroSection5() {
           className="h5-cta-wrap"
           style={{ display: 'flex', gap: 10, alignItems: 'center', justifyContent: 'center', marginBottom: '2rem', flexWrap: 'nowrap' }}
         >
-          <a href="#register" className="h5-primary">
+          <a href="/register" className="h5-primary">
             Register Now
             <svg width="13" height="13" viewBox="0 0 16 16" fill="none" style={{ marginLeft: 6 }}>
               <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />

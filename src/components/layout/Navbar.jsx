@@ -29,6 +29,7 @@ import {
   UserPlus,
 } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../../lib/useAuth';
 
 // ─── Site color tokens (black & white) ──────────────────────────────────────
 const ACTIVE    = '#111111';
@@ -37,16 +38,15 @@ const BG_PANEL  = 'rgba(255,255,255,0.88)';
 const BORDER    = 'rgba(0,0,0,0.12)';
 
 // ─── Nav items ────────────────────────────────────────────────────────────────
-const NAV_ITEMS = [
+const getNavItems = (user) => [
   { id: 'home',       label: 'Home',               icon: House,         path: '/', hash: '#hero' },
   { id: 'partners',   label: 'Partners',            icon: Handshake,     path: '/partners', hash: '' },
   { id: 'highlights', label: 'Highlights',          icon: Star,          path: '/highlights', hash: '' },
   { id: 'prizes',     label: 'Prizes',              icon: Trophy,        path: '/prizes', hash: '' },
   { id: 'problems',   label: 'Problem Statements',  icon: BookOpen,      path: '/', hash: '#problems' },
-  // { id: 'guidelines', label: 'Guidelines',          icon: ClipboardList, path: '/', hash: '#guidelines' },
   { id: 'faq',        label: 'FAQ',                 icon: HelpCircle,    path: '/faq', hash: '' },
   { id: 'contact',    label: 'Contact',             icon: Phone,         path: '/contact', hash: '' },
-  { id: 'register',   label: 'Register',            icon: UserPlus,      path: '/register', hash: '' },
+  { id: 'register',   label: user ? 'Dashboard' : 'Register', icon: UserPlus, path: user ? '/dashboard' : '/register', hash: '' },
 ];
 
 // ─── Active-section tracker ───────────────────────────────────────────────────
@@ -80,7 +80,7 @@ function useActiveSection() {
           return;
         }
         // Find which section is most visible
-        const sections = NAV_ITEMS.filter(i => i.path === '/').map(i => i.hash.replace('#', '')).filter(Boolean);
+        const sections = getNavItems(null).filter(i => i.path === '/').map(i => i.hash.replace('#', '')).filter(Boolean);
         let current = 'home';
         for (const id of sections) {
           const el = document.getElementById(id);
@@ -204,7 +204,7 @@ function NavDockIcon({ children, className = '' }) {
 }
 
 // ─── Desktop: Vertical Dock on the left ──────────────────────────────────────
-const DesktopNavBar = () => {
+const DesktopNavBar = ({ user }) => {
   const activeSection = useActiveSection();
   const navigate = useNavigate();
   const location = useLocation();
@@ -335,7 +335,7 @@ const DesktopNavBar = () => {
           style={{ background: 'linear-gradient(to bottom, transparent, #111, transparent)', opacity: 0.18 }}
         />
 
-        {NAV_ITEMS.map((item) => {
+        {getNavItems(user).map((item) => {
           const isActive   = activeSection === item.id;
           const LucideIcon = item.icon;
           return (
@@ -367,7 +367,7 @@ const DesktopNavBar = () => {
 };
 
 // ─── Mobile: Floating hamburger bottom-right ──────────────────────────────────
-const MobileNavBar = () => {
+const MobileNavBar = ({ user }) => {
   const activeSection  = useActiveSection();
   const [isOpen, setIsOpen]         = useState(false);
   const [showLabels, setShowLabels] = useState(false);
@@ -460,7 +460,7 @@ const MobileNavBar = () => {
             isOpen ? 'max-h-[600px] opacity-100 pt-2' : 'max-h-0 opacity-0',
           ].join(' ')}
         >
-          {NAV_ITEMS.map((item) => {
+          {getNavItems(user).map((item) => {
             const isActive   = activeSection === item.id;
             const LucideIcon = item.icon;
 
@@ -505,18 +505,19 @@ const MobileNavBar = () => {
 // ─── Export ───────────────────────────────────────────────────────────────────
 const Navbar = () => {
   const activeSection = useActiveSection();
+  const user = useAuth();
 
   return (
     <>
-      <DesktopNavBar />
-      <MobileNavBar />
+      <DesktopNavBar user={user} />
+      <MobileNavBar user={user} />
 
       {/* Floating Auth Button - Top Right */}
       {activeSection !== 'home' && (
         <div className="fixed top-6 right-8 z-50 hidden sm:flex items-center gap-3">
-          <a href="/register" style={{ textDecoration: 'none' }}>
+          <a href={user ? "/dashboard" : "/register"} style={{ textDecoration: 'none' }}>
             <button className="nav-register-btn">
-              REGISTER
+              {user ? "DASHBOARD" : "REGISTER"}
             </button>
           </a>
         </div>

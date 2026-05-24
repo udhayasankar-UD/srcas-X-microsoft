@@ -4,6 +4,7 @@ import PPTSection from '../components/sections/PPTSection';
 
 import { ScratchCard } from '../components/ui/ScratchCard';
 import { InternshipTicket } from '../components/ui/InternshipTicket';
+import { useAuth } from '../lib/useAuth';
 
 /* ─── Outcome card ─── */
 const OutcomeCard = ({ icon, title, desc, index }) => {
@@ -100,6 +101,7 @@ const Ticker = ({ items }) => (
 
 /* ─── Main Page ─── */
 const PrizesPage = () => {
+  const user = useAuth();
   const heroRef = useRef(null);
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
   const heroY = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
@@ -207,7 +209,7 @@ const PrizesPage = () => {
             >
               Explore Prizes ↓
             </a>
-            <a href="#register" style={{
+            <a href={user ? "/dashboard" : "/register"} style={{
               display: 'inline-flex', alignItems: 'center', gap: 8,
               padding: '13px 28px', background: 'transparent', color: '#fff',
               fontSize: '0.85rem', fontWeight: 700, borderRadius: 100,
@@ -218,7 +220,7 @@ const PrizesPage = () => {
               onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.8)'}
               onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)'}
             >
-              Register Now
+              {user ? "Dashboard" : "Register Now"}
             </a>
           </motion.div>
         </motion.div>
@@ -435,7 +437,7 @@ const PrizesPage = () => {
             <span style={{ WebkitTextStroke: '2.5px #111', color: 'transparent' }}>your reward?</span>
           </h2>
           <motion.a
-            href="#register"
+            href={user ? "/dashboard" : "/register"}
             whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.97 }}
             style={{

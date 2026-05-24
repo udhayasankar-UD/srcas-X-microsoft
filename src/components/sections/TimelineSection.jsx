@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import { useAuth } from "../../lib/useAuth";
 
 /* ─────────────────────────────────────────
    Icons (B&W inline SVG)
@@ -349,6 +350,7 @@ function BeamDot({ event, scrollYProgress, vertical }) {
    CTA Banner (shared)
 ───────────────────────────────────────── */
 function CTABanner({ mobile }) {
+  const user = useAuth();
   return (
     <motion.div
       initial={{ opacity: 0, y: 24 }}
@@ -407,7 +409,7 @@ function CTABanner({ mobile }) {
       </div>
 
       <a
-        href="#register"
+        href={user ? "/dashboard" : "/register"}
         style={{
           display: "inline-flex", alignItems: "center", gap: 10,
           padding: mobile ? "12px 22px" : "15px 30px",
@@ -427,7 +429,7 @@ function CTABanner({ mobile }) {
           e.currentTarget.style.boxShadow = "none";
         }}
       >
-        Register Now
+        {user ? "Dashboard" : "Register Now"}
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
           <path d="M5 12h14M12 5l7 7-7 7"/>
         </svg>
