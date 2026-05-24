@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { supabase } from '../../lib/supabaseClient';
 
 const SDG_COLORS = ['#E5243B','#DDA63A','#4C9F38','#C5192D','#FF3A21','#26BDE2','#FCC30B','#A21942','#FD6925','#DD1367','#FD9D24','#BF8B2E','#3F7E44','#0A97D9','#56C02B','#00689D','#19486A'];
 
@@ -25,7 +26,7 @@ const NAV = [
   { id:'schedule',   icon:'▤',  label:'Schedule'   },
 ];
 
-export default function DashboardLayout({ activeTab, setActiveTab, children }) {
+export default function DashboardLayout({ activeTab, setActiveTab, children, hasTeam, announcements, user }) {
   const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
@@ -62,11 +63,18 @@ export default function DashboardLayout({ activeTab, setActiveTab, children }) {
 
         {/* Footer nav */}
         <div style={{ padding:'10px 8px', borderTop:'1.5px solid #ebebeb' }}>
-          <button onClick={() => navigate('/')} style={{ display:'flex', alignItems:'center', gap:10, padding:'9px 12px', borderRadius:10, border:'none', cursor:'pointer', width:'100%', background:'transparent', textAlign:'left', outline:'none' }}
+          <button onClick={() => navigate('/')} style={{ display:'flex', alignItems:'center', gap:10, padding:'9px 12px', borderRadius:10, border:'none', cursor:'pointer', width:'100%', background:'transparent', textAlign:'left', outline:'none', marginBottom:4 }}
             onMouseEnter={e => e.currentTarget.style.background='#f9fafb'}
             onMouseLeave={e => e.currentTarget.style.background='transparent'}>
             <span style={{ fontSize:15, color:'#9ca3af' }}>←</span>
             {!collapsed && <span style={{ fontSize:12, color:'#9ca3af', fontWeight:500 }}>Back to Site</span>}
+          </button>
+
+          <button onClick={async () => { await supabase.auth.signOut(); navigate('/'); }} style={{ display:'flex', alignItems:'center', gap:10, padding:'10px 14px', borderRadius:12, border:'1px solid #fca5a5', cursor:'pointer', width:'100%', background:'#fef2f2', textAlign:'left', outline:'none', transition:'all 0.2s', marginTop:8 }}
+            onMouseEnter={e => { e.currentTarget.style.background='#fee2e2'; e.currentTarget.style.borderColor='#f87171'; }}
+            onMouseLeave={e => { e.currentTarget.style.background='#fef2f2'; e.currentTarget.style.borderColor='#fca5a5'; }}>
+            <span style={{ fontSize:16, color:'#dc2626' }}>🚪</span>
+            {!collapsed && <span style={{ fontSize:13, color:'#dc2626', fontWeight:700 }}>Log Out</span>}
           </button>
         </div>
       </aside>
@@ -121,19 +129,18 @@ export default function DashboardLayout({ activeTab, setActiveTab, children }) {
               <button onClick={() => setShowAnnouncements(false)} style={{ background:'none', border:'none', fontSize:24, cursor:'pointer', color:'#9ca3af' }}>&times;</button>
             </div>
             <div style={{ padding:'20px 24px', display:'flex', flexDirection:'column', gap:16, maxHeight:'70vh', overflowY:'auto' }}>
-              {[
-                { time:'2h ago', tag:'New',    text:'Mentorship sessions open — book your slot before June 3.' },
-                { time:'1d ago', tag:'Update', text:'Problem statement details updated on the Problem Statements page.' },
-                { time:'3d ago', tag:'',       text:'Welcome to SRCAS Hackathon 3.0! Registration confirmed.' },
-              ].map((a, i, arr) => (
-                <div key={i} style={{ paddingBottom: i<arr.length-1?14:0, marginBottom: i<arr.length-1?14:0, borderBottom: i<arr.length-1?'1px solid #f3f4f6':'none' }}>
+              {announcements && announcements.length > 0 ? announcements.map((a, i, arr) => (
+                <div key={a.id || i} style={{ paddingBottom: i<arr.length-1?14:0, marginBottom: i<arr.length-1?14:0, borderBottom: i<arr.length-1?'1px solid #f3f4f6':'none' }}>
                   <div style={{ display:'flex', alignItems:'center', gap:6, marginBottom:6 }}>
                     {a.tag && <span style={{ fontSize:10, fontWeight:700, color:'#4C9F38', background:'#f0fdf4', padding:'2px 8px', borderRadius:20 }}>{a.tag}</span>}
-                    <span style={{ fontSize:11, color:'#9ca3af', fontWeight:500 }}>{a.time}</span>
+                    <span style={{ fontSize:11, color:'#9ca3af', fontWeight:500 }}>{new Date(a.created_at).toLocaleDateString()}</span>
                   </div>
-                  <p style={{ fontSize:13, color:'#374151', lineHeight:1.5, margin:0 }}>{a.text}</p>
+                  <h4 style={{ fontSize:14, fontWeight:700, color:'#111', margin:'0 0 4px 0' }}>{a.title}</h4>
+                  <p style={{ fontSize:13, color:'#374151', lineHeight:1.5, margin:0 }}>{a.message}</p>
                 </div>
-              ))}
+              )) : (
+                <p style={{ fontSize:13, color:'#9ca3af', fontStyle:'italic' }}>No announcements yet.</p>
+              )}
             </div>
           </div>
         </div>
@@ -151,25 +158,25 @@ export default function DashboardLayout({ activeTab, setActiveTab, children }) {
               <div style={{ display:'flex', gap:16, flexWrap:'wrap' }}>
                 <div style={{ flex:1, minWidth:200, display:'flex', flexDirection:'column', gap:6 }}>
                   <label style={{ fontSize:12, fontWeight:700, color:'#111' }}>First Name</label>
-                  <div style={{ display:'flex', alignItems:'center', border:'1.5px solid #e5e7eb', borderRadius:8, padding:'10px 14px', gap:10 }}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                    <input type="text" placeholder="Enter your first name" style={{ border:'none', outline:'none', width:'100%', fontSize:13 }}/>
+                  <div style={{ display:'flex', alignItems:'center', border:'1.5px solid #e5e7eb', borderRadius:8, padding:'10px 14px', gap:10, background:'#f9fafb' }}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    <input type="text" defaultValue={user?.user_metadata?.full_name?.split(' ')[0] || ''} placeholder="First name" readOnly style={{ border:'none', outline:'none', width:'100%', fontSize:13, background:'transparent', color:'#6b7280', cursor:'not-allowed' }}/>
                   </div>
                 </div>
                 <div style={{ flex:1, minWidth:200, display:'flex', flexDirection:'column', gap:6 }}>
                   <label style={{ fontSize:12, fontWeight:700, color:'#111' }}>Last Name</label>
-                  <div style={{ display:'flex', alignItems:'center', border:'1.5px solid #e5e7eb', borderRadius:8, padding:'10px 14px', gap:10 }}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                    <input type="text" placeholder="Enter your last name" style={{ border:'none', outline:'none', width:'100%', fontSize:13 }}/>
+                  <div style={{ display:'flex', alignItems:'center', border:'1.5px solid #e5e7eb', borderRadius:8, padding:'10px 14px', gap:10, background:'#f9fafb' }}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    <input type="text" defaultValue={user?.user_metadata?.full_name?.split(' ').slice(1).join(' ') || ''} placeholder="Last name" readOnly style={{ border:'none', outline:'none', width:'100%', fontSize:13, background:'transparent', color:'#6b7280', cursor:'not-allowed' }}/>
                   </div>
                 </div>
               </div>
 
               <div style={{ display:'flex', flexDirection:'column', gap:6 }}>
                 <label style={{ fontSize:12, fontWeight:700, color:'#111' }}>Email Address</label>
-                <div style={{ display:'flex', alignItems:'center', border:'1.5px solid #e5e7eb', borderRadius:8, padding:'10px 14px', gap:10 }}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                  <input type="email" placeholder="Enter your email address" style={{ border:'none', outline:'none', width:'100%', fontSize:13 }}/>
+                <div style={{ display:'flex', alignItems:'center', border:'1.5px solid #e5e7eb', borderRadius:8, padding:'10px 14px', gap:10, background:'#f9fafb' }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                  <input type="email" defaultValue={user?.email || ''} readOnly style={{ border:'none', outline:'none', width:'100%', fontSize:13, background:'transparent', color:'#6b7280', cursor:'not-allowed' }}/>
                 </div>
               </div>
 

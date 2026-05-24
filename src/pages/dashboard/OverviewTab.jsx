@@ -10,67 +10,14 @@ const TIMELINE = [
   { date:'Jun 28', label:'Grand Finale',          done:false },
 ];
 
-const ANNOUNCEMENTS = [
-  { time:'2h ago', tag:'New',    text:'Mentorship sessions open — book your slot before June 3.' },
-  { time:'1d ago', tag:'Update', text:'Problem statement details updated on the Problem Statements page.' },
-  { time:'3d ago', tag:'',       text:'Welcome to SRCAS Hackathon 3.0! Registration confirmed.' },
-];
-
-const TEAM_MEMBERS = [
-  { name: 'Arjun S.', role: 'Team Leader', color: '#8b5cf6' },
-  { name: 'Priya M.', role: 'Member',      color: '#3b82f6' },
-  { name: 'Ravi K.',  role: 'Member',      color: '#ec4899' }
-];
-
-const PROGRESS = [
-  { label:'Idea Submission',    pct:100, color:'#4C9F38' },
-  { label:'Team Verification',  pct:100, color:'#4C9F38' },
-  { label:'Prototype',          pct:40,  color:'#f59e0b' },
-  { label:'Presentation Deck',  pct:20,  color:'#f59e0b' },
-  { label:'Final Submission',   pct:0,   color:'#e5e7eb' },
-];
-
-function ProgressBar({ label, pct, color }) {
-  return (
-    <div style={{ display:'flex', flexDirection:'column', gap:6 }}>
-      <div style={{ display:'flex', justifyContent:'space-between' }}>
-        <span style={{ fontSize:12, fontWeight:600, color:'#374151' }}>{label}</span>
-        <span style={{ fontSize:12, fontWeight:700, color: pct===100?'#4C9F38': pct>0?'#f59e0b':'#9ca3af' }}>{pct}%</span>
-      </div>
-      <div style={{ height:8, background:'#f3f4f6', borderRadius:99 }}>
-        <div style={{ height:'100%', width:`${pct}%`, background:pct===0?'#e5e7eb':color, borderRadius:99, transition:'width 0.5s ease' }}/>
-      </div>
-    </div>
-  );
-}
-
-function Stat({ icon, label, value, badge, badgeColor }) {
-  return (
-    <div className="dash-card" style={card({ display:'flex', flexDirection:'column', gap:6 })}>
-      <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start' }}>
-        <div style={{ fontSize:28 }}>{icon}</div>
-        {badge && <span style={{ fontSize:10, fontWeight:700, color:badgeColor, background:`${badgeColor}18`, padding:'3px 9px', borderRadius:20 }}>{badge}</span>}
-      </div>
-      <div style={{ fontSize:26, fontWeight:900, color:'#111' }}>{value}</div>
-      <div style={{ fontSize:12, color:'#9ca3af', fontWeight:500 }}>{label}</div>
-    </div>
-  );
-}
-
-function CheckIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="#10b981">
-      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-    </svg>
-  );
-}
-
-export default function OverviewTab() {
+export default function OverviewTab({ hasTeam, teamData, setActiveTab, announcements = [] }) {
+  // We use placeholder progress if they have a team, but wait on actual submissions.
+  const overallProgress = hasTeam ? 20 : 0; 
+  
   return (
     <div style={{ display:'flex', flexDirection:'column', gap:20 }}>
-      
       {/* 1. Horizontal Timeline */}
-      <div className="dash-card" style={{ padding:'20px 0', overflowX:'auto' }}>
+      <div className="dash-card" style={{ padding:'20px 0', overflowX:'auto', background:'#fff', borderRadius:14, boxShadow:'0 1px 4px rgba(0,0,0,0.06)' }}>
         <div style={{ display:'flex', alignItems:'flex-start', justifyContent:'space-between', minWidth:500, padding:'0 20px' }}>
           {TIMELINE.map((t, i) => (
             <div key={i} style={{ flex: 1, position:'relative', display:'flex', flexDirection:'column', alignItems:'center', textAlign:'center' }}>
@@ -87,79 +34,59 @@ export default function OverviewTab() {
         </div>
       </div>
 
-      {/* 2. & 3. Team Members and Announcements */}
       <div className="dash-grid-2" style={{ display:'grid', gridTemplateColumns:'2fr 3fr', gap:16 }}>
-        
-        {/* Left Column */}
+        {/* Left Column: Announcements */}
         <div style={{ display:'flex', flexDirection:'column', gap:16 }}>
-          {/* Team Member Card */}
-          <div className="dash-card" style={card()}>
-            <div style={{ fontSize:15, fontWeight:800, color:'#111', marginBottom:16 }}>Team Leader</div>
-            <div style={{ display:'flex', alignItems:'center', gap:12, marginBottom:20 }}>
-              <div style={{ width:36, height:36, borderRadius:'8px', background:TEAM_MEMBERS[0].color, color:'#fff', display:'flex', alignItems:'center', justifyContent:'center', fontSize:15, fontWeight:800 }}>{TEAM_MEMBERS[0].name[0]}</div>
-              <div style={{ fontSize:14, fontWeight:600, color:'#374151' }}>{TEAM_MEMBERS[0].name}</div>
-              <CheckIcon />
-            </div>
-
-            <div style={{ height:1, background:'#f3f4f6', margin:'0 -22px 20px -22px' }}/>
-
-            <div style={{ fontSize:15, fontWeight:800, color:'#111', marginBottom:16 }}>Team Members</div>
-            <div style={{ display:'flex', flexDirection:'column', gap:16 }}>
-              {TEAM_MEMBERS.slice(1).map((m, i) => (
-                <div key={i} style={{ display:'flex', alignItems:'center', gap:12 }}>
-                  <div style={{ width:36, height:36, borderRadius:'8px', background:m.color, color:'#fff', display:'flex', alignItems:'center', justifyContent:'center', fontSize:15, fontWeight:800 }}>{m.name[0]}</div>
-                  <div style={{ fontSize:14, fontWeight:600, color:'#374151' }}>{m.name}</div>
-                  <CheckIcon />
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Announcements Card (Moved under Team Info) */}
-          <div className="dash-card" style={card()}>
+          <div className="dash-card" style={card({ minHeight: 300 })}>
             <div style={{ fontSize:15, fontWeight:800, color:'#111', marginBottom:16, display:'flex', alignItems:'center', gap:8 }}>
               <span style={{ color:'#f59e0b' }}>📢</span> Announcements
             </div>
-            {ANNOUNCEMENTS.map((a, i) => (
-              <div key={i} style={{ paddingBottom: i<ANNOUNCEMENTS.length-1?14:0, marginBottom: i<ANNOUNCEMENTS.length-1?14:0, borderBottom: i<ANNOUNCEMENTS.length-1?'1px solid #f3f4f6':'none' }}>
-                <div style={{ display:'flex', alignItems:'center', gap:6, marginBottom:6 }}>
-                  {a.tag && <span style={{ fontSize:10, fontWeight:700, color:'#4C9F38', background:'#f0fdf4', padding:'2px 8px', borderRadius:20 }}>{a.tag}</span>}
-                  <span style={{ fontSize:11, color:'#9ca3af', fontWeight:500 }}>{a.time}</span>
+            {announcements.length > 0 ? (
+              announcements.map((a, i) => (
+                <div key={a.id || i} style={{ paddingBottom: i<announcements.length-1?14:0, marginBottom: i<announcements.length-1?14:0, borderBottom: i<announcements.length-1?'1px solid #f3f4f6':'none' }}>
+                  <div style={{ display:'flex', alignItems:'center', gap:6, marginBottom:6 }}>
+                    {a.tag && <span style={{ fontSize:10, fontWeight:700, color:'#4C9F38', background:'#f0fdf4', padding:'2px 8px', borderRadius:20 }}>{a.tag}</span>}
+                    <span style={{ fontSize:11, color:'#9ca3af', fontWeight:500 }}>{new Date(a.created_at).toLocaleDateString()}</span>
+                  </div>
+                  <h4 style={{ fontSize:14, fontWeight:700, color:'#111', margin:'0 0 4px 0' }}>{a.title}</h4>
+                  <p style={{ fontSize:13, color:'#374151', lineHeight:1.5, margin:0 }}>{a.message}</p>
                 </div>
-                <p style={{ fontSize:13, color:'#374151', lineHeight:1.5, margin:0 }}>{a.text}</p>
-              </div>
-            ))}
+              ))
+            ) : (
+              <p style={{ fontSize:13, color:'#9ca3af', fontStyle:'italic' }}>No announcements yet.</p>
+            )}
           </div>
         </div>
 
-        {/* Right Column */}
+        {/* Right Column: CTA or Team Info */}
         <div style={{ display:'flex', flexDirection:'column', gap:16 }}>
-          {/* Submission Progress Bars */}
-          <div className="dash-card" style={card()}>
-            <div style={{ fontSize:15, fontWeight:800, color:'#111', marginBottom:16 }}>📊 Team Progress</div>
-            <div style={{ display:'flex', flexDirection:'column', gap:14 }}>
-              {PROGRESS.map((p, i) => <ProgressBar key={i} {...p}/>)}
+          {!hasTeam ? (
+            <div className="dash-card" style={card({ display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', minHeight: 300, background:'linear-gradient(135deg, #f0fdf4, #e8f5e9)', border:'1px solid #bbf7d0' })}>
+              <div style={{ fontSize:50, marginBottom:16 }}>🚀</div>
+              <h3 style={{ fontSize:20, fontWeight:900, color:'#166534', margin:'0 0 8px 0', textAlign:'center' }}>You haven't formed a team yet!</h3>
+              <p style={{ fontSize:14, color:'#15803d', textAlign:'center', maxWidth:300, marginBottom:24 }}>Create your team to unlock the submission portal and invite your teammates.</p>
+              <button onClick={() => setActiveTab('team')} style={{ padding:'12px 24px', borderRadius:10, background:'#4C9F38', color:'#fff', fontWeight:800, fontSize:15, border:'none', cursor:'pointer', boxShadow:'0 4px 14px rgba(76,159,56,0.3)' }}>
+                Create Team Now
+              </button>
             </div>
-            <div style={{ marginTop:18, padding:'14px 16px', background:'#f0fdf4', borderRadius:10, border:'1px solid #bbf7d0' }}>
-              <div style={{ fontSize:13, fontWeight:700, color:'#166534' }}>Overall Progress</div>
-              <div style={{ fontSize:28, fontWeight:900, color:'#166534', marginTop:4 }}>52%</div>
-              <div style={{ fontSize:12, color:'#15803d', marginTop:4, fontWeight:600 }}>2 of 5 stages complete</div>
+          ) : (
+            <div className="dash-card" style={card()}>
+              <div style={{ fontSize:15, fontWeight:800, color:'#111', marginBottom:16 }}>🌟 Welcome, {teamData?.team_name}!</div>
+              <div style={{ padding:'14px 16px', background:'#f9fafb', borderRadius:10, border:'1.5px solid #e5e7eb', marginBottom: 16 }}>
+                <p style={{ margin:0, fontSize:14, color:'#374151' }}>Head over to the <strong>Submission</strong> tab to start filling out your project details. You can save your progress at any time!</p>
+              </div>
+              
+              <div style={{ padding:'14px 16px', background:'#f0fdf4', borderRadius:10, border:'1px solid #bbf7d0' }}>
+                <div style={{ fontSize:13, fontWeight:700, color:'#166534' }}>Overall Completion</div>
+                <div style={{ height:8, background:'#dcfce7', borderRadius:99, margin:'10px 0' }}>
+                  <div style={{ height:'100%', width:`${overallProgress}%`, background:'#4C9F38', borderRadius:99 }}/>
+                </div>
+                <div style={{ fontSize:12, color:'#15803d', fontWeight:600 }}>{overallProgress}% Complete</div>
+              </div>
             </div>
-          </div>
-          
-          
+          )}
         </div>
-
       </div>
-
-      {/* 4. Stats */}
-      <div className="dash-grid-4" style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:16 }}>
-        <Stat icon="🏅" label="Current Round"    value="Round 1" badge="Active"    badgeColor="#4C9F38"/>
-        <Stat icon="⏳" label="Days to Finals"   value="13"      badge="Jun 28"    badgeColor="#f59e0b"/>
-        <Stat icon="👥" label="Registered Teams" value="284"     badge="+12 today" badgeColor="#26BDE2"/>
-        <Stat icon="🎯" label="Your SDG Focus"   value="SDG 6"   badge="Clean Water" badgeColor="#26BDE2"/>
-      </div>
-
     </div>
   );
 }

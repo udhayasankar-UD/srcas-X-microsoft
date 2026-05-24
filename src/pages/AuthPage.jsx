@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { supabase } from '../lib/supabaseClient';
 
 const SDG_COLORS = ['#E5243B','#DDA63A','#4C9F38','#C5192D','#FF3A21','#26BDE2','#FCC30B','#A21942','#FD6925','#DD1367','#FD9D24','#BF8B2E','#3F7E44','#0A97D9','#56C02B','#00689D','#19486A'];
 
@@ -88,10 +89,10 @@ function SDGCard({ mode }) {
   );
 }
 
-function SocialBtn({ icon, label }) {
+function SocialBtn({ icon, label, onClick }) {
   const [hov, setHov] = useState(false);
   return (
-    <button onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
+    <button type="button" onClick={onClick} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
       style={{ flex:1, display:'flex', alignItems:'center', justifyContent:'center', gap:'7px', padding:'10px 6px', borderRadius:'10px', border:'1.5px solid #e5e7eb', background: hov ? '#f9fafb' : '#fff', cursor:'pointer', fontSize:'13px', fontWeight:600, color:'#374151', transition:'all 0.2s', transform: hov ? 'translateY(-2px)' : 'none', boxShadow: hov ? '0 4px 12px rgba(0,0,0,0.08)' : 'none' }}>
       {icon}<span style={{ whiteSpace:'nowrap' }}>{label}</span>
     </button>
@@ -123,8 +124,8 @@ function InputField({ label, type='text', placeholder, icon, value, onChange }) 
 }
 
 const GoogleIcon = () => <svg width="16" height="16" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>;
-const FbIcon   = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>;
-const AppleIcon = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="#111"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg>;
+const GithubIcon = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="#111"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.699-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.161 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>;
+const MicrosoftIcon = () => <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#f35325" d="M1 1h10v10H1z"/><path fill="#81bc06" d="M12 1h10v10H12z"/><path fill="#05a6f0" d="M1 12h10v10H1z"/><path fill="#ffba08" d="M12 12h10v10H12z"/></svg>;
 
 export default function AuthPage() {
   const [mode, setMode] = useState('login');
@@ -133,17 +134,88 @@ export default function AuthPage() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
+  const [successMsg, setSuccessMsg] = useState('');
 
   const switchMode = (next) => {
     if (next === mode || animating) return;
+    setErrorMsg('');
+    setSuccessMsg('');
     setAnimating(true);
     setTimeout(() => { setMode(next); setAnimating(false); }, 380);
+  };
+
+  const handleAuth = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setErrorMsg('');
+    setSuccessMsg('');
+
+    // Client side validation for sign up
+    if (!isLogin) {
+      const hasUpper = /[A-Z]/.test(password);
+      const hasLower = /[a-z]/.test(password);
+      const hasNumber = /[0-9]/.test(password);
+      const hasSpecial = /[^A-Za-z0-9]/.test(password);
+      const hasLength = password.length >= 8;
+
+      if (!hasUpper || !hasLower || !hasNumber || !hasSpecial || !hasLength) {
+        setErrorMsg('Please meet all password requirements.');
+        setLoading(false);
+        return;
+      }
+    }
+
+    try {
+      if (isLogin) {
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        navigate('/dashboard');
+      } else {
+        const { data, error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: { data: { full_name: name } }
+        });
+        if (error) throw error;
+        
+        if (data?.session === null) {
+          // Email confirmation is required
+          setSuccessMsg('Registration successful! Please check your email inbox to confirm your account.');
+          setName('');
+          setEmail('');
+          setPassword('');
+          setMode('login'); // switch to login UI visually without clearing success
+        } else {
+          navigate('/dashboard');
+        }
+      }
+    } catch (error) {
+      setErrorMsg(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSocialLogin = async (provider) => {
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({ 
+        provider,
+        options: {
+          redirectTo: `${window.location.origin}/dashboard`
+        }
+      });
+      if (error) throw error;
+    } catch (error) {
+      setErrorMsg(error.message);
+    }
   };
 
   const isLogin = mode === 'login';
 
   const formPanel = (
-    <div style={{ display:'flex', flexDirection:'column', justifyContent:'center', padding:'40px 44px', height:'100%', opacity: animating ? 0 : 1, transform: animating ? `translateX(${isLogin ? '-28px' : '28px'})` : 'translateX(0)', transition:'opacity 0.38s ease, transform 0.38s ease' }}>
+    <form onSubmit={handleAuth} style={{ display:'flex', flexDirection:'column', justifyContent:'center', padding:'40px 44px', height:'100%', opacity: animating ? 0 : 1, transform: animating ? `translateX(${isLogin ? '-28px' : '28px'})` : 'translateX(0)', transition:'opacity 0.38s ease, transform 0.38s ease' }}>
 
       {/* Logo */}
       <div style={{ display:'flex', alignItems:'center', gap:'10px', marginBottom:'28px' }}>
@@ -164,9 +236,9 @@ export default function AuthPage() {
 
       {/* ── Social buttons FIRST ── */}
       <div style={{ display:'flex', gap:'8px', marginBottom:'16px' }}>
-        <SocialBtn label="Google"   icon={<GoogleIcon />} />
-        <SocialBtn label="Facebook" icon={<FbIcon />} />
-        <SocialBtn label="Apple"    icon={<AppleIcon />} />
+        <SocialBtn label="Google" icon={<GoogleIcon />} onClick={() => handleSocialLogin('google')} />
+        <SocialBtn label="GitHub" icon={<GithubIcon />} onClick={() => handleSocialLogin('github')} />
+        <SocialBtn label="Microsoft" icon={<MicrosoftIcon />} onClick={() => handleSocialLogin('azure')} />
       </div>
 
       {/* Divider */}
@@ -184,27 +256,50 @@ export default function AuthPage() {
         )}
         <InputField label="Email" type="email" placeholder="youremail@domain.com" value={email} onChange={e => setEmail(e.target.value)}
           icon={<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>} />
-        <InputField label="Password" type="password" placeholder="Create a password" value={password} onChange={e => setPassword(e.target.value)}
-          icon={<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>} />
+        <div>
+          <InputField label="Password" type="password" placeholder="Create a password" value={password} onChange={e => setPassword(e.target.value)}
+            icon={<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>} />
+          {!isLogin && (
+            <div style={{ display:'flex', flexDirection:'column', gap:6, marginTop:12, marginLeft:4 }}>
+              {[
+                { label: 'Uppercase letter', met: /[A-Z]/.test(password) },
+                { label: 'Lowercase letter', met: /[a-z]/.test(password) },
+                { label: 'Number', met: /[0-9]/.test(password) },
+                { label: 'Special character (e.g. !?<>@#$%)', met: /[^A-Za-z0-9]/.test(password) },
+                { label: '8 characters or more', met: password.length >= 8 },
+              ].map((req, i) => (
+                <div key={i} style={{ display:'flex', alignItems:'center', gap:8, color: req.met ? '#4C9F38' : '#9ca3af', fontSize:12, fontWeight:500, transition:'color 0.2s' }}>
+                  <div style={{ width:14, height:14, borderRadius:'50%', border: req.met ? 'none' : '1.5px solid #9ca3af', background: req.met ? '#4C9F38' : 'transparent', display:'flex', alignItems:'center', justifyContent:'center', transition:'all 0.2s', flexShrink:0 }}>
+                    {req.met && <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3.5"><polyline points="20 6 9 17 4 12" /></svg>}
+                  </div>
+                  {req.label}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Submit */}
-      <button style={{ width:'100%', padding:'13px', borderRadius:'11px', background:'linear-gradient(135deg,#4C9F38,#3d8a2e)', color:'#fff', fontWeight:800, fontSize:'15px', border:'none', cursor:'pointer', letterSpacing:'0.04em', boxShadow:'0 4px 16px rgba(76,159,56,0.35)', transition:'all 0.2s', display:'flex', alignItems:'center', justifyContent:'center', gap:'8px', marginBottom:'20px' }}
-        onMouseEnter={e => { e.currentTarget.style.transform='translateY(-2px)'; e.currentTarget.style.boxShadow='0 8px 24px rgba(76,159,56,0.45)'; }}
-        onMouseLeave={e => { e.currentTarget.style.transform='translateY(0)';    e.currentTarget.style.boxShadow='0 4px 16px rgba(76,159,56,0.35)'; }}>
-        {isLogin ? 'Sign in' : 'Create Account'}
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      {errorMsg && <div style={{ color: '#E5243B', fontSize: '13px', marginBottom: '12px', fontWeight: 600 }}>{errorMsg}</div>}
+      {successMsg && <div style={{ color: '#166534', background: '#f0fdf4', padding: '12px', borderRadius: '8px', border: '1px solid #bbf7d0', fontSize: '13px', marginBottom: '12px', fontWeight: 600 }}>✉️ {successMsg}</div>}
+      
+      <button type="submit" disabled={loading} style={{ width:'100%', padding:'13px', borderRadius:'11px', background:'linear-gradient(135deg,#4C9F38,#3d8a2e)', color:'#fff', fontWeight:800, fontSize:'15px', border:'none', cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.7 : 1, letterSpacing:'0.04em', boxShadow:'0 4px 16px rgba(76,159,56,0.35)', transition:'all 0.2s', display:'flex', alignItems:'center', justifyContent:'center', gap:'8px', marginBottom:'20px' }}
+        onMouseEnter={e => { if(!loading) { e.currentTarget.style.transform='translateY(-2px)'; e.currentTarget.style.boxShadow='0 8px 24px rgba(76,159,56,0.45)'; } }}
+        onMouseLeave={e => { if(!loading) { e.currentTarget.style.transform='translateY(0)';    e.currentTarget.style.boxShadow='0 4px 16px rgba(76,159,56,0.35)'; } }}>
+        {loading ? 'Processing...' : (isLogin ? 'Sign in' : 'Create Account')}
+        {!loading && <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>}
       </button>
 
       {/* Toggle */}
       <p style={{ textAlign:'center', fontSize:'13px', color:'#6b7280', margin:0 }}>
         {isLogin ? "Don't have an account? " : 'Already have an account? '}
-        <button onClick={() => switchMode(isLogin ? 'signup' : 'login')}
+        <button type="button" onClick={() => switchMode(isLogin ? 'signup' : 'login')}
           style={{ background:'none', border:'none', cursor:'pointer', color:'#4C9F38', fontWeight:700, fontSize:'13px', padding:0 }}>
           {isLogin ? 'Sign up' : 'Sign in'}
         </button>
       </p>
-    </div>
+    </form>
   );
 
   const cardPanel = (
