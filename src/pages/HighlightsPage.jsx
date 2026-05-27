@@ -208,7 +208,7 @@ export default function HighlightsPage() {
       {/* Lightbox */}
       <Lightbox photo={lightbox} onClose={() => setLightbox(null)} />
 
-      <PPTSection />
+      {/* <PPTSection /> */}
       
       <style>{`
         @media (max-width: 600px) {

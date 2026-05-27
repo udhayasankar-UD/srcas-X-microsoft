@@ -262,7 +262,7 @@ const ContactSection = () => {
                 </motion.div>
             </div>
             
-            <PPTSection />
+            {/* <PPTSection /> */}
 
             <style>{`
                 @media (max-width: 900px) {

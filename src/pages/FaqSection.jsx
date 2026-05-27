@@ -394,7 +394,7 @@ export default function FaqSection() {
         </div>
       </div>
 
-      <PPTSection />
+      {/* <PPTSection /> */}
 
       <style>{`
         @media (max-width: 900px) {

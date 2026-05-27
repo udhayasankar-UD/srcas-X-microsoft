@@ -25,7 +25,7 @@ function HomePage() {
       <ProblemStatements />
       <GuidelinesSection />
       <TimelineSection />
-      <PPTSection />
+      {/* <PPTSection /> */}
       <InteractiveSection />
       {/* <FaqSection />
       <ContactSection /> */}

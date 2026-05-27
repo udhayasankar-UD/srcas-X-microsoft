@@ -453,7 +453,7 @@ const PrizesPage = () => {
         </motion.div>
       </section>
 
-      <PPTSection />
+      {/* <PPTSection /> */}
       <style>{`
         @media (max-width: 768px) {
           .prize-podium { flex-direction: column !important; align-items: stretch !important; gap: 24px !important; }

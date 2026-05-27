@@ -523,7 +523,7 @@ export default function PartnersPage() {
           </div>
         </div>
       </section> */}
-<PPTSection />
+{/* <PPTSection /> */}
       <style>{`
         @media (max-width: 640px) {
           section {
