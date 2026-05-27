@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { cn } from "@/lib/utils";
-import srcasLogo from "../../assets/logo/srcas-1-logo.png";
+import srcasLogo from "../../assets/logo/srcas-logo.png";
 import pcLogo from "../../assets/logo/programming-club-2-logo.png";
 import msLogo from "../../assets/logo/microsoft.png";
 

@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import { theme } from '../../theme';
+import sdgLogo from '../../assets/logo/sdg-logo-circle.png';
 
 // Inlined so Vite doesn't choke on the space in "problem statements/" during peer-import resolution
 const SDGs = [
@@ -340,8 +341,9 @@ export default function ProblemStatements() {
               fontSize: 'clamp(1.8rem, 3.8vw, 3.4rem)',
               fontWeight: 800, color: '#111111',
               letterSpacing: '-0.03em', lineHeight: 1.1, margin: 0,
+              display: 'flex', alignItems: 'center', gap: '12px'
             }}>
-              The SDG <span style={{ color: activeSDG.color, transition: 'color 0.4s ease' }}>Filmstrip</span>
+              The <img src={sdgLogo} alt="SDG" style={{ height: 'clamp(4.4rem, 8vw, 7.6rem)', objectFit: 'contain' }} /> <span style={{ color: activeSDG.color, transition: 'color 0.4s ease' }}>Filmstrip</span>
             </h2>
             {/* Mobile nav buttons */}
             {isMobile && (

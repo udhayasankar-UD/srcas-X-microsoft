@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import srcasLogo from '../../assets/logo/srcas-1-logo.png';
+import srcasLogo from '../../assets/logo/srcas-logo.png';
 import msLogo from '../../assets/logo/microsoft.png';
 import pcLogo from '../../assets/logo/programming-club-2-logo.png';
 

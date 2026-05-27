@@ -41,7 +41,7 @@ export default function DashboardLayout({ activeTab, setActiveTab, children, has
         <div onClick={() => setCollapsed(!collapsed)} style={{ padding:'20px 16px', borderBottom:'1.5px solid #ebebeb', display:'flex', alignItems:'center', gap:10, cursor:'pointer', minHeight:64 }}>
           <SDGWheel size={32}/>
           {!collapsed && <div>
-            <div style={{ fontWeight:800, fontSize:13, color:'#111', whiteSpace:'nowrap', letterSpacing:'0.04em' }}>SDG HACKATHON</div>
+            <div style={{ fontWeight:800, fontSize:13, color:'#111', whiteSpace:'nowrap', letterSpacing:'0.04em' }}>SRCAS HACKATHON 3.0</div>
             <div style={{ fontSize:10, color:'#aaa', whiteSpace:'nowrap' }}>Participant Portal</div>
           </div>}
         </div>

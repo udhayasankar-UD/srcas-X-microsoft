@@ -1,6 +1,6 @@
 import { useRef, useState, useCallback, useMemo, useEffect } from "react";
 import { motion } from "framer-motion";
-import ticketBg from "../../assets/tickets/PC_BG_ticket.png";
+import ticketBg from "../../assets/tickets/PC_BG_ticket_real.png";
 
 /* ─────────────────────────────────────────────
    GRAND PRIZE TICKET — Dark premium ticket

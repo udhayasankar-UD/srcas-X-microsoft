@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import gsap from 'gsap';
 import { theme } from '../../theme';
-import srcasLogo from '../../assets/logo/srcas-1-logo.png';
+import srcasLogo from '../../assets/logo/srcas-logo.png';
 import msLogo from '../../assets/logo/microsoft.png';
 import pcLogo from '../../assets/logo/programming-club-2-logo.png';
 import { ArrowRight, Calendar, MapPin, Sparkles } from 'lucide-react';

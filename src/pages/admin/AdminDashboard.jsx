@@ -1,0 +1,282 @@
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { supabase } from '../../lib/supabaseClient';
+import { Home, Users, Flag, FileText, CheckSquare, Calendar, Bell, BookOpen, BarChart2, Settings, Link as LinkIcon, Shield, LogOut, Search, ChevronDown, Eye, Megaphone, Download, LayoutDashboard, ChevronRight } from 'lucide-react';
+
+// Style constants
+const S = {
+  bg: '#F8FAFC', card: '#FFFFFF', border: '#E5E7EB', primary: '#6C4EFF',
+  t1: '#111827', t2: '#6B7280', t3: '#9CA3AF', green: '#059669',
+  activeBg: '#EEE8FF', radius: '14px', pad: '24px', gap: '20px',
+};
+
+
+
+export default function AdminDashboard() {
+  const navigate = useNavigate();
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [loadingAuth, setLoadingAuth] = useState(true);
+  const [teams, setTeams] = useState([]);
+  const [members, setMembers] = useState([]);
+  const [submissions, setSubmissions] = useState([]);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.user) { navigate('/register'); return; }
+      const { data: adminList } = await supabase.from('admins').select('email');
+      const e1 = "udteam06" + "@" + "gmail.com";
+      const e2 = "udhayasankar200721" + "@" + "gmail.com";
+      const hardcoded = [e1, e2];
+      const email = session.user.email.trim().toLowerCase();
+      const ok = hardcoded.includes(email) || adminList?.some(a => a.email.trim().toLowerCase() === email);
+      if (ok) { setIsAdmin(true); fetchData(); } else { alert("Not admin!"); navigate('/dashboard'); }
+      setLoadingAuth(false);
+    };
+    checkAuth();
+  }, [navigate]);
+
+  const fetchData = async () => {
+    const [{ data: t }, { data: m }, { data: s }] = await Promise.all([
+      supabase.from('teams').select('*').order('created_at', { ascending: false }),
+      supabase.from('team_members').select('*'),
+      supabase.from('submissions').select('*'),
+    ]);
+    if (t) setTeams(t); if (m) setMembers(m); if (s) setSubmissions(s);
+  };
+
+  const exportCSV = () => {
+    let csv = "data:text/csv;charset=utf-8,Team,Status,Score,Name,Email,Phone,College,Dept,Year\n";
+    teams.forEach(t => {
+      members.filter(m => m.team_id === t.id).forEach(m => {
+        csv += ['"'+t.team_name+'"',t.status||'Pending',t.score||0,'"'+m.full_name+'"',m.email,m.phone_number,'"'+m.college_name+'"','"'+m.dept+'"',m.year].join(",") + "\n";
+      });
+    });
+    const a = document.createElement("a");
+    a.href = encodeURI(csv);
+    a.download = "hackathon_export.csv";
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  };
+
+  if (loadingAuth) return <div style={{minHeight:'100vh',display:'flex',alignItems:'center',justifyContent:'center',background:S.bg}}><div style={{width:40,height:40,border:'3px solid '+S.primary,borderTopColor:'transparent',borderRadius:'50%',animation:'spin 1s linear infinite'}}/></div>;
+  if (!isAdmin) return null;
+
+  const statCards = [
+    { title: 'Total Teams', value: teams.length, trend: '12.5%', color: '#6C4EFF', bg: '#EEE8FF' },
+    { title: 'Total Participants', value: members.length, trend: '8.3%', color: '#059669', bg: '#D1FAE5' },
+    { title: 'Submissions', value: submissions.length, trend: '15.7%', color: '#D97706', bg: '#FEF3C7' },
+    { title: 'Evaluations', value: teams.filter(t => t.score > 0).length, trend: '10.2%', color: '#2563EB', bg: '#DBEAFE' },
+  ];
+
+  const statusStyle = (s) => {
+    if (s === 'Shortlisted') return { color: '#6C4EFF', background: '#EEE8FF' };
+    if (s === 'Rejected') return { color: '#DC2626', background: '#FEF2F2' };
+    return { color: '#D97706', background: '#FEF3C7' };
+  };
+
+  return (
+    <>
+        {/* TOP NAV */}
+        <header style={{ height:64, background:S.card, borderBottom:'1px solid '+S.border, display:'flex', alignItems:'center', justifyContent:'space-between', padding:'0 28px', flexShrink:0 }}>
+          <div style={{ display:'flex', alignItems:'center', gap:16 }}>
+            <div>
+              <h1 style={{ fontSize:18, fontWeight:700, margin:0, color:S.t1 }}>Dashboard</h1>
+              <div style={{ fontSize:11, fontWeight:500, color:S.t2, display:'flex', alignItems:'center', gap:4 }}>Home <ChevronRight size={12}/> <span style={{color:S.t1}}>Dashboard</span></div>
+            </div>
+          </div>
+          <div style={{ display:'flex', alignItems:'center', gap:20 }}>
+            <div style={{ position:'relative' }}>
+              <Search style={{ position:'absolute', left:10, top:'50%', transform:'translateY(-50%)', width:16, height:16, color:S.t3 }}/>
+              <input placeholder="Search anything..." style={{ paddingLeft:34, paddingRight:48, paddingTop:8, paddingBottom:8, background:'#F1F5F9', border:'1px solid '+S.border, borderRadius:10, fontSize:13, width:240, outline:'none' }}/>
+              <span style={{ position:'absolute', right:8, top:'50%', transform:'translateY(-50%)', fontSize:10, fontWeight:700, color:S.t3, background:S.card, border:'1px solid '+S.border, padding:'2px 6px', borderRadius:4 }}>Ctrl+K</span>
+            </div>
+            <div style={{ display:'flex', alignItems:'center', gap:10, borderLeft:'1px solid '+S.border, paddingLeft:20, cursor:'pointer' }}>
+              <div style={{ width:34, height:34, borderRadius:'50%', background:'#059669', display:'flex', alignItems:'center', justifyContent:'center', color:'#fff', fontWeight:700, fontSize:14 }}>A</div>
+              <div>
+                <div style={{ fontSize:13, fontWeight:700, color:S.t1 }}>Admin User</div>
+                <div style={{ fontSize:11, fontWeight:500, color:S.t2 }}>Super Admin</div>
+              </div>
+              <ChevronDown size={14} style={{color:S.t3}}/>
+            </div>
+          </div>
+        </header>
+
+        {/* SCROLLABLE CONTENT */}
+        <div style={{ flex:1, overflowY:'auto', padding:S.pad }}>
+          <div style={{ display:'flex', flexDirection:'column', gap:S.gap }}>
+
+            
+
+            {/* STAT CARDS */}
+            <div style={{ display:'grid', gridTemplateColumns:'repeat(4, 1fr)', gap:S.gap }}>
+              {statCards.map((c, i) => (
+                <div key={i} style={{ background:S.card, border:'1px solid '+S.border, borderRadius:S.radius, padding:'20px 22px', boxShadow:'0 1px 3px rgba(0,0,0,.04)' }}>
+                  <div style={{ width:44, height:44, borderRadius:12, background:c.bg, display:'flex', alignItems:'center', justifyContent:'center', marginBottom:14 }}>
+                    {[<Users size={20}/>, <Users size={20}/>, <FileText size={20}/>, <Shield size={20}/>][i]}
+                  </div>
+                  <div style={{ fontSize:12, fontWeight:600, color:S.t2, marginBottom:4 }}>{c.title}</div>
+                  <div style={{ fontSize:28, fontWeight:800, color:S.t1, marginBottom:6 }}>{c.value}</div>
+                  <div style={{ fontSize:11, fontWeight:600, color:S.green }}>↑ {c.trend} <span style={{ color:S.t3, fontWeight:400, marginLeft:4 }}>vs last 7 days</span></div>
+                </div>
+              ))}
+            </div>
+
+            {/* CHARTS ROW */}
+            <div style={{ display:'grid', gridTemplateColumns:'2fr 1fr', gap:S.gap, minHeight:380 }}>
+              {/* Line Chart */}
+              <div style={{ background:S.card, border:'1px solid '+S.border, borderRadius:S.radius, padding:S.pad, boxShadow:'0 1px 3px rgba(0,0,0,.04)', display:'flex', flexDirection:'column' }}>
+                <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:20 }}>
+                  <h3 style={{ fontSize:15, fontWeight:700, margin:0 }}>Submissions Overview</h3>
+                  <div style={{ fontSize:12, fontWeight:500, color:S.t2, background:'#F1F5F9', padding:'5px 10px', borderRadius:8, border:'1px solid '+S.border, cursor:'pointer', display:'flex', alignItems:'center', gap:4 }}>This Week <ChevronDown size={13}/></div>
+                </div>
+                <div style={{ flex:1, position:'relative', minHeight:180 }}>
+                  <div style={{ position:'absolute', left:0, top:0, bottom:32, display:'flex', flexDirection:'column', justifyContent:'space-between', fontSize:10, fontWeight:500, color:S.t3, width:24 }}>
+                    <span>100</span><span>75</span><span>50</span><span>25</span><span>0</span>
+                  </div>
+                  <svg viewBox="0 0 800 200" style={{ width:'calc(100% - 30px)', height:'calc(100% - 32px)', marginLeft:30, overflow:'visible' }} preserveAspectRatio="none">
+                    <defs><linearGradient id="cg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#8b5cf6" stopOpacity="0.15"/><stop offset="100%" stopColor="#8b5cf6" stopOpacity="0"/></linearGradient></defs>
+                    <path d="M0 160 L133 120 L266 160 L400 130 L533 150 L666 90 L800 20 L800 200 L0 200Z" fill="url(#cg)"/>
+                    <path d="M0 160 L133 120 L266 160 L400 130 L533 150 L666 90 L800 20" fill="none" stroke="#8b5cf6" strokeWidth="2.5"/>
+                    {[[0,160],[133,120],[266,160],[400,130],[533,150],[666,90],[800,20]].map(([x,y],i) => {
+                      const counts = [0, 0, 0, 0, 0, 0, submissions.length];
+                      return <circle key={i} cx={x} cy={y} r="6" fill="#8b5cf6" style={{cursor: 'pointer'}}><title>{counts[i]} Submissions on this day</title></circle>;
+                    })}
+                  </svg>
+                  <div style={{ position:'absolute', bottom:0, left:30, right:0, display:'flex', justifyContent:'space-between', fontSize:11, fontWeight:500, color:S.t3 }}>
+                    {['May 20','May 21','May 22','May 23','May 24','May 25','May 26'].map(d => <span key={d}>{d}</span>)}
+                  </div>
+                </div>
+                <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:12, marginTop:16 }}>
+                  {[
+                    { dot:'#6C4EFF', label:'Total', val: submissions.length },
+                    { dot:'#D97706', label:'Submitted', val: submissions.length },
+                    { dot:'#059669', label:'Under Review', val: teams.filter(t=>t.status==='Pending').length },
+                    { dot:'#D97706', label:'Shortlisted', val: teams.filter(t=>t.status==='Shortlisted').length },
+                  ].map((s,i) => (
+                    <div key={i} style={{ background:'#FAFAFA', border:'1px solid #F1F5F9', borderRadius:10, padding:'10px 12px' }}>
+                      <div style={{ display:'flex', alignItems:'center', gap:6, marginBottom:4 }}>
+                        <div style={{ width:8, height:8, borderRadius:'50%', background:s.dot }}/>
+                        <span style={{ fontSize:11, fontWeight:600, color:S.t2 }}>{s.label}</span>
+                      </div>
+                      <div style={{ fontSize:20, fontWeight:800, color:S.t1 }}>{s.val}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Donut Chart */}
+              <div style={{ background:S.card, border:'1px solid '+S.border, borderRadius:S.radius, padding:S.pad, boxShadow:'0 1px 3px rgba(0,0,0,.04)', display:'flex', flexDirection:'column' }}>
+                <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:16 }}>
+                  <h3 style={{ fontSize:15, fontWeight:700, margin:0 }}>Submissions by Track</h3>
+                  <span style={{ fontSize:11, fontWeight:700, color:S.primary, cursor:'pointer' }}>View all</span>
+                </div>
+                <div style={{ display:'flex', flexDirection:'column', alignItems:'center', flex:1, justifyContent:'center' }}>
+                  <div style={{ position:'relative', width:160, height:160, borderRadius:'50%', background:'conic-gradient(#4ade80 0% 30%, #3b82f6 30% 53%, #eab308 53% 71%, #a855f7 71% 86%, #ec4899 86% 100%)', marginBottom:20 }}>
+                    <div style={{ position:'absolute', top:'50%', left:'50%', transform:'translate(-50%,-50%)', width:108, height:108, borderRadius:'50%', background:'#fff', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center' }}>
+                      <span style={{ fontSize:22, fontWeight:800, color:S.t1 }}>{submissions.length}</span>
+                      <span style={{ fontSize:10, fontWeight:500, color:S.t2 }}>Total</span>
+                    </div>
+                  </div>
+                  <div style={{ width:'100%', display:'flex', flexDirection:'column', gap:10 }}>
+                    {[
+                      { c:'#4ade80', l:'Climate Action' },
+                      { c:'#3b82f6', l:'Quality Education' },
+                      { c:'#eab308', l:'Affordable Energy' },
+                      { c:'#a855f7', l:'Sustainable Cities' },
+                      { c:'#ec4899', l:'Life on Land' },
+                    ].map((t,i) => {
+                      const count = submissions.filter(s => s.category === t.l).length || 0;
+                      const percent = submissions.length > 0 ? ((count / submissions.length) * 100).toFixed(1) : 0;
+                      return (
+                        <div key={i} title={`${count} Submissions for ${t.l}`} style={{ display:'flex', justifyContent:'space-between', alignItems:'center', fontSize:12, padding:'0 4px', cursor:'pointer' }}>
+                          <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+                            <div style={{ width:8, height:8, borderRadius:'50%', background:t.c }}/>
+                            <span style={{ fontWeight:600, color:S.t1 }}>{t.l}</span>
+                          </div>
+                          <span style={{ fontWeight:500, color:S.t2 }}>{count} ({percent}%)</span>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* BOTTOM ROW */}
+            <div style={{ display:'grid', gridTemplateColumns:'2fr 1fr', gap:S.gap }}>
+              {/* Recent Submissions */}
+              <div style={{ background:S.card, border:'1px solid '+S.border, borderRadius:S.radius, boxShadow:'0 1px 3px rgba(0,0,0,.04)', overflow:'hidden' }}>
+                <div style={{ padding:'18px 22px', borderBottom:'1px solid #F1F5F9', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+                  <h3 style={{ fontSize:15, fontWeight:700, margin:0 }}>Recent Submissions</h3>
+                  <span style={{ fontSize:11, fontWeight:700, color:S.primary, cursor:'pointer' }}>View all</span>
+                </div>
+                <table style={{ width:'100%', borderCollapse:'collapse', fontSize:12 }}>
+                  <thead>
+                    <tr style={{ background:'#FAFAFA', borderBottom:'1px solid #F1F5F9' }}>
+                      {['Team Name','Track','Submission Title','Submitted On','Status','Action'].map(h => (
+                        <th key={h} style={{ padding:'12px 18px', fontWeight:600, color:S.t2, textAlign: h==='Action' ? 'center' : 'left' }}>{h}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {teams.slice(0,5).map(team => {
+                      const sub = submissions.find(s => s.team_id === team.id);
+                      const st = statusStyle(team.status);
+                      return (
+                        <tr key={team.id} style={{ borderBottom:'1px solid #F8FAFC' }}>
+                          <td style={{ padding:'14px 18px' }}>
+                            <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+                              <div style={{ width:28, height:28, borderRadius:6, background:'#D1FAE5', color:'#059669', display:'flex', alignItems:'center', justifyContent:'center', fontWeight:700, fontSize:11 }}>{team.team_name.charAt(0)}</div>
+                              <span style={{ fontWeight:700, color:S.t1 }}>{team.team_name}</span>
+                            </div>
+                          </td>
+                          <td style={{ padding:'14px 18px', color:S.t2 }}>{sub?.category || 'General'}</td>
+                          <td style={{ padding:'14px 18px', color:S.t2, maxWidth:140, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{sub?.project_title || '-'}</td>
+                          <td style={{ padding:'14px 18px', color:S.t3 }}>{team.created_at ? new Date(team.created_at).toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'}) : '-'}</td>
+                          <td style={{ padding:'14px 18px' }}>
+                            <span style={{ ...st, padding:'4px 10px', borderRadius:6, fontSize:10, fontWeight:700, display:'inline-block' }}>
+                              {team.status === 'Pending' ? 'Under Review' : team.status || 'Submitted'}
+                            </span>
+                          </td>
+                          <td style={{ padding:'14px 18px', textAlign:'center' }}>
+                            <button style={{ background:S.card, border:'1px solid '+S.border, borderRadius:6, padding:'5px 7px', cursor:'pointer', color:S.t3 }}><Eye size={14}/></button>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+                <div style={{ padding:'14px 22px', borderTop:'1px solid #F1F5F9', textAlign:'center' }}>
+                  <button style={{ background:'none', border:'none', fontSize:12, fontWeight:700, color:S.primary, cursor:'pointer', display:'inline-flex', alignItems:'center', gap:4 }}>
+                    View all submissions <ChevronRight size={14}/>
+                  </button>
+                </div>
+              </div>
+
+              {/* Quick Actions */}
+              <div>
+                <h3 style={{ fontSize:15, fontWeight:700, margin:'0 0 16px' }}>Quick Actions</h3>
+                <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:12 }}>
+                  {[
+                    { Icon: Users, label:'Users', color:'#2563EB', bg:'#DBEAFE', onClick: () => navigate('/udview/users') },
+                    { Icon: Flag, label:'Teams', color:'#059669', bg:'#D1FAE5', onClick: () => navigate('/udview/teams') },
+                    { Icon: CheckSquare, label:'Evaluations', color:'#D97706', bg:'#FEF3C7', onClick: () => navigate('/udview/evaluations') },
+                    { Icon: Megaphone, label:'Announcements', color:'#6C4EFF', bg:'#EEE8FF', onClick: () => navigate('/udview/announcements') }
+                  ].map((a, i) => (
+                    <button key={i} onClick={a.onClick} style={{ display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:8, padding:'18px 12px', borderRadius:12, border:'1px solid #F1F5F9', background:S.card, cursor:'pointer', boxShadow:'0 1px 2px rgba(0,0,0,.04)', transition:'box-shadow .15s' }}
+                      onMouseEnter={e => e.currentTarget.style.boxShadow='0 4px 12px rgba(0,0,0,.08)'}
+                      onMouseLeave={e => e.currentTarget.style.boxShadow='0 1px 2px rgba(0,0,0,.04)'}>
+                      <div style={{ padding:8, borderRadius:10, background:a.bg, color:a.color }}><a.Icon size={20}/></div>
+                      <span style={{ fontSize:11, fontWeight:700, color:a.color }}>{a.label}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      
+    </>
+  );
+}

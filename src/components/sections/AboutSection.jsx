@@ -256,7 +256,7 @@ export default function AboutSection() {
           <div style={styles.introInner}>
             <p style={styles.label} className="about-animate">ABOUT THE HACKATHON</p>
             <h2 style={{ ...styles.heading, marginBottom: '5rem' }} className="about-animate" id="about-heading">
-              What's the Next Big Idea?
+              What's Next <span style={{color: '#1264dfff'}}>Big Idea? </span> 
             </h2>
             <div style={styles.introCols} className="about-cols-mobile">
               <motion.div 

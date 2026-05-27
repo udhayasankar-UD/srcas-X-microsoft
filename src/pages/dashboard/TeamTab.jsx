@@ -103,6 +103,25 @@ export default function TeamTab({ hasTeam, teamData, teamMembers, user, setTeamM
     setFormData(prev => ({ ...prev, teammates: newTeammates }));
   }, [formData.teamSize]);
 
+  // Sync user data to leader if it loads after initial render
+  useEffect(() => {
+    if (user?.email || user?.user_metadata?.full_name || user?.user_metadata?.name) {
+      setFormData(prev => {
+        if (!prev.leader.email || !prev.leader.full_name) {
+          return {
+            ...prev,
+            leader: {
+              ...prev.leader,
+              full_name: prev.leader.full_name || user?.user_metadata?.full_name || user?.user_metadata?.name || '',
+              email: prev.leader.email || user?.email || ''
+            }
+          };
+        }
+        return prev;
+      });
+    }
+  }, [user]);
+
   // --- VALIDATION ---
   const validateCurrentStep = () => {
     setErrorMsg('');

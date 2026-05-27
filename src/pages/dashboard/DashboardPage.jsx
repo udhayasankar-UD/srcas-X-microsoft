@@ -98,7 +98,7 @@ export default function DashboardPage() {
       {activeTab === 'submission' && <SubmissionTab hasTeam={hasTeam} teamData={teamData} teamMembers={teamMembers} submissions={submissions} setSubmissions={setSubmissions} />}
       {activeTab === 'resources'  && <ResourcesTab />}
       {activeTab === 'schedule'   && <ScheduleTab />}
-      {activeTab === 'announcements' && <AnnouncementsTab />}
+      {activeTab === 'announcements' && <AnnouncementsTab announcements={announcements} />}
     </DashboardLayout>
   );
 }

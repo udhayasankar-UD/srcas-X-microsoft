@@ -1,4 +1,4 @@
-Project Brief: National-Level SDG Hackathon 2026
+Project Brief: National-Level SRCAS Hackathon 3.0 2026
 
 Organizing a national-level hackathon with partners like Microsoft and Igenius AI is a massive opportunity, and highlighting the 17 UN Sustainable Development Goals (SDGs) gives it a strong, purpose-driven foundation.
 
@@ -8,7 +8,7 @@ Since you are responsible for the website and the exact problem statements are s
 
 Event Name: SRMS
 
-Theme: "What's the Next Big Idea?"
+Theme: "What's Next Big Idea?"
 
 Dates: August 14 & 15, 2026
 

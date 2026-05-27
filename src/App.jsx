@@ -14,6 +14,13 @@ import ContactSection from './pages/ContactSection';
 import FaqSection from './pages/FaqSection';
 import AuthPage from './pages/AuthPage';
 import DashboardPage from './pages/dashboard/DashboardPage';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import AdminLayout from './pages/admin/AdminLayout';
+import AdminUsers from './pages/admin/AdminUsers';
+import AdminTeams from './pages/admin/AdminTeams';
+import AdminEvaluations from './pages/admin/AdminEvaluations';
+import AdminEvaluateSubmission from './pages/admin/AdminEvaluateSubmission';
+import AdminAnnouncements from './pages/admin/AdminAnnouncements';
 
 /**
  * ScrollToTop Component
@@ -79,6 +86,16 @@ function App() {
 
         {/* Dashboard — standalone, no Navbar/Footer */}
         <Route path="/dashboard" element={<DashboardPage />} />
+
+        {/* Admin Dashboard */}
+        <Route path="/udview" element={<AdminLayout />}>
+          <Route index element={<AdminDashboard />} />
+          <Route path="users" element={<AdminUsers />} />
+          <Route path="teams" element={<AdminTeams />} />
+          <Route path="evaluations" element={<AdminEvaluations />} />
+          <Route path="evaluations/:id" element={<AdminEvaluateSubmission />} />
+          <Route path="announcements" element={<AdminAnnouncements />} />
+        </Route>
 
         {/* All other pages — with Navbar/Footer */}
         <Route path="/*" element={

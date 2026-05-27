@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import srcasLogo from "../../assets/logo/srcas-1-logo.png";
+import srcasLogo from "../../assets/logo/srcas-logo.png";
 import msLogo from "../../assets/logo/microsoft.png";
 import heroArchImage from "../../assets/images/hero_arch_image.png";
 import { CardBody, CardContainer, CardItem } from "../ui/3d-card";
@@ -203,26 +203,26 @@ export default function HeroSection6() {
         zIndex: 10,
         alignItems: "center"
       }} className="hs6-main-container">
-        
+
         {/* Left Column */}
         <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "24px" }}>
-          <motion.h1 
+          <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            style={{ 
-            fontSize: "clamp(4rem, 7vw, 7rem)", 
-            fontWeight: 800, 
-            lineHeight: 1.05, 
-            letterSpacing: "-0.04em",
-            margin: 0
-          }}>
+            style={{
+              fontSize: "clamp(4rem, 7vw, 7rem)",
+              fontWeight: 800,
+              lineHeight: 1.05,
+              letterSpacing: "-0.04em",
+              margin: 0
+            }}>
             What's the <br />
             next <br />
             <span style={{ color: "#d1d5db" }}>big</span> idea?
           </motion.h1>
 
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
@@ -231,7 +231,7 @@ export default function HeroSection6() {
             <span style={{ fontWeight: 800, color: "#111" }}>Build. Solve. Impact.</span>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
@@ -245,8 +245,8 @@ export default function HeroSection6() {
               boxShadow: "0 10px 25px rgba(0,0,0,0.1)",
               transition: "transform 0.2s"
             }}
-            onMouseEnter={(e) => e.currentTarget.style.transform = "scale(1.02)"}
-            onMouseLeave={(e) => e.currentTarget.style.transform = "scale(1)"}
+              onMouseEnter={(e) => e.currentTarget.style.transform = "scale(1.02)"}
+              onMouseLeave={(e) => e.currentTarget.style.transform = "scale(1)"}
             >
               Register Now <ArrowRight size={18} />
             </a>
@@ -259,8 +259,8 @@ export default function HeroSection6() {
               border: "1px solid #e5e7eb",
               transition: "transform 0.2s"
             }}
-            onMouseEnter={(e) => e.currentTarget.style.transform = "scale(1.02)"}
-            onMouseLeave={(e) => e.currentTarget.style.transform = "scale(1)"}
+              onMouseEnter={(e) => e.currentTarget.style.transform = "scale(1.02)"}
+              onMouseLeave={(e) => e.currentTarget.style.transform = "scale(1)"}
             >
               View Problem Statements <ArrowRight size={18} />
             </a>
@@ -268,12 +268,12 @@ export default function HeroSection6() {
         </div>
 
         {/* Right Column (Image/Graphic) */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.3 }}
           style={{ flex: 1, position: "relative", display: "flex", justifyContent: "flex-end" }} className="hs6-image-container">
-          
+
           <CardContainer className="w-full max-w-[600px]" containerClassName="py-0 flex-1 flex justify-end">
             <CardBody style={{
               position: "relative",
@@ -285,29 +285,29 @@ export default function HeroSection6() {
               border: "1px solid rgba(255,255,255,0.5)",
               padding: 0
             }} className="w-full h-auto">
-              
+
               <CardItem translateZ="50" style={{ width: "100%", height: "100%", overflow: "hidden", borderRadius: "32px" }}>
                 <img src={heroArchImage} alt="Abstract Architecture" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
               </CardItem>
-              
+
               {/* Floating Card */}
               <CardItem translateZ="100" style={{
                 position: "absolute",
                 top: "40px",
                 left: "-30px",
               }}>
-                <motion.div 
+                <motion.div
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.8, duration: 0.6 }}
                   style={{
-                  backgroundColor: "rgba(255, 255, 255, 0.9)",
-                  backdropFilter: "blur(12px)",
-                  padding: "24px",
-                  borderRadius: "20px",
-                  boxShadow: "0 15px 35px rgba(0,0,0,0.08)",
-                  maxWidth: "200px"
-                }} className="hs6-floating-card">
+                    backgroundColor: "rgba(255, 255, 255, 0.9)",
+                    backdropFilter: "blur(12px)",
+                    padding: "24px",
+                    borderRadius: "20px",
+                    boxShadow: "0 15px 35px rgba(0,0,0,0.08)",
+                    maxWidth: "200px"
+                  }} className="hs6-floating-card">
                   <div style={{
                     width: "40px", height: "40px",
                     backgroundColor: "#111", borderRadius: "50%",
@@ -336,7 +336,7 @@ export default function HeroSection6() {
         position: "relative",
         zIndex: 10
       }} className="hs6-bottom-container">
-        
+
         {/* Row 1 */}
         {/* <motion.div 
           initial={{ opacity: 0, y: 20 }}
@@ -376,31 +376,31 @@ export default function HeroSection6() {
         </motion.div> */}
 
         {/* Row 2 */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.6 }}
           style={{
-          backgroundColor: "#fff",
-          borderRadius: "16px",
-          padding: "20px 30px",
-          boxShadow: "0 10px 40px rgba(0,0,0,0.04)",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          flexWrap: "wrap",
-          gap: "15px"
-        }}>
+            backgroundColor: "#fff",
+            borderRadius: "16px",
+            padding: "20px 30px",
+            boxShadow: "0 10px 40px rgba(0,0,0,0.04)",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            flexWrap: "wrap",
+            gap: "15px"
+          }}>
           <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "0.75rem", fontWeight: 700, color: "#111" }}>
             <TrophyIcon size={18} /> 4TH HACKATHON
           </div>
           <div style={{ width: "1px", height: "20px", background: "#e5e7eb" }}></div>
           <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "0.75rem", fontWeight: 700, color: "#111" }}>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2px" }}>
-              <div style={{width: 8, height: 8, background: "#f25022"}}></div>
-              <div style={{width: 8, height: 8, background: "#7fba00"}}></div>
-              <div style={{width: 8, height: 8, background: "#00a4ef"}}></div>
-              <div style={{width: 8, height: 8, background: "#ffb900"}}></div>
+              <div style={{ width: 8, height: 8, background: "#f25022" }}></div>
+              <div style={{ width: 8, height: 8, background: "#7fba00" }}></div>
+              <div style={{ width: 8, height: 8, background: "#00a4ef" }}></div>
+              <div style={{ width: 8, height: 8, background: "#ffb900" }}></div>
             </div> MICROSOFT PARTNER
           </div>
           <div style={{ width: "1px", height: "20px", background: "#e5e7eb" }}></div>
@@ -433,7 +433,7 @@ export default function HeroSection6() {
         </motion.div>
 
         {/* Scroll text */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1, duration: 1 }}

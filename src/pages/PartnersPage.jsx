@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import PPTSection from '../components/sections/PPTSection';
 
-import srcasLogo from '../assets/logo/srcas-1-logo.png';
+import srcasLogo from '../assets/logo/srcas-logo.png';
 import programmingClubLogo from '../assets/logo/programming-club-2-logo.png';
 import microsoftLogo from '../assets/logo/microsoft.png';
 import igeniusLogo from '../assets/logo/igenius.png';
@@ -30,10 +30,11 @@ const partners = [
     logo: igeniusLogo,
     name: 'iGenius AI',
     role: 'Innovation Partner',
-    authorizedPartner: {
-      logo: microsoftLogo,
-      label: 'Authorized Partner',
-    },
+  },
+  {
+    logo: microsoftLogo,
+    name: 'Microsoft',
+    role: 'Authorized Partner',
   },
 ];
 
@@ -391,40 +392,6 @@ export default function PartnersPage() {
                   </p>
                 </div>
 
-                {/* Authorized Partner sub-section */}
-                {p.authorizedPartner && (
-                  <>
-                    {/* Divider */}
-                    <div style={{ margin: '0 24px', height: 1, background: '#f0f0f0' }} />
-
-                    <div
-                      style={{
-                        padding: '24px 24px 32px',
-                        textAlign: 'center',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        gap: 14,
-                      }}
-                    >
-                      <p style={{
-                        fontSize: '0.7rem', fontWeight: 700,
-                        letterSpacing: '0.2em', textTransform: 'uppercase',
-                        color: '#9ca3af', margin: 0,
-                      }}>
-                        {p.authorizedPartner.label}
-                      </p>
-                      <img
-                        src={p.authorizedPartner.logo}
-                        alt={p.authorizedPartner.name}
-                        style={{ maxHeight: 44, maxWidth: '60%', objectFit: 'contain' }}
-                      />
-                      <p style={{ fontSize: '1rem', fontWeight: 700, color: '#111', margin: 0 }}>
-                        {p.authorizedPartner.name}
-                      </p>
-                    </div>
-                  </>
-                )}
               </motion.div>
             ))}
           </div>

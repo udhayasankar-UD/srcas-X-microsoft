@@ -1,7 +1,7 @@
 import { useRef, useEffect, useState, useCallback } from "react";
 import { motion, useScroll, useTransform, useSpring, AnimatePresence } from "framer-motion";
 import { theme } from "../../theme";
-import srcasLogo from "../../assets/logo/srcas-1-logo.png";
+import srcasLogo from "../../assets/logo/srcas-logo.png";
 import msLogo from "../../assets/logo/microsoft.png";
 import pcLogo from "../../assets/logo/programming-club-2-logo.png";
 import { GoogleGeminiEffectLight } from "../ui/google-gemini-effect-light";
@@ -232,7 +232,7 @@ function RegisterBtn() {
         animate={{ x: hovered ? 4 : 0 }}
         transition={{ duration: 0.25 }}
       >
-        <path d="M3 8h10M9 4l4 4-4 4" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M3 8h10M9 4l4 4-4 4" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
       </motion.svg>
     </motion.a>
   );
@@ -249,11 +249,11 @@ export default function HeroSection2() {
   const raw4 = useTransform(scrollYProgress, [0, 0.5], [0.05, 1.2]);
   const raw5 = useTransform(scrollYProgress, [0, 0.5], [0, 1.2]);
 
-  const pathLengthFirst  = useSpring(raw1, SPRING);
+  const pathLengthFirst = useSpring(raw1, SPRING);
   const pathLengthSecond = useSpring(raw2, SPRING);
-  const pathLengthThird  = useSpring(raw3, SPRING);
+  const pathLengthThird = useSpring(raw3, SPRING);
   const pathLengthFourth = useSpring(raw4, SPRING);
-  const pathLengthFifth  = useSpring(raw5, SPRING);
+  const pathLengthFifth = useSpring(raw5, SPRING);
 
 
   return (
@@ -501,10 +501,10 @@ export default function HeroSection2() {
           className="hero2-calendar-hide-mobile"
         >
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <rect x="3" y="4" width="14" height="13" rx="2" stroke="#0078D4" strokeWidth="1.5" fill="none"/>
-            <line x1="3" y1="8" x2="17" y2="8" stroke="#0078D4" strokeWidth="1.5"/>
-            <line x1="7" y1="2" x2="7" y2="5" stroke="#0078D4" strokeWidth="1.5" strokeLinecap="round"/>
-            <line x1="13" y1="2" x2="13" y2="5" stroke="#0078D4" strokeWidth="1.5" strokeLinecap="round"/>
+            <rect x="3" y="4" width="14" height="13" rx="2" stroke="#0078D4" strokeWidth="1.5" fill="none" />
+            <line x1="3" y1="8" x2="17" y2="8" stroke="#0078D4" strokeWidth="1.5" />
+            <line x1="7" y1="2" x2="7" y2="5" stroke="#0078D4" strokeWidth="1.5" strokeLinecap="round" />
+            <line x1="13" y1="2" x2="13" y2="5" stroke="#0078D4" strokeWidth="1.5" strokeLinecap="round" />
           </svg>
           <span style={{ fontSize: "0.8rem", fontWeight: 700, color: "#333", letterSpacing: "0.05em" }}>
             AUG 14–15, 2026

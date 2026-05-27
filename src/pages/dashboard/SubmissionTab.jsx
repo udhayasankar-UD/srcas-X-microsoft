@@ -5,6 +5,14 @@ const card = (extra={}) => ({ background:'#fff', borderRadius:14, padding:'22px 
 
 const STEPS = ['Project Info','Links & Repo','Review & Submit'];
 
+const SDG_OPTIONS = [
+  "SDG 1 - No Poverty", "SDG 2 - Zero Hunger", "SDG 3 - Good Health", "SDG 4 - Quality Education",
+  "SDG 5 - Gender Equality", "SDG 6 - Clean Water", "SDG 7 - Clean Energy", "SDG 8 - Economic Growth",
+  "SDG 9 - Industry & Innovation", "SDG 10 - Reduced Inequalities", "SDG 11 - Sustainable Cities",
+  "SDG 12 - Responsible Consumption", "SDG 13 - Climate Action", "SDG 14 - Life Below Water",
+  "SDG 15 - Life on Land", "SDG 16 - Peace & Justice", "SDG 17 - Partnerships"
+];
+
 function Field({ label, value, onChange, placeholder, type='text', hint }) {
   return (
     <div style={{ display:'flex', flexDirection:'column', gap:5 }}>
@@ -26,13 +34,26 @@ export default function SubmissionTab({ hasTeam, teamData, teamMembers, submissi
   const [errorMsg, setErrorMsg] = useState('');
   const [success, setSuccess] = useState(false);
   const [saveMsg, setSaveMsg] = useState('');
+  
+  const [sdgOpen, setSdgOpen] = useState(false);
+  const sdgRef = useRef();
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (sdgRef.current && !sdgRef.current.contains(event.target)) {
+        setSdgOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   // Check if they already submitted
   const alreadySubmitted = submissions && submissions.length > 0;
   
   const [form, setForm] = useState({
     title: alreadySubmitted ? submissions[0].project_title : '',
-    sdg: alreadySubmitted ? submissions[0].sdg_goal : '',
+    sdg: alreadySubmitted ? (submissions[0].sdg_goal ? submissions[0].sdg_goal.split(', ') : []) : [],
     category: alreadySubmitted ? submissions[0].category : '',
     description: alreadySubmitted ? submissions[0].project_description : '',
     github: alreadySubmitted ? submissions[0].github_url : '',
@@ -64,6 +85,17 @@ export default function SubmissionTab({ hasTeam, teamData, teamMembers, submissi
 
   const set = (k) => (e) => setForm(p => ({ ...p, [k]: e.target ? e.target.value : e }));
 
+  const handleSdgToggle = (val) => {
+    setForm(prev => {
+      const current = Array.isArray(prev.sdg) ? prev.sdg : (prev.sdg ? prev.sdg.split(', ') : []);
+      if (current.includes(val)) {
+        return { ...prev, sdg: current.filter(s => s !== val) };
+      } else {
+        return { ...prev, sdg: [...current, val] };
+      }
+    });
+  };
+
   const handleSubmit = async () => {
     setSubmitting(true);
     setErrorMsg('');
@@ -91,7 +123,7 @@ export default function SubmissionTab({ hasTeam, teamData, teamMembers, submissi
       const newSubmission = {
         team_id: teamData.id,
         project_title: form.title,
-        sdg_goal: form.sdg,
+        sdg_goal: Array.isArray(form.sdg) ? form.sdg.join(', ') : form.sdg,
         category: form.category,
         project_description: form.description,
         github_url: form.github,
@@ -265,28 +297,44 @@ export default function SubmissionTab({ hasTeam, teamData, teamMembers, submissi
               <div style={{ fontSize:15, fontWeight:800, color:'#111', marginBottom:4 }}>Project Information</div>
               <Field label="Project Title" value={form.title} onChange={set('title')} placeholder="Your project name"/>
               <div className="dash-grid-2" style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:14 }}>
-                <div style={{ display:'flex', flexDirection:'column', gap:5 }}>
-                  <label style={{ fontSize:13, fontWeight:600, color:'#374151' }}>SDG Goal</label>
-                  <select value={form.sdg} onChange={set('sdg')} style={{ padding:'10px 13px', borderRadius:10, border:'1.5px solid #e5e7eb', fontSize:13, outline:'none', background:'#fff', color: form.sdg ? '#111' : '#9ca3af' }}>
-                    <option value="" disabled>Select an SDG Goal...</option>
-                    <option value="SDG 1 - No Poverty">SDG 1 - No Poverty</option>
-                    <option value="SDG 2 - Zero Hunger">SDG 2 - Zero Hunger</option>
-                    <option value="SDG 3 - Good Health">SDG 3 - Good Health</option>
-                    <option value="SDG 4 - Quality Education">SDG 4 - Quality Education</option>
-                    <option value="SDG 5 - Gender Equality">SDG 5 - Gender Equality</option>
-                    <option value="SDG 6 - Clean Water">SDG 6 - Clean Water</option>
-                    <option value="SDG 7 - Clean Energy">SDG 7 - Clean Energy</option>
-                    <option value="SDG 8 - Economic Growth">SDG 8 - Economic Growth</option>
-                    <option value="SDG 9 - Industry & Innovation">SDG 9 - Industry & Innovation</option>
-                    <option value="SDG 10 - Reduced Inequalities">SDG 10 - Reduced Inequalities</option>
-                    <option value="SDG 11 - Sustainable Cities">SDG 11 - Sustainable Cities</option>
-                    <option value="SDG 12 - Responsible Consumption">SDG 12 - Responsible Consumption</option>
-                    <option value="SDG 13 - Climate Action">SDG 13 - Climate Action</option>
-                    <option value="SDG 14 - Life Below Water">SDG 14 - Life Below Water</option>
-                    <option value="SDG 15 - Life on Land">SDG 15 - Life on Land</option>
-                    <option value="SDG 16 - Peace & Justice">SDG 16 - Peace & Justice</option>
-                    <option value="SDG 17 - Partnerships">SDG 17 - Partnerships</option>
-                  </select>
+                <div style={{ display:'flex', flexDirection:'column', gap:5 }} ref={sdgRef}>
+                  <label style={{ fontSize:13, fontWeight:600, color:'#374151' }}>SDG Goals</label>
+                  <div style={{ position: 'relative' }}>
+                    <div 
+                      onClick={() => setSdgOpen(!sdgOpen)}
+                      style={{ 
+                        padding:'10px 13px', borderRadius:10, border:'1.5px solid #e5e7eb', fontSize:13, 
+                        background:'#fff', cursor:'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                        color: form.sdg && form.sdg.length > 0 ? '#111' : '#9ca3af'
+                      }}
+                    >
+                      <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        {form.sdg && form.sdg.length > 0 ? form.sdg.join(', ') : 'Select SDG Goals...'}
+                      </span>
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ transform: sdgOpen ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s', flexShrink: 0, marginLeft: 8 }}>
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                      </svg>
+                    </div>
+                    
+                    {sdgOpen && (
+                      <div style={{ 
+                        position: 'absolute', top: '100%', left: 0, right: 0, marginTop: '8px', zIndex: 10,
+                        padding:'10px', borderRadius:10, border:'1.5px solid #e5e7eb', background:'#fff', 
+                        maxHeight:'200px', overflowY:'auto', display:'flex', flexDirection:'column', gap:'6px',
+                        boxShadow: '0 4px 20px rgba(0,0,0,0.08)'
+                      }}>
+                        {SDG_OPTIONS.map(opt => {
+                          const isChecked = Array.isArray(form.sdg) ? form.sdg.includes(opt) : (form.sdg || '').includes(opt);
+                          return (
+                            <label key={opt} style={{ display:'flex', alignItems:'center', gap:'8px', cursor:'pointer', fontSize:'13px', color:'#111', padding: '4px 0' }}>
+                              <input type="checkbox" checked={isChecked} onChange={() => handleSdgToggle(opt)} style={{ cursor:'pointer', accentColor:'#4C9F38' }} />
+                              {opt}
+                            </label>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
                 </div>
                 <div style={{ display:'flex', flexDirection:'column', gap:5 }}>
                   <label style={{ fontSize:13, fontWeight:600, color:'#374151' }}>Category</label>

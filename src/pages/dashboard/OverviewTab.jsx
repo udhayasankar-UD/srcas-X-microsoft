@@ -99,24 +99,26 @@ export default function OverviewTab({ hasTeam, teamData, teamMembers, submission
             <span style={{ fontSize:13, fontWeight:700, color:'#3b82f6', cursor:'pointer' }}>View all</span>
           </div>
           <div style={{ display:'flex', flexDirection:'column', gap:16, flex:1 }}>
-            <div style={{ display:'flex', gap:12 }}>
-              <span style={{ fontSize:10, fontWeight:800, color:'#10b981', background:'#ecfdf5', padding:'4px 8px', borderRadius:6, height:'fit-content' }}>New</span>
-              <div>
-                <div style={{ fontSize:14, fontWeight:800, color:'#111' }}>Round 1 submissions are now open!</div>
-                <div style={{ fontSize:13, color:'#6b7280', marginTop:4 }}>Make sure to submit your idea before the deadline.</div>
-                <div style={{ fontSize:11, color:'#9ca3af', marginTop:6 }}>May 24, 2026 • Admin</div>
+            {announcements.length === 0 ? (
+              <div style={{ textAlign:'center', color:'#9ca3af', padding:'20px 0', fontSize:13 }}>
+                No announcements yet.
               </div>
-            </div>
-            <div style={{ display:'flex', gap:12 }}>
-              <span style={{ fontSize:14, color:'#3b82f6', padding:'4px 8px' }}>🧑‍🏫</span>
-              <div>
-                <div style={{ fontSize:14, fontWeight:800, color:'#111' }}>Mentor Connect Session</div>
-                <div style={{ fontSize:13, color:'#6b7280', marginTop:4 }}>Join our live session on May 26 at 5:00 PM IST</div>
-                <div style={{ fontSize:11, color:'#9ca3af', marginTop:6 }}>May 22, 2026 • Admin</div>
+            ) : announcements.slice(0, 3).map(a => (
+              <div key={a.id} style={{ display:'flex', gap:12 }}>
+                {a.tag ? (
+                  <span style={{ fontSize:10, fontWeight:800, color:'#10b981', background:'#ecfdf5', padding:'4px 8px', borderRadius:6, height:'fit-content' }}>{a.tag}</span>
+                ) : (
+                  <span style={{ fontSize:14, color:'#3b82f6', padding:'4px 8px' }}>📢</span>
+                )}
+                <div>
+                  <div style={{ fontSize:14, fontWeight:800, color:'#111' }}>{a.title}</div>
+                  <div style={{ fontSize:13, color:'#6b7280', marginTop:4, display:'-webkit-box', WebkitLineClamp:1, WebkitBoxOrient:'vertical', overflow:'hidden' }}>{a.message}</div>
+                  <div style={{ fontSize:11, color:'#9ca3af', marginTop:6 }}>{new Date(a.created_at).toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'})} • Admin</div>
+                </div>
               </div>
-            </div>
+            ))}
           </div>
-          <div style={{ marginTop:20, textAlign:'center', fontSize:13, fontWeight:700, color:'#6b7280', cursor:'pointer' }}>View all announcements</div>
+          <div onClick={() => setActiveTab('announcements')} style={{ marginTop:20, textAlign:'center', fontSize:13, fontWeight:700, color:'#6b7280', cursor:'pointer' }}>View all announcements</div>
         </div>
 
         {/* Project Progress */}

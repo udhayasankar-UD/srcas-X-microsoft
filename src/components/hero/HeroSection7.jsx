@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { theme } from '../../theme';
-import srcasLogo from '../../assets/logo/srcas-1-logo.png';
+import srcasLogo from '../../assets/logo/srcas-logo.png';
 import msLogo from '../../assets/logo/microsoft.png';
 import igeniusLogo from '../../assets/logo/igenius.png';
 

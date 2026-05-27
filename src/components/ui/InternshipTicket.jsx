@@ -1,6 +1,6 @@
 import { useRef, useState, useCallback, useMemo, useEffect } from "react";
 import { motion } from "framer-motion";
-import ticketBgDesktop from "../../assets/tickets/PC_BG_ticket.png";
+import ticketBgDesktop from "../../assets/tickets/PC_BG_ticket_real.png";
 import ticketBgMobile from "../../assets/tickets/mobile_BG_ticket.png";
 
 /* ─── Barcode ─── */
@@ -16,7 +16,7 @@ const Barcode = () => {
       {pattern.map((h, i) => (
         <div key={i} style={{
           height: h * 1.2,
-          background: i % 2 === 0 ? "rgba(255,255,255,0.85)" : "transparent",
+          background: i % 2 === 0 ? "rgba(0,0,0,0.85)" : "transparent",
           width: "100%",
         }} />
       ))}
@@ -160,7 +160,7 @@ export const InternshipTicket = () => {
               position: "absolute", left: 16, top: "50%",
               transform: "translateY(-50%) rotate(180deg)",
               writingMode: "vertical-rl", fontSize: "0.6rem", fontWeight: 600,
-              letterSpacing: "0.2em", color: "rgba(255,255,255,0.28)",
+              letterSpacing: "0.2em", color: "rgba(0,0,0,0.45)",
               textTransform: "uppercase", userSelect: "none",
               display: "flex", alignItems: "center", gap: 6,
             }}>
@@ -174,16 +174,16 @@ export const InternshipTicket = () => {
               style={{
                 marginLeft: "clamp(28px,3.5vw,52px)",
                 width: 58, height: 58,
-                background: "rgba(255,255,255,0.07)",
+                background: "rgba(0,0,0,0.04)",
                 borderRadius: 14,
                 display: "flex", alignItems: "center", justifyContent: "center",
                 marginBottom: 24,
-                border: "1px solid rgba(255,255,255,0.1)",
+                border: "1px solid rgba(0,0,0,0.1)",
                 transformStyle: "preserve-3d",
               }}
             >
               <svg width="26" height="26" viewBox="0 0 24 24" fill="none"
-                stroke="rgba(255,255,255,0.85)" strokeWidth="1.5"
+                stroke="rgba(0,0,0,0.85)" strokeWidth="1.5"
                 strokeLinecap="round" strokeLinejoin="round">
                 <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
                 <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
@@ -197,11 +197,11 @@ export const InternshipTicket = () => {
               style={{
                 marginLeft: "clamp(28px,3.5vw,52px)",
                 fontSize: "0.68rem", fontWeight: 700, letterSpacing: "0.16em",
-                color: "rgba(255,255,255,0.45)", textTransform: "uppercase",
+                color: "rgba(0,0,0,0.65)", textTransform: "uppercase",
                 marginBottom: 14, transformStyle: "preserve-3d",
               }}
             >
-              MICROSOFT × GENIUS AI
+              IGENIUS AI
             </motion.div>
 
             {/* Heading — pops out most */}
@@ -210,7 +210,7 @@ export const InternshipTicket = () => {
               transition={{ type: "spring", stiffness: 260, damping: 22 }}
               style={{
                 fontSize: "clamp(1.8rem,3.5vw,3rem)", fontWeight: 900,
-                color: "#fff", lineHeight: 1.08, margin: "0 0 18px",
+                color: "#111", lineHeight: 1.08, margin: "0 0 18px",
                 marginLeft: "clamp(28px,3.5vw,52px)",
                 letterSpacing: "-0.03em", transformStyle: "preserve-3d",
               }}
@@ -224,7 +224,7 @@ export const InternshipTicket = () => {
               transition={{ type: "spring", stiffness: 260, damping: 22 }}
               style={{
                 fontSize: "0.83rem", lineHeight: 1.65,
-                color: "rgba(255,255,255,0.5)", maxWidth: 380,
+                color: "rgba(0,0,0,0.65)", maxWidth: 380,
                 margin: "0 0 28px", marginLeft: "clamp(28px,3.5vw,52px)",
                 transformStyle: "preserve-3d",
               }}
@@ -255,12 +255,6 @@ export const InternshipTicket = () => {
               >
                 Register to Compete →
               </a>
-              <span style={{
-                fontSize: "0.75rem", color: "rgba(255,255,255,0.3)",
-                borderLeft: "1px solid rgba(255,255,255,0.1)", paddingLeft: 18,
-              }}>
-                Top 1 team only
-              </span>
             </motion.div>
 
             {/* Wave mesh bg — removed, using BG_ticket.png instead */}
@@ -291,26 +285,27 @@ export const InternshipTicket = () => {
               <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 5 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
                   <div style={{ width: 38, height: 9, background: "#8cc63f" }} />
-                  <div style={{ color: "#fff", fontSize: "0.58rem", fontWeight: 700, letterSpacing: "0.1em" }}>UD :)</div>
+                  <div style={{ color: "#111", fontSize: "0.58rem", fontWeight: 700, letterSpacing: "0.1em" }}>UD :)</div>
                 </div>
-                <div style={{ fontFamily: "'Courier New', monospace", fontSize: "0.72rem", color: "#ccc", letterSpacing: "0.05em" }}>
+                <div style={{ fontFamily: "'Courier New', monospace", fontSize: "0.72rem", color: "rgba(0,0,0,0.5)", letterSpacing: "0.05em" }}>
                   000000114351
                 </div>
               </div>
             </div>
 
-            {/* Barcode + rotated text */}
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flex: 1 }}>
-              <div style={{ width: "35%", maxWidth: 80 }}><Barcode /></div>
+            {/* Rotated text */}
+            <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "flex-end", flex: 1 }}>
               <div style={{
                 writingMode: "vertical-rl", transform: "rotate(180deg)",
-                display: "flex", flexDirection: "column", gap: 7, alignItems: "flex-start",
+                display: "flex", flexDirection: "column", gap: 7, alignItems: "center",
+                background: "rgba(255, 255, 255, 0.8)", backdropFilter: "blur(4px)",
+                padding: "12px 6px", borderRadius: 6,
+                boxShadow: "0 2px 10px rgba(0,0,0,0.05)"
               }}>
-                <span style={{ fontSize: "0.72rem", color: "#ccc", letterSpacing: "0.05em" }}>21-06-26</span>
-                <span style={{ fontSize: "0.88rem", color: "#fff", fontWeight: 600, letterSpacing: "0.02em" }}>
-                  <span style={{ color: "#59c23a" }}>Internship</span> ticket
+                <span style={{ fontSize: "0.88rem", color: "#111", fontWeight: 700, letterSpacing: "0.02em" }}>
+                  <span style={{ color: "#4C9F38" }}>Internship</span> ticket
                 </span>
-                <span style={{ fontSize: "0.88rem", color: "#fff", fontWeight: 600, letterSpacing: "0.02em" }}>14.00 to 16.00 Hs</span>
+                <span style={{ fontSize: "0.88rem", color: "#111", fontWeight: 700, letterSpacing: "0.02em" }}>14.00 to 16.00 Hs</span>
               </div>
             </div>
           </motion.div>
