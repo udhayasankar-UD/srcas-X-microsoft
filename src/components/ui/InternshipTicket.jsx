@@ -1,7 +1,7 @@
 import { useRef, useState, useCallback, useMemo, useEffect } from "react";
 import { motion } from "framer-motion";
 import ticketBgDesktop from "../../assets/tickets/PC_BG_ticket_real.png";
-import ticketBgMobile from "../../assets/tickets/mobile_BG_ticket.png";
+import ticketBgMobile from "../../assets/tickets/mobile_BG_ticket_real.png";
 
 /* ─── Barcode ─── */
 const Barcode = () => {
@@ -169,6 +169,7 @@ export const InternshipTicket = () => {
 
             {/* Icon — pops out */}
             <motion.div
+              className="ticket-icon"
               animate={{ translateZ: z.icon }}
               transition={{ type: "spring", stiffness: 260, damping: 22 }}
               style={{
@@ -192,6 +193,7 @@ export const InternshipTicket = () => {
 
             {/* Subtitle — pops out */}
             <motion.div
+              className="ticket-sub"
               animate={{ translateZ: z.sub }}
               transition={{ type: "spring", stiffness: 260, damping: 22 }}
               style={{
@@ -206,6 +208,7 @@ export const InternshipTicket = () => {
 
             {/* Heading — pops out most */}
             <motion.h3
+              className="ticket-heading"
               animate={{ translateZ: z.heading }}
               transition={{ type: "spring", stiffness: 260, damping: 22 }}
               style={{
@@ -220,6 +223,7 @@ export const InternshipTicket = () => {
 
             {/* Description — pops out */}
             <motion.p
+              className="ticket-desc"
               animate={{ translateZ: z.desc }}
               transition={{ type: "spring", stiffness: 260, damping: 22 }}
               style={{
@@ -234,6 +238,7 @@ export const InternshipTicket = () => {
 
             {/* CTA — pops out the most */}
             <motion.div
+              className="ticket-cta"
               animate={{ translateZ: z.cta }}
               transition={{ type: "spring", stiffness: 260, damping: 22 }}
               style={{
@@ -317,8 +322,30 @@ export const InternshipTicket = () => {
         /* Mobile: hide stub, make left full width */
         @media (max-width: 768px) {
           .ticket-stub { display: none !important; }
-          .ticket-left { width: 100% !important; }
+          .ticket-left {
+            width: 100% !important;
+            min-height: 560px !important;
+            justify-content: flex-end !important;
+            align-items: center !important;
+            padding-bottom: 40px !important;
+          }
           .ticket-divider { display: none !important; }
+          .ticket-desc { display: none !important; }
+          .ticket-icon { display: none !important; }
+          .ticket-sub { display: none !important; }
+          .ticket-cta { margin-top: 0 !important; margin-left: 0 !important; justify-content: center !important; }
+          .ticket-heading {
+            background: rgba(255, 255, 255, 0.0000001) !important;
+            backdrop-filter: blur(14px) !important;
+            -webkit-backdrop-filter: blur(14px) !important;
+            padding: 16px 22px 20px !important;
+            border-radius: 14px !important;
+            display: inline-block !important;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.4) !important;
+            border: 1px solid rgba(255,255,255,0.25) !important;
+            margin-top: auto !important;
+            margin-bottom: 8px !important;
+          }
         }
       `}</style>
     </>

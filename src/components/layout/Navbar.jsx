@@ -422,13 +422,15 @@ const MobileNavBar = ({ user }) => {
   }, [isOpen]);
 
   return (
-    <div className="fixed sm:hidden top-4 right-4 z-50">
+    <div className="fixed sm:hidden top-4 right-4" style={{ zIndex: 99999 }}>
       <div
         ref={menuRef}
+        onClick={!isOpen ? handleToggle : undefined}
         className={[
           'relative flex flex-col rounded-3xl transition-all duration-300 ease-out overflow-hidden',
           isOpen ? 'p-3 gap-2' : 'p-0',
           showLabels ? 'w-56' : isOpen ? 'w-14' : 'w-14',
+          !isOpen ? 'cursor-pointer' : '',
         ].join(' ')}
         style={{
           background: BG_PANEL,

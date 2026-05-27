@@ -264,7 +264,7 @@ export default function HeroSection1() {
       }} />
 
       {/* Header */}
-      <header style={{
+      <header className="h1-header" style={{
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
@@ -573,6 +573,7 @@ export default function HeroSection1() {
           .h1-pills-mobile-hide{display:none!important}
           .h1-magnetbg{display:none!important}
           .h1-row2{display:none!important}
+          .h1-header{pointer-events:none!important}
         }
         .hero-btn-learn-more{position:relative;display:inline-block;cursor:pointer;outline:none;border:0;vertical-align:middle;text-decoration:none;background:transparent;padding:0;font-size:inherit;font-family:inherit;width:13rem;height:auto}
         .hero-btn-circle{transition:all .45s cubic-bezier(.65,0,.076,1);position:relative;display:block;margin:0;width:3rem;height:3rem;background:#111;border-radius:1.625rem}
