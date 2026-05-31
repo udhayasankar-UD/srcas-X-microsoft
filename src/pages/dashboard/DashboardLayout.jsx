@@ -96,9 +96,10 @@ export default function DashboardLayout({ activeTab, setActiveTab, children, has
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
               <div style={{ position:'absolute', top:2, right:4, width:8, height:8, borderRadius:'50%', background:'#E5243B', border:'2px solid #fff' }}/>
             </button>
-            <div style={{ width:8, height:8, borderRadius:'50%', background:'#4C9F38' }}/>
-            <span style={{ fontSize:12, color:'#4C9F38', fontWeight:600 }}>Round 1 · Active</span>
-            <div onClick={() => setShowProfile(true)} style={{ cursor:'pointer', marginLeft:8, width:34, height:34, borderRadius:'50%', background:'linear-gradient(135deg,#4C9F38,#26BDE2)', display:'flex', alignItems:'center', justifyContent:'center', color:'#fff', fontWeight:800, fontSize:13 }}>A</div>
+
+            <div onClick={() => setShowProfile(true)} style={{ cursor:'pointer', marginLeft:8, width:34, height:34, borderRadius:'50%', background:'linear-gradient(135deg,#4C9F38,#26BDE2)', display:'flex', alignItems:'center', justifyContent:'center', color:'#fff' }}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </div>
           </div>
         </header>
 
@@ -113,9 +114,23 @@ export default function DashboardLayout({ activeTab, setActiveTab, children, has
         {NAV.map(item => {
           const active = activeTab === item.id;
           return (
-            <button key={item.id} onClick={() => setActiveTab(item.id)} style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:4, background:'transparent', border:'none', outline:'none', padding:'8px', flex:1, cursor:'pointer' }}>
-              <span style={{ fontSize:20, color: active ? '#4C9F38' : '#9ca3af', fontWeight: active ? 900 : 500 }}>{item.icon}</span>
-              <span style={{ fontSize:10, color: active ? '#4C9F38' : '#9ca3af', fontWeight: active ? 700 : 500 }}>{item.label}</span>
+            <button key={item.id} onClick={() => setActiveTab(item.id)} 
+              style={{ 
+                display:'flex', alignItems:'center', justifyContent:'center', gap:6, 
+                background: active ? '#ebfbee' : 'transparent', 
+                border:'none', outline:'none', 
+                padding: active ? '10px 16px' : '10px 0', 
+                borderRadius: '100px',
+                flex: active ? '0 0 auto' : '1 1 0', 
+                cursor:'pointer',
+                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                minWidth: 0,
+                overflow: 'hidden'
+              }}>
+              <span style={{ fontSize: active ? 18 : 20, color: active ? '#22c55e' : '#9ca3af', fontWeight: active ? 900 : 500, flexShrink: 0, lineHeight: 1 }}>{item.icon}</span>
+              {active && (
+                <span style={{ fontSize:13, color: '#22c55e', fontWeight: 800, whiteSpace: 'nowrap' }}>{item.label}</span>
+              )}
             </button>
           );
         })}
@@ -199,12 +214,14 @@ export default function DashboardLayout({ activeTab, setActiveTab, children, has
             display: flex; position: fixed; bottom: 0; left: 0; right: 0; 
             background: #fff; border-top: 1.5px solid #ebebeb; z-index: 50; 
             justify-content: space-between; align-items: center; 
-            padding-bottom: env(safe-area-inset-bottom);
+            padding: 8px 12px;
+            padding-bottom: calc(8px + env(safe-area-inset-bottom));
+            gap: 4px;
           }
-          .dash-main-wrapper { padding-bottom: 60px !important; }
-          .dash-header { padding: 12px 16px !important; height: auto !important; flex-direction: column; align-items: flex-start !important; justify-content: center; gap: 4px; }
+          .dash-main-wrapper { padding-bottom: calc(68px + env(safe-area-inset-bottom)) !important; }
+          .dash-header { padding: 18px 16px 22px !important; min-height: 70px !important; height: auto !important; flex-direction: column; align-items: flex-start !important; justify-content: center; gap: 4px; }
           .dash-subtitle { display: none !important; }
-          .dash-header-right { position: absolute; right: 16px; top: 16px; }
+          .dash-header-right { position: absolute; right: 16px; top: 18px; }
           .dash-content { padding: 16px !important; }
           .dash-grid-2 { grid-template-columns: 1fr !important; }
           .dash-grid-4 { grid-template-columns: repeat(2, 1fr) !important; gap: 12px !important; }

@@ -214,22 +214,27 @@ function DesktopStickyCard({ event, scrollYProgress }) {
 }
 
 /* ─────────────────────────────────────────
-   Mobile sticky card — slides from side
+   Mobile card — slides from side on scroll
    Even index = from left, odd = from right
 ───────────────────────────────────────── */
-function MobileStickyCard({ event, scrollYProgress }) {
+function MobileStickyCard({ event }) {
   const isFinal = event.isFinal;
   const { Icon } = event;
   const isEven = event.index % 2 === 0;
 
-  const [start, end] = cardRange(event.index);
-  const rawX  = useTransform(scrollYProgress, [start, end], [isEven ? -72 : 72, 0]);
-  const rawOp = useTransform(scrollYProgress, [start, end], [0, 1]);
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["0 1", "0.9 1"]
+  });
+
+  const rawX  = useTransform(scrollYProgress, [0, 1], [isEven ? -72 : 72, 0]);
+  const rawOp = useTransform(scrollYProgress, [0, 1], [0, 1]);
   const x       = useSpring(rawX,  { stiffness: 85, damping: 26, restDelta: 0.001 });
   const opacity = useSpring(rawOp, { stiffness: 85, damping: 26, restDelta: 0.001 });
 
   return (
-    <motion.div style={{ opacity, x }}>
+    <motion.div ref={ref} style={{ opacity, x }}>
       <div style={{
         background: isFinal ? "#0a0a0a" : "#fff",
         border: isFinal ? "1px solid rgba(255,255,255,0.1)" : "1px solid #e8e8e8",
@@ -704,7 +709,7 @@ export default function TimelineSection() {
                       <BeamDot event={ev} scrollYProgress={mobileProgress} vertical={true} />
                     </div>
 
-                    <MobileStickyCard event={ev} scrollYProgress={mobileProgress} />
+                    <MobileStickyCard event={ev} />
                   </div>
                 ))}
               </div>
@@ -764,16 +769,13 @@ export default function TimelineSection() {
 
           .tl-mobile-outer {
             display: block;
-            height: 380vh;
             position: relative;
             background: #fff;
+            padding: 4rem 0 2rem;
             font-family: 'Plus Jakarta Sans', sans-serif;
           }
           .tl-mobile-sticky {
-            position: sticky;
-            top: 0;
-            height: 100vh;
-            overflow: hidden;
+            position: relative;
             display: flex;
             align-items: center;
             background: #fff;

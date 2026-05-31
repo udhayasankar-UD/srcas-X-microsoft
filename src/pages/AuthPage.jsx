@@ -215,7 +215,7 @@ export default function AuthPage() {
   const isLogin = mode === 'login';
 
   const formPanel = (
-    <form onSubmit={handleAuth} style={{ display:'flex', flexDirection:'column', justifyContent:'center', padding:'40px 44px', height:'100%', opacity: animating ? 0 : 1, transform: animating ? `translateX(${isLogin ? '-28px' : '28px'})` : 'translateX(0)', transition:'opacity 0.38s ease, transform 0.38s ease' }}>
+    <form className="auth-form" onSubmit={handleAuth} style={{ display:'flex', flexDirection:'column', justifyContent:'center', padding:'40px 44px', height:'100%', opacity: animating ? 0 : 1, transform: animating ? `translateX(${isLogin ? '-28px' : '28px'})` : 'translateX(0)', transition:'opacity 0.38s ease, transform 0.38s ease' }}>
 
       {/* Logo */}
       <div style={{ display:'flex', alignItems:'center', gap:'10px', marginBottom:'28px' }}>
@@ -235,7 +235,7 @@ export default function AuthPage() {
       </p>
 
       {/* ── Social buttons FIRST ── */}
-      <div style={{ display:'flex', gap:'8px', marginBottom:'16px' }}>
+      <div style={{ display:'flex', flexWrap:'wrap', gap:'8px', marginBottom:'16px' }}>
         <SocialBtn label="Google" icon={<GoogleIcon />} onClick={() => handleSocialLogin('google')} />
         <SocialBtn label="GitHub" icon={<GithubIcon />} onClick={() => handleSocialLogin('github')} />
         <SocialBtn label="Microsoft" icon={<MicrosoftIcon />} onClick={() => handleSocialLogin('azure')} />
@@ -321,15 +321,15 @@ export default function AuthPage() {
       </button>
 
       {/* Main card */}
-      <div style={{ width:'100%', maxWidth:'940px', background:'#fff', borderRadius:'28px', boxShadow:'0 24px 80px rgba(0,0,0,0.10)', display:'grid', gridTemplateColumns:'1fr 1fr', minHeight:'600px', overflow:'hidden' }}>
+      <div className="auth-main-card" style={{ width:'100%', maxWidth:'940px', background:'#fff', borderRadius:'28px', boxShadow:'0 24px 80px rgba(0,0,0,0.10)', display:'grid', gridTemplateColumns:'1fr 1fr', minHeight:'600px', overflow:'hidden' }}>
         {isLogin ? (
           <>
             <div>{formPanel}</div>
-            <div style={{ background:'linear-gradient(135deg,#f0fdf4,#e8f5e9)' }}>{cardPanel}</div>
+            <div className="auth-card-wrapper" style={{ background:'linear-gradient(135deg,#f0fdf4,#e8f5e9)' }}>{cardPanel}</div>
           </>
         ) : (
           <>
-            <div style={{ background:'linear-gradient(135deg,#f0fdf4,#e8f5e9)' }}>{cardPanel}</div>
+            <div className="auth-card-wrapper" style={{ background:'linear-gradient(135deg,#f0fdf4,#e8f5e9)' }}>{cardPanel}</div>
             <div>{formPanel}</div>
           </>
         )}
@@ -341,6 +341,11 @@ export default function AuthPage() {
         input::placeholder { color: #9ca3af; }
         @media (max-width: 700px) {
           div[style*="grid-template-columns"] { grid-template-columns: 1fr !important; }
+          .auth-card-wrapper { display: none !important; }
+          .auth-main-card { min-height: auto !important; }
+        }
+        @media (max-width: 500px) {
+          .auth-form { padding: 32px 24px !important; }
         }
       `}</style>
     </div>
