@@ -115,7 +115,7 @@ function DesktopStickyCard({ event, scrollYProgress }) {
           ? "1px solid rgba(255,255,255,0.1)"
           : `1px solid ${hovered ? "#111" : "#e8e8e8"}`,
         borderRadius: 22,
-        padding: "32px 28px 28px",
+        padding: "24px 20px 20px",
         position: "relative", overflow: "hidden", cursor: "default",
         height: "100%",
         boxShadow: hovered
@@ -157,7 +157,7 @@ function DesktopStickyCard({ event, scrollYProgress }) {
           background: isFinal ? "rgba(255,255,255,0.08)" : "#f5f5f5",
           border: isFinal ? "1px solid rgba(255,255,255,0.12)" : "1px solid #eaeaea",
           display: "flex", alignItems: "center", justifyContent: "center",
-          marginBottom: 22, color: isFinal ? "#fff" : "#111", flexShrink: 0,
+          marginBottom: 16, color: isFinal ? "#fff" : "#111", flexShrink: 0,
           transition: "transform 0.3s",
           transform: hovered ? "scale(1.1)" : "scale(1)",
         }}>
@@ -167,7 +167,7 @@ function DesktopStickyCard({ event, scrollYProgress }) {
         <div style={{ display: "flex", alignItems: "baseline", gap: 7, marginBottom: 16 }}>
           <span style={{
             fontFamily: "'Plus Jakarta Sans', sans-serif",
-            fontSize: "3.6rem", fontWeight: 900, letterSpacing: "-0.06em",
+            fontSize: "3rem", fontWeight: 900, letterSpacing: "-0.06em",
             lineHeight: 0.9, color: isFinal ? "#fff" : "#111",
           }}>{event.day}</span>
           <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
@@ -189,16 +189,16 @@ function DesktopStickyCard({ event, scrollYProgress }) {
           margin: "0 0 10px",
         }}>{event.title}</h3>
 
-        <div style={{ height: 1, background: isFinal ? "rgba(255,255,255,0.07)" : "#f0f0f0", marginBottom: 14 }} />
+        <div style={{ height: 1, background: isFinal ? "rgba(255,255,255,0.07)" : "#f0f0f0", marginBottom: 10 }} />
 
         <p style={{
-          fontSize: "0.82rem", lineHeight: 1.7,
+          fontSize: "0.82rem", lineHeight: 1.5,
           color: isFinal ? "rgba(255,255,255,0.42)" : "#888",
           margin: 0, flex: 1,
         }}>{event.desc}</p>
 
         <div style={{
-          marginTop: 20, alignSelf: "flex-start",
+          marginTop: 14, alignSelf: "flex-start",
           display: "inline-flex", alignItems: "center", gap: 5,
           padding: "4px 11px", borderRadius: 999,
           background: event.tagBg, border: `1px solid ${event.tagBorder}`,
@@ -525,7 +525,7 @@ export default function TimelineSection() {
               viewport={{ once: true, margin: "-40px" }}
               transition={{ duration: 0.95, ease: EASE }}
               style={{
-                marginBottom: 52,
+                marginBottom: 32,
                 display: "flex", alignItems: "flex-end",
                 justifyContent: "space-between", gap: 24, flexWrap: "wrap",
               }}
@@ -569,7 +569,7 @@ export default function TimelineSection() {
             </motion.div>
 
             {/* Horizontal beam row */}
-            <div style={{ position: "relative", marginBottom: 32 }}>
+            <div style={{ position: "relative", marginBottom: 20 }}>
               <div style={{
                 position: "absolute", top: "50%", left: 0, width: "100%", height: 3,
                 transform: "translateY(-50%)",
