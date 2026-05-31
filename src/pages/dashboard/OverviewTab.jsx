@@ -2,11 +2,11 @@ import React from 'react';
 import EventTimeline from '../../components/EventTimeline';
 
 const TIMELINE_STEPS = [
-  { title:'Registration Deadline', date:'May 20' },
-  { title:'Idea Submission', date:'May 25' },
-  { title:'Shortlist Announced', date:'Jun 5' },
-  { title:'Prototype Submission', date:'Jun 15' },
-  { title:'Grand Finale', date:'Jun 28' },
+  { title:'Registration Deadline', date:'Jun 21' },
+  { title:'Idea Submission', date:'Jul 25' },
+  { title:'Shortlist Announced', date:'Aug 7' },
+  { title:'Prototype Submission', date:'Aug 10' },
+  { title:'Grand Finale', date:'Aug 14' },
 ];
 
 const card = (extra={}) => ({ background:'#fff', borderRadius:16, padding:'24px', boxShadow:'0 1px 4px rgba(0,0,0,0.06)', border:'1px solid #f3f4f6', ...extra });
@@ -179,8 +179,8 @@ export default function OverviewTab({ hasTeam, teamData, teamMembers, submission
                 <div style={{ fontSize:12, color:'#6b7280' }}>Top teams will be shortlisted</div>
               </div>
               <div style={{ textAlign:'right' }}>
-                <div style={{ fontSize:13, fontWeight:700, color:'#111' }}>Jun 5, 2026</div>
-                <div style={{ fontSize:11, color:'#9ca3af' }}>12 days left</div>
+                <div style={{ fontSize:13, fontWeight:700, color:'#111' }}>Aug 7, 2026</div>
+                <div style={{ fontSize:11, color:'#9ca3af' }}>68 days left</div>
               </div>
             </div>
             <div style={{ display:'flex', alignItems:'center', gap:12 }}>
@@ -190,8 +190,8 @@ export default function OverviewTab({ hasTeam, teamData, teamMembers, submission
                 <div style={{ fontSize:12, color:'#6b7280' }}>Submit your prototype and pitch deck</div>
               </div>
               <div style={{ textAlign:'right' }}>
-                <div style={{ fontSize:13, fontWeight:700, color:'#111' }}>Jun 15, 2026</div>
-                <div style={{ fontSize:11, color:'#9ca3af' }}>22 days left</div>
+                <div style={{ fontSize:13, fontWeight:700, color:'#111' }}>Aug 10, 2026</div>
+                <div style={{ fontSize:11, color:'#9ca3af' }}>71 days left</div>
               </div>
             </div>
             <div style={{ display:'flex', alignItems:'center', gap:12 }}>
@@ -201,8 +201,8 @@ export default function OverviewTab({ hasTeam, teamData, teamMembers, submission
                 <div style={{ fontSize:12, color:'#6b7280' }}>Final presentations and winner announcement</div>
               </div>
               <div style={{ textAlign:'right' }}>
-                <div style={{ fontSize:13, fontWeight:700, color:'#111' }}>Jun 28, 2026</div>
-                <div style={{ fontSize:11, color:'#9ca3af' }}>35 days left</div>
+                <div style={{ fontSize:13, fontWeight:700, color:'#111' }}>Aug 14, 2026</div>
+                <div style={{ fontSize:11, color:'#9ca3af' }}>75 days left</div>
               </div>
             </div>
           </div>

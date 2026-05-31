@@ -132,7 +132,7 @@ const PrizesPage = () => {
     { icon: '💼', title: 'Trackwise best performers will get internships', amount: '' },
   ];
 
-  const tickerItems = ['₹5L+ Prize Pool', 'Microsoft Internship', 'Singapore Trip', '1:1 Mentorship', 'Open Innovation', '17 UN SDGs', 'SRCAS 2026', 'Aug 14–16'];
+  const tickerItems = ['₹5L+ Prize Pool', 'Microsoft Internship', 'Singapore Trip', '1:1 Mentorship', 'Open Innovation', '17 UN SDGs', 'SRCAS 2026', 'Aug 14'];
 
   return (
     <div style={{ background: '#fff', color: '#111', fontFamily: "'Plus Jakarta Sans', sans-serif", overflowX: 'hidden' }}>
@@ -425,7 +425,7 @@ const PrizesPage = () => {
           transition={{ duration: 0.7 }}
         >
           <p style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.24em', color: '#9ca3af', textTransform: 'uppercase', marginBottom: 20 }}>
-            Aug 14–16, 2026 · SRCAS, Coimbatore
+            Aug 14, 2026 · SRCAS, Coimbatore
           </p>
           <h2 style={{
             fontFamily: "'Plus Jakarta Sans', sans-serif",

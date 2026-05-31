@@ -143,7 +143,7 @@ export default function AdminDashboard() {
                     })}
                   </svg>
                   <div style={{ position:'absolute', bottom:0, left:30, right:0, display:'flex', justifyContent:'space-between', fontSize:11, fontWeight:500, color:S.t3 }}>
-                    {['May 20','May 21','May 22','May 23','May 24','May 25','May 26'].map(d => <span key={d}>{d}</span>)}
+                    {['Jul 20','Jul 21','Jul 22','Jul 23','Jul 24','Jul 25','Jul 26'].map(d => <span key={d}>{d}</span>)}
                   </div>
                 </div>
                 <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:12, marginTop:16 }}>

@@ -10,8 +10,8 @@ const RESOURCES = [
 ];
 
 const FAQS = [
-  { q:'Can I change my SDG goal after registration?', a:'Yes, you can update your SDG focus until the Idea Submission deadline (May 25).' },
-  { q:'Is the hackathon online or offline?',          a:'The hackathon is hybrid — ideation is online, finals are at SRCAS campus on Jun 28.' },
+  { q:'Can I change my SDG goal after registration?', a:'Yes, you can update your SDG focus until the Idea Submission deadline (Jul 25).' },
+  { q:'Is the hackathon online or offline?',          a:'The hackathon is hybrid — ideation is online, finals are at SRCAS campus on Aug 14.' },
   { q:'What Azure services can we use?',              a:'All Azure services are allowed. Use your student credits or apply for additional credits.' },
   { q:'How many members per team?',                   a:'Teams can have 2–4 members. Solo participation is not allowed.' },
 ];

@@ -192,7 +192,7 @@ const MarqueeItem = () => (
     <span style={{ color: '#d1d5db' }}>✦</span>
     <span>Singapore Trip</span>
     <span style={{ color: '#d1d5db' }}>✦</span>
-    <span>Aug 14–16 · SRCAS</span>
+    <span>Aug 14 · SRCAS</span>
     <span style={{ color: '#d1d5db' }}>✦</span>
     <span>Open Innovation</span>
     <span style={{ color: '#d1d5db' }}>✦</span>

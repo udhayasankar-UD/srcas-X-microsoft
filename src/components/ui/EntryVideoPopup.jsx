@@ -286,7 +286,7 @@ useEffect(() => {
                     color: '#fff', letterSpacing: '-0.01em',
                     fontFamily: "'Plus Jakarta Sans', sans-serif",
                   }}>
-                    Aug 14–16, 2026 · SRCAS, Coimbatore
+                    Aug 14, 2026 · SRCAS, Coimbatore
                   </p>
                   <p style={{
                     margin: '2px 0 0', fontSize: '0.75rem',

@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 
 const EVENTS = [
-  { date:'May 15–20', event:'Registration Open',        status:'done',    desc:'Team registration and idea brief.',       time:'All day' },
-  { date:'May 25',    event:'Idea Submission Deadline', status:'done',    desc:'300-word abstract of your solution.',     time:'11:59 PM IST' },
-  { date:'Jun 5',     event:'Shortlist Announced',      status:'upcoming',desc:'Top 30 teams notified via email.',        time:'12:00 PM IST' },
-  { date:'Jun 25',    event:'Final 10 Announced',       status:'upcoming',desc:'Top 10 teams invited to present.',        time:'10:00 AM IST' },
-  { date:'Jun 28',    event:'Grand Finale & Awards',    status:'upcoming',desc:'Live presentations and prize ceremony.',  time:'09:00 AM IST' },
+  { date:'Jun 7–21',  event:'Registration Open',        status:'done',    desc:'Team registration and idea brief.',       time:'All day' },
+  { date:'Jul 25',    event:'Idea Submission Deadline', status:'active',  desc:'300-word abstract of your solution.',     time:'11:59 PM IST' },
+  { date:'Aug 7',     event:'Shortlist Announced',      status:'upcoming',desc:'Top 30 teams notified via email.',        time:'12:00 PM IST' },
+  { date:'Aug 14',    event:'Grand Finale & Awards',    status:'upcoming',desc:'Live presentations and prize ceremony.',  time:'09:00 AM IST' },
 ];
 
 const MENTORS = [
@@ -88,7 +87,7 @@ export default function ScheduleTab() {
           <div className="dash-card" style={{ background:'linear-gradient(135deg,#111,#222)', borderRadius:14, padding:'20px 22px', boxShadow:'0 4px 20px rgba(0,0,0,0.15)', color:'#fff' }}>
             <div style={{ fontSize:12, fontWeight:700, color:'rgba(255,255,255,0.5)', marginBottom:8, letterSpacing:'0.06em' }}>FINALS COUNTDOWN</div>
             <div style={{ fontSize:38, fontWeight:900, letterSpacing:'-0.02em', color:'#4C9F38' }}>13 days</div>
-            <div style={{ fontSize:12, color:'rgba(255,255,255,0.5)', marginTop:4 }}>Grand Finale · Jun 28 · SRCAS Campus</div>
+            <div style={{ fontSize:12, color:'rgba(255,255,255,0.5)', marginTop:4 }}>Grand Finale · Aug 14 · SRCAS Campus</div>
             <div style={{ display:'flex', gap:8, marginTop:14, flexWrap:'wrap' }}>
               {['09:00 AM Start','Live Presentations','Prize Ceremony'].map((t, i) => (
                 <span key={i} style={{ fontSize:10, fontWeight:600, color:'rgba(255,255,255,0.6)', background:'rgba(255,255,255,0.08)', padding:'4px 10px', borderRadius:20 }}>{t}</span>
