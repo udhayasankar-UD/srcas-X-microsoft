@@ -1,19 +1,73 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { supabase } from '../../lib/supabaseClient';
 import EventTimeline from '../../components/EventTimeline';
 
 const TIMELINE_STEPS = [
-  { title:'Registration Deadline', date:'Jun 21' },
+  { title:'Registration', date:'Jun 21' },
+  { title:'Team Confirmation', date:'Jul 10' },
   { title:'Idea Submission', date:'Jul 25' },
   { title:'Shortlist Announced', date:'Aug 7' },
-  { title:'Prototype Submission', date:'Aug 10' },
   { title:'Grand Finale', date:'Aug 14' },
 ];
 
 const card = (extra={}) => ({ background:'#fff', borderRadius:16, padding:'24px', boxShadow:'0 1px 4px rgba(0,0,0,0.06)', border:'1px solid #f3f4f6', ...extra });
 
 export default function OverviewTab({ hasTeam, teamData, teamMembers, submissions, user, setActiveTab, announcements = [] }) {
+  const [totalTeams, setTotalTeams] = useState(245);
+
+  useEffect(() => {
+    const fetchTeamCount = async () => {
+      const { count } = await supabase.from('teams').select('id', { count: 'exact', head: true });
+      if (count !== null) setTotalTeams(count);
+    };
+    fetchTeamCount();
+  }, []);
+
   const memberCount = teamMembers?.length || 1;
-  const overallProgress = hasTeam ? 20 : 0; 
+  const hasSubmitted = submissions?.length > 0;
+  const overallProgress = hasTeam ? (hasSubmitted ? 60 : 40) : 20; 
+  const currentStepIndex = hasSubmitted ? 2 : (hasTeam ? 1 : 0);
+
+  const now = new Date();
+  const milestones = [
+    { title: 'Team Confirmation', dateStr: '2026-07-10T23:59:59', icon: '👥', desc: 'Form your team and confirm details' },
+    { title: 'Idea Submission', dateStr: '2026-07-25T23:59:59', icon: '💡', desc: 'Submit your 300-word abstract' },
+    { title: 'Shortlist Announced', dateStr: '2026-08-07T12:00:00', icon: '🚩', desc: 'Top teams will be shortlisted' },
+    { title: 'Grand Finale', dateStr: '2026-08-14T09:00:00', icon: '🏆', desc: 'Final presentations and winner announcement' }
+  ];
+
+  const upcomingMilestones = milestones.filter(m => new Date(m.dateStr) > now);
+  const nextMilestone = upcomingMilestones.length > 0 ? upcomingMilestones[0] : milestones[milestones.length - 1];
+
+  const getDaysLeft = (targetDate) => {
+    const diff = new Date(targetDate) - now;
+    if (diff < 0) return 0;
+    return Math.ceil(diff / (1000 * 60 * 60 * 24));
+  };
+  const daysToNext = getDaysLeft(nextMilestone.dateStr);
+
+  const CheckItem = ({ label, status }) => {
+    let icon, style, color;
+    if (status === 'done') {
+      icon = <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>;
+      style = { width:16, height:16, borderRadius:'50%', background:'#10b981', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 };
+      color = '#111';
+    } else if (status === 'active') {
+      icon = null;
+      style = { width:16, height:16, borderRadius:'50%', border:'2px dashed #10b981', flexShrink:0 };
+      color = '#10b981';
+    } else {
+      icon = null;
+      style = { width:16, height:16, borderRadius:'50%', border:'2px solid #e5e7eb', flexShrink:0 };
+      color = '#9ca3af';
+    }
+    return (
+      <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+        <div style={style}>{icon}</div>
+        <span style={{ fontSize:13, fontWeight:600, color }}>{label}</span>
+      </div>
+    );
+  };
   
   // Time ago formatter
   const timeAgo = (dateStr) => {
@@ -50,7 +104,7 @@ export default function OverviewTab({ hasTeam, teamData, teamMembers, submission
     <div style={{ display:'flex', flexDirection:'column', gap:24 }}>
       
       {/* 1. Dynamic Timeline */}
-      <EventTimeline steps={TIMELINE_STEPS} currentStepIndex={hasTeam ? 1 : 0} />
+      <EventTimeline steps={TIMELINE_STEPS} currentStepIndex={currentStepIndex} />
 
       {/* 2. Stats Grid (5 columns) */}
       <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(200px, 1fr))', gap:16 }}>
@@ -71,11 +125,11 @@ export default function OverviewTab({ hasTeam, teamData, teamMembers, submission
           <div style={{ display:'flex', alignItems:'center', gap:16, marginBottom:16 }}>
             <div style={{ width:48, height:48, borderRadius:12, background:'#eff6ff', color:'#3b82f6', display:'flex', alignItems:'center', justifyContent:'center', fontSize:20 }}>📅</div>
             <div>
-              <div style={{ fontSize:24, fontWeight:800, color:'#111', lineHeight:1 }}>12</div>
+              <div style={{ fontSize:24, fontWeight:800, color:'#111', lineHeight:1 }}>{daysToNext}</div>
               <div style={{ fontSize:13, fontWeight:600, color:'#6b7280', marginTop:4 }}>Days to Next Milestone</div>
             </div>
           </div>
-          <div style={{ marginTop:'auto', fontSize:13, fontWeight:700, color:'#9ca3af' }}>Shortlist Announced</div>
+          <div style={{ marginTop:'auto', fontSize:13, fontWeight:700, color:'#9ca3af' }}>{nextMilestone.title}</div>
         </div>
 
         {/* Card 5 */}
@@ -83,7 +137,7 @@ export default function OverviewTab({ hasTeam, teamData, teamMembers, submission
           <div style={{ display:'flex', alignItems:'center', gap:16, marginBottom:16 }}>
             <div style={{ width:48, height:48, borderRadius:12, background:'#fefce8', color:'#eab308', display:'flex', alignItems:'center', justifyContent:'center', fontSize:20 }}>⭐</div>
             <div>
-              <div style={{ fontSize:24, fontWeight:800, color:'#111', lineHeight:1 }}>245</div>
+              <div style={{ fontSize:24, fontWeight:800, color:'#111', lineHeight:1 }}>{totalTeams}</div>
               <div style={{ fontSize:13, fontWeight:600, color:'#6b7280', marginTop:4 }}>Teams Participating</div>
             </div>
           </div>
@@ -140,26 +194,11 @@ export default function OverviewTab({ hasTeam, teamData, teamMembers, submission
             </div>
             {/* Checklist */}
             <div style={{ display:'flex', flexDirection:'column', gap:12, flex:1 }}>
-              <div style={{ display:'flex', alignItems:'center', gap:8 }}>
-                <div style={{ width:16, height:16, borderRadius:'50%', background:'#10b981', display:'flex', alignItems:'center', justifyContent:'center' }}><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg></div>
-                <span style={{ fontSize:13, fontWeight:600, color:'#111' }}>Team Setup</span>
-              </div>
-              <div style={{ display:'flex', alignItems:'center', gap:8 }}>
-                <div style={{ width:16, height:16, borderRadius:'50%', background:'#10b981', display:'flex', alignItems:'center', justifyContent:'center' }}><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg></div>
-                <span style={{ fontSize:13, fontWeight:600, color:'#111' }}>Idea Submission</span>
-              </div>
-              <div style={{ display:'flex', alignItems:'center', gap:8 }}>
-                <div style={{ width:16, height:16, borderRadius:'50%', border:'2px dashed #d1d5db' }}/>
-                <span style={{ fontSize:13, fontWeight:600, color:'#6b7280' }}>Prototype Development</span>
-              </div>
-              <div style={{ display:'flex', alignItems:'center', gap:8 }}>
-                <div style={{ width:16, height:16, borderRadius:'50%', border:'2px solid #e5e7eb' }}/>
-                <span style={{ fontSize:13, fontWeight:600, color:'#9ca3af' }}>Prototype Submission</span>
-              </div>
-              <div style={{ display:'flex', alignItems:'center', gap:8 }}>
-                <div style={{ width:16, height:16, borderRadius:'50%', border:'2px solid #e5e7eb' }}/>
-                <span style={{ fontSize:13, fontWeight:600, color:'#9ca3af' }}>Final Presentation</span>
-              </div>
+              <CheckItem label="Registration" status="done" />
+              <CheckItem label="Team Confirmation" status={hasTeam ? 'done' : 'active'} />
+              <CheckItem label="Idea Submission" status={hasSubmitted ? 'done' : (hasTeam ? 'active' : 'pending')} />
+              <CheckItem label="Shortlist Announced" status={hasSubmitted ? 'active' : 'pending'} />
+              <CheckItem label="Grand Finale" status="pending" />
             </div>
           </div>
           <div style={{ marginTop:20, textAlign:'center', fontSize:13, fontWeight:700, color:'#10b981' }}>Keep going! You're on the right track.</div>
@@ -169,48 +208,27 @@ export default function OverviewTab({ hasTeam, teamData, teamMembers, submission
         <div style={card({ display:'flex', flexDirection:'column' })}>
           <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:20 }}>
             <h3 style={{ fontSize:16, fontWeight:800, color:'#111', margin:0 }}>Upcoming Milestones</h3>
-            <span style={{ fontSize:13, fontWeight:700, color:'#3b82f6', cursor:'pointer' }}>View all</span>
           </div>
           <div style={{ display:'flex', flexDirection:'column', gap:16, flex:1 }}>
-            <div style={{ display:'flex', alignItems:'center', gap:12 }}>
-              <div style={{ width:40, height:40, borderRadius:10, background:'#eff6ff', color:'#3b82f6', display:'flex', alignItems:'center', justifyContent:'center', fontSize:16 }}>🚩</div>
-              <div style={{ flex:1 }}>
-                <div style={{ fontSize:14, fontWeight:800, color:'#111' }}>Shortlist Announced</div>
-                <div style={{ fontSize:12, color:'#6b7280' }}>Top teams will be shortlisted</div>
+            {upcomingMilestones.slice(0, 3).map((m, i) => (
+              <div key={i} style={{ display:'flex', alignItems:'center', gap:12 }}>
+                <div style={{ width:40, height:40, borderRadius:10, background: m.icon==='🏆'?'#fefce8':'#eff6ff', color: m.icon==='🏆'?'#eab308':'#3b82f6', display:'flex', alignItems:'center', justifyContent:'center', fontSize:16 }}>{m.icon}</div>
+                <div style={{ flex:1 }}>
+                  <div style={{ fontSize:14, fontWeight:800, color:'#111' }}>{m.title}</div>
+                  <div style={{ fontSize:12, color:'#6b7280' }}>{m.desc}</div>
+                </div>
+                <div style={{ textAlign:'right' }}>
+                  <div style={{ fontSize:13, fontWeight:700, color:'#111' }}>{new Date(m.dateStr).toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'})}</div>
+                  <div style={{ fontSize:11, color:'#9ca3af' }}>{getDaysLeft(m.dateStr)} days left</div>
+                </div>
               </div>
-              <div style={{ textAlign:'right' }}>
-                <div style={{ fontSize:13, fontWeight:700, color:'#111' }}>Aug 7, 2026</div>
-                <div style={{ fontSize:11, color:'#9ca3af' }}>68 days left</div>
-              </div>
-            </div>
-            <div style={{ display:'flex', alignItems:'center', gap:12 }}>
-              <div style={{ width:40, height:40, borderRadius:10, background:'#eff6ff', color:'#3b82f6', display:'flex', alignItems:'center', justifyContent:'center', fontSize:16 }}>📤</div>
-              <div style={{ flex:1 }}>
-                <div style={{ fontSize:14, fontWeight:800, color:'#111' }}>Prototype Submission</div>
-                <div style={{ fontSize:12, color:'#6b7280' }}>Submit your prototype and pitch deck</div>
-              </div>
-              <div style={{ textAlign:'right' }}>
-                <div style={{ fontSize:13, fontWeight:700, color:'#111' }}>Aug 10, 2026</div>
-                <div style={{ fontSize:11, color:'#9ca3af' }}>71 days left</div>
-              </div>
-            </div>
-            <div style={{ display:'flex', alignItems:'center', gap:12 }}>
-              <div style={{ width:40, height:40, borderRadius:10, background:'#fefce8', color:'#eab308', display:'flex', alignItems:'center', justifyContent:'center', fontSize:16 }}>🏆</div>
-              <div style={{ flex:1 }}>
-                <div style={{ fontSize:14, fontWeight:800, color:'#111' }}>Grand Finale</div>
-                <div style={{ fontSize:12, color:'#6b7280' }}>Final presentations and winner announcement</div>
-              </div>
-              <div style={{ textAlign:'right' }}>
-                <div style={{ fontSize:13, fontWeight:700, color:'#111' }}>Aug 14, 2026</div>
-                <div style={{ fontSize:11, color:'#9ca3af' }}>75 days left</div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>
 
       {/* 4. Bottom Grid (2 columns) */}
-      <div style={{ display:'grid', gridTemplateColumns:'2fr 1.2fr', gap:16 }}>
+      <div className="dash-grid-2" style={{ display:'grid', gridTemplateColumns:'2fr 1.2fr', gap:16 }}>
         {/* Recent Activity */}
         <div style={card({ display:'flex', flexDirection:'column' })}>
           <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:20 }}>

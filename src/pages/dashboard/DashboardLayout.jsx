@@ -23,7 +23,6 @@ const NAV = [
   { id:'team',         icon:'◎',   label:'My Team'       },
   { id:'submission',   icon:'↑',   label:'Submission'    },
   { id:'resources',    icon:'≡',   label:'Resources'     },
-  { id:'schedule',     icon:'▤',   label:'Schedule'      },
   { id:'announcements',icon:'⚑',   label:'Announcements' },
 ];
 

@@ -34,6 +34,7 @@ export default function SubmissionTab({ hasTeam, teamData, teamMembers, submissi
   const [errorMsg, setErrorMsg] = useState('');
   const [success, setSuccess] = useState(false);
   const [saveMsg, setSaveMsg] = useState('');
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   
   const [sdgOpen, setSdgOpen] = useState(false);
   const sdgRef = useRef();
@@ -173,8 +174,24 @@ export default function SubmissionTab({ hasTeam, teamData, teamMembers, submissi
     );
   }
 
+  const confirmDeleteSubmission = async (s) => {
+    setSubmitting(true);
+    try {
+      const { error } = await supabase.from('submissions').delete().eq('id', s.id);
+      if (error) throw error;
+      if (setSubmissions) setSubmissions([]);
+      setShowDeleteModal(false);
+    } catch(err) {
+      alert("Error deleting submission: " + err.message);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   if (alreadySubmitted || success) {
     const s = alreadySubmitted ? submissions[0] : form;
+    const isBeforeDeadline = new Date() <= new Date('2026-07-25T23:59:59'); // change the deadline here after July
+    
     return (
       <div style={{ display:'flex', flexDirection:'column', gap:20 }}>
         <div className="dash-card" style={card({ width:'100%', borderLeft:'4px solid #4C9F38' })}>
@@ -185,7 +202,17 @@ export default function SubmissionTab({ hasTeam, teamData, teamMembers, submissi
         </div>
 
         <div className="dash-card" style={card({ width:'100%' })}>
-          <h3 style={{ fontSize:16, fontWeight:800, color:'#111', marginBottom:16, borderBottom:'1px solid #e5e7eb', paddingBottom:12 }}>Submission Details</h3>
+          <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:16, borderBottom:'1px solid #e5e7eb', paddingBottom:12, flexWrap:'wrap', gap:10 }}>
+            <h3 style={{ fontSize:16, fontWeight:800, color:'#111', margin:0 }}>Submission Details</h3>
+            {isBeforeDeadline && s.id && (
+              <button 
+                onClick={() => setShowDeleteModal(true)}
+                disabled={submitting}
+                style={{ padding:'6px 12px', background:'#fef2f2', color:'#dc2626', border:'1px solid #fecaca', borderRadius:6, fontSize:12, fontWeight:700, cursor: submitting ? 'not-allowed' : 'pointer', transition:'all 0.2s' }}>
+                Delete & Re-submit
+              </button>
+            )}
+          </div>
           <div style={{ display:'flex', flexDirection:'column', gap:14 }}>
             <div style={{ display:'flex', flexDirection:'column', gap:4 }}>
               <span style={{ fontSize:11, fontWeight:700, color:'#9ca3af', textTransform:'uppercase' }}>Project Title</span>
@@ -228,6 +255,37 @@ export default function SubmissionTab({ hasTeam, teamData, teamMembers, submissi
             )}
           </div>
         </div>
+
+        {/* Delete Warning Modal */}
+        {showDeleteModal && (
+          <div style={{ position:'fixed', top:0, left:0, right:0, bottom:0, background:'rgba(0,0,0,0.6)', zIndex:100, display:'flex', alignItems:'center', justifyContent:'center', padding:20 }}>
+            <div style={{ background:'#fff', borderRadius:16, width:'100%', maxWidth:400, overflow:'hidden', boxShadow:'0 20px 40px rgba(0,0,0,0.2)', position:'relative' }}>
+              <div style={{ padding:'24px', display:'flex', flexDirection:'column', alignItems:'center', textAlign:'center' }}>
+                <div style={{ width:56, height:56, borderRadius:'50%', background:'#fef2f2', display:'flex', alignItems:'center', justifyContent:'center', marginBottom:16 }}>
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#dc2626" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                </div>
+                <h3 style={{ fontSize:20, fontWeight:800, color:'#111', marginBottom:8 }}>Delete Submission?</h3>
+                <p style={{ fontSize:14, color:'#4b5563', marginBottom:24, lineHeight:1.5 }}>
+                  Are you sure you want to delete your submission? You will need to fill out the form and upload your PDF again. <strong>This action cannot be undone.</strong>
+                </p>
+                <div style={{ display:'flex', gap:12, width:'100%' }}>
+                  <button 
+                    onClick={() => setShowDeleteModal(false)}
+                    disabled={submitting}
+                    style={{ flex:1, padding:'10px', background:'#f3f4f6', color:'#374151', border:'none', borderRadius:8, fontWeight:700, cursor:'pointer' }}>
+                    Cancel
+                  </button>
+                  <button 
+                    onClick={() => confirmDeleteSubmission(s)}
+                    disabled={submitting}
+                    style={{ flex:1, padding:'10px', background:'#dc2626', color:'#fff', border:'none', borderRadius:8, fontWeight:700, cursor: submitting ? 'not-allowed' : 'pointer' }}>
+                    {submitting ? 'Deleting...' : 'Yes, Delete'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     );
   }

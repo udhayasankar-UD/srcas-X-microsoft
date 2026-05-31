@@ -5,7 +5,7 @@ import OverviewTab    from './OverviewTab';
 import TeamTab        from './TeamTab';
 import SubmissionTab  from './SubmissionTab';
 import ResourcesTab   from './ResourcesTab';
-import ScheduleTab    from './ScheduleTab';
+
 import AnnouncementsTab from './AnnouncementsTab';
 
 export default function DashboardPage() {
@@ -96,8 +96,8 @@ export default function DashboardPage() {
       {activeTab === 'overview'   && <OverviewTab hasTeam={hasTeam} teamData={teamData} teamMembers={teamMembers} submissions={submissions} user={user} setActiveTab={setActiveTab} announcements={announcements} />}
       {activeTab === 'team'       && <TeamTab hasTeam={hasTeam} teamData={teamData} teamMembers={teamMembers} user={user} setTeamMembers={setTeamMembers} setTeamData={setTeamData} setHasTeam={setHasTeam} />}
       {activeTab === 'submission' && <SubmissionTab hasTeam={hasTeam} teamData={teamData} teamMembers={teamMembers} submissions={submissions} setSubmissions={setSubmissions} />}
-      {activeTab === 'resources'  && <ResourcesTab />}
-      {activeTab === 'schedule'   && <ScheduleTab />}
+      {activeTab === 'resources'  && <ResourcesTab hasTeam={hasTeam} submissions={submissions} />}
+
       {activeTab === 'announcements' && <AnnouncementsTab announcements={announcements} />}
     </DashboardLayout>
   );
