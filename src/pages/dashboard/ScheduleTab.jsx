@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const EVENTS = [
   { date:'Jun 7–21',  event:'Registration Open',        status:'done',    desc:'Team registration and idea brief.',       time:'All day' },

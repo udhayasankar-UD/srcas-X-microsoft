@@ -433,23 +433,6 @@ export default function TimelineSection() {
                     </span>
                   </h2>
                 </div>
-                {/* Stages pill */}
-                <div style={{
-                  display: "flex", alignItems: "center", gap: 5,
-                  padding: "9px 18px", border: "1px solid #e8e8e8",
-                  borderRadius: 999, background: "#fafafa",
-                }}>
-                  {[0,1,2,3].map(i => (
-                    <div key={i} style={{
-                      width: i === 3 ? 24 : 7, height: 7, borderRadius: 999,
-                      background: i === 3 ? "#0078D4" : "#ddd",
-                    }}/>
-                  ))}
-                  <span style={{
-                    fontFamily: "monospace", fontSize: "0.62rem", fontWeight: 700,
-                    letterSpacing: "0.1em", color: "#888", marginLeft: 6,
-                  }}>4 STAGES</span>
-                </div>
               </div>
 
               {/* ── Connecting beam + icon dots ── */}

@@ -163,13 +163,14 @@ function GridDots() {
   );
 }
 
+const COUNTDOWN_TARGET = new Date('2026-08-14T09:00:00').getTime();
+
 // ── Countdown badge ────────────────────────────────────────────────────────────
 function CountdownBadge() {
-  const target = new Date('2026-08-14T09:00:00').getTime();
   const [t, setT] = useState({ d: 0, h: 0, m: 0, s: 0 });
   useEffect(() => {
     const tick = () => {
-      const diff = target - Date.now();
+      const diff = COUNTDOWN_TARGET - Date.now();
       if (diff <= 0) return;
       setT({ d: Math.floor(diff / 86400000), h: Math.floor((diff % 86400000) / 3600000), m: Math.floor((diff % 3600000) / 60000), s: Math.floor((diff % 60000) / 1000) });
     };

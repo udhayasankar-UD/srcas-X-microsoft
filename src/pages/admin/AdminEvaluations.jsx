@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '../../lib/supabaseClient';
+import { supabase, ADMIN_EMAILS } from '../../lib/supabaseClient';
 import { Home, Users, Flag, FileText, CheckSquare, Calendar, Bell, BookOpen, BarChart2, Settings, Link as LinkIcon, Shield, LogOut, Search, ChevronDown, LayoutDashboard, Download, ChevronRight, MoreVertical, ChevronLeft, Star, Clock, XCircle, Eye, Calendar as CalendarIcon, ClipboardCheck, Filter } from 'lucide-react';
 
 const S = {
@@ -23,22 +23,7 @@ export default function AdminEvaluations() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session?.user) { navigate('/register'); return; }
-      const { data: adminList } = await supabase.from('admins').select('email');
-      const e1 = "udteam06" + "@" + "gmail.com";
-      const e2 = "udhayasankar200721" + "@" + "gmail.com";
-      const hardcoded = [e1, e2];
-      const email = session.user.email.trim().toLowerCase();
-      const ok = hardcoded.includes(email) || adminList?.some(a => a.email.trim().toLowerCase() === email);
-      if (ok) { setIsAdmin(true); fetchData(); } else { alert("Not admin!"); navigate('/dashboard'); }
-    };
-    checkAuth();
-  }, [navigate]);
-
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     const [{ data: t }, { data: s }] = await Promise.all([
       supabase.from('teams').select('*'),
       supabase.from('submissions').select('*').order('created_at', { ascending: false })
@@ -69,9 +54,23 @@ export default function AdminEvaluations() {
     });
     
     setEvaluations(evals);
-    
     setLoading(false);
-  };
+  }, []);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.user) { navigate('/register'); return; }
+      const { data: adminList } = await supabase.from('admins').select('email');
+      const hardcoded = ADMIN_EMAILS;
+      const email = session.user.email.trim().toLowerCase();
+      const ok = hardcoded.includes(email) || adminList?.some(a => a.email.trim().toLowerCase() === email);
+      if (ok) { setIsAdmin(true); fetchData(); } else { alert("Not admin!"); navigate('/dashboard'); }
+    };
+    checkAuth();
+  }, [navigate, fetchData]);
+
+
 
   if (loading) return <div style={{minHeight:'100vh',display:'flex',alignItems:'center',justifyContent:'center',background:S.bg}}><div style={{width:40,height:40,border:'3px solid '+S.primary,borderTopColor:'transparent',borderRadius:'50%',animation:'spin 1s linear infinite'}}/></div>;
   if (!isAdmin) return null;
@@ -367,3 +366,4 @@ export default function AdminEvaluations() {
     </>
   );
 }
+

@@ -146,13 +146,14 @@ function StatBadge({ value, label, delay }) {
   );
 }
 
+const COUNTDOWN_TARGET = new Date('2026-08-14T09:00:00').getTime();
+
 // ── Countdown timer ────────────────────────────────────────────────────────────
 function Countdown() {
-  const target = new Date('2026-08-14T09:00:00').getTime();
   const [timeLeft, setTimeLeft] = useState({ d: 0, h: 0, m: 0, s: 0 });
   useEffect(() => {
     const tick = () => {
-      const diff = target - Date.now();
+      const diff = COUNTDOWN_TARGET - Date.now();
       if (diff <= 0) return;
       setTimeLeft({
         d: Math.floor(diff / 86400000),

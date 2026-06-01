@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { supabase } from '../../lib/supabaseClient';
 
 const INDIA_STATES_CITIES = {
@@ -87,40 +87,7 @@ export default function TeamTab({ hasTeam, teamData, teamMembers, user, setTeamM
   const [creating, setCreating] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
-  // Update teammates array when team size changes
-  useEffect(() => {
-    const requiredTeammates = formData.teamSize - 1;
-    let newTeammates = [...formData.teammates];
-    
-    if (newTeammates.length < requiredTeammates) {
-      for (let i = newTeammates.length; i < requiredTeammates; i++) {
-        newTeammates.push({ ...defaultMember });
-      }
-    } else if (newTeammates.length > requiredTeammates) {
-      newTeammates = newTeammates.slice(0, requiredTeammates);
-    }
-    
-    setFormData(prev => ({ ...prev, teammates: newTeammates }));
-  }, [formData.teamSize]);
 
-  // Sync user data to leader if it loads after initial render
-  useEffect(() => {
-    if (user?.email || user?.user_metadata?.full_name || user?.user_metadata?.name) {
-      setFormData(prev => {
-        if (!prev.leader.email || !prev.leader.full_name) {
-          return {
-            ...prev,
-            leader: {
-              ...prev.leader,
-              full_name: prev.leader.full_name || user?.user_metadata?.full_name || user?.user_metadata?.name || '',
-              email: prev.leader.email || user?.email || ''
-            }
-          };
-        }
-        return prev;
-      });
-    }
-  }, [user]);
 
   // --- VALIDATION ---
   const validateCurrentStep = () => {
@@ -364,7 +331,21 @@ export default function TeamTab({ hasTeam, teamData, teamMembers, user, setTeamM
 
               <div>
                 <label style={styles.label}>Total Team Size</label>
-                <select value={formData.teamSize} onChange={e => setFormData({...formData, teamSize: parseInt(e.target.value)})} style={{ ...styles.input, cursor: 'pointer' }}>
+                <select value={formData.teamSize} onChange={e => {
+                  const newSize = parseInt(e.target.value);
+                  const requiredTeammates = newSize - 1;
+                  let newTeammates = [...formData.teammates];
+                  
+                  if (newTeammates.length < requiredTeammates) {
+                    for (let i = newTeammates.length; i < requiredTeammates; i++) {
+                      newTeammates.push({ ...defaultMember });
+                    }
+                  } else if (newTeammates.length > requiredTeammates) {
+                    newTeammates = newTeammates.slice(0, requiredTeammates);
+                  }
+                  
+                  setFormData(prev => ({ ...prev, teamSize: newSize, teammates: newTeammates }));
+                }} style={{ ...styles.input, cursor: 'pointer' }}>
                   <option value={2}>2 Members (Lead + 1 Teammate)</option>
                   <option value={3}>3 Members (Lead + 2 Teammates)</option>
                   <option value={4}>4 Members (Lead + 3 Teammates)</option>

@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '../../lib/supabaseClient';
+import { supabase, ADMIN_EMAILS } from '../../lib/supabaseClient';
 import { Home, Users, Flag, FileText, CheckSquare, Calendar, Bell, BookOpen, BarChart2, Settings, Link as LinkIcon, Shield, LogOut, Search, ChevronDown, Eye, Megaphone, Download, LayoutDashboard, ChevronRight } from 'lucide-react';
 
 // Style constants
@@ -20,30 +20,30 @@ export default function AdminDashboard() {
   const [members, setMembers] = useState([]);
   const [submissions, setSubmissions] = useState([]);
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session?.user) { navigate('/register'); return; }
-      const { data: adminList } = await supabase.from('admins').select('email');
-      const e1 = "udteam06" + "@" + "gmail.com";
-      const e2 = "udhayasankar200721" + "@" + "gmail.com";
-      const hardcoded = [e1, e2];
-      const email = session.user.email.trim().toLowerCase();
-      const ok = hardcoded.includes(email) || adminList?.some(a => a.email.trim().toLowerCase() === email);
-      if (ok) { setIsAdmin(true); fetchData(); } else { alert("Not admin!"); navigate('/dashboard'); }
-      setLoadingAuth(false);
-    };
-    checkAuth();
-  }, [navigate]);
-
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     const [{ data: t }, { data: m }, { data: s }] = await Promise.all([
       supabase.from('teams').select('*').order('created_at', { ascending: false }),
       supabase.from('team_members').select('*'),
       supabase.from('submissions').select('*'),
     ]);
     if (t) setTeams(t); if (m) setMembers(m); if (s) setSubmissions(s);
-  };
+  }, []);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.user) { navigate('/register'); return; }
+      const { data: adminList } = await supabase.from('admins').select('email');
+      const hardcoded = ADMIN_EMAILS;
+      const email = session.user.email.trim().toLowerCase();
+      const ok = hardcoded.includes(email) || adminList?.some(a => a.email.trim().toLowerCase() === email);
+      if (ok) { setIsAdmin(true); fetchData(); } else { alert("Not admin!"); navigate('/dashboard'); }
+      setLoadingAuth(false);
+    };
+    checkAuth();
+  }, [navigate, fetchData]);
+
+
 
   const exportCSV = () => {
     let csv = "data:text/csv;charset=utf-8,Team,Status,Score,Name,Email,Phone,College,Dept,Year\n";
@@ -280,3 +280,4 @@ export default function AdminDashboard() {
     </>
   );
 }
+

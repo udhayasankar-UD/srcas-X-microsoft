@@ -6,3 +6,9 @@ const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://placeholder-pr
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'placeholder-anon-key';
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+// Centralized admin emails to avoid repeating them across components
+export const ADMIN_EMAILS = [
+  "udteam06@gmail.com",
+  "udhayasankar200721@gmail.com"
+];

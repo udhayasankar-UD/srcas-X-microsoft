@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const RESOURCES = [
   { icon:'📄', label:'Hackathon Rulebook',       desc:'Official rules and judging criteria',   tag:'PDF',    href:'#', color:'#E5243B' },

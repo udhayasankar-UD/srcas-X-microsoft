@@ -13,43 +13,7 @@ const StarIcon = ({ size = 20, color = "currentColor", fill = "none" }) => (
     <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
   </svg>
 );
-const TrophyIcon = ({ size = 20, color = "currentColor" }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
-    <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
-    <path d="M4 22h16"></path>
-    <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path>
-    <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path>
-    <path d="M18 2H6v7a6 6 0 0 0 12 0V2z"></path>
-  </svg>
-);
-const BrainIcon = ({ size = 20, color = "currentColor" }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z"></path>
-    <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z"></path>
-  </svg>
-);
-const PinIcon = ({ size = 20, color = "currentColor" }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-    <circle cx="12" cy="10" r="3"></circle>
-  </svg>
-);
-const BulbIcon = ({ size = 20, color = "currentColor" }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1.3.5 2.6 1.5 3.5.8.8 1.3 1.5 1.5 2.5"></path>
-    <path d="M9 18h6"></path>
-    <path d="M10 22h4"></path>
-  </svg>
-);
-const CalendarIcon = ({ size = 20, color = "currentColor" }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-    <line x1="16" y1="2" x2="16" y2="6"></line>
-    <line x1="8" y1="2" x2="8" y2="6"></line>
-    <line x1="3" y1="10" x2="21" y2="10"></line>
-  </svg>
-);
+
 
 const LINE1 = "What's the Next";
 const LINE2 = "Big Idea!";
@@ -126,37 +90,7 @@ function GridLines() {
   );
 }
 
-// Scramble text effect on hover
-function ScrambleTag({ text }) {
-  const [display, setDisplay] = useState(text);
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  const interval = useRef(null);
-  const frame = useRef(0);
 
-  const scramble = () => {
-    frame.current = 0;
-    clearInterval(interval.current);
-    interval.current = setInterval(() => {
-      frame.current++;
-      setDisplay(text.split('').map((ch, i) =>
-        i < frame.current / 2 ? ch : chars[Math.floor(Math.random() * chars.length)]
-      ).join(''));
-      if (frame.current >= text.length * 2) {
-        clearInterval(interval.current);
-        setDisplay(text);
-      }
-    }, 30);
-  };
-
-  useEffect(() => () => clearInterval(interval.current), []);
-
-  return (
-    <span onMouseEnter={scramble} style={{ fontFamily: 'monospace', cursor: 'default', letterSpacing: '0.08em' }}>
-      {display}
-    </span>
-    
-  );
-}
 
 export default function HeroSection1() {
   const [typed1, setTyped1] = useState('');

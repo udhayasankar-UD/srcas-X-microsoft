@@ -12,6 +12,29 @@ const TIMELINE_STEPS = [
 
 const card = (extra={}) => ({ background:'#fff', borderRadius:16, padding:'24px', boxShadow:'0 1px 4px rgba(0,0,0,0.06)', border:'1px solid #f3f4f6', ...extra });
 
+const CheckItem = ({ label, status }) => {
+  let icon, style, color;
+  if (status === 'done') {
+    icon = <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>;
+    style = { width:16, height:16, borderRadius:'50%', background:'#10b981', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 };
+    color = '#111';
+  } else if (status === 'active') {
+    icon = null;
+    style = { width:16, height:16, borderRadius:'50%', border:'2px dashed #10b981', flexShrink:0 };
+    color = '#10b981';
+  } else {
+    icon = null;
+    style = { width:16, height:16, borderRadius:'50%', border:'2px solid #e5e7eb', flexShrink:0 };
+    color = '#9ca3af';
+  }
+  return (
+    <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+      <div style={style}>{icon}</div>
+      <span style={{ fontSize:13, fontWeight:600, color }}>{label}</span>
+    </div>
+  );
+};
+
 export default function OverviewTab({ hasTeam, teamData, teamMembers, submissions, user, setActiveTab, announcements = [] }) {
   const [totalTeams, setTotalTeams] = useState(245);
 
@@ -46,28 +69,7 @@ export default function OverviewTab({ hasTeam, teamData, teamMembers, submission
   };
   const daysToNext = getDaysLeft(nextMilestone.dateStr);
 
-  const CheckItem = ({ label, status }) => {
-    let icon, style, color;
-    if (status === 'done') {
-      icon = <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>;
-      style = { width:16, height:16, borderRadius:'50%', background:'#10b981', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 };
-      color = '#111';
-    } else if (status === 'active') {
-      icon = null;
-      style = { width:16, height:16, borderRadius:'50%', border:'2px dashed #10b981', flexShrink:0 };
-      color = '#10b981';
-    } else {
-      icon = null;
-      style = { width:16, height:16, borderRadius:'50%', border:'2px solid #e5e7eb', flexShrink:0 };
-      color = '#9ca3af';
-    }
-    return (
-      <div style={{ display:'flex', alignItems:'center', gap:8 }}>
-        <div style={style}>{icon}</div>
-        <span style={{ fontSize:13, fontWeight:600, color }}>{label}</span>
-      </div>
-    );
-  };
+
   
   // Time ago formatter
   const timeAgo = (dateStr) => {

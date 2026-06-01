@@ -52,29 +52,30 @@ export default function SubmissionTab({ hasTeam, teamData, teamMembers, submissi
   // Check if they already submitted
   const alreadySubmitted = submissions && submissions.length > 0;
   
-  const [form, setForm] = useState({
-    title: alreadySubmitted ? submissions[0].project_title : '',
-    sdg: alreadySubmitted ? (submissions[0].sdg_goal ? submissions[0].sdg_goal.split(', ') : []) : [],
-    category: alreadySubmitted ? submissions[0].category : '',
-    description: alreadySubmitted ? submissions[0].project_description : '',
-    github: alreadySubmitted ? submissions[0].github_url : '',
-    demo: alreadySubmitted ? submissions[0].demo_video_url : '',
-    pdf: null,
-    pdf_url: alreadySubmitted ? submissions[0].pdf_url : ''
-  });
+  const [form, setForm] = useState(() => {
+    let initialState = {
+      title: alreadySubmitted ? submissions[0].project_title : '',
+      sdg: alreadySubmitted ? (submissions[0].sdg_goal ? submissions[0].sdg_goal.split(', ') : []) : [],
+      category: alreadySubmitted ? submissions[0].category : '',
+      description: alreadySubmitted ? submissions[0].project_description : '',
+      github: alreadySubmitted ? submissions[0].github_url : '',
+      demo: alreadySubmitted ? submissions[0].demo_video_url : '',
+      pdf: null,
+      pdf_url: alreadySubmitted ? submissions[0].pdf_url : ''
+    };
 
-  // Load draft from localStorage on mount
-  useEffect(() => {
     if (!alreadySubmitted && teamData) {
       const draft = localStorage.getItem(`submission_draft_${teamData.id}`);
       if (draft) {
         try {
           const parsed = JSON.parse(draft);
-          setForm(prev => ({ ...prev, ...parsed, pdf: null })); // PDF files can't be stored in localStorage
-        } catch(e) {}
+          initialState = { ...initialState, ...parsed, pdf: null };
+        } catch (err) { console.warn('Draft parse error:', err); }
       }
     }
-  }, [teamData, alreadySubmitted]);
+
+    return initialState;
+  });
 
   const handleSaveDraft = () => {
     if (!teamData) return;
@@ -107,7 +108,7 @@ export default function SubmissionTab({ hasTeam, teamData, teamMembers, submissi
       if (form.pdf) {
         const fileExt = form.pdf.name.split('.').pop();
         const fileName = `${teamData.id}-${Math.random()}.${fileExt}`;
-        const { data: uploadData, error: uploadError } = await supabase.storage
+        const { error: uploadError } = await supabase.storage
           .from('presentations_deck')
           .upload(fileName, form.pdf);
           
@@ -292,7 +293,6 @@ export default function SubmissionTab({ hasTeam, teamData, teamMembers, submissi
 
   // Word counter logic
   const wordCount = form.description ? form.description.trim().split(/\s+/).filter(w => w.length > 0).length : 0;
-  const isOverLimit = wordCount > 500;
 
   const handleDescChange = (e) => {
     const val = e.target.value;

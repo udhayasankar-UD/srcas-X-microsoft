@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '../../lib/supabaseClient';
+import { supabase, ADMIN_EMAILS } from '../../lib/supabaseClient';
 import { Home, Users, Flag, FileText, CheckSquare, Calendar, Bell, BookOpen, BarChart2, Settings, Link as LinkIcon, Shield, LogOut, Search, ChevronDown, LayoutDashboard, ChevronRight, ChevronLeft, Plus, MoreVertical, Megaphone, Eye, X, Edit, Trash2 } from 'lucide-react';
 
 const S = {
@@ -29,27 +29,27 @@ export default function AdminAnnouncements() {
   const [formData, setFormData] = useState({ title: '', message: '', tag: 'General' });
   const [isSaving, setIsSaving] = useState(false);
 
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    const { data } = await supabase.from('announcements').select('*').order('created_at', { ascending: false });
+    if (data) setAnnouncements(data);
+    setLoading(false);
+  }, []);
+
   useEffect(() => {
     const checkAuth = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session?.user) { navigate('/register'); return; }
       const { data: adminList } = await supabase.from('admins').select('email');
-      const e1 = "udteam06@gmail.com";
-      const e2 = "udhayasankar200721@gmail.com";
-      const hardcoded = [e1, e2];
+      const hardcoded = ADMIN_EMAILS;
       const email = session.user.email.trim().toLowerCase();
       const ok = hardcoded.includes(email) || adminList?.some(a => a.email.trim().toLowerCase() === email);
       if (ok) { setIsAdmin(true); fetchData(); } else { alert("Not admin!"); navigate('/dashboard'); }
     };
     checkAuth();
-  }, [navigate]);
+  }, [navigate, fetchData]);
 
-  const fetchData = async () => {
-    setLoading(true);
-    const { data } = await supabase.from('announcements').select('*').order('created_at', { ascending: false });
-    if (data) setAnnouncements(data);
-    setLoading(false);
-  };
+
 
   const handleOpenModal = (announcement = null) => {
     if (announcement) {
@@ -286,3 +286,4 @@ export default function AdminAnnouncements() {
     </>
   );
 }
+

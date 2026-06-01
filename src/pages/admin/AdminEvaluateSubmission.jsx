@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
-import { supabase } from '../../lib/supabaseClient';
+import { supabase, ADMIN_EMAILS } from '../../lib/supabaseClient';
 import { Home, Users, Flag, FileText, CheckSquare, Calendar, Bell, BookOpen, BarChart2, Settings, Link as LinkIcon, Shield, LogOut, Search, ChevronDown, LayoutDashboard, ChevronRight, ChevronLeft, Check, Leaf, ExternalLink, Bold, Italic, Underline, List, Link2, Clock } from 'lucide-react';
 
 const S = {
@@ -32,13 +32,43 @@ export default function AdminEvaluateSubmission() {
   const [notes, setNotes] = useState("");
 
   useEffect(() => {
+    async function fetchData() {
+      // Attempt to fetch real submission
+      const { data: sub } = await supabase.from('submissions').select('*').eq('id', id).single();
+      
+      if (sub) {
+        setSubmission(sub);
+        
+        if (sub.evaluation_scores) setScores(sub.evaluation_scores);
+        if (sub.evaluation_notes) setNotes(sub.evaluation_notes);
+
+        const { data: tm } = await supabase.from('teams').select('*').eq('id', sub.team_id).single();
+        if (tm) setTeam(tm);
+        const { data: mbrs } = await supabase.from('team_members').select('*').eq('team_id', sub.team_id);
+        if (mbrs) setMembers(mbrs);
+      } else {
+        // Fallback for visual mock if ID doesn't exist
+        setSubmission({
+          id: 'SUB-2025-00156',
+          project_title: 'AI Based Waste Management',
+          project_description: 'AI Based Waste Management is an intelligent platform that leverages machine learning and computer vision to optimize waste collection routes, classify waste types in real-time, and promote recycling. The system aims to reduce landfill usage, lower carbon emissions, and build smarter, cleaner cities.',
+          category: 'Climate Action',
+          created_at: '2025-05-26T23:59:00Z',
+          status: 'Under Review',
+          round: 'Evaluation'
+        });
+        setTeam({ team_name: 'Greenovate' });
+        setMembers([{id:1},{id:2},{id:3},{id:4}]); // Mock 4 members
+      }
+      
+      setLoading(false);
+    };
+
     const checkAuth = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session?.user) { navigate('/register'); return; }
       const { data: adminList } = await supabase.from('admins').select('email');
-      const e1 = "udteam06" + "@" + "gmail.com";
-      const e2 = "udhayasankar200721" + "@" + "gmail.com";
-      const hardcoded = [e1, e2];
+      const hardcoded = ADMIN_EMAILS;
       const email = session.user.email.trim().toLowerCase();
       setAdminName(email.split('@')[0]);
       const ok = hardcoded.includes(email) || adminList?.some(a => a.email.trim().toLowerCase() === email);
@@ -46,39 +76,6 @@ export default function AdminEvaluateSubmission() {
     };
     checkAuth();
   }, [navigate, id]);
-
-  const fetchData = async () => {
-    // Attempt to fetch real submission
-    const { data: sub } = await supabase.from('submissions').select('*').eq('id', id).single();
-    
-    if (sub) {
-      setSubmission(sub);
-      
-      if (sub.evaluation_scores) setScores(sub.evaluation_scores);
-      if (sub.evaluation_notes) setNotes(sub.evaluation_notes);
-
-      const { data: tm } = await supabase.from('teams').select('*').eq('id', sub.team_id).single();
-      if (tm) setTeam(tm);
-      const { data: mbrs } = await supabase.from('team_members').select('*').eq('team_id', sub.team_id);
-      if (mbrs) setMembers(mbrs);
-    } else {
-      // Fallback for visual mock if ID doesn't exist
-      setSubmission({
-        id: 'SUB-2025-00156',
-        project_title: 'AI Based Waste Management',
-        project_description: 'AI Based Waste Management is an intelligent platform that leverages machine learning and computer vision to optimize waste collection routes, classify waste types in real-time, and promote recycling. The system aims to reduce landfill usage, lower carbon emissions, and build smarter, cleaner cities.',
-        category: 'Climate Action',
-        created_at: '2025-05-26T23:59:00Z',
-        status: 'Under Review',
-        round: 'Evaluation'
-      });
-      setTeam({ team_name: 'Greenovate' });
-      setMembers([{id:1},{id:2},{id:3},{id:4}]); // Mock 4 members
-    }
-    
-    setLoading(false);
-  };
-
   if (loading) return <div style={{minHeight:'100vh',display:'flex',alignItems:'center',justifyContent:'center',background:S.bg}}><div style={{width:40,height:40,border:'3px solid '+S.primary,borderTopColor:'transparent',borderRadius:'50%',animation:'spin 1s linear infinite'}}/></div>;
   if (!isAdmin) return null;
 
@@ -277,7 +274,7 @@ export default function AdminEvaluateSubmission() {
                   <div style={{ flex:1 }}>
                     <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:12 }}>
                       <div style={{ fontSize:13, fontWeight:600, color:S.t1 }}>Project Document</div>
-                      <button onClick={() => submission?.pdf_url && window.open(submission.pdf_url, '_blank')} disabled={!submission?.pdf_url} style={{ background:'transparent', border:'none', color:S.primary, fontSize:12, fontWeight:600, cursor: submission?.pdf_url ? 'pointer' : 'not-allowed', display:'flex', alignItems:'center', gap:4 }}>
+                      <button onClick={() => submission?.pdf_url && window.open(submission.pdf_url, '_blank', 'noopener,noreferrer')} disabled={!submission?.pdf_url} style={{ background:'transparent', border:'none', color:S.primary, fontSize:12, fontWeight:600, cursor: submission?.pdf_url ? 'pointer' : 'not-allowed', display:'flex', alignItems:'center', gap:4 }}>
                         View Submission <ExternalLink size={12}/>
                       </button>
                     </div>
@@ -395,7 +392,7 @@ export default function AdminEvaluateSubmission() {
               <div style={{ background:S.card, border:'1px solid '+S.border, borderRadius:S.radius, padding:'24px' }}>
                 <h3 style={{ margin:0, fontSize:14, fontWeight:700, color:S.t1 }}>Quick Actions</h3>
                 <div style={{ display:'flex', flexDirection:'column', gap:12, marginTop:16 }}>
-                  <button onClick={() => submission?.pdf_url && window.open(submission.pdf_url, '_blank')} disabled={!submission?.pdf_url} style={{ background:'#F8FAFC', border:'1px solid '+S.border, borderRadius:8, padding:12, fontSize:13, fontWeight:600, color: submission?.pdf_url ? S.primary : S.t3, display:'flex', alignItems:'center', justifyContent:'center', gap:8, cursor: submission?.pdf_url ? 'pointer' : 'not-allowed' }}>
+                  <button onClick={() => submission?.pdf_url && window.open(submission.pdf_url, '_blank', 'noopener,noreferrer')} disabled={!submission?.pdf_url} style={{ background:'#F8FAFC', border:'1px solid '+S.border, borderRadius:8, padding:12, fontSize:13, fontWeight:600, color: submission?.pdf_url ? S.primary : S.t3, display:'flex', alignItems:'center', justifyContent:'center', gap:8, cursor: submission?.pdf_url ? 'pointer' : 'not-allowed' }}>
                     View Submission <ExternalLink size={14}/>
                   </button>
                   <button onClick={() => navigate('/udview/teams')} style={{ background:'#F8FAFC', border:'1px solid '+S.border, borderRadius:8, padding:12, fontSize:13, fontWeight:600, color:S.t2, display:'flex', alignItems:'center', justifyContent:'center', gap:8, cursor:'pointer' }}>
@@ -411,3 +408,4 @@ export default function AdminEvaluateSubmission() {
     </>
   );
 }
+
