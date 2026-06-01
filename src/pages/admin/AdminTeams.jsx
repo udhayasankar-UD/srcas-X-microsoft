@@ -56,16 +56,19 @@ export default function AdminTeams() {
   if (loading) return <div style={{minHeight:'100vh',display:'flex',alignItems:'center',justifyContent:'center',background:S.bg}}><div style={{width:40,height:40,border:'3px solid '+S.primary,borderTopColor:'transparent',borderRadius:'50%',animation:'spin 1s linear infinite'}}/></div>;
   if (!isAdmin) return null;
 
+  const toggleShortlist = async (teamId, currentStatus) => {
+    const newStatus = currentStatus === 'Shortlisted' ? 'Pending' : 'Shortlisted';
+    const { error } = await supabase.from('teams').update({ status: newStatus }).eq('id', teamId);
+    if (!error) {
+      setTeams(teams.map(t => t.id === teamId ? { ...t, status: newStatus } : t));
+    } else {
+      alert("Error: " + error.message);
+    }
+  };
+
   const filteredTeams = teams.filter(t => {
-    const sub = submissions.find(s => s.team_id === t.id);
-    const track = sub?.category || 'General';
-    const status = t.status || 'Active';
-    
     const matchSearch = t.team_name?.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchTrack = trackFilter === 'All Tracks' || track === trackFilter;
-    const matchStatus = statusFilter === 'All Status' || status === statusFilter;
-    
-    return matchSearch && matchTrack && matchStatus;
+    return matchSearch;
   });
 
   const totalPages = Math.ceil(filteredTeams.length / itemsPerPage);
@@ -164,28 +167,9 @@ export default function AdminTeams() {
                       style={{ paddingLeft:36, paddingRight:16, paddingTop:10, paddingBottom:10, background:S.card, border:'1px solid '+S.border, borderRadius:8, fontSize:13, width:'100%', outline:'none', color:S.t1 }}
                     />
                   </div>
-                  <select value={trackFilter} onChange={e => { setTrackFilter(e.target.value); setCurrentPage(1); }} style={{ padding:'10px 14px', border:'1px solid '+S.border, borderRadius:8, fontSize:13, fontWeight:500, color:S.t1, outline:'none', cursor:'pointer', appearance:'none', background:`url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%239CA3AF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") no-repeat right 10px center`, paddingRight:32 }}>
-                    <option>All Tracks</option>
-                    <option>Climate Action</option>
-                    <option>Quality Education</option>
-                    <option>Affordable Energy</option>
-                    <option>Sustainable Cities</option>
-                    <option>Life on Land</option>
-                    <option>General</option>
-                  </select>
-                  <select value={statusFilter} onChange={e => { setStatusFilter(e.target.value); setCurrentPage(1); }} style={{ padding:'10px 14px', border:'1px solid '+S.border, borderRadius:8, fontSize:13, fontWeight:500, color:S.t1, outline:'none', cursor:'pointer', appearance:'none', background:`url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%239CA3AF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") no-repeat right 10px center`, paddingRight:32 }}>
-                    <option>All Status</option>
-                    <option>Active</option>
-                    <option>Pending</option>
-                    <option>Shortlisted</option>
-                    <option>Rejected</option>
-                  </select>
-                  <select style={{ padding:'10px 14px', border:'1px solid '+S.border, borderRadius:8, fontSize:13, fontWeight:500, color:S.t1, outline:'none', cursor:'pointer', appearance:'none', background:`url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%239CA3AF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") no-repeat right 10px center`, paddingRight:32 }}>
-                    <option>All Rounds</option>
-                  </select>
                 </div>
                 <div style={{ display:'flex', alignItems:'center', gap:16 }}>
-                  <span onClick={() => { setSearchTerm(''); setTrackFilter('All Tracks'); setStatusFilter('All Status'); setCurrentPage(1); }} style={{ fontSize:13, fontWeight:600, color:S.primary, cursor:'pointer' }}>Clear Filters</span>
+                  <span onClick={() => { setSearchTerm(''); setCurrentPage(1); }} style={{ fontSize:13, fontWeight:600, color:S.primary, cursor:'pointer' }}>Clear Filters</span>
                 </div>
               </div>
 
@@ -193,8 +177,8 @@ export default function AdminTeams() {
                 <table style={{ width:'100%', borderCollapse:'collapse', fontSize:13 }}>
                   <thead>
                     <tr style={{ background:'#FAFAFA', borderBottom:'1px solid '+S.border }}>
-                      {['Team', 'Track', 'Team Lead', 'Members', 'Status', 'Round', 'Registered On', 'Actions'].map(h => (
-                        <th key={h} style={{ padding:'16px 20px', fontWeight:600, color:S.t2, textAlign: h==='Actions'?'center':'left' }}>{h}</th>
+                      {['Team', 'Team Lead', 'Members', 'Registered On'].map(h => (
+                        <th key={h} style={{ padding:'16px 20px', fontWeight:600, color:S.t2, textAlign:'left' }}>{h}</th>
                       ))}
                     </tr>
                   </thead>
@@ -202,8 +186,8 @@ export default function AdminTeams() {
                     {currentTeams.map(t => {
                       const sub = submissions.find(s => s.team_id === t.id);
                       const track = sub?.category || 'General';
-                      const lead = members.find(m => m.id === t.leader_id);
                       const teamMembers = members.filter(m => m.team_id === t.id);
+                      const lead = teamMembers[0]; // The first member is typically the creator/leader
                       
                       const avatarColors = [
                         {bg: '#EEE8FF', text: '#6C4EFF'}, {bg: '#DBEAFE', text: '#2563EB'},
@@ -217,17 +201,23 @@ export default function AdminTeams() {
                         'Affordable Energy': {bg:'#FEF3C7', text:'#D97706'},
                         'Sustainable Cities': {bg:'#F3E8FF', text:'#9333EA'},
                         'Life on Land': {bg:'#DCFCE7', text:'#16A34A'},
-                        'Quality Education': {bg:'#DBEAFE', text:'#2563EB'}
+                        'Quality Education': {bg:'#DBEAFE', text:'#2563EB'},
+                        'Software': {bg:'#DBEAFE', text:'#2563EB'},
+                        'Hardware': {bg:'#FEF3C7', text:'#D97706'},
+                        'General': {bg:'#F1F5F9', text:'#64748B'}
                       };
                       const tc = trackColors[track] || {bg:'#F1F5F9', text:'#64748B'};
 
-                      const getStatusColor = (s) => {
-                        if (s === 'Shortlisted') return {color: '#9333EA', bg: '#F3E8FF'};
-                        if (s === 'Pending' || s === 'Under Review') return {color: '#D97706', bg: '#FEF3C7'};
-                        if (s === 'Rejected' || s === 'Inactive') return {color: '#DC2626', bg: '#FEF2F2'};
-                        return {color: '#16A34A', bg: '#DCFCE7'};
-                      };
-                      const sc = getStatusColor(t.status || 'Active');
+                      let sdgNumbers = '-';
+                      if (sub?.sdg_goal) {
+                        const matches = sub.sdg_goal.match(/SDG\s*(\d+)/gi);
+                        if (matches) {
+                          sdgNumbers = matches.map(m => m.replace(/SDG\s*/i, '')).join(', ');
+                        } else {
+                          const justNums = sub.sdg_goal.replace(/[^0-9,]/g, '').trim();
+                          if (justNums) sdgNumbers = justNums;
+                        }
+                      }
 
                       return (
                         <tr key={t.id} style={{ borderBottom:'1px solid #F8FAFC' }}>
@@ -242,11 +232,7 @@ export default function AdminTeams() {
                               </div>
                             </div>
                           </td>
-                          <td style={{ padding:'16px 20px' }}>
-                            <span style={{ background:tc.bg, color:tc.text, padding:'4px 10px', borderRadius:6, fontSize:11, fontWeight:600 }}>
-                              {track}
-                            </span>
-                          </td>
+
                           <td style={{ padding:'16px 20px' }}>
                             <div style={{ display:'flex', alignItems:'center', gap:10 }}>
                               <div style={{ width:28, height:28, borderRadius:'50%', background:S.activeBg, color:S.primary, display:'flex', alignItems:'center', justifyContent:'center', fontWeight:700, fontSize:10 }}>
@@ -272,18 +258,8 @@ export default function AdminTeams() {
                               )}
                             </div>
                           </td>
-                          <td style={{ padding:'16px 20px' }}>
-                            <span style={{ color: sc.color, fontWeight:600, fontSize:12 }}>
-                              {t.status || 'Active'}
-                            </span>
-                          </td>
-                          <td style={{ padding:'16px 20px', color:S.t2 }}>Submission</td>
+
                           <td style={{ padding:'16px 20px', color:S.t2 }}>{t.created_at ? new Date(t.created_at).toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'}) : '-'}</td>
-                          <td style={{ padding:'16px 20px', textAlign:'center' }}>
-                            <button style={{ background:'none', border:'none', color:S.t3, cursor:'pointer', padding:4 }}>
-                              <MoreVertical size={16}/>
-                            </button>
-                          </td>
                         </tr>
                       );
                     })}

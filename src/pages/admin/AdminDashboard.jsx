@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase, ADMIN_EMAILS } from '../../lib/supabaseClient';
 import { Users, Flag, FileText, CheckSquare, Shield, Search, ChevronDown, Eye, Megaphone, ChevronRight } from 'lucide-react';
@@ -59,15 +59,64 @@ export default function AdminDashboard() {
     document.body.appendChild(a); a.click(); document.body.removeChild(a);
   };
 
-  if (loadingAuth) return <div style={{minHeight:'100vh',display:'flex',alignItems:'center',justifyContent:'center',background:S.bg}}><div style={{width:40,height:40,border:'3px solid '+S.primary,borderTopColor:'transparent',borderRadius:'50%',animation:'spin 1s linear infinite'}}/></div>;
-  if (!isAdmin) return null;
+
+  const getTrend = useCallback((arr, dateField = 'created_at') => {
+    const now = new Date();
+    const last7Days = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+    const last14Days = new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000);
+    
+    const currentWeekCount = arr.filter(item => item[dateField] && new Date(item[dateField]) >= last7Days).length;
+    const previousWeekCount = arr.filter(item => {
+      if (!item[dateField]) return false;
+      const d = new Date(item[dateField]);
+      return d >= last14Days && d < last7Days;
+    }).length;
+    
+    if (previousWeekCount === 0) return currentWeekCount > 0 ? 100 : 0;
+    return Math.round(((currentWeekCount - previousWeekCount) / previousWeekCount) * 100);
+  }, []);
 
   const statCards = [
-    { title: 'Total Teams', value: teams.length, trend: '12.5%', color: '#6C4EFF', bg: '#EEE8FF' },
-    { title: 'Total Participants', value: members.length, trend: '8.3%', color: '#059669', bg: '#D1FAE5' },
-    { title: 'Submissions', value: submissions.length, trend: '15.7%', color: '#D97706', bg: '#FEF3C7' },
-    { title: 'Evaluations', value: teams.filter(t => t.score > 0).length, trend: '10.2%', color: '#2563EB', bg: '#DBEAFE' },
+    { title: 'Total Teams', value: teams.length, trend: getTrend(teams), color: '#6C4EFF', bg: '#EEE8FF' },
+    { title: 'Total Participants', value: members.length, trend: getTrend(members), color: '#059669', bg: '#D1FAE5' },
+    { title: 'Submissions', value: submissions.length, trend: getTrend(submissions), color: '#D97706', bg: '#FEF3C7' },
+    { title: 'Evaluations', value: teams.filter(t => t.score > 0).length, trend: getTrend(teams.filter(t => t.score > 0)), color: '#2563EB', bg: '#DBEAFE' },
   ];
+
+  const chartData = useMemo(() => {
+    const days = 7;
+    const counts = Array(days).fill(0);
+    const labels = Array(days).fill('');
+    
+    const now = new Date();
+    for(let i = 0; i < days; i++) {
+      const d = new Date(now.getTime() - (days - 1 - i) * 24 * 60 * 60 * 1000);
+      labels[i] = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      
+      counts[i] = submissions.filter(s => {
+        if(!s.created_at) return false;
+        const sd = new Date(s.created_at);
+        return sd.getDate() === d.getDate() && sd.getMonth() === d.getMonth() && sd.getFullYear() === d.getFullYear();
+      }).length;
+    }
+    
+    const maxVal = Math.max(...counts, 4); // Minimum max is 4
+    const points = counts.map((count, i) => {
+      const x = (i / (days - 1)) * 800;
+      const y = 200 - (count / maxVal) * 180;
+      return [Math.round(x), Math.round(y)];
+    });
+    
+    const pathString = "M" + points.map(p => p.join(',')).join(' L');
+    const fillString = pathString + " L800,200 L0,200Z";
+    
+    const yLabels = [maxVal, Math.round(maxVal*0.75), Math.round(maxVal*0.5), Math.round(maxVal*0.25), 0];
+    
+    return { counts, labels, points, pathString, fillString, yLabels };
+  }, [submissions]);
+
+  if (loadingAuth) return <div style={{minHeight:'100vh',display:'flex',alignItems:'center',justifyContent:'center',background:S.bg}}><div style={{width:40,height:40,border:'3px solid '+S.primary,borderTopColor:'transparent',borderRadius:'50%',animation:'spin 1s linear infinite'}}/></div>;
+  if (!isAdmin) return null;
 
   const statusStyle = (s) => {
     if (s === 'Shortlisted') return { color: '#6C4EFF', background: '#EEE8FF' };
@@ -117,7 +166,7 @@ export default function AdminDashboard() {
                   </div>
                   <div style={{ fontSize:12, fontWeight:600, color:S.t2, marginBottom:4 }}>{c.title}</div>
                   <div style={{ fontSize:28, fontWeight:800, color:S.t1, marginBottom:6 }}>{c.value}</div>
-                  <div style={{ fontSize:11, fontWeight:600, color:S.green }}>↑ {c.trend} <span style={{ color:S.t3, fontWeight:400, marginLeft:4 }}>vs last 7 days</span></div>
+                  <div style={{ fontSize:11, fontWeight:600, color: c.trend >= 0 ? S.green : '#DC2626' }}>{c.trend >= 0 ? '↑' : '↓'} {Math.abs(c.trend)}% <span style={{ color:S.t3, fontWeight:400, marginLeft:4 }}>vs last 7 days</span></div>
                 </div>
               ))}
             </div>
@@ -132,19 +181,18 @@ export default function AdminDashboard() {
                 </div>
                 <div style={{ flex:1, position:'relative', minHeight:180 }}>
                   <div style={{ position:'absolute', left:0, top:0, bottom:32, display:'flex', flexDirection:'column', justifyContent:'space-between', fontSize:10, fontWeight:500, color:S.t3, width:24 }}>
-                    <span>100</span><span>75</span><span>50</span><span>25</span><span>0</span>
+                    {chartData.yLabels.map((yl, i) => <span key={i}>{yl}</span>)}
                   </div>
                   <svg viewBox="0 0 800 200" style={{ width:'calc(100% - 30px)', height:'calc(100% - 32px)', marginLeft:30, overflow:'visible' }} preserveAspectRatio="none">
                     <defs><linearGradient id="cg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#8b5cf6" stopOpacity="0.15"/><stop offset="100%" stopColor="#8b5cf6" stopOpacity="0"/></linearGradient></defs>
-                    <path d="M0 160 L133 120 L266 160 L400 130 L533 150 L666 90 L800 20 L800 200 L0 200Z" fill="url(#cg)"/>
-                    <path d="M0 160 L133 120 L266 160 L400 130 L533 150 L666 90 L800 20" fill="none" stroke="#8b5cf6" strokeWidth="2.5"/>
-                    {[[0,160],[133,120],[266,160],[400,130],[533,150],[666,90],[800,20]].map(([x,y],i) => {
-                      const counts = [0, 0, 0, 0, 0, 0, submissions.length];
-                      return <circle key={i} cx={x} cy={y} r="6" fill="#8b5cf6" style={{cursor: 'pointer'}}><title>{counts[i]} Submissions on this day</title></circle>;
-                    })}
+                    <path d={chartData.fillString} fill="url(#cg)"/>
+                    <path d={chartData.pathString} fill="none" stroke="#8b5cf6" strokeWidth="2.5"/>
+                    {chartData.points.map(([x,y],i) => (
+                      <circle key={i} cx={x} cy={y} r="6" fill="#8b5cf6" style={{cursor: 'pointer'}}><title>{chartData.counts[i]} Submissions on this day</title></circle>
+                    ))}
                   </svg>
                   <div style={{ position:'absolute', bottom:0, left:30, right:0, display:'flex', justifyContent:'space-between', fontSize:11, fontWeight:500, color:S.t3 }}>
-                    {['Jul 20','Jul 21','Jul 22','Jul 23','Jul 24','Jul 25','Jul 26'].map(d => <span key={d}>{d}</span>)}
+                    {chartData.labels.map((d, i) => <span key={i}>{d}</span>)}
                   </div>
                 </div>
                 <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:12, marginTop:16 }}>
