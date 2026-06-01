@@ -1,4 +1,3 @@
-import React from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { Home, Users, Flag, CheckSquare, Bell, LayoutDashboard, LogOut } from 'lucide-react';
 

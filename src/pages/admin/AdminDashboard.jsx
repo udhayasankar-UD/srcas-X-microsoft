@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase, ADMIN_EMAILS } from '../../lib/supabaseClient';
-import { Home, Users, Flag, FileText, CheckSquare, Calendar, Bell, BookOpen, BarChart2, Settings, Link as LinkIcon, Shield, LogOut, Search, ChevronDown, Eye, Megaphone, Download, LayoutDashboard, ChevronRight } from 'lucide-react';
+import { Users, Flag, FileText, CheckSquare, Shield, Search, ChevronDown, Eye, Megaphone, ChevronRight } from 'lucide-react';
 
 // Style constants
 const S = {
@@ -45,6 +45,7 @@ export default function AdminDashboard() {
 
 
 
+  // eslint-disable-next-line no-unused-vars
   const exportCSV = () => {
     let csv = "data:text/csv;charset=utf-8,Team,Status,Score,Name,Email,Phone,College,Dept,Year\n";
     teams.forEach(t => {

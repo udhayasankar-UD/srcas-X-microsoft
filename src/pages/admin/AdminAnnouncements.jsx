@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase, ADMIN_EMAILS } from '../../lib/supabaseClient';
-import { Home, Users, Flag, FileText, CheckSquare, Calendar, Bell, BookOpen, BarChart2, Settings, Link as LinkIcon, Shield, LogOut, Search, ChevronDown, LayoutDashboard, ChevronRight, ChevronLeft, Plus, MoreVertical, Megaphone, Eye, X, Edit, Trash2 } from 'lucide-react';
+import { Calendar, Bell, Search, ChevronDown, ChevronRight, ChevronLeft, Plus, Megaphone, Eye, Edit, Trash2 } from 'lucide-react';
 
 const S = {
   bg: '#F8FAFC', card: '#FFFFFF', border: '#E5E7EB', primary: '#6C4EFF',
@@ -23,10 +23,12 @@ export default function AdminAnnouncements() {
   const itemsPerPage = 8;
 
   // Modal State
+  // eslint-disable-next-line no-unused-vars
   const [showModal, setShowModal] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [currentId, setCurrentId] = useState(null);
   const [formData, setFormData] = useState({ title: '', message: '', tag: 'General' });
+  // eslint-disable-next-line no-unused-vars
   const [isSaving, setIsSaving] = useState(false);
 
   const fetchData = useCallback(async () => {
@@ -64,6 +66,7 @@ export default function AdminAnnouncements() {
     setShowModal(true);
   };
 
+  // eslint-disable-next-line no-unused-vars
   const handleSave = async () => {
     if (!formData.title || !formData.message) {
       alert("Title and message are required.");

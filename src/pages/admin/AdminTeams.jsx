@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase, ADMIN_EMAILS } from '../../lib/supabaseClient';
-import { Home, Users, Flag, FileText, CheckSquare, Calendar, Bell, BookOpen, BarChart2, Settings, Link as LinkIcon, Shield, LogOut, Search, ChevronDown, LayoutDashboard, Download, ChevronRight, Plus, MoreVertical, ChevronLeft, Trophy } from 'lucide-react';
+import { Users, Flag, CheckSquare, Search, ChevronDown, Download, ChevronRight, MoreVertical, ChevronLeft, Trophy } from 'lucide-react';
 
 const S = {
   bg: '#F8FAFC', card: '#FFFFFF', border: '#E5E7EB', primary: '#6C4EFF',

@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams, Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { supabase, ADMIN_EMAILS } from '../../lib/supabaseClient';
-import { Home, Users, Flag, FileText, CheckSquare, Calendar, Bell, BookOpen, BarChart2, Settings, Link as LinkIcon, Shield, LogOut, Search, ChevronDown, LayoutDashboard, ChevronRight, ChevronLeft, Check, Leaf, ExternalLink, Bold, Italic, Underline, List, Link2, Clock } from 'lucide-react';
+import { Search, ChevronDown, ChevronRight, ChevronLeft, Check, Leaf, ExternalLink, Bold, Italic, Underline, List, Link2 } from 'lucide-react';
 
 const S = {
   bg: '#F8FAFC', card: '#FFFFFF', border: '#E5E7EB', primary: '#6C4EFF',

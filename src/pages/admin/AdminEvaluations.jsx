@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase, ADMIN_EMAILS } from '../../lib/supabaseClient';
-import { Home, Users, Flag, FileText, CheckSquare, Calendar, Bell, BookOpen, BarChart2, Settings, Link as LinkIcon, Shield, LogOut, Search, ChevronDown, LayoutDashboard, Download, ChevronRight, MoreVertical, ChevronLeft, Star, Clock, XCircle, Eye, Calendar as CalendarIcon, ClipboardCheck, Filter } from 'lucide-react';
+import { FileText, Search, ChevronDown, Download, ChevronRight, MoreVertical, ChevronLeft, Star, Clock, XCircle, Eye, Calendar as CalendarIcon, ClipboardCheck, Filter } from 'lucide-react';
 
 const S = {
   bg: '#F8FAFC', card: '#FFFFFF', border: '#E5E7EB', primary: '#6C4EFF',
