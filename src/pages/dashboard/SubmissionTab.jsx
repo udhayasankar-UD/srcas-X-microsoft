@@ -136,11 +136,11 @@ export default function SubmissionTab({ hasTeam, teamData, teamMembers, submissi
       };
 
       // Insert to submissions table
-      const { error } = await supabase.from('submissions').insert(newSubmission);
+      const { data, error } = await supabase.from('submissions').insert(newSubmission).select();
 
       if (error) throw error;
 
-      if (setSubmissions) setSubmissions([newSubmission]);
+      if (setSubmissions) setSubmissions(data && data.length > 0 ? data : [newSubmission]);
       setForm(p => ({ ...p, pdf_url: pdf_url }));
       setSuccess(true);
     } catch (err) {
@@ -180,9 +180,12 @@ export default function SubmissionTab({ hasTeam, teamData, teamMembers, submissi
   const confirmDeleteSubmission = async (s) => {
     setSubmitting(true);
     try {
-      const { error } = await supabase.from('submissions').delete().eq('id', s.id);
+      // Use team_id for deletion to ensure it works even if s.id is missing locally
+      const { error } = await supabase.from('submissions').delete().eq('team_id', teamData.id);
       if (error) throw error;
       if (setSubmissions) setSubmissions([]);
+      setSuccess(false);
+      setStep(0);
       setShowDeleteModal(false);
     } catch (err) {
       alert("Error deleting submission: " + err.message);
