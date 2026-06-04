@@ -27,13 +27,23 @@ import AdminAnnouncements from './pages/admin/AdminAnnouncements';
  * Scrolls the window to (0,0) whenever the route pathname changes.
  */
 function ScrollToTop() {
-  const { pathname } = useLocation();
+  const { pathname, hash } = useLocation();
 
   useEffect(() => {
-    // Always scroll to top when the pathname changes.
-    // This ensures that navigating to a new page starts at the top.
-    window.scrollTo(0, 0);
-  }, [pathname]);
+    if (hash) {
+      // Wait a tick for the new page to render, then scroll to the element
+      setTimeout(() => {
+        const id = hash.replace('#', '');
+        const element = document.getElementById(id);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+    } else {
+      // Always scroll to top when navigating to a new page without a hash
+      window.scrollTo(0, 0);
+    }
+  }, [pathname, hash]);
 
   return null;
 }

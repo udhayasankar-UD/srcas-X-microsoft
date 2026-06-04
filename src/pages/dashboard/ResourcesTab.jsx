@@ -1,11 +1,13 @@
 import { useState } from 'react';
+import OfficialPPT from '../../assets/PPT/SRCAS HACKATHON 3.0.pptx';
 
 const RESOURCES = [
+  { icon:'📝', label:'Official PPT Template',     desc:'Download the required presentation format', tag:'PPTX', href: OfficialPPT, download: 'SRCAS_HACKATHON_3.0_Template.pptx', color:'#4C9F38' },
   { icon:'📄', label:'Hackathon Rulebook',       desc:'Official rules and judging criteria',   tag:'PDF',    href:'#', color:'#E5243B' },
-  { icon:'🎯', label:'Problem Statements',        desc:'All 6 challenge categories explained',  tag:'PDF',    href:'#', color:'#E5243B' },
+  { icon:'🎯', label:'Problem Statements',        desc:'Explore all 17 SDG challenges',         tag:'Link',   href:'/#problems', color:'#E5243B' },
   { icon:'💬', label:'Discord Community',         desc:'Connect with participants & organizers', tag:'Link',   href:'#', color:'#3b82f6' },
   { icon:'📱', label:'Whatsapp Community',       desc:'Connect with organizers all detail share there', tag:'Link',   href:'#', color:'#3b82f6' },
-  { icon:'🏆', label:'Prize Details',             desc:'Learn about the cash prizes & awards',  tag:'Page',   href:'/prizes', color:'#f59e0b' },
+  { icon:'🏆', label:'Prize Details',             desc:'Learn about the cash prizes & awards',  tag:'Link',   href:'/#prizes', color:'#f59e0b' },
   { icon:'📹', label:'Submission Guidelines',     desc:'How to record your demo video',         tag:'Video',  href:'#', color:'#8b5cf6' },
 ];
 
@@ -43,7 +45,7 @@ export default function ResourcesTab({ hasTeam, submissions }) {
         <div style={{ fontSize:14, fontWeight:800, color:'#111', marginBottom:14 }}>📚 Resource Library</div>
         <div className="dash-grid-resources" style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(220px,1fr))', gap:12 }}>
           {RESOURCES.map((r, i) => (
-            <a key={i} href={r.href} style={{ textDecoration:'none', display:'flex', flexDirection:'column', height:'100%' }}>
+            <a key={i} href={r.href} download={r.download} style={{ textDecoration:'none', display:'flex', flexDirection:'column', height:'100%' }}>
               <div style={{ background:'#fff', borderRadius:14, padding:'18px 18px', border:'1.5px solid #f0f0f0', boxShadow:'0 1px 4px rgba(0,0,0,0.05)', cursor:'pointer', transition:'all 0.2s', display:'flex', flexDirection:'column', gap:8, flex:1 }}
                 onMouseEnter={e => { e.currentTarget.style.borderColor=r.color; e.currentTarget.style.transform='translateY(-3px)'; e.currentTarget.style.boxShadow=`0 8px 24px ${r.color}22`; }}
                 onMouseLeave={e => { e.currentTarget.style.borderColor='#f0f0f0'; e.currentTarget.style.transform='translateY(0)'; e.currentTarget.style.boxShadow='0 1px 4px rgba(0,0,0,0.05)'; }}>
