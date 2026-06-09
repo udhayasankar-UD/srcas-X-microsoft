@@ -450,7 +450,7 @@ export default function GuidelinesSection() {
             fontSize: "clamp(2.4rem, 5vw, 4rem)", fontWeight: 900,
             lineHeight: 1.05, letterSpacing: "-0.04em", color: "#111", margin: 0,
           }}>
-            Rules of the game. <br className="hidden md:block" />
+            Before You Begin. <br className="hidden md:block" />
             <span style={{ color: "#777" }}>Everything you need to know.</span>
           </h2>
         </motion.div>

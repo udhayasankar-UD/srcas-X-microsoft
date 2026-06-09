@@ -54,7 +54,7 @@ export default function DashboardPage() {
           const { data: members, error: membersError } = await supabase
             .from('team_members')
             .select('*')
-            .eq('team_id', team.id);
+            .eq('team_id', team.id);      
           
           if (membersError) throw membersError;
           setTeamMembers(members);

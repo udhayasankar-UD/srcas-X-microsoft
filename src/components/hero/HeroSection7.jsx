@@ -232,28 +232,55 @@ export default function HeroSection7() {
         </div>
 
         {/* Logos */}
-        <div className="h1-logos-mobile-hide" style={{ display: "flex", alignItems: "center", gap: "24px" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "8px", fontWeight: 800, fontSize: "1.2rem", color: '#111' }}>
+        <div className="h1-logos-mobile-hide" style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px", fontWeight: 800, fontSize: "1.4rem", color: '#111', marginRight: '8px' }}>
             SDG
-            <SDGWheel size={24} style={{ borderRadius: '50%' }} />
+            <SDGWheel size={32} style={{ borderRadius: '50%' }} />
           </div>
-          <div style={{ width: "1px", height: "30px", background: "#e5e7eb" }}></div>
-          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <span style={{ fontSize: "0.9rem", color: "#6b7280", textTransform: "uppercase", fontWeight: 600, display: "flex", flexDirection: "column" }}>
+          
+          {/* Card 1: Organized By */}
+          <div style={{ 
+            display: "flex", 
+            alignItems: "center", 
+            gap: "12px",
+            background: "#fff",
+            border: "1px solid #e5e7eb",
+            borderRadius: "12px",
+            padding: "0 18px",
+            height: "80px",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.06)"
+          }}>
+            <span style={{ fontSize: "1rem", color: "#6b7280", textTransform: "uppercase", fontWeight: 700 }}>
               Organized by
             </span>
-            <img src={srcasLogo} alt="SRCAS" style={{ height: "32px", objectFit: "contain" }} />
+            <img src={srcasLogo} alt="SRCAS" style={{ height: "48px", objectFit: "contain" }} />
           </div>
-          <div style={{ width: "1px", height: "30px", background: "#e5e7eb" }}></div>
-          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <span style={{ fontSize: "0.9rem", color: "#6b7280", textTransform: "uppercase", fontWeight: 600, display: "flex", flexDirection: "column" }}>
-              Partner
-            </span>
-            <img src={igeniusLogo} alt="igeniusAI" style={{ height: "24px", objectFit: "contain" }} />
-            <span style={{ fontSize: "0.9rem", color: "#6b7280", textTransform: "uppercase", fontWeight: 600, display: "flex", flexDirection: "column" }}>
-              Authorized Partner
-            </span>
-            <img src={msLogo} alt="Microsoft" style={{ height: "42px", objectFit: "contain" }} />
+
+          {/* Card 2: Partners */}
+          <div style={{ 
+            display: "flex", 
+            alignItems: "center", 
+            gap: "16px",
+            background: "#fff",
+            border: "1px solid #e5e7eb",
+            borderRadius: "12px",
+            padding: "0 18px",
+            height: "80px",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.06)"
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ fontSize: "1rem", color: "#6b7280", textTransform: "uppercase", fontWeight: 700 }}>
+                Partner
+              </span>
+              <img src={igeniusLogo} alt="igeniusAI" style={{ height: "36px", objectFit: "contain" }} />
+            </div>
+            <div style={{ width: '1px', height: '40px', background: '#e5e7eb' }}></div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ fontSize: "1rem", color: "#6b7280", textTransform: "uppercase", fontWeight: 700 }}>
+                Authorized Partner
+              </span>
+              <img src={msLogo} alt="Microsoft" style={{ height: "56px", objectFit: "contain" }} />
+            </div>
           </div>
         </div>
       </header>
@@ -375,7 +402,7 @@ export default function HeroSection7() {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '16px', marginBottom: '24px' }}>
           
           <h2 style={{ 
-            fontSize: 'clamp(1rem, 1.5vw, 1.5rem)', 
+            fontSize: 'clamp(1.4rem, 2.4vw, 2rem)', 
             fontWeight: 800, 
             color: '#374151', 
             margin: 0, 
@@ -385,7 +412,7 @@ export default function HeroSection7() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            gap: '8px'
+            gap: '10px'
           }}>
             <span>SRCAS</span>
             <span style={{ color: '#0562f8ff', fontFamily: theme.fonts.pixel, letterSpacing: '0.02em', textTransform: 'none' }}>Hackathon 3.0!</span>
