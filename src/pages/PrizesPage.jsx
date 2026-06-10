@@ -132,7 +132,7 @@ const PrizesPage = () => {
     { icon: '💼', title: 'Trackwise best performers will get internships', amount: '' },
   ];
 
-  const tickerItems = ['₹5L+ Prize Pool', 'Microsoft Internship', 'Singapore Trip', '1:1 Mentorship', 'Open Innovation', '17 UN SDGs', 'SRCAS 2026', 'Aug 14'];
+  const tickerItems = ['₹1.8L+ Prize Pool', 'Microsoft Internship', 'Singapore Trip', '1:1 Mentorship', 'Open Innovation', '17 UN SDGs', 'SRCAS 2026', 'Aug 14'];
 
   return (
     <div style={{ background: '#fff', color: '#111', fontFamily: "'Plus Jakarta Sans', sans-serif", overflowX: 'hidden' }}>

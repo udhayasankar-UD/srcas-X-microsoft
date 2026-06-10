@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase, ADMIN_EMAILS } from '../../lib/supabaseClient';
-import { Calendar, Bell, Search, ChevronDown, ChevronRight, ChevronLeft, Plus, Megaphone, Eye, Edit, Trash2 } from 'lucide-react';
+import { Calendar, Bell, Search, ChevronDown, ChevronRight, ChevronLeft, Plus, Megaphone, Eye, Edit, Trash2, X } from 'lucide-react';
 
 const S = {
   bg: '#F8FAFC', card: '#FFFFFF', border: '#E5E7EB', primary: '#6C4EFF',
@@ -23,12 +23,10 @@ export default function AdminAnnouncements() {
   const itemsPerPage = 8;
 
   // Modal State
-  // eslint-disable-next-line no-unused-vars
   const [showModal, setShowModal] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [currentId, setCurrentId] = useState(null);
   const [formData, setFormData] = useState({ title: '', message: '', tag: 'General' });
-  // eslint-disable-next-line no-unused-vars
   const [isSaving, setIsSaving] = useState(false);
 
   const fetchData = useCallback(async () => {
@@ -66,7 +64,6 @@ export default function AdminAnnouncements() {
     setShowModal(true);
   };
 
-  // eslint-disable-next-line no-unused-vars
   const handleSave = async () => {
     if (!formData.title || !formData.message) {
       alert("Title and message are required.");
@@ -285,6 +282,40 @@ export default function AdminAnnouncements() {
             </div>
           </div>
         </div>
+        
+        {/* MODAL */}
+        {showModal && (
+          <div style={{ position:'fixed', top:0, left:0, right:0, bottom:0, background:'rgba(0,0,0,0.5)', display:'flex', alignItems:'center', justifyContent:'center', zIndex:999 }}>
+            <div style={{ background:S.card, borderRadius:S.radius, width:400, padding:24, boxShadow:'0 10px 15px rgba(0,0,0,0.1)' }}>
+              <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:20 }}>
+                <h3 style={{ margin:0, fontSize:18, fontWeight:700 }}>{isEditing ? 'Edit Announcement' : 'New Announcement'}</h3>
+                <button onClick={() => setShowModal(false)} style={{ background:'transparent', border:'none', cursor:'pointer', color:S.t3 }}><X size={20}/></button>
+              </div>
+              <div style={{ display:'flex', flexDirection:'column', gap:16 }}>
+                <div>
+                  <label style={{ display:'block', fontSize:12, fontWeight:600, color:S.t2, marginBottom:4 }}>Title</label>
+                  <input value={formData.title} onChange={(e) => setFormData({...formData, title: e.target.value})} style={{ width:'100%', padding:10, borderRadius:8, border:'1px solid '+S.border, fontSize:13 }} placeholder="Announcement title" />
+                </div>
+                <div>
+                  <label style={{ display:'block', fontSize:12, fontWeight:600, color:S.t2, marginBottom:4 }}>Message</label>
+                  <textarea value={formData.message} onChange={(e) => setFormData({...formData, message: e.target.value})} style={{ width:'100%', padding:10, borderRadius:8, border:'1px solid '+S.border, fontSize:13, minHeight:100, resize:'vertical' }} placeholder="Announcement details..." />
+                </div>
+                <div>
+                  <label style={{ display:'block', fontSize:12, fontWeight:600, color:S.t2, marginBottom:4 }}>Tag</label>
+                  <select value={formData.tag} onChange={(e) => setFormData({...formData, tag: e.target.value})} style={{ width:'100%', padding:10, borderRadius:8, border:'1px solid '+S.border, fontSize:13 }}>
+                    <option value="General">General</option>
+                    <option value="Important">Important</option>
+                    <option value="Update">Update</option>
+                  </select>
+                </div>
+              </div>
+              <div style={{ display:'flex', justifyContent:'flex-end', gap:12, marginTop:24 }}>
+                <button onClick={() => setShowModal(false)} style={{ background:'transparent', border:'1px solid '+S.border, padding:'8px 16px', borderRadius:8, fontSize:13, fontWeight:600, cursor:'pointer' }}>Cancel</button>
+                <button onClick={handleSave} disabled={isSaving} style={{ background:S.primary, color:'#fff', border:'none', padding:'8px 16px', borderRadius:8, fontSize:13, fontWeight:600, cursor: isSaving ? 'default' : 'pointer', opacity: isSaving ? 0.7 : 1 }}>{isSaving ? 'Saving...' : 'Save'}</button>
+              </div>
+            </div>
+          </div>
+        )}
       
     </>
   );

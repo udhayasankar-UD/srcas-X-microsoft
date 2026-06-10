@@ -159,11 +159,11 @@ const ContactSection = () => {
                             <User size={24} color="#111" />
                         </div>
                         <div>
-                            <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#111', margin: '0 0 8px' }}>Dr. N. Sumathi</h3>
-                            <p style={{ fontSize: '0.9rem', color: '#6b7280', margin: 0, fontWeight: 500 }}>Programming Club Staff Coordinator</p>
+                            <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#111', margin: '0 0 8px' }}>Mrs. Supraja</h3>
+                            <p style={{ fontSize: '0.9rem', color: '#6b7280', margin: 0, fontWeight: 500 }}>Igenius Coordinator</p>
                         </div>
                         <div style={{ marginTop: 'auto' }}>
-                            <CopyPhone number="+919894090549" display="+91 98940 90549" />
+                            <CopyPhone number="+917338893731" display="+91 73388 93731" />
                         </div>
                     </motion.div>
 
@@ -197,11 +197,11 @@ const ContactSection = () => {
                             <User size={24} color="#111" />
                         </div>
                         <div>
-                            <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#111', margin: '0 0 8px' }}>Dr. M. Praneesh</h3>
-                            <p style={{ fontSize: '0.9rem', color: '#6b7280', margin: 0, fontWeight: 500 }}>Programming Club Staff Coordinator</p>
+                            <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#111', margin: '0 0 8px' }}>Dhananjay R S</h3>
+                            <p style={{ fontSize: '0.9rem', color: '#6b7280', margin: 0, fontWeight: 500 }}>Vice Chairman of Programming Club</p>
                         </div>
                         <div style={{ marginTop: 'auto' }}>
-                            <CopyPhone number="+919629924052" display="+91 96299 24052" />
+                            <CopyPhone number="+919345060349" display="+91 93450 60349" />
                         </div>
                     </motion.div>
                     {/* Location Card */}

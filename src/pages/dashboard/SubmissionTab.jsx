@@ -180,6 +180,18 @@ export default function SubmissionTab({ hasTeam, teamData, teamMembers, submissi
   const confirmDeleteSubmission = async (s) => {
     setSubmitting(true);
     try {
+      if (s?.pdf_url) {
+        try {
+          const urlParts = s.pdf_url.split('/');
+          const fileName = urlParts[urlParts.length - 1];
+          if (fileName) {
+            await supabase.storage.from('presentations_deck').remove([fileName]);
+          }
+        } catch (storageErr) {
+          console.error("Error deleting from storage:", storageErr);
+        }
+      }
+
       // Use team_id for deletion to ensure it works even if s.id is missing locally
       const { error } = await supabase.from('submissions').delete().eq('team_id', teamData.id);
       if (error) throw error;
