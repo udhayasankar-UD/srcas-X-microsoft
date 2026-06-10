@@ -1,0 +1,265 @@
+import { useEffect, useState, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { supabase, ADMIN_EMAILS } from '../../lib/supabaseClient';
+import { FileText, Search, ChevronRight, Download, Calendar as CalendarIcon, Filter, Eye } from 'lucide-react';
+
+const S = {
+  bg: '#F8FAFC', card: '#FFFFFF', border: '#E5E7EB', primary: '#6C4EFF',
+  t1: '#111827', t2: '#6B7280', t3: '#9CA3AF', green: '#16A34A',
+  activeBg: '#EEE8FF', radius: '14px', pad: '24px', gap: '20px',
+};
+
+export default function AdminSubmissions() {
+  const navigate = useNavigate();
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [submissionsList, setSubmissionsList] = useState([]);
+  
+  // Filters and Pagination
+  const [searchTerm, setSearchTerm] = useState('');
+  const [activeTab, setActiveTab] = useState('All Submissions');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
+  const fetchData = useCallback(async () => {
+    const [{ data: t }, { data: s }] = await Promise.all([
+      supabase.from('teams').select('*'),
+      supabase.from('submissions').select('*').order('created_at', { ascending: false })
+    ]);
+    
+    const subs = (s || []).map((sub) => {
+      const team = (t || []).find(tm => tm.id === sub.team_id);
+      
+      return {
+        id: sub.id,
+        teamId: team?.id,
+        teamName: team?.team_name || 'Unknown Team',
+        teamTrack: sub.category || 'General',
+        subTitle: sub.project_title || 'Untitled Project',
+        subDesc: sub.project_description || 'No description provided',
+        status: sub.status || 'Pending',
+        fileUrl: sub.pdf_url || null,
+        date: sub.created_at || new Date().toISOString()
+      };
+    });
+    
+    setSubmissionsList(subs);
+    setLoading(false);
+  }, []);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.user) { navigate('/register'); return; }
+      const { data: adminList } = await supabase.from('admins').select('email');
+      const hardcoded = ADMIN_EMAILS;
+      const email = session.user.email.trim().toLowerCase();
+      const ok = hardcoded.includes(email) || adminList?.some(a => a.email.trim().toLowerCase() === email);
+      if (ok) { setIsAdmin(true); fetchData(); } else { alert("Not admin!"); navigate('/dashboard'); }
+    };
+    checkAuth();
+  }, [navigate, fetchData]);
+
+  if (loading) return <div style={{minHeight:'100vh',display:'flex',alignItems:'center',justifyContent:'center',background:S.bg}}><div style={{width:40,height:40,border:'3px solid '+S.primary,borderTopColor:'transparent',borderRadius:'50%',animation:'spin 1s linear infinite'}}/></div>;
+  if (!isAdmin) return null;
+
+  const filteredSubs = submissionsList.filter(s => {
+    const matchSearch = s.teamName.toLowerCase().includes(searchTerm.toLowerCase()) || s.subTitle.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchTab = activeTab === 'All Submissions' || s.status === activeTab;
+    return matchSearch && matchTab;
+  });
+
+  const totalPages = Math.ceil(filteredSubs.length / itemsPerPage);
+  const currentSubs = filteredSubs.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  const handleExport = () => {
+    if (filteredSubs.length === 0) {
+      alert("No data to export");
+      return;
+    }
+    const headers = ['Submission ID', 'Team Name', 'Track', 'Project Title', 'Status', 'Submitted On'];
+    const csvContent = [
+      headers.join(','),
+      ...filteredSubs.map(s => [
+        `"${s.id}"`,
+        `"${s.teamName}"`,
+        `"${s.teamTrack}"`,
+        `"${s.subTitle}"`,
+        `"${s.status}"`,
+        `"${new Date(s.date).toLocaleString()}"`
+      ])
+    ].join('\n');
+    
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", "submissions_export.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const tabs = [
+    { label: 'All Submissions', count: submissionsList.length, bg: '#F1F5F9', color: '#64748B' },
+    { label: 'Pending', count: submissionsList.filter(s => s.status === 'Pending').length, bg: '#FEF3C7', color: '#D97706' },
+    { label: 'Shortlisted', count: submissionsList.filter(s => s.status === 'Shortlisted').length, bg: '#DBEAFE', color: '#2563EB' },
+    { label: 'Rejected', count: submissionsList.filter(s => s.status === 'Rejected').length, bg: '#FEF2F2', color: '#DC2626' }
+  ];
+
+  const getStatusStyle = (status) => {
+    if (status === 'Shortlisted') return { color: '#2563EB', bg: '#DBEAFE', border: '#BFDBFE' };
+    if (status === 'Rejected') return { color: '#DC2626', bg: '#FEF2F2', border: '#FECACA' };
+    return { color: '#D97706', bg: '#FEF3C7', border: '#FDE68A' };
+  };
+
+  return (
+    <>
+        <header style={{ height:64, background:S.card, borderBottom:'1px solid '+S.border, display:'flex', alignItems:'center', justifyContent:'space-between', padding:'0 28px', flexShrink:0 }}>
+          <div style={{ display:'flex', alignItems:'center', gap:16 }}>
+            <div>
+              <h1 style={{ fontSize:18, fontWeight:700, margin:0, color:S.t1 }}>Submissions</h1>
+              <div style={{ fontSize:11, fontWeight:500, color:S.t2, display:'flex', alignItems:'center', gap:4 }}>Home <ChevronRight size={12}/> <span style={{color:S.t1}}>Submissions</span></div>
+            </div>
+          </div>
+          <div style={{ display:'flex', alignItems:'center', gap:20 }}>
+            <div style={{ display:'flex', alignItems:'center', gap:10, borderLeft:'1px solid '+S.border, paddingLeft:20, cursor:'pointer' }}>
+              <div style={{ width:34, height:34, borderRadius:'50%', background:'#059669', display:'flex', alignItems:'center', justifyContent:'center', color:'#fff', fontWeight:700, fontSize:14 }}>A</div>
+              <div>
+                <div style={{ fontSize:13, fontWeight:700, color:S.t1 }}>Admin User</div>
+                <div style={{ fontSize:11, fontWeight:500, color:S.t2 }}>Super Admin</div>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <div style={{ flex:1, overflowY:'auto', padding:S.pad }}>
+          <div style={{ display:'flex', flexDirection:'column', gap:S.gap }}>
+            
+            <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-end' }}>
+              <div>
+                <h2 style={{ fontSize:24, fontWeight:800, color:S.t1, margin:'0 0 6px' }}>Project Submissions</h2>
+                <p style={{ fontSize:13, color:S.t2, margin:0 }}>View all team submissions and presentations.</p>
+              </div>
+              <button onClick={handleExport} style={{ display:'flex', alignItems:'center', gap:8, background:S.card, color:S.t1, border:'1px solid '+S.border, padding:'10px 16px', borderRadius:8, fontSize:13, fontWeight:600, cursor:'pointer', boxShadow:'0 1px 2px rgba(0,0,0,.05)' }}>
+                <Download size={16}/> Export CSV
+              </button>
+            </div>
+
+            <div style={{ background:S.card, border:'1px solid '+S.border, borderRadius:S.radius, boxShadow:'0 1px 3px rgba(0,0,0,.04)', display:'flex', flexDirection:'column' }}>
+              
+              <div style={{ padding:'20px', borderBottom:'1px solid '+S.border, display:'flex', justifyContent:'space-between', alignItems:'center', flexWrap:'wrap', gap:16 }}>
+                <div style={{ display:'flex', alignItems:'center', gap:12, flex:1, flexWrap:'wrap' }}>
+                  <div style={{ position:'relative', minWidth:260 }}>
+                    <Search size={16} style={{ position:'absolute', left:12, top:'50%', transform:'translateY(-50%)', color:S.t3 }}/>
+                    <input 
+                      placeholder="Search submissions..." 
+                      value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}
+                      style={{ paddingLeft:36, paddingRight:16, paddingTop:10, paddingBottom:10, background:S.card, border:'1px solid '+S.border, borderRadius:8, fontSize:13, width:'100%', outline:'none', color:S.t1 }}
+                    />
+                  </div>
+                  <div style={{ display:'flex', alignItems:'center', gap:8, padding:'9px 14px', border:'1px solid '+S.border, borderRadius:8, fontSize:13, fontWeight:500, color:S.t1, cursor:'pointer' }}>
+                    <CalendarIcon size={14} style={{color:S.t3}}/> All Time
+                  </div>
+                </div>
+                <div style={{ display:'flex', alignItems:'center', gap:16 }}>
+                  <span onClick={() => setSearchTerm('')} style={{ fontSize:13, fontWeight:600, color:S.t2, cursor:'pointer' }}>Clear Filters</span>
+                  <button style={{ display:'flex', alignItems:'center', gap:6, background:S.card, color:S.t1, border:'1px solid '+S.border, padding:'10px 16px', borderRadius:8, fontSize:13, fontWeight:600, cursor:'pointer' }}>
+                    <Filter size={16}/> Filters
+                  </button>
+                </div>
+              </div>
+
+              <div style={{ padding:'0 20px', borderBottom:'1px solid '+S.border, display:'flex', gap:24 }}>
+                {tabs.map((t, i) => (
+                  <div key={i} onClick={() => { setActiveTab(t.label); setCurrentPage(1); }} style={{ padding:'16px 0', borderBottom: activeTab === t.label ? '2px solid '+S.primary : '2px solid transparent', color: activeTab === t.label ? S.primary : S.t2, fontSize:13, fontWeight:600, cursor:'pointer', display:'flex', alignItems:'center', gap:8 }}>
+                    {t.label}
+                    <span style={{ padding:'2px 8px', borderRadius:10, fontSize:11, fontWeight:700, background: t.bg, color: t.color }}>{t.count}</span>
+                  </div>
+                ))}
+              </div>
+
+              <div style={{ overflowX:'auto' }}>
+                <table style={{ width:'100%', borderCollapse:'collapse', fontSize:13 }}>
+                  <thead>
+                    <tr style={{ background:'#FAFAFA', borderBottom:'1px solid '+S.border }}>
+                      {['Team Name', 'Project Title', 'Track', 'Status', 'Submitted On', 'PDF File'].map(h => (
+                        <th key={h} style={{ padding:'16px 20px', fontWeight:600, color:S.t2, textAlign: h==='PDF File'?'center':'left' }}>{h}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {currentSubs.map(s => {
+                      const sc = getStatusStyle(s.status);
+                      return (
+                        <tr key={s.id} style={{ borderBottom:'1px solid #F8FAFC' }}>
+                          <td style={{ padding:'16px 20px' }}>
+                            <div style={{ fontWeight:700, color:S.t1 }}>{s.teamName}</div>
+                          </td>
+                          <td style={{ padding:'16px 20px' }}>
+                            <div style={{ fontWeight:600, color:S.t1, fontSize:13 }}>{s.subTitle}</div>
+                            <div style={{ fontSize:11, color:S.t3, maxWidth:250, whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>{s.subDesc}</div>
+                          </td>
+                          <td style={{ padding:'16px 20px' }}>
+                            <span style={{ background:'#F1F5F9', color:'#475569', padding:'4px 10px', borderRadius:6, fontSize:11, fontWeight:600 }}>
+                              {s.teamTrack}
+                            </span>
+                          </td>
+                          <td style={{ padding:'16px 20px' }}>
+                            <span style={{ color: sc.color, background:sc.bg, border:'1px solid '+sc.border, padding:'4px 10px', borderRadius:6, fontSize:11, fontWeight:600 }}>
+                              {s.status}
+                            </span>
+                          </td>
+                          <td style={{ padding:'16px 20px', color:S.t2 }}>
+                            {new Date(s.date).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric', hour:'2-digit', minute:'2-digit' })}
+                          </td>
+                          <td style={{ padding:'16px 20px', textAlign:'center' }}>
+                            {s.fileUrl ? (
+                              <a href={s.fileUrl} target="_blank" rel="noreferrer" title="View PDF" style={{ width:32, height:32, borderRadius:'50%', border:'1px solid '+S.border, background:S.card, display:'inline-flex', alignItems:'center', justifyContent:'center', color:S.t2, cursor:'pointer', textDecoration:'none', transition:'all 0.2s' }}>
+                                <Eye size={16}/>
+                              </a>
+                            ) : (
+                              <span title="No PDF" style={{ width:32, height:32, borderRadius:'50%', border:'1px solid '+S.border, background:S.bg, display:'inline-flex', alignItems:'center', justifyContent:'center', color:S.border, cursor:'not-allowed' }}>
+                                <Eye size={16}/>
+                              </span>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+                {filteredSubs.length === 0 && (
+                  <div style={{ padding:'60px 20px', textAlign:'center', color:S.t3 }}>
+                    <FileText size={40} style={{ opacity:0.2, marginBottom:16 }}/>
+                    <div style={{ fontSize:15, fontWeight:600, color:S.t2 }}>No submissions found</div>
+                    <div style={{ fontSize:13, marginTop:4 }}>Try adjusting your filters or search query.</div>
+                  </div>
+                )}
+              </div>
+
+              {filteredSubs.length > 0 && (
+                <div style={{ padding:'16px 20px', borderTop:'1px solid '+S.border, display:'flex', justifyContent:'space-between', alignItems:'center', fontSize:13 }}>
+                  <div style={{ color:S.t2 }}>
+                    Showing <span style={{ fontWeight:700, color:S.t1 }}>{(currentPage - 1) * itemsPerPage + 1}</span> to <span style={{ fontWeight:700, color:S.t1 }}>{Math.min(currentPage * itemsPerPage, filteredSubs.length)}</span> of <span style={{ fontWeight:700, color:S.t1 }}>{filteredSubs.length}</span> submissions
+                  </div>
+                  <div style={{ display:'flex', gap:6 }}>
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+                      <button 
+                        key={page}
+                        onClick={() => setCurrentPage(page)}
+                        style={{ width:32, height:32, borderRadius:8, border: page === currentPage ? 'none' : '1px solid '+S.border, background: page === currentPage ? S.primary : S.card, color: page === currentPage ? '#fff' : S.t2, fontSize:13, fontWeight:600, cursor:'pointer' }}
+                      >
+                        {page}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+            </div>
+          </div>
+        </div>
+    </>
+  );
+}

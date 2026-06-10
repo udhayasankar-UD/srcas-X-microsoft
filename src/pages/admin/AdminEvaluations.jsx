@@ -156,18 +156,12 @@ export default function AdminEvaluations() {
             </div>
           </div>
           <div style={{ display:'flex', alignItems:'center', gap:20 }}>
-            <div style={{ position:'relative' }}>
-              <Search style={{ position:'absolute', left:10, top:'50%', transform:'translateY(-50%)', width:16, height:16, color:S.t3 }}/>
-              <input placeholder="Search anything..." style={{ paddingLeft:34, paddingRight:48, paddingTop:8, paddingBottom:8, background:'#F1F5F9', border:'1px solid '+S.border, borderRadius:10, fontSize:13, width:240, outline:'none' }}/>
-              <span style={{ position:'absolute', right:8, top:'50%', transform:'translateY(-50%)', fontSize:10, fontWeight:700, color:S.t3, background:S.card, border:'1px solid '+S.border, padding:'2px 6px', borderRadius:4 }}>Ctrl+K</span>
-            </div>
             <div style={{ display:'flex', alignItems:'center', gap:10, borderLeft:'1px solid '+S.border, paddingLeft:20, cursor:'pointer' }}>
               <div style={{ width:34, height:34, borderRadius:'50%', background:'#059669', display:'flex', alignItems:'center', justifyContent:'center', color:'#fff', fontWeight:700, fontSize:14 }}>A</div>
               <div>
                 <div style={{ fontSize:13, fontWeight:700, color:S.t1 }}>Admin User</div>
                 <div style={{ fontSize:11, fontWeight:500, color:S.t2 }}>Super Admin</div>
               </div>
-              <ChevronDown size={14} style={{color:S.t3}}/>
             </div>
           </div>
         </header>
@@ -326,9 +320,6 @@ export default function AdminEvaluations() {
                             <div style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:8 }}>
                               <button onClick={() => navigate(`/udview/evaluations/${e.id}`)} style={{ background:S.card, border:'1px solid '+S.border, borderRadius:6, color:S.t2, cursor:'pointer', padding:6, display:'flex', alignItems:'center', justifyContent:'center' }}>
                                 <Eye size={14}/>
-                              </button>
-                              <button style={{ background:S.card, border:'1px solid '+S.border, borderRadius:6, color:S.t2, cursor:'pointer', padding:6, display:'flex', alignItems:'center', justifyContent:'center' }}>
-                                <MoreVertical size={14}/>
                               </button>
                             </div>
                           </td>

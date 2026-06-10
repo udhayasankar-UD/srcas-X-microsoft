@@ -56,8 +56,16 @@ export default function AdminUsers() {
 
   const filteredMembers = members.filter(m => {
     const t = teams.find(team => team.id === m.team_id);
-    const isLeader = t?.leader_id === m.id;
-    const role = isLeader ? 'Team Lead' : 'Participant';
+    const teamMembers = members.filter(mem => mem.team_id === m.team_id);
+    const sortedTeam = [...teamMembers].sort((a,b) => {
+       const tA = new Date(a.created_at).getTime();
+       const tB = new Date(b.created_at).getTime();
+       if (tA !== tB) return tA - tB;
+       return String(a.id).localeCompare(String(b.id));
+    });
+    const leaderId = sortedTeam.length > 0 ? sortedTeam[0].id : null;
+    const isLeader = m.id === leaderId;
+    const role = isLeader ? 'Team Lead' : 'Member';
     
     const matchSearch = m.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) || m.email?.toLowerCase().includes(searchTerm.toLowerCase());
     const matchRole = roleFilter === 'All Roles' || role === roleFilter;
@@ -78,12 +86,20 @@ export default function AdminUsers() {
   ];
 
   const exportCSV = () => {
-    let csv = "data:text/csv;charset=utf-8,User,Role,Team,Email,College,Location,Year\n";
+    let csv = "data:text/csv;charset=utf-8,User,Role,Team,Email,College,Location,Year,Registered On\n";
     filteredMembers.forEach(m => {
       const t = teams.find(team => team.id === m.team_id);
-      const isLeader = t?.leader_id === m.id;
-      const role = isLeader ? 'Team Lead' : 'Participant';
-      csv += `"${m.full_name || ''}","${role}","${t ? t.team_name : ''}","${m.email || ''}","${m.college_name || ''}","${m.city || ''}","${m.year || ''}"\n`;
+      const teamMembers = members.filter(mem => mem.team_id === m.team_id);
+      const sortedTeam = [...teamMembers].sort((a,b) => {
+         const tA = new Date(a.created_at).getTime();
+         const tB = new Date(b.created_at).getTime();
+         if (tA !== tB) return tA - tB;
+         return String(a.id).localeCompare(String(b.id));
+      });
+      const leaderId = sortedTeam.length > 0 ? sortedTeam[0].id : null;
+      const isLeader = m.id === leaderId;
+      const role = isLeader ? 'Team Lead' : 'Member';
+      csv += `"${m.full_name || ''}","${role}","${t ? t.team_name : ''}","${m.email || ''}","${m.college_name || ''}","${m.location || m.city || ''}","${m.year || ''}","${new Date(m.created_at).toLocaleString()}"\n`;
     });
     const a = document.createElement("a");
     a.href = encodeURI(csv);
@@ -101,18 +117,12 @@ export default function AdminUsers() {
             </div>
           </div>
           <div style={{ display:'flex', alignItems:'center', gap:20 }}>
-            <div style={{ position:'relative' }}>
-              <Search style={{ position:'absolute', left:10, top:'50%', transform:'translateY(-50%)', width:16, height:16, color:S.t3 }}/>
-              <input placeholder="Search anything..." style={{ paddingLeft:34, paddingRight:48, paddingTop:8, paddingBottom:8, background:'#F1F5F9', border:'1px solid '+S.border, borderRadius:10, fontSize:13, width:240, outline:'none' }}/>
-              <span style={{ position:'absolute', right:8, top:'50%', transform:'translateY(-50%)', fontSize:10, fontWeight:700, color:S.t3, background:S.card, border:'1px solid '+S.border, padding:'2px 6px', borderRadius:4 }}>Ctrl+K</span>
-            </div>
             <div style={{ display:'flex', alignItems:'center', gap:10, borderLeft:'1px solid '+S.border, paddingLeft:20, cursor:'pointer' }}>
               <div style={{ width:34, height:34, borderRadius:'50%', background:'#059669', display:'flex', alignItems:'center', justifyContent:'center', color:'#fff', fontWeight:700, fontSize:14 }}>A</div>
               <div>
                 <div style={{ fontSize:13, fontWeight:700, color:S.t1 }}>Admin User</div>
                 <div style={{ fontSize:11, fontWeight:500, color:S.t2 }}>Super Admin</div>
               </div>
-              <ChevronDown size={14} style={{color:S.t3}}/>
             </div>
           </div>
         </header>
@@ -126,9 +136,6 @@ export default function AdminUsers() {
                 <p style={{ fontSize:13, color:S.t2, margin:'4px 0 0' }}>Manage all users of the hackathon platform.</p>
               </div>
               <div style={{ display:'flex', alignItems:'center', gap:12 }}>
-                <button style={{ display:'flex', alignItems:'center', gap:6, background:S.primary, color:'#fff', border:'none', padding:'10px 16px', borderRadius:10, fontSize:13, fontWeight:600, cursor:'pointer', boxShadow:'0 1px 2px rgba(0,0,0,.04)' }}>
-                  <Plus size={16}/> Add User
-                </button>
                 <button onClick={exportCSV} style={{ display:'flex', alignItems:'center', gap:6, background:S.card, color:S.t1, border:'1px solid '+S.border, padding:'10px 16px', borderRadius:10, fontSize:13, fontWeight:600, cursor:'pointer', boxShadow:'0 1px 2px rgba(0,0,0,.04)' }}>
                   <Download size={16}/> Export
                 </button>
@@ -165,7 +172,7 @@ export default function AdminUsers() {
                   <select value={roleFilter} onChange={e => { setRoleFilter(e.target.value); setCurrentPage(1); }} style={{ padding:'10px 14px', border:'1px solid '+S.border, borderRadius:8, fontSize:13, fontWeight:500, color:S.t1, outline:'none', cursor:'pointer', appearance:'none', background:`url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%239CA3AF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") no-repeat right 10px center`, paddingRight:32 }}>
                     <option>All Roles</option>
                     <option>Team Lead</option>
-                    <option>Participant</option>
+                    <option>Member</option>
                   </select>
                   <select value={teamFilter} onChange={e => { setTeamFilter(e.target.value); setCurrentPage(1); }} style={{ padding:'10px 14px', border:'1px solid '+S.border, borderRadius:8, fontSize:13, fontWeight:500, color:S.t1, outline:'none', cursor:'pointer', appearance:'none', background:`url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%239CA3AF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") no-repeat right 10px center`, paddingRight:32 }}>
                     <option>All Teams</option>
@@ -186,15 +193,23 @@ export default function AdminUsers() {
                 <table style={{ width:'100%', borderCollapse:'collapse', fontSize:13 }}>
                   <thead>
                     <tr style={{ background:'#FAFAFA', borderBottom:'1px solid '+S.border }}>
-                      {['User', 'Role', 'Team', 'Email', 'College', 'Location', 'Year'].map(h => (
-                        <th key={h} style={{ padding:'16px 20px', fontWeight:600, color:S.t2, textAlign: 'left' }}>{h}</th>
+                      {['User', 'Role', 'Team', 'Email', 'College', 'Location', 'Year', 'Registered On'].map(h => (
+                        <th key={h} style={{ padding:'16px 20px', fontWeight:600, color:S.t2, textAlign: 'left', whiteSpace: 'nowrap' }}>{h}</th>
                       ))}
                     </tr>
                   </thead>
                   <tbody>
                     {currentMembers.map(m => {
                       const t = teams.find(team => team.id === m.team_id);
-                      const isLeader = t?.leader_id === m.id;
+                      const teamMembers = members.filter(mem => mem.team_id === m.team_id);
+                      const sortedTeam = [...teamMembers].sort((a,b) => {
+                         const tA = new Date(a.created_at).getTime();
+                         const tB = new Date(b.created_at).getTime();
+                         if (tA !== tB) return tA - tB;
+                         return String(a.id).localeCompare(String(b.id));
+                      });
+                      const leaderId = sortedTeam.length > 0 ? sortedTeam[0].id : null;
+                      const isLeader = m.id === leaderId;
                       const avatarColors = [
                         {bg: '#DCFCE7', text: '#16A34A'}, {bg: '#EEE8FF', text: '#6C4EFF'},
                         {bg: '#FEF3C7', text: '#D97706'}, {bg: '#DBEAFE', text: '#2563EB'},
@@ -221,7 +236,7 @@ export default function AdminUsers() {
                               color: isLeader ? '#6C4EFF' : '#2563EB', 
                               padding:'4px 10px', borderRadius:6, fontSize:11, fontWeight:600 
                             }}>
-                              {isLeader ? 'Team Lead' : 'Participant'}
+                              {isLeader ? 'Team Lead' : 'Member'}
                             </span>
                           </td>
                           <td style={{ padding:'16px 20px' }}>
@@ -234,8 +249,12 @@ export default function AdminUsers() {
                           </td>
                           <td style={{ padding:'16px 20px', color:S.t2 }}>{m.email || 'N/A'}</td>
                           <td style={{ padding:'16px 20px', color:S.t2 }}>{m.college_name || '-'}</td>
-                          <td style={{ padding:'16px 20px', color:S.t2 }}>{m.city || '-'}</td>
+                          <td style={{ padding:'16px 20px', color:S.t2 }}>{m.location || '-'}</td>
                           <td style={{ padding:'16px 20px', color:S.t2 }}>{m.year || '-'}</td>
+                          <td style={{ padding:'16px 20px', color:S.t2, whiteSpace: 'nowrap' }}>
+                            {new Date(m.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} <br/>
+                            <span style={{ fontSize: 11, color: S.t3 }}>{new Date(m.created_at).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}</span>
+                          </td>
                         </tr>
                       );
                     })}

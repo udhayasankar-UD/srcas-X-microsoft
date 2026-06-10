@@ -19,7 +19,7 @@ function HomePage() {
       <ProblemStatements />
       <GuidelinesSection />
       <TimelineSection />
-      <InteractiveSection />
+      {/* <InteractiveSection /> */}
     </main>
   );
 }

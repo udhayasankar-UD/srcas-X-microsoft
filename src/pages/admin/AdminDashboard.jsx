@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase, ADMIN_EMAILS } from '../../lib/supabaseClient';
-import { Users, Flag, FileText, CheckSquare, Shield, Search, ChevronDown, Eye, Megaphone, ChevronRight } from 'lucide-react';
+import { Users, Flag, FileText, CheckSquare, Shield, Search, ChevronDown  , Megaphone, ChevronRight } from 'lucide-react';
 
 // Style constants
 const S = {
@@ -83,9 +83,10 @@ export default function AdminDashboard() {
     { title: 'Evaluations', value: teams.filter(t => t.score > 0).length, trend: getTrend(teams.filter(t => t.score > 0)), color: '#2563EB', bg: '#DBEAFE' },
   ];
 
-  const chartData = useMemo(() => {
+  const chartsData = useMemo(() => {
     const days = 7;
-    const counts = Array(days).fill(0);
+    const regCounts = Array(days).fill(0);
+    const subCounts = Array(days).fill(0);
     const labels = Array(days).fill('');
     
     const now = new Date();
@@ -93,27 +94,38 @@ export default function AdminDashboard() {
       const d = new Date(now.getTime() - (days - 1 - i) * 24 * 60 * 60 * 1000);
       labels[i] = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
       
-      counts[i] = submissions.filter(s => {
+      regCounts[i] = members.filter(s => {
+        if(!s.created_at) return false;
+        const sd = new Date(s.created_at);
+        return sd.getDate() === d.getDate() && sd.getMonth() === d.getMonth() && sd.getFullYear() === d.getFullYear();
+      }).length;
+      
+      subCounts[i] = submissions.filter(s => {
         if(!s.created_at) return false;
         const sd = new Date(s.created_at);
         return sd.getDate() === d.getDate() && sd.getMonth() === d.getMonth() && sd.getFullYear() === d.getFullYear();
       }).length;
     }
     
-    const maxVal = Math.max(...counts, 4); // Minimum max is 4
-    const points = counts.map((count, i) => {
-      const x = (i / (days - 1)) * 800;
-      const y = 200 - (count / maxVal) * 180;
-      return [Math.round(x), Math.round(y)];
-    });
+    const getPathData = (counts) => {
+      const maxVal = Math.max(...counts, 4); // Minimum max is 4
+      const points = counts.map((count, i) => {
+        const x = (i / (days - 1)) * 800;
+        const y = 200 - (count / maxVal) * 180;
+        return [Math.round(x), Math.round(y)];
+      });
+      const pathString = "M" + points.map(p => p.join(',')).join(' L');
+      const fillString = pathString + " L800,200 L0,200Z";
+      const yLabels = [maxVal, Math.round(maxVal*0.75), Math.round(maxVal*0.5), Math.round(maxVal*0.25), 0];
+      return { counts, points, pathString, fillString, yLabels };
+    };
     
-    const pathString = "M" + points.map(p => p.join(',')).join(' L');
-    const fillString = pathString + " L800,200 L0,200Z";
-    
-    const yLabels = [maxVal, Math.round(maxVal*0.75), Math.round(maxVal*0.5), Math.round(maxVal*0.25), 0];
-    
-    return { counts, labels, points, pathString, fillString, yLabels };
-  }, [submissions]);
+    return { 
+      labels, 
+      registration: getPathData(regCounts), 
+      submission: getPathData(subCounts) 
+    };
+  }, [members, submissions]);
 
   if (loadingAuth) return <div style={{minHeight:'100vh',display:'flex',alignItems:'center',justifyContent:'center',background:S.bg}}><div style={{width:40,height:40,border:'3px solid '+S.primary,borderTopColor:'transparent',borderRadius:'50%',animation:'spin 1s linear infinite'}}/></div>;
   if (!isAdmin) return null;
@@ -135,18 +147,12 @@ export default function AdminDashboard() {
             </div>
           </div>
           <div style={{ display:'flex', alignItems:'center', gap:20 }}>
-            <div style={{ position:'relative' }}>
-              <Search style={{ position:'absolute', left:10, top:'50%', transform:'translateY(-50%)', width:16, height:16, color:S.t3 }}/>
-              <input placeholder="Search anything..." style={{ paddingLeft:34, paddingRight:48, paddingTop:8, paddingBottom:8, background:'#F1F5F9', border:'1px solid '+S.border, borderRadius:10, fontSize:13, width:240, outline:'none' }}/>
-              <span style={{ position:'absolute', right:8, top:'50%', transform:'translateY(-50%)', fontSize:10, fontWeight:700, color:S.t3, background:S.card, border:'1px solid '+S.border, padding:'2px 6px', borderRadius:4 }}>Ctrl+K</span>
-            </div>
             <div style={{ display:'flex', alignItems:'center', gap:10, borderLeft:'1px solid '+S.border, paddingLeft:20, cursor:'pointer' }}>
               <div style={{ width:34, height:34, borderRadius:'50%', background:'#059669', display:'flex', alignItems:'center', justifyContent:'center', color:'#fff', fontWeight:700, fontSize:14 }}>A</div>
               <div>
                 <div style={{ fontSize:13, fontWeight:700, color:S.t1 }}>Admin User</div>
                 <div style={{ fontSize:11, fontWeight:500, color:S.t2 }}>Super Admin</div>
               </div>
-              <ChevronDown size={14} style={{color:S.t3}}/>
             </div>
           </div>
         </header>
@@ -172,35 +178,35 @@ export default function AdminDashboard() {
             </div>
 
             {/* CHARTS ROW */}
-            <div style={{ display:'grid', gridTemplateColumns:'2fr 1fr', gap:S.gap, minHeight:380 }}>
+            <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:S.gap, minHeight:380 }}>
               {/* Line Chart */}
               <div style={{ background:S.card, border:'1px solid '+S.border, borderRadius:S.radius, padding:S.pad, boxShadow:'0 1px 3px rgba(0,0,0,.04)', display:'flex', flexDirection:'column' }}>
                 <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:20 }}>
-                  <h3 style={{ fontSize:15, fontWeight:700, margin:0 }}>Submissions Overview</h3>
-                  <div style={{ fontSize:12, fontWeight:500, color:S.t2, background:'#F1F5F9', padding:'5px 10px', borderRadius:8, border:'1px solid '+S.border, cursor:'pointer', display:'flex', alignItems:'center', gap:4 }}>This Week <ChevronDown size={13}/></div>
+                  <h3 style={{ fontSize:15, fontWeight:700, margin:0 }}>Registration Graph</h3>
+                  <div style={{ fontSize:12, fontWeight:500, color:S.t2, background:'#F1F5F9', padding:'5px 10px', borderRadius:8, border:'1px solid '+S.border, cursor:'pointer', display:'flex', alignItems:'center', gap:4 }}>This Week</div>
                 </div>
                 <div style={{ flex:1, position:'relative', minHeight:180 }}>
                   <div style={{ position:'absolute', left:0, top:0, bottom:32, display:'flex', flexDirection:'column', justifyContent:'space-between', fontSize:10, fontWeight:500, color:S.t3, width:24 }}>
-                    {chartData.yLabels.map((yl, i) => <span key={i}>{yl}</span>)}
+                    {chartsData.registration.yLabels.map((yl, i) => <span key={i}>{yl}</span>)}
                   </div>
                   <svg viewBox="0 0 800 200" style={{ width:'calc(100% - 30px)', height:'calc(100% - 32px)', marginLeft:30, overflow:'visible' }} preserveAspectRatio="none">
-                    <defs><linearGradient id="cg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#8b5cf6" stopOpacity="0.15"/><stop offset="100%" stopColor="#8b5cf6" stopOpacity="0"/></linearGradient></defs>
-                    <path d={chartData.fillString} fill="url(#cg)"/>
-                    <path d={chartData.pathString} fill="none" stroke="#8b5cf6" strokeWidth="2.5"/>
-                    {chartData.points.map(([x,y],i) => (
-                      <circle key={i} cx={x} cy={y} r="6" fill="#8b5cf6" style={{cursor: 'pointer'}}><title>{chartData.counts[i]} Submissions on this day</title></circle>
+                    <defs><linearGradient id="cgReg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#8b5cf6" stopOpacity="0.15"/><stop offset="100%" stopColor="#8b5cf6" stopOpacity="0"/></linearGradient></defs>
+                    <path d={chartsData.registration.fillString} fill="url(#cgReg)"/>
+                    <path d={chartsData.registration.pathString} fill="none" stroke="#8b5cf6" strokeWidth="2.5"/>
+                    {chartsData.registration.points.map(([x,y],i) => (
+                      <circle key={i} cx={x} cy={y} r="6" fill="#8b5cf6" style={{cursor: 'pointer'}}><title>{chartsData.registration.counts[i]} Registrations on this day</title></circle>
                     ))}
                   </svg>
                   <div style={{ position:'absolute', bottom:0, left:30, right:0, display:'flex', justifyContent:'space-between', fontSize:11, fontWeight:500, color:S.t3 }}>
-                    {chartData.labels.map((d, i) => <span key={i}>{d}</span>)}
+                    {chartsData.labels.map((d, i) => <span key={i}>{d}</span>)}
                   </div>
                 </div>
                 <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:12, marginTop:16 }}>
                   {[
-                    { dot:'#6C4EFF', label:'Total', val: submissions.length },
-                    { dot:'#D97706', label:'Submitted', val: submissions.length },
-                    { dot:'#059669', label:'Under Review', val: teams.filter(t=>t.status==='Pending').length },
-                    { dot:'#D97706', label:'Shortlisted', val: teams.filter(t=>t.status==='Shortlisted').length },
+                    { dot:'#6C4EFF', label:'Total Users', val: members.length },
+                    { dot:'#D97706', label:'Total Teams', val: teams.length },
+                    { dot:'#059669', label:'Avg Team Size', val: teams.length ? (members.length / teams.length).toFixed(1) : 0 },
+                    { dot:'#2563EB', label:'Submissions', val: submissions.length },
                   ].map((s,i) => (
                     <div key={i} style={{ background:'#FAFAFA', border:'1px solid #F1F5F9', borderRadius:10, padding:'10px 12px' }}>
                       <div style={{ display:'flex', alignItems:'center', gap:6, marginBottom:4 }}>
@@ -213,40 +219,42 @@ export default function AdminDashboard() {
                 </div>
               </div>
 
-              {/* Donut Chart */}
               <div style={{ background:S.card, border:'1px solid '+S.border, borderRadius:S.radius, padding:S.pad, boxShadow:'0 1px 3px rgba(0,0,0,.04)', display:'flex', flexDirection:'column' }}>
-                <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:16 }}>
-                  <h3 style={{ fontSize:15, fontWeight:700, margin:0 }}>Submissions by Track</h3>
-                  <span style={{ fontSize:11, fontWeight:700, color:S.primary, cursor:'pointer' }}>View all</span>
+                <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:20 }}>
+                  <h3 style={{ fontSize:15, fontWeight:700, margin:0 }}>Submissions Graph</h3>
+                  <div style={{ fontSize:12, fontWeight:500, color:S.t2, background:'#F1F5F9', padding:'5px 10px', borderRadius:8, border:'1px solid '+S.border, cursor:'pointer', display:'flex', alignItems:'center', gap:4 }}>This Week</div>
                 </div>
-                <div style={{ display:'flex', flexDirection:'column', alignItems:'center', flex:1, justifyContent:'center' }}>
-                  <div style={{ position:'relative', width:160, height:160, borderRadius:'50%', background:'conic-gradient(#4ade80 0% 30%, #3b82f6 30% 53%, #eab308 53% 71%, #a855f7 71% 86%, #ec4899 86% 100%)', marginBottom:20 }}>
-                    <div style={{ position:'absolute', top:'50%', left:'50%', transform:'translate(-50%,-50%)', width:108, height:108, borderRadius:'50%', background:'#fff', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center' }}>
-                      <span style={{ fontSize:22, fontWeight:800, color:S.t1 }}>{submissions.length}</span>
-                      <span style={{ fontSize:10, fontWeight:500, color:S.t2 }}>Total</span>
+                <div style={{ flex:1, position:'relative', minHeight:180 }}>
+                  <div style={{ position:'absolute', left:0, top:0, bottom:32, display:'flex', flexDirection:'column', justifyContent:'space-between', fontSize:10, fontWeight:500, color:S.t3, width:24 }}>
+                    {chartsData.submission.yLabels.map((yl, i) => <span key={i}>{yl}</span>)}
+                  </div>
+                  <svg viewBox="0 0 800 200" style={{ width:'calc(100% - 30px)', height:'calc(100% - 32px)', marginLeft:30, overflow:'visible' }} preserveAspectRatio="none">
+                    <defs><linearGradient id="cgSub" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#059669" stopOpacity="0.15"/><stop offset="100%" stopColor="#059669" stopOpacity="0"/></linearGradient></defs>
+                    <path d={chartsData.submission.fillString} fill="url(#cgSub)"/>
+                    <path d={chartsData.submission.pathString} fill="none" stroke="#059669" strokeWidth="2.5"/>
+                    {chartsData.submission.points.map(([x,y],i) => (
+                      <circle key={i} cx={x} cy={y} r="6" fill="#059669" style={{cursor: 'pointer'}}><title>{chartsData.submission.counts[i]} Submissions on this day</title></circle>
+                    ))}
+                  </svg>
+                  <div style={{ position:'absolute', bottom:0, left:30, right:0, display:'flex', justifyContent:'space-between', fontSize:11, fontWeight:500, color:S.t3 }}>
+                    {chartsData.labels.map((d, i) => <span key={i}>{d}</span>)}
+                  </div>
+                </div>
+                <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:12, marginTop:16 }}>
+                  {[
+                    { dot:'#3b82f6', label:'Submitted', val: submissions.length },
+                    { dot:'#eab308', label:'Pending', val: teams.filter(t => t.status === 'Pending').length },
+                    { dot:'#8b5cf6', label:'Shortlisted', val: teams.filter(t => t.status === 'Shortlisted').length },
+                    { dot:'#ef4444', label:'Rejected', val: teams.filter(t => t.status === 'Rejected').length },
+                  ].map((s,i) => (
+                    <div key={i} style={{ background:'#FAFAFA', border:'1px solid #F1F5F9', borderRadius:10, padding:'10px 12px' }}>
+                      <div style={{ display:'flex', alignItems:'center', gap:6, marginBottom:4 }}>
+                        <div style={{ width:8, height:8, borderRadius:'50%', background:s.dot }}/>
+                        <span style={{ fontSize:11, fontWeight:600, color:S.t2, whiteSpace:'nowrap' }}>{s.label}</span>
+                      </div>
+                      <div style={{ fontSize:20, fontWeight:800, color:S.t1 }}>{s.val}</div>
                     </div>
-                  </div>
-                  <div style={{ width:'100%', display:'flex', flexDirection:'column', gap:10 }}>
-                    {[
-                      { c:'#4ade80', l:'Climate Action' },
-                      { c:'#3b82f6', l:'Quality Education' },
-                      { c:'#eab308', l:'Affordable Energy' },
-                      { c:'#a855f7', l:'Sustainable Cities' },
-                      { c:'#ec4899', l:'Life on Land' },
-                    ].map((t,i) => {
-                      const count = submissions.filter(s => s.category === t.l).length || 0;
-                      const percent = submissions.length > 0 ? ((count / submissions.length) * 100).toFixed(1) : 0;
-                      return (
-                        <div key={i} title={`${count} Submissions for ${t.l}`} style={{ display:'flex', justifyContent:'space-between', alignItems:'center', fontSize:12, padding:'0 4px', cursor:'pointer' }}>
-                          <div style={{ display:'flex', alignItems:'center', gap:8 }}>
-                            <div style={{ width:8, height:8, borderRadius:'50%', background:t.c }}/>
-                            <span style={{ fontWeight:600, color:S.t1 }}>{t.l}</span>
-                          </div>
-                          <span style={{ fontWeight:500, color:S.t2 }}>{count} ({percent}%)</span>
-                        </div>
-                      )
-                    })}
-                  </div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -262,7 +270,7 @@ export default function AdminDashboard() {
                 <table style={{ width:'100%', borderCollapse:'collapse', fontSize:12 }}>
                   <thead>
                     <tr style={{ background:'#FAFAFA', borderBottom:'1px solid #F1F5F9' }}>
-                      {['Team Name','Track','Submission Title','Submitted On','Status','Action'].map(h => (
+                      {['Team Name','Track','Submission Title','Submitted On','Status'].map(h => (
                         <th key={h} style={{ padding:'12px 18px', fontWeight:600, color:S.t2, textAlign: h==='Action' ? 'center' : 'left' }}>{h}</th>
                       ))}
                     </tr>
@@ -288,7 +296,7 @@ export default function AdminDashboard() {
                             </span>
                           </td>
                           <td style={{ padding:'14px 18px', textAlign:'center' }}>
-                            <button style={{ background:S.card, border:'1px solid '+S.border, borderRadius:6, padding:'5px 7px', cursor:'pointer', color:S.t3 }}><Eye size={14}/></button>
+
                           </td>
                         </tr>
                       );
@@ -296,7 +304,7 @@ export default function AdminDashboard() {
                   </tbody>
                 </table>
                 <div style={{ padding:'14px 22px', borderTop:'1px solid #F1F5F9', textAlign:'center' }}>
-                  <button style={{ background:'none', border:'none', fontSize:12, fontWeight:700, color:S.primary, cursor:'pointer', display:'inline-flex', alignItems:'center', gap:4 }}>
+                  <button onClick={() => navigate('/udview/submissions')} style={{ background:'none', border:'none', fontSize:12, fontWeight:700, color:S.primary, cursor:'pointer', display:'inline-flex', alignItems:'center', gap:4 }}>
                     View all submissions <ChevronRight size={14}/>
                   </button>
                 </div>

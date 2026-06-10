@@ -74,13 +74,6 @@ export default function AdminTeams() {
   const totalPages = Math.ceil(filteredTeams.length / itemsPerPage);
   const currentTeams = filteredTeams.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
-  const stats = [
-    { title: 'Total Teams', value: teams.length, trend: '12.5%', c: S.primary, bg: S.activeBg, icon: Users },
-    { title: 'Registered Teams', value: teams.length, trend: '10.3%', c: S.green, bg: '#DCFCE7', icon: Flag },
-    { title: 'Shortlisted Teams', value: teams.filter(t => t.status === 'Shortlisted').length, trend: '4.2%', c: '#2563EB', bg: '#DBEAFE', icon: CheckSquare },
-    { title: 'Winners', value: '3', trend: '0%', c: '#DC2626', bg: '#FEF2F2', icon: Trophy },
-  ];
-
   const exportCSV = () => {
     let csv = "data:text/csv;charset=utf-8,Team,Track,Lead Name,Lead Email,Members Count,Status,Registered On\n";
     filteredTeams.forEach(t => {
@@ -107,18 +100,12 @@ export default function AdminTeams() {
             </div>
           </div>
           <div style={{ display:'flex', alignItems:'center', gap:20 }}>
-            <div style={{ position:'relative' }}>
-              <Search style={{ position:'absolute', left:10, top:'50%', transform:'translateY(-50%)', width:16, height:16, color:S.t3 }}/>
-              <input placeholder="Search anything..." style={{ paddingLeft:34, paddingRight:48, paddingTop:8, paddingBottom:8, background:'#F1F5F9', border:'1px solid '+S.border, borderRadius:10, fontSize:13, width:240, outline:'none' }}/>
-              <span style={{ position:'absolute', right:8, top:'50%', transform:'translateY(-50%)', fontSize:10, fontWeight:700, color:S.t3, background:S.card, border:'1px solid '+S.border, padding:'2px 6px', borderRadius:4 }}>Ctrl+K</span>
-            </div>
             <div style={{ display:'flex', alignItems:'center', gap:10, borderLeft:'1px solid '+S.border, paddingLeft:20, cursor:'pointer' }}>
               <div style={{ width:34, height:34, borderRadius:'50%', background:'#059669', display:'flex', alignItems:'center', justifyContent:'center', color:'#fff', fontWeight:700, fontSize:14 }}>A</div>
               <div>
                 <div style={{ fontSize:13, fontWeight:700, color:S.t1 }}>Admin User</div>
                 <div style={{ fontSize:11, fontWeight:500, color:S.t2 }}>Super Admin</div>
               </div>
-              <ChevronDown size={14} style={{color:S.t3}}/>
             </div>
           </div>
         </header>
@@ -138,21 +125,6 @@ export default function AdminTeams() {
                   <Download size={16}/> Export
                 </button>
               </div>
-            </div>
-
-            <div style={{ display:'grid', gridTemplateColumns:'repeat(4, 1fr)', gap:S.gap }}>
-              {stats.map((c, i) => (
-                <div key={i} style={{ background:S.card, border:'1px solid '+S.border, borderRadius:S.radius, padding:'20px', boxShadow:'0 1px 3px rgba(0,0,0,.04)', display:'flex', gap:16, alignItems:'flex-start' }}>
-                  <div style={{ width:40, height:40, borderRadius:10, background:c.bg, color:c.c, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
-                    <c.icon size={20}/>
-                  </div>
-                  <div>
-                    <div style={{ fontSize:12, fontWeight:600, color:S.t2, marginBottom:4 }}>{c.title}</div>
-                    <div style={{ fontSize:24, fontWeight:800, color:S.t1, marginBottom:4 }}>{c.value}</div>
-                    <div style={{ fontSize:11, fontWeight:600, color:S.green }}>↑ {c.trend} <span style={{ color:S.t3, fontWeight:400, marginLeft:4 }}>vs last 7 days</span></div>
-                  </div>
-                </div>
-              ))}
             </div>
 
             <div style={{ background:S.card, border:'1px solid '+S.border, borderRadius:S.radius, boxShadow:'0 1px 3px rgba(0,0,0,.04)', display:'flex', flexDirection:'column' }}>

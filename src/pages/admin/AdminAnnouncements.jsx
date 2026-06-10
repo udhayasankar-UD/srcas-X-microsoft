@@ -124,11 +124,7 @@ export default function AdminAnnouncements() {
             </div>
           </div>
           <div style={{ display:'flex', alignItems:'center', gap:20 }}>
-            <div style={{ position:'relative' }}>
-              <Search style={{ position:'absolute', left:10, top:'50%', transform:'translateY(-50%)', width:16, height:16, color:S.t3 }}/>
-              <input placeholder="Search anything..." style={{ paddingLeft:34, paddingRight:48, paddingTop:8, paddingBottom:8, background:'#F1F5F9', border:'1px solid '+S.border, borderRadius:10, fontSize:13, width:240, outline:'none' }}/>
-              <span style={{ position:'absolute', right:8, top:'50%', transform:'translateY(-50%)', fontSize:10, fontWeight:700, color:S.t3, background:S.card, border:'1px solid '+S.border, padding:'2px 6px', borderRadius:4 }}>Ctrl+K</span>
-            </div>
+
             <div style={{ position:'relative', cursor:'pointer' }}>
               <Bell size={20} color={S.t2}/>
               <div style={{ position:'absolute', top:-4, right:-4, width:16, height:16, background:'#EF4444', color:'#fff', borderRadius:'50%', fontSize:9, fontWeight:700, display:'flex', alignItems:'center', justifyContent:'center', border:'2px solid '+S.card }}>3</div>
@@ -139,7 +135,6 @@ export default function AdminAnnouncements() {
                 <div style={{ fontSize:13, fontWeight:700, color:S.t1 }}>Admin User</div>
                 <div style={{ fontSize:11, fontWeight:500, color:S.t2 }}>Super Admin</div>
               </div>
-              <ChevronDown size={14} style={{color:S.t3}}/>
             </div>
           </div>
         </header>

@@ -54,7 +54,7 @@ const DEPARTMENTS = [
 
 const defaultMember = { 
   full_name: '', email: '', phone_number: '', 
-  state: '', city: '', dept: '', dept_other: '', year: '',
+  state: '', city: '', city_other: '', dept: '', dept_other: '', year: '',
   college_name: '', reg_no: '' 
 };
 
@@ -105,8 +105,11 @@ export default function TeamTab({ hasTeam, teamData, teamMembers, user, setTeamM
       if (!/^\d{10}$/.test(member.phone_number)) {
         return "Phone number must be exactly 10 digits.";
       }
-      if (member.dept === 'Other' && !member.dept_other.trim()) {
+      if (member.dept === 'Other' && !member.dept_other?.trim()) {
         return "Please specify your department.";
+      }
+      if (member.city === 'Other' && !member.city_other?.trim()) {
+        return "Please specify your city/district.";
       }
       return true;
     };
@@ -161,7 +164,7 @@ export default function TeamTab({ hasTeam, teamData, teamMembers, user, setTeamM
         full_name: m.full_name,
         email: m.email,
         phone_number: m.phone_number,
-        location: `${m.city}, ${m.state}`,
+        location: `${m.city === 'Other' ? m.city_other : m.city}, ${m.state}`,
         college_name: m.college_name,
         reg_no: m.reg_no,
         dept: m.dept === 'Other' ? m.dept_other : m.dept,
@@ -231,12 +234,19 @@ export default function TeamTab({ hasTeam, teamData, teamMembers, user, setTeamM
           </select>
         </div>
         <div>
-          <label style={styles.label}>City</label>
+          <label style={styles.label}>City / District</label>
           <select value={member.city} onChange={e => updateMember('city', e.target.value)} disabled={!member.state} style={!member.state ? styles.inputDisabled : { ...styles.input, cursor: 'pointer' }}>
             <option value="" disabled>Select City</option>
             {member.state && INDIA_STATES_CITIES[member.state]?.map(c => <option key={c} value={c}>{c}</option>)}
+            {member.state && <option value="Other">Other (Please Specify)</option>}
           </select>
         </div>
+        {member.city === 'Other' && (
+          <div>
+            <label style={styles.label}>Specify City / District</label>
+            <input type="text" value={member.city_other || ''} onChange={e => updateMember('city_other', e.target.value)} style={styles.input} placeholder="Your City" />
+          </div>
+        )}
 
         {/* Academic Details */}
         <div>
