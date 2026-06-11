@@ -192,7 +192,7 @@ export default function HeroSection7() {
       </div>
 
       {/* Header */}
-      <header style={{
+      <header className="hero-header" style={{
         display: "flex",
         alignItems: "center",
         justifyContent: "flex-end", /* Align to the right side */
@@ -214,49 +214,27 @@ export default function HeroSection7() {
             <SDGWheel size={32} style={{ borderRadius: '50%' }} />
           </div>
           
-          {/* Card 1: Organized By */}
-          <div style={{ 
+          {/* Unified Logos Card */}
+          <div className="hero-logos-card" style={{ 
             display: "flex", 
             alignItems: "center", 
-            gap: "12px",
             background: "#fff",
             border: "1px solid #e5e7eb",
             borderRadius: "12px",
-            padding: "0 18px",
-            height: "80px",
             boxShadow: "0 4px 12px rgba(0,0,0,0.06)"
           }}>
             <span className="h1-logo-text" style={{ fontSize: "1rem", color: "#6b7280", textTransform: "uppercase", fontWeight: 700, whiteSpace: "nowrap" }}>
               Organized by
             </span>
-            <img src={srcasLogo} alt="SRCAS" style={{ height: "48px", objectFit: "contain" }} />
-          </div>
-
-          {/* Card 2: Partners */}
-          <div style={{ 
-            display: "flex", 
-            alignItems: "center", 
-            gap: "16px",
-            background: "#fff",
-            border: "1px solid #e5e7eb",
-            borderRadius: "12px",
-            padding: "0 18px",
-            height: "80px",
-            boxShadow: "0 4px 12px rgba(0,0,0,0.06)"
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span className="h1-logo-text" style={{ fontSize: "1rem", color: "#6b7280", textTransform: "uppercase", fontWeight: 700, whiteSpace: "nowrap" }}>
-                Partner
-              </span>
-              <img src={igeniusLogo} alt="igeniusAI" style={{ height: "36px", objectFit: "contain" }} />
-            </div>
-            <div style={{ width: '1px', height: '40px', background: '#e5e7eb' }}></div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span className="h1-logo-text" style={{ fontSize: "1rem", color: "#6b7280", textTransform: "uppercase", fontWeight: 700, whiteSpace: "nowrap" }}>
-                Authorized Partner
-              </span>
-              <img src={msLogo} alt="Microsoft" style={{ height: "56px", objectFit: "contain" }} />
-            </div>
+            <img src={srcasLogo} alt="SRCAS" className="hero-logo-img" style={{ objectFit: "contain" }} />
+            
+            <div className="hero-logo-divider" style={{ width: '1px', background: '#e5e7eb' }}></div>
+            
+            <img src={igeniusLogo} alt="igeniusAI" className="hero-logo-img" style={{ objectFit: "contain" }} />
+            
+            <div className="hero-logo-divider" style={{ width: '1px', background: '#e5e7eb' }}></div>
+            
+            <img src={msLogo} alt="Microsoft" className="hero-logo-img" style={{ objectFit: "contain" }} />
           </div>
         </div>
       </header>
@@ -651,13 +629,34 @@ export default function HeroSection7() {
           box-shadow: 0px 0px 1px;
         }
 
-        @media(max-width:1300px) and (min-width:993px) {
+        .hero-logos-card {
+          gap: 16px;
+          padding: 0 18px;
+          height: 80px;
+        }
+        .hero-logo-img {
+          height: 44px;
+        }
+        .hero-logo-divider {
+          height: 40px;
+          margin: 0 4px;
+        }
+
+        @media(max-width:1300px) {
           .h1-logo-text { display: none !important; }
         }
         @media(max-width:992px){
-          .h1-logos-mobile-hide{display:none!important}
+          .hero-logos-card {
+            gap: 12px;
+            padding: 0 14px;
+            height: 64px;
+          }
+          .hero-logo-img { height: 36px; }
+          .hero-logo-divider { height: 32px; margin: 0 2px; }
         }
-        @media(max-width:768px){
+        @media(max-width:640px){
+          .h1-logos-mobile-hide { display: none !important; }
+          .hero-header { padding: 16px 20px !important; justify-content: center !important; }
           .h1-pills-mobile-hide{display:none!important}
           .hero-hide-mobile { display: none !important; }
           .hero-floating-bg { opacity: 0.35; }
