@@ -342,7 +342,7 @@ export default function HeroSection7() {
           <SDGWheel size={44} />
           
           {/* Mini badge */}
-          <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '4px 12px', border: '1px solid #e5e7eb', borderRadius: 100, background: 'rgba(255,255,255,0.8)', backdropFilter: 'blur(10px)' }}>
+          <motion.div className="hero-mini-badge-hide" initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '4px 12px', border: '1px solid #e5e7eb', borderRadius: 100, background: 'rgba(255,255,255,0.8)', backdropFilter: 'blur(10px)' }}>
             <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#4c9f38', display: 'inline-block' }} />
             <span style={{ fontSize: '9px', fontWeight: 700, letterSpacing: '0.14em', color: '#4c9f38', textTransform: 'uppercase' }}>
               Registration Open!
@@ -384,7 +384,7 @@ export default function HeroSection7() {
               <path d="M 10 10 L 30 -5" stroke="#facc15" strokeWidth="4" strokeLinecap="round" />
               <path d="M 15 30 L 35 25" stroke="#facc15" strokeWidth="4" strokeLinecap="round" />
             </svg>
-            <h1 style={{ 
+            <h1 className="hero-main-heading" style={{ 
               fontSize: 'clamp(3.5rem, 8vw, 7.5rem)', 
               fontWeight: 900, 
               color: '#111', 
@@ -408,7 +408,7 @@ export default function HeroSection7() {
         </motion.div>
 
         {/* Subtext */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} style={{ marginBottom: '40px' }}>
+        <motion.div className="hero-subtext-container" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} style={{ marginBottom: '40px' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '20px' }}>
             <p style={{ fontSize: '1.125rem', color: '#4b5563', maxWidth: '520px', lineHeight: 1.6, margin: 0, textAlign: 'center' }}>
               India's premier national-level hackathon. Build tech-driven solutions for the 17 UN Sustainable Development Goals.
@@ -646,8 +646,12 @@ export default function HeroSection7() {
           height: 180px;
         }
 
-        @media(max-width:1300px) {
+        @media(max-width:1400px), (max-height: 800px) {
           .h1-logo-text { display: none !important; }
+          .hero-mini-badge-hide { display: none !important; }
+          .h1-pills-mobile-hide { display: none !important; }
+          .hero-main-heading { font-size: clamp(3rem, 6vw, 5.5rem) !important; }
+          .hero-subtext-container { margin-bottom: 24px !important; }
         }
 
         @media(max-width:1100px) {
