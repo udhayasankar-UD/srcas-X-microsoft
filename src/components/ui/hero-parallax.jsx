@@ -151,7 +151,7 @@ export const Header = () => {
       </h1>
 
       <p className="max-w-2xl text-sm sm:text-base md:text-xl mt-4 md:mt-6 text-neutral-600 leading-relaxed">
-        Explore memorable moments from SRCAS Hackathon 2024 <br/>
+        Explore memorable moments from SRCAS Hackathon's <br/>
         Showcasing innovation, creativity, and teamwork <br/>
         Relive the energy and excitement of the event
       </p>
@@ -202,13 +202,7 @@ export const ProductCard = ({ product, translate }) => {
         </div>
       )}
 
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-black opacity-0 group-hover/product:opacity-70 transition-opacity duration-300 pointer-events-none" />
-
-      {/* Title */}
-      <h2 className="absolute bottom-3 left-3 text-white text-sm md:text-lg font-semibold opacity-0 group-hover/product:opacity-100 transition-opacity duration-300">
-        {product.title}
-      </h2>
+      {/* Removed Overlay and Title */}
     </motion.div>
 
     

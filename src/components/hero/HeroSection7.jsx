@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { theme } from '../../theme';
+import { useAuth } from '../../lib/useAuth';
 import srcasLogo from '../../assets/logo/srcas-logo.png';
 import srcasLogoOnly from '../../assets/logo/srcaslogoonly.png';
 import srcasHackLogo from '../../assets/logo/srcas-hack-3.0-logo.png';
@@ -174,6 +175,7 @@ const ParallaxElement = ({ children, yOffset = 100, initialRotate = 0, initialSc
 };
 
 export default function HeroSection7() {
+  const user = useAuth();
   const containerRef = useRef(null);
 
   return (
@@ -418,7 +420,7 @@ export default function HeroSection7() {
 
         {/* Buttons */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', justifyContent: 'center' }}>
-          <Link to="/register" style={{ textDecoration: 'none' }}>
+          <Link to={user ? "/dashboard" : "/register"} style={{ textDecoration: 'none' }}>
             <div className="hero-btn">
               <div className="hero-bg" />
               <div className="hero-border" />
@@ -434,14 +436,9 @@ export default function HeroSection7() {
                     <line className="hero-line" x1={0} y1={2} x2={100} y2={2} fill="none" strokeLinecap="round" strokeWidth={2} strokeDasharray={60} />
                   </svg>
                 </div>
-                <span className="hero-text" data-text="GO">REGISTER NOW</span>
+                <span className="hero-text" data-text="GO">{user ? "My Dashboard" : "REGISTER NOW"}</span>
               </div>
             </div>
-          </Link>
-          <Link to="/dashboard" style={{ textDecoration: 'none' }}>
-            <button className="dashboard-btn">
-              My Dashboard
-            </button>
           </Link>
         </motion.div>
 

@@ -6,18 +6,6 @@ import PPTSection from "../components/sections/PPTSection";
 import crewImage from "../assets/highlights/crew.png"
 import SRCASHackVideo from "../assets/highlights/srcas-1.0.mp4"
 
-/* ── Gallery photos (replace src with real images) ── */
-// const galleryPhotos = [
-//   { id: 1, src: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600&q=80", alt: "Prize distribution ceremony", span: "row-span-2" },
-//   { id: 2, src: "https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=600&q=80", alt: "Panel discussion", span: "" },
-//   { id: 3, src: "https://images.unsplash.com/photo-1528605248644-14dd04022da1?w=600&q=80", alt: "Team photo", span: "" },
-//   { id: 4, src: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=600&q=80", alt: "Hacking session", span: "" },
-//   { id: 5, src: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=600&q=80", alt: "Winners", span: "row-span-2" },
-//   { id: 6, src: "https://images.unsplash.com/photo-1531482615713-2afd69097998?w=600&q=80", alt: "Crowd", span: "" },
-//   { id: 7, src: "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=600&q=80", alt: "Presentation", span: "" },
-//   { id: 8, src: "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=600&q=80", alt: "Award ceremony", span: "" },
-// ];
-
 /* ── Lightbox ── */
 const Lightbox = ({ photo, onClose }) => (
   <AnimatePresence>
@@ -67,60 +55,6 @@ export default function HighlightsPage() {
 
       {/* ── PARALLAX HERO ── */}
       <HeroParallaxDemo />
-
-      {/* ── PHOTO GALLERY ── */}
-      {/* <section style={{ padding: "80px clamp(16px, 5vw, 60px)" }}>
-         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          style={{ textAlign: "center", marginBottom: 48 }}
-        >
-          <p style={{ fontSize: "0.8rem", fontWeight: 700, letterSpacing: "0.22em", textTransform: "uppercase", color: "#9ca3af", marginBottom: 14 }}>
-            Memories
-          </p>
-          <h2 style={{ fontSize: "clamp(2.4rem, 5vw, 4rem)", fontWeight: 900, letterSpacing: "-0.04em", color: "#111", margin: 0 }}>
-            Moments from the floor
-          </h2>
-        </motion.div> 
-
-        {/* Masonry-style grid
-         <div style={{
-          maxWidth: 1200,
-          margin: "0 auto",
-          display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
-          gridAutoRows: "260px",
-          gap: 14,
-        }}>
-          {galleryPhotos.map((photo, i) => (
-            <motion.div
-              key={photo.id}
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true, margin: "-40px" }}
-              transition={{ duration: 0.5, delay: i * 0.06 }}
-              onClick={() => setLightbox(photo)}
-              style={{
-                gridRow: photo.span === "row-span-2" ? "span 2" : "span 1",
-                borderRadius: 12,
-                overflow: "hidden",
-                cursor: "zoom-in",
-                position: "relative",
-              }}
-            >
-              <img
-                src={photo.src}
-                alt={photo.alt}
-                style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", transition: "transform 0.4s ease" }}
-                onMouseEnter={e => e.currentTarget.style.transform = "scale(1.05)"}
-                onMouseLeave={e => e.currentTarget.style.transform = "scale(1)"}
-              />
-            </motion.div>
-          ))}
-        </div>
-      </section>  */}
 
       {/* ── SRCAS HACKATHON ── */}
       <section style={{ padding: "80px clamp(16px, 5vw, 60px)" }}>
