@@ -160,7 +160,7 @@ const ContactSection = () => {
                         </div>
                         <div>
                             <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#111', margin: '0 0 8px' }}>Mrs. Supraja</h3>
-                            <p style={{ fontSize: '0.9rem', color: '#6b7280', margin: 0, fontWeight: 500 }}>Igenius Coordinator</p>
+                            <p style={{ fontSize: '0.9rem', color: '#6b7280', margin: 0, fontWeight: 500 }}>Hackathon Coordinator</p>
                         </div>
                         <div style={{ marginTop: 'auto' }}>
                             <CopyPhone number="+917338893731" display="+91 73388 93731" />

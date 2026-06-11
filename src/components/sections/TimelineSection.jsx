@@ -408,7 +408,7 @@ function CTABanner({ mobile }) {
         }}>
           Don't wait — spots fill fast.<br />
           <span style={{ color: "rgba(255,255,255,0.42)", fontWeight: 500, fontSize: "0.88em" }}>
-            Registration closes June 21, 2026.
+            Registration closes July 25, 2026.
           </span>
         </p>
       </div>

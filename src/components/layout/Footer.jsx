@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useEffect, useRef } from "react";
+import { useAuth } from "../../lib/useAuth";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { cn } from "@/lib/utils";
@@ -226,6 +227,7 @@ export default function Footer() {
   const headingRef = useRef(null);
   const linksRef = useRef(null);
   const currentYear = new Date().getFullYear();
+  const user = useAuth();
 
   useEffect(() => {
     if (!wrapperRef.current) return;
@@ -307,10 +309,10 @@ export default function Footer() {
             <div ref={linksRef} className="flex flex-col items-center gap-3 w-full">
               <MagneticButton
                 as="a"
-                href="/register"
+                href={user ? "/dashboard" : "/register"}
                 className="cf-pill px-7 py-2.5 rounded-full text-neutral-900 font-black text-sm border-neutral-300 hover:border-neutral-900"
               >
-                🚀 Register Now →
+                {user ? "🚀 Go to Dashboard →" : "🚀 Register Now →"}
               </MagneticButton>
             </div>
           </div>
@@ -328,8 +330,8 @@ export default function Footer() {
             {/* Social icons */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               {[
-                { icon: LinkedinIcon, href: "https://linkedin.com", label: "LinkedIn" },
-                { icon: InstagramIcon, href: "https://instagram.com", label: "Instagram" },
+                { icon: LinkedinIcon, href: "https://www.linkedin.com/company/proclub-srcas", label: "LinkedIn" },
+                { icon: InstagramIcon, href: "https://www.instagram.com/proclub_srcas", label: "Instagram" },
                 { icon: WhatsAppIcon, href: "https://wa.me/1234567890", label: "WhatsApp" },
               ].map(({ icon: Icon, href, label }) => (
                 <MagneticButton

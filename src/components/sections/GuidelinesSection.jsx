@@ -1,10 +1,12 @@
 import React, { useState, useRef } from 'react';
+import { useAuth } from '../../lib/useAuth';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import MagneticButton from '../ui/MagneticButton';
 import {
   Clock, UserPlus, FileText, Unlock, Badge,
   Users, Coffee, Building, MapPin, ShieldCheck
 } from 'lucide-react';
+
 
 const SDG_IMAGES = {
   1: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Sustainable_Development_Goal_01NoPoverty.svg/960px-Sustainable_Development_Goal_01NoPoverty.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail&_=20240924093018%22,",
@@ -125,7 +127,7 @@ const guidelinesPart2 = [
   },
   {
     id: '08', title: 'In-person Event',
-    description: 'SRCAS Hackathon 2.0 is an in-person (offline) hackathon event at SRCAS Coimbatore.',
+    description: 'SRCAS Hackathon 3.0 is an in-person (offline) hackathon event at SRCAS Coimbatore.',
     icon: Building
   },
   {
@@ -269,6 +271,7 @@ const GuidelineItem = ({ item, accentColor, glowColor, isLast }) => {
 
 export default function GuidelinesSection() {
   const sectionRef = useRef(null);
+  const user = useAuth();
   return (
     <section ref={sectionRef} id="finalists" style={{
       position: "relative",
@@ -550,12 +553,33 @@ export default function GuidelinesSection() {
               Registration is free. No prerequisites.
             </p>
           </div>
-          <MagneticButton href="#problems" variant="light" size="md">
-            Register Now
+          
+          <a
+            href={user ? "/dashboard" : "/register"}
+            style={{
+              display: "inline-flex", alignItems: "center", gap: 10,
+              padding: "15px 30px",
+              background: "#fff", color: "#111",
+              fontFamily: "'Plus Jakarta Sans', sans-serif",
+              fontWeight: 800, fontSize: "0.88rem",
+              letterSpacing: "-0.01em", borderRadius: 13,
+              textDecoration: "none", flexShrink: 0,
+              transition: "transform 0.3s, box-shadow 0.3s",
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.transform = "translateY(-3px)";
+              e.currentTarget.style.boxShadow = "0 10px 28px rgba(0,0,0,0.16)";
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.boxShadow = "none";
+            }}
+          >
+            {user ? "Dashboard" : "Register Now"}
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M5 12h14M12 5l7 7-7 7"/>
             </svg>
-          </MagneticButton>
+          </a>
         </motion.div>
       </div>
     </section>

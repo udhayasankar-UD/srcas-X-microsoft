@@ -195,7 +195,7 @@ export default function HeroSection7() {
       <header style={{
         display: "flex",
         alignItems: "center",
-        justifyContent: "space-between",
+        justifyContent: "flex-end", /* Align to the right side */
         padding: "24px 40px",
         position: "absolute",
         top: 0,
@@ -203,36 +203,9 @@ export default function HeroSection7() {
         right: 0,
         zIndex: 50
       }}>
-        {/* Pills */}
-        <div className="h1-pills-mobile-hide" style={{ display: "flex", alignItems: "center" }}>
-          <div style={{
-            backgroundColor: "#111",
-            color: "#fff",
-            padding: "8px 20px",
-            borderRadius: "30px 0 0 30px",
-            fontSize: "0.75rem",
-            fontWeight: 700,
-            letterSpacing: "0.05em",
-            display: "flex",
-            alignItems: "center",
-            gap: "6px"
-          }}>
-            <StarIcon size={12} fill="#fff" /> NATIONAL HACKATHON 2026
-          </div>
-          <div style={{
-            backgroundColor: "#fff",
-            color: "#6b7280",
-            padding: "8px 20px",
-            borderRadius: "0 30px 30px 0",
-            fontSize: "0.75rem",
-            fontWeight: 600,
-            letterSpacing: "0.05em",
-            border: "1px solid #e5e7eb",
-            borderLeft: "none"
-          }}>
-            #BUILD THE FUTURE
-          </div>
-        </div>
+        
+
+        
 
         {/* Logos */}
         <div className="h1-logos-mobile-hide" style={{ display: "flex", alignItems: "center", gap: "16px" }}>
@@ -253,7 +226,7 @@ export default function HeroSection7() {
             height: "80px",
             boxShadow: "0 4px 12px rgba(0,0,0,0.06)"
           }}>
-            <span style={{ fontSize: "1rem", color: "#6b7280", textTransform: "uppercase", fontWeight: 700 }}>
+            <span className="h1-logo-text" style={{ fontSize: "1rem", color: "#6b7280", textTransform: "uppercase", fontWeight: 700, whiteSpace: "nowrap" }}>
               Organized by
             </span>
             <img src={srcasLogo} alt="SRCAS" style={{ height: "48px", objectFit: "contain" }} />
@@ -272,14 +245,14 @@ export default function HeroSection7() {
             boxShadow: "0 4px 12px rgba(0,0,0,0.06)"
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ fontSize: "1rem", color: "#6b7280", textTransform: "uppercase", fontWeight: 700 }}>
+              <span className="h1-logo-text" style={{ fontSize: "1rem", color: "#6b7280", textTransform: "uppercase", fontWeight: 700, whiteSpace: "nowrap" }}>
                 Partner
               </span>
               <img src={igeniusLogo} alt="igeniusAI" style={{ height: "36px", objectFit: "contain" }} />
             </div>
             <div style={{ width: '1px', height: '40px', background: '#e5e7eb' }}></div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ fontSize: "1rem", color: "#6b7280", textTransform: "uppercase", fontWeight: 700 }}>
+              <span className="h1-logo-text" style={{ fontSize: "1rem", color: "#6b7280", textTransform: "uppercase", fontWeight: 700, whiteSpace: "nowrap" }}>
                 Authorized Partner
               </span>
               <img src={msLogo} alt="Microsoft" style={{ height: "56px", objectFit: "contain" }} />
@@ -405,9 +378,6 @@ export default function HeroSection7() {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '16px', marginBottom: '24px' }}>
           
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px' }}>
-            <ParallaxElement className="hero-hide-mobile" yOffset={-40} initialRotate={-10} rotationSpeed={10} style={{ pointerEvents: 'none' }}>
-              <img src={srcasLogoOnly} alt="SRCAS" style={{ height: '88px', objectFit: 'contain' }} />
-            </ParallaxElement>
             <h2 style={{ 
               fontSize: 'clamp(1.4rem, 2.4vw, 2rem)', 
               fontWeight: 800, 
@@ -424,9 +394,6 @@ export default function HeroSection7() {
               <span>SRCAS</span>
               <span style={{ color: '#0562f8ff', fontFamily: theme.fonts.pixel, letterSpacing: '0.02em', textTransform: 'none' }}>Hackathon 3.0!</span>
             </h2>
-            <ParallaxElement className="hero-hide-mobile" yOffset={-40} initialRotate={12} rotationSpeed={-10} style={{ pointerEvents: 'none', alignSelf: 'flex-start', marginTop: '-40px' }}>
-              <img src={srcasHackLogo} alt="SRCAS Hackathon 3.0" style={{ height: '176px', objectFit: 'contain' }} />
-            </ParallaxElement>
           </div>
 
           <div style={{ position: 'relative', marginTop: '12px' }}>
@@ -458,10 +425,7 @@ export default function HeroSection7() {
                 justifyContent: 'center',
                 gap: '16px'
               }}> 
-                <ParallaxElement className="hero-hide-mobile" yOffset={-60} initialRotate={10} rotationSpeed={-16} style={{ pointerEvents: 'none' }}>
-                  <img src={igeniusLogo} alt="iGenius" style={{ height: '60px', objectFit: 'contain', opacity: 0.9 }} />
-                </ParallaxElement>
-                <span>Big Idea!</span>
+              <span>Big Idea!</span>
               </span> 
             </h1>
           </div>
@@ -473,9 +437,6 @@ export default function HeroSection7() {
             <p style={{ fontSize: '1.125rem', color: '#4b5563', maxWidth: '520px', lineHeight: 1.6, margin: 0, textAlign: 'center' }}>
               India's premier national-level hackathon. Build tech-driven solutions for the 17 UN Sustainable Development Goals.
             </p>
-            <ParallaxElement className="hero-hide-mobile" yOffset={-80} initialRotate={-8} rotationSpeed={24} style={{ pointerEvents: 'none' }}>
-              <img src={msLogoOnly} alt="Microsoft" style={{ height: '88px', objectFit: 'contain', opacity: 0.9 }} />
-            </ParallaxElement>
           </div>
         </motion.div>
 
@@ -507,6 +468,37 @@ export default function HeroSection7() {
             </button>
           </Link>
         </motion.div>
+
+        {/* Pills */}
+        <div className="h1-pills-mobile-hide" style={{ display: "flex", alignItems: "center", marginTop: "40px"   }}>
+          <div style={{
+            backgroundColor: "#111",
+            color: "#fff",
+            padding: "8px 20px",
+            borderRadius: "30px 0 0 30px",
+            fontSize: "0.75rem",
+            fontWeight: 700,
+            letterSpacing: "0.05em",
+            display: "flex",
+            alignItems: "center",
+            gap: "6px"
+          }}>
+            <StarIcon size={12} fill="#fff" /> NATIONAL HACKATHON 2026
+          </div>
+          <div style={{
+            backgroundColor: "#fff",
+            color: "#6b7280",
+            padding: "8px 20px",
+            borderRadius: "0 30px 30px 0",
+            fontSize: "0.75rem",
+            fontWeight: 600,
+            letterSpacing: "0.05em",
+            border: "1px solid #e5e7eb",
+            borderLeft: "none"
+          }}>
+            #BUILD THE FUTURE
+          </div>
+        </div>
 
       </div>
       
@@ -659,7 +651,10 @@ export default function HeroSection7() {
           box-shadow: 0px 0px 1px;
         }
 
-        @media(max-width:1200px){
+        @media(max-width:1300px) and (min-width:993px) {
+          .h1-logo-text { display: none !important; }
+        }
+        @media(max-width:992px){
           .h1-logos-mobile-hide{display:none!important}
         }
         @media(max-width:768px){
