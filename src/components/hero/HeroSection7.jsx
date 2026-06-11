@@ -142,9 +142,7 @@ const FloatingIcon = ({ icon: Icon, color, size = 32, blur = 0, opacity = 0.8, s
 
 
 const SDGCard = ({ imgSrc, alt, style }) => (
-  <div style={{
-    width: '180px',
-    height: '180px',
+  <div className="hero-sdg-card" style={{
     borderRadius: '12px',
     overflow: 'hidden',
     boxShadow: '0 10px 40px rgba(0,0,0,0.15)',
@@ -642,9 +640,26 @@ export default function HeroSection7() {
           margin: 0 4px;
         }
 
+        /* ── SDG Card default (Desktop) ── */
+        .hero-sdg-card {
+          width: 180px;
+          height: 180px;
+        }
+
         @media(max-width:1300px) {
           .h1-logo-text { display: none !important; }
         }
+
+        @media(max-width:1100px) {
+          /* Slightly smaller SDG cards */
+          .hero-sdg-card { width: 150px; height: 150px; }
+          /* Push floating cards to edges */
+          .hero-logo-top-left { left: 4% !important; }
+          .hero-logo-top-right { right: 4% !important; }
+          .hero-logo-bottom-left { left: 4% !important; }
+          .hero-logo-bottom-right { right: 4% !important; }
+        }
+
         @media(max-width:992px){
           .hero-logos-card {
             gap: 12px;
@@ -654,27 +669,30 @@ export default function HeroSection7() {
           .hero-logo-img { height: 36px; }
           .hero-logo-divider { height: 32px; margin: 0 2px; }
 
-          /* Push floating SDG cards further to edges on medium screens */
-          .hero-logo-top-left { left: 2% !important; transform: scale(0.75); }
-          .hero-logo-top-right { right: 2% !important; transform: scale(0.75); }
-          .hero-logo-bottom-left { left: 2% !important; transform: scale(0.75); }
-          .hero-logo-bottom-right { right: 2% !important; transform: scale(0.75); }
+          /* Smaller SDG cards */
+          .hero-sdg-card { width: 120px; height: 120px; }
+          .hero-logo-top-left { left: 2% !important; }
+          .hero-logo-top-right { right: 2% !important; }
+          .hero-logo-bottom-left { left: 2% !important; }
+          .hero-logo-bottom-right { right: 2% !important; }
           .hero-floating-bg { opacity: 0.6; }
         }
+
         @media(max-width:640px){
           .h1-logos-mobile-hide { display: none !important; }
           .hero-header { padding: 16px 20px !important; justify-content: center !important; }
           .h1-pills-mobile-hide{display:none!important}
           .hero-hide-mobile { display: none !important; }
           .hero-floating-bg { opacity: 0.35; }
+
+          /* Even smaller SDG cards */
+          .hero-sdg-card { width: 90px; height: 90px; border-radius: 8px; }
           
-          /* Position 2 logos at top edges */
-          .hero-logo-top-left { top: 5% !important; left: -15% !important; transform: scale(0.6); }
-          .hero-logo-top-right { top: 8% !important; right: -15% !important; left: auto !important; transform: scale(0.6); }
-          
-          /* Position 2 logos at bottom edges */
-          .hero-logo-bottom-left { bottom: 20% !important; left: -15% !important; top: auto !important; transform: scale(0.6); }
-          .hero-logo-bottom-right { bottom: 15% !important; right: -15% !important; left: auto !important; top: auto !important; transform: scale(0.6); }
+          /* Position cards at edges */
+          .hero-logo-top-left { top: 5% !important; left: -5% !important; }
+          .hero-logo-top-right { top: 8% !important; right: -5% !important; left: auto !important; }
+          .hero-logo-bottom-left { bottom: 20% !important; left: -5% !important; top: auto !important; }
+          .hero-logo-bottom-right { bottom: 15% !important; right: -5% !important; left: auto !important; top: auto !important; }
           
           /* Center 1 wheel at the bottom */
           .hero-wheel-bottom { bottom: 0% !important; left: 50% !important; right: auto !important; margin-left: -140px !important; }
