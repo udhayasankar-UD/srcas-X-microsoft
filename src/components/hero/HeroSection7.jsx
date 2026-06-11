@@ -653,6 +653,13 @@ export default function HeroSection7() {
           }
           .hero-logo-img { height: 36px; }
           .hero-logo-divider { height: 32px; margin: 0 2px; }
+
+          /* Push floating SDG cards further to edges on medium screens */
+          .hero-logo-top-left { left: 2% !important; transform: scale(0.75); }
+          .hero-logo-top-right { right: 2% !important; transform: scale(0.75); }
+          .hero-logo-bottom-left { left: 2% !important; transform: scale(0.75); }
+          .hero-logo-bottom-right { right: 2% !important; transform: scale(0.75); }
+          .hero-floating-bg { opacity: 0.6; }
         }
         @media(max-width:640px){
           .h1-logos-mobile-hide { display: none !important; }
@@ -662,12 +669,12 @@ export default function HeroSection7() {
           .hero-floating-bg { opacity: 0.35; }
           
           /* Position 2 logos at top edges */
-          .hero-logo-top-left { top: 5% !important; left: -15% !important; }
-          .hero-logo-top-right { top: 8% !important; right: -15% !important; left: auto !important; }
+          .hero-logo-top-left { top: 5% !important; left: -15% !important; transform: scale(0.6); }
+          .hero-logo-top-right { top: 8% !important; right: -15% !important; left: auto !important; transform: scale(0.6); }
           
           /* Position 2 logos at bottom edges */
-          .hero-logo-bottom-left { bottom: 20% !important; left: -15% !important; top: auto !important; }
-          .hero-logo-bottom-right { bottom: 15% !important; right: -15% !important; left: auto !important; top: auto !important; }
+          .hero-logo-bottom-left { bottom: 20% !important; left: -15% !important; top: auto !important; transform: scale(0.6); }
+          .hero-logo-bottom-right { bottom: 15% !important; right: -15% !important; left: auto !important; top: auto !important; transform: scale(0.6); }
           
           /* Center 1 wheel at the bottom */
           .hero-wheel-bottom { bottom: 0% !important; left: 50% !important; right: auto !important; margin-left: -140px !important; }
