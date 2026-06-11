@@ -189,7 +189,7 @@ const MarqueeItem = () => (
     <span style={{ color: '#d1d5db' }}>✦</span>
     <span>17 UN SDGs</span>
     <span style={{ color: '#d1d5db' }}>✦</span>
-    <span>₹60,000+ Prize Pool</span>
+    <span>₹1,80,000+ Prize Pool</span>
     <span style={{ color: '#d1d5db' }}>✦</span>
     <span>Singapore Trip</span>
     <span style={{ color: '#d1d5db' }}>✦</span>

@@ -6,28 +6,66 @@ import PPTSection from '../components/sections/PPTSection';
 const faqs = [
   {
     question: "How do I register?",
-    answer: "You can register through the official hackathon registration portal at srcas.ac.in/hackathon. Fill in your team details, upload your college ID, and complete the form. Registrations close 7 days before the event.",
+    answer: (
+      <>
+        You can register through the official hackathon registration portal at{" "}
+        <a
+          href="https://www.hackathon2026.in/register"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-600 underline"
+        >
+          https://www.hackathon2026.in/register
+        </a>
+        .
+      </>
+    ),
+  },
+  {
+    question: "Who can participate in the SRCAS Hackathon 3.0?",
+    answer:
+      "The hackathon is open to all students, regardless of skill level. Whether you're a beginner exploring your first project or an experienced developer, you're welcome to participate.",
   },
   {
     question: "How many team members do I need?",
-    answer: "Teams must have 2 to 4 members. Solo participation is not allowed. All members must be currently enrolled college students with a valid ID.",
+    answer:
+      "Each team must have a minimum of 2 and a maximum of 4 members. Solo participation is not permitted.",
   },
   {
     question: "Can team members be from different colleges?",
-    answer: "Yes, cross-college teams are allowed and encouraged. Participants from different institutions can collaborate freely.",
+    answer:
+      "No. Team members must belong to the same college. Cross-college teams are not permitted for SRCAS Hackathon 3.0.",
   },
   {
     question: "Who is eligible to participate in the hackathon?",
-    answer: "Any undergraduate or postgraduate student from any college is eligible to participate. No prior hackathon experience is required.",
+    answer:
+      "Any undergraduate or postgraduate student currently enrolled in a recognized institution is eligible to participate. No prior hackathon experience is required.",
   },
   {
-    question: "How much are the participation fees?",
-    answer: "Participation is completely free. Food, refreshments, and basic facilities will be provided during the event.",
+    question: "Is there a registration fee?",
+    answer:
+      "No, participation is completely free. We believe innovation should be accessible to everyone.",
+  },
+  {
+    question: "What should I bring to the SRCAS Hackathon 3.0?",
+    answer:
+      "Please bring your laptop, charger, any hardware required for your project, and lots of creativity. Food, refreshments, Wi-Fi, and a comfortable workspace will be provided by the organizers.",
+  },
+  {
+    question: "Can I start working on my project before the event?",
+    answer:
+      "No. All project development must begin only after the official hackathon starts. Pre-existing ideas are allowed, but coding, designing, or building the project before the event is not permitted.",
+  },
+  {
+    question: "How are the winners selected?",
+    answer:
+      "Projects will be evaluated by a panel of industry experts based on innovation, technical complexity, practical applicability, impact, and presentation quality.",
   },
   {
     question: "Will the hackathon be in person or online?",
-    answer: "The hackathon format (online or offline) will be confirmed in the official announcement. Please refer to the event page for updates.",
-  }
+    answer:
+      "The Idea Nation round will be conducted online. Teams shortlisted for the final round must be present on campus to participate in the 24-hour hackathon and final project evaluation.",
+  },
 ];
 
 const FaqItem = ({ faq, isOpen, onClick, index }) => (
