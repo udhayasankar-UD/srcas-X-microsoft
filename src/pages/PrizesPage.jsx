@@ -448,7 +448,7 @@ const PrizesPage = () => {
               boxShadow: '0 8px 32px rgba(0,0,0,0.15)',
             }}
           >
-            🚀 Register Now
+            {user ? "📊 My Dashboard" : "🚀 Register Now"}
           </motion.a>
         </motion.div>
       </section>

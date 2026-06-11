@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { useAuth } from '../../lib/useAuth';
 
 import AI_video_promotion from '../../assets/videos/AI_video_promotion.mp4';
 
@@ -10,6 +11,7 @@ export default function EntryVideoPopup() {
   const [muted, setMuted]     = useState(true);
   const [loaded, setLoaded]   = useState(false);
   const videoRef = useRef(null);
+  const user = useAuth();
 
   // Show only once — persists across reloads via localStorage
 // Always show on page load
@@ -299,7 +301,7 @@ useEffect(() => {
                 <div style={{ display: 'flex', gap: 10 }}>
                   
                   <a
-                    href="/register"
+                    href={user ? "/dashboard" : "/register"}
                     onClick={close}
                     style={{
                       padding: '9px 22px', borderRadius: 100,
@@ -314,7 +316,7 @@ useEffect(() => {
                     onMouseEnter={e => { e.currentTarget.style.background = '#e5e5e5'; e.currentTarget.style.transform = 'scale(1.03)'; }}
                     onMouseLeave={e => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.transform = 'scale(1)'; }}
                   >
-                    🚀 Register Now
+                    {user ? "📊 My Dashboard" : "🚀 Register Now"}
                   </a>
                 </div>
               </div>
