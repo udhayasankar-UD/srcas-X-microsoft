@@ -4,10 +4,7 @@ import { Link } from 'react-router-dom';
 import { theme } from '../../theme';
 import { useAuth } from '../../lib/useAuth';
 import srcasLogo from '../../assets/logo/srcas-logo.png';
-import srcasLogoOnly from '../../assets/logo/srcaslogoonly.png';
-import srcasHackLogo from '../../assets/logo/srcas-hack-3.0-logo.png';
 import msLogo from '../../assets/logo/microsoft.png';
-import msLogoOnly from '../../assets/logo/microsoftlogoonly.png';
 import igeniusLogo from '../../assets/logo/igenius.png';
 
 // SDG Image URLs (Official UN Icons)
@@ -226,15 +223,22 @@ export default function HeroSection7() {
             <span className="h1-logo-text" style={{ fontSize: "1rem", color: "#6b7280", textTransform: "uppercase", fontWeight: 700, whiteSpace: "nowrap" }}>
               Organized by
             </span>
-            <img src={srcasLogo} alt="SRCAS" className="hero-logo-img" style={{ objectFit: "contain" }} />
+            
+            <div className="logo-wrap-srcas">
+              <img src={srcasLogo} alt="SRCAS" className="hero-logo-img logo-srcas" style={{ objectFit: "contain" }} />
+            </div>
             
             <div className="hero-logo-divider" style={{ width: '1px', background: '#e5e7eb' }}></div>
             
-            <img src={igeniusLogo} alt="igeniusAI" className="hero-logo-img" style={{ objectFit: "contain" }} />
+            <div className="logo-wrap-igenius">
+              <img src={igeniusLogo} alt="igeniusAI" className="hero-logo-img logo-igenius" style={{ objectFit: "contain" }} />
+            </div>
             
             <div className="hero-logo-divider" style={{ width: '1px', background: '#e5e7eb' }}></div>
             
-            <img src={msLogo} alt="Microsoft" className="hero-logo-img" style={{ objectFit: "contain" }} />
+            <div className="logo-wrap-ms">
+              <img src={msLogo} alt="Microsoft" className="hero-logo-img logo-ms" style={{ objectFit: "contain" }} />
+            </div>
           </div>
         </div>
       </header>
@@ -626,12 +630,24 @@ export default function HeroSection7() {
 
         .hero-logos-card {
           gap: 16px;
-          padding: 0 18px;
+          padding: 0 20px;
           height: 80px;
         }
-        .hero-logo-img {
-          height: 44px;
+
+        .logo-wrap-srcas, .logo-wrap-igenius, .logo-wrap-ms {
+          height: 60px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          overflow: hidden;
         }
+        .logo-wrap-srcas { width: 210px; overflow: visible; }
+        .logo-wrap-igenius { width: 220px; }
+        .logo-wrap-ms { width: 170px; }
+
+        .logo-srcas { height: 60px !important; transform: scale(2.5); mix-blend-mode: multiply; margin-top: 8px; margin-left: 0; margin-right: 0; margin-bottom: 0; }
+        .logo-igenius { height: 60px !important; transform: scale(2.8); mix-blend-mode: multiply; margin: 0; }
+        .logo-ms { height: 60px !important; transform: scale(2.2); mix-blend-mode: multiply; margin: 0; }
         .hero-logo-divider {
           height: 40px;
           margin: 0 4px;
@@ -665,9 +681,17 @@ export default function HeroSection7() {
           .hero-logos-card {
             gap: 12px;
             padding: 0 14px;
-            height: 64px;
+            height: 60px;
           }
-          .hero-logo-img { height: 36px; }
+
+          .logo-wrap-srcas, .logo-wrap-igenius, .logo-wrap-ms { height: 40px; }
+          .logo-wrap-srcas { width: 150px; overflow: visible; }
+          .logo-wrap-igenius { width: 145px; }
+          .logo-wrap-ms { width: 115px; }
+
+          .logo-srcas { height: 40px !important; transform: scale(2.5); mix-blend-mode: multiply; margin-top: 6px; margin-left: 0; margin-right: 0; margin-bottom: 0; }
+          .logo-igenius { height: 40px !important; transform: scale(2.8); mix-blend-mode: multiply; margin: 0; }
+          .logo-ms { height: 40px !important; transform: scale(2.2); mix-blend-mode: multiply; margin: 0; }
           .hero-logo-divider { height: 32px; margin: 0 2px; }
 
           /* Smaller SDG cards */

@@ -84,8 +84,9 @@ export default function OrganizersCommittee() {
 
           <div
             style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+              display: 'flex',
+              flexWrap: 'wrap',
+              justifyContent: 'center',
               gap: 40,
             }}
           >
@@ -95,6 +96,8 @@ export default function OrganizersCommittee() {
                 {...fadeUp(i * 0.08)}
                 whileHover={{ y: -6 }}
                 style={{
+                  flex: '1 1 300px',
+                  maxWidth: 350,
                   background: '#fff',
                   border: '1px solid #e5e7eb',
                   borderRadius: 20,
