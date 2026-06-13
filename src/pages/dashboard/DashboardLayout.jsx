@@ -87,7 +87,7 @@ export default function DashboardLayout({ activeTab, setActiveTab, children, has
             <h1 style={{ fontSize:17, fontWeight:800, color:'#111', margin:0 }}>
               {NAV.find(n => n.id === activeTab)?.label}
             </h1>
-            <p className="dash-subtitle" style={{ fontSize:11, color:'#9ca3af', margin:0 }}>SRCAS Hackathon 3.0 · Microsoft Imagine Cup</p>
+            <p className="dash-subtitle" style={{ fontSize:11, color:'#9ca3af', margin:0 }}>SRCAS Hackathon 3.0 · iGenius - Authorized Microsoft Partner</p>
           </div>
           <div className="dash-header-right" style={{ display:'flex', alignItems:'center', gap:10 }}>
             {/* Notification Icon */}

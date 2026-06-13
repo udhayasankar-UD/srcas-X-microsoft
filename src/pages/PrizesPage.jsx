@@ -112,7 +112,6 @@ const PrizesPage = () => {
     { icon: '💼', title: 'Microsoft Internship', desc: 'Best performers get a fast-track interview for a Microsoft summer internship with dedicated mentorship.' },
     { icon: '💰', title: 'Cash Prize Pool', desc: '₹1,80,000+ distributed across categories — Grand Prize, Runner-ups, and Track Awards.' },
     { icon: '🧠', title: '1:1 Mentorship', desc: 'Direct mentorship sessions with engineers from Microsoft and Igenius AI throughout the event.' },
-    // { icon: '☁️', title: 'Azure Cloud Credits', desc: 'Every shipping team walks away with Azure cloud credits to keep building after the hackathon.' },
     { icon: '🎁', title: 'Goodies & Certificates', desc: 'Swag kits, certificates of participation, and surprise perks for all registered teams.' },
   ];
 
@@ -154,7 +153,7 @@ const PrizesPage = () => {
             transition={{ duration: 0.6 }}
             style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.24em', color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', marginBottom: 24 }}
           >
-            SRCAS × Microsoft × Igenius AI — 2026
+            SRCAS HACKATHON 3.0 — 2026
           </motion.p>
 
           {/* Big heading */}

@@ -310,7 +310,7 @@ export const InternshipTicket = () => {
                 <span style={{ fontSize: "0.88rem", color: "#111", fontWeight: 700, letterSpacing: "0.02em" }}>
                   <span style={{ color: "#4C9F38" }}>Internship</span> ticket
                 </span>
-                <span style={{ fontSize: "0.88rem", color: "#111", fontWeight: 700, letterSpacing: "0.02em" }}>14.00 to 16.00 Hs</span>
+                <span style={{ fontSize: "0.88rem", color: "#111", fontWeight: 700, letterSpacing: "0.02em" }}>30.06 to 21.06 Hs</span>
               </div>
             </div>
           </motion.div>

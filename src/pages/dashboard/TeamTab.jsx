@@ -1,5 +1,7 @@
 import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '../../lib/supabaseClient';
+import { Rocket, Users, Flag, ClipboardList, MoreVertical, Info, Target, Calendar } from 'lucide-react';
 
 const INDIA_STATES_CITIES = {
   "Andaman and Nicobar Islands": ["Port Blair"],
@@ -52,10 +54,10 @@ const DEPARTMENTS = [
   "Other"
 ];
 
-const defaultMember = { 
-  full_name: '', email: '', phone_number: '', 
+const defaultMember = {
+  full_name: '', email: '', phone_number: '',
   state: '', city: '', city_other: '', dept: '', dept_other: '', year: '',
-  college_name: '', reg_no: '' 
+  college_name: '', reg_no: ''
 };
 
 // Reusable inline styles to replace Tailwind
@@ -70,22 +72,23 @@ const styles = {
   buttonBack: { padding: '12px 24px', borderRadius: 10, border: '1.5px solid #e5e7eb', background: '#fff', color: '#374151', fontSize: 14, fontWeight: 700, cursor: 'pointer', transition: 'background 0.2s' }
 };
 
-export default function TeamTab({ hasTeam, teamData, teamMembers, user, setTeamMembers, setTeamData, setHasTeam }) {
+export default function TeamTab({ hasTeam, teamData, teamMembers, user, setTeamMembers, setTeamData, setHasTeam, setActiveTab }) {
   // --- STATE MANAGEMENT ---
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState({
     teamName: '',
     teamSize: 2,
-    leader: { 
-      ...defaultMember, 
-      full_name: user?.user_metadata?.full_name || '', 
-      email: user?.email || '' 
+    leader: {
+      ...defaultMember,
+      full_name: user?.user_metadata?.full_name || '',
+      email: user?.email || ''
     },
     teammates: [{ ...defaultMember }] // Initialized for teamSize 2 (1 teammate)
   });
-  
+
   const [creating, setCreating] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const [toastMsg, setToastMsg] = useState('');
 
 
 
@@ -122,7 +125,7 @@ export default function TeamTab({ hasTeam, teamData, teamMembers, user, setTeamM
       const teammateIndex = currentStep - 2;
       return validateMember(formData.teammates[teammateIndex]);
     }
-    
+
     return true;
   };
 
@@ -147,7 +150,7 @@ export default function TeamTab({ hasTeam, teamData, teamMembers, user, setTeamM
       setErrorMsg(isValid);
       return;
     }
-    
+
     setCreating(true);
     setErrorMsg('');
     try {
@@ -157,7 +160,7 @@ export default function TeamTab({ hasTeam, teamData, teamMembers, user, setTeamM
         team_name: formData.teamName
       }).select().single();
       if (teamErr) throw teamErr;
-      
+
       // 2. Format Members (Merge State/City into Location, resolve Dept)
       const formatMember = (m) => ({
         team_id: team.id,
@@ -175,14 +178,16 @@ export default function TeamTab({ hasTeam, teamData, teamMembers, user, setTeamM
         formatMember(formData.leader),
         ...formData.teammates.map(formatMember)
       ];
-      
+
       // 3. Insert Members
       const { data: members, error: memErr } = await supabase.from('team_members').insert(allMembers).select();
       if (memErr) throw memErr;
-      
+
       setTeamData(team);
       setTeamMembers(members);
       setHasTeam(true);
+      setToastMsg('🎉 Team created successfully!');
+      setTimeout(() => setToastMsg(''), 4000);
     } catch (err) {
       setErrorMsg(err.message);
     } finally {
@@ -228,7 +233,7 @@ export default function TeamTab({ hasTeam, teamData, teamMembers, user, setTeamM
         {/* Location Details */}
         <div>
           <label style={styles.label}>State</label>
-          <select value={member.state} onChange={e => { updateMember('state', e.target.value); if(isLeader) setFormData(p => ({...p, leader:{...p.leader, state:e.target.value, city:''}})); }} style={{ ...styles.input, cursor: 'pointer' }}>
+          <select value={member.state} onChange={e => { updateMember('state', e.target.value); if (isLeader) setFormData(p => ({ ...p, leader: { ...p.leader, state: e.target.value, city: '' } })); }} style={{ ...styles.input, cursor: 'pointer' }}>
             <option value="" disabled>Select State</option>
             {Object.keys(INDIA_STATES_CITIES).map(s => <option key={s} value={s}>{s}</option>)}
           </select>
@@ -255,7 +260,7 @@ export default function TeamTab({ hasTeam, teamData, teamMembers, user, setTeamM
         </div>
         <div>
           <label style={styles.label}>Register Number</label>
-          <input type="text" value={member.reg_no} onChange={e => updateMember('reg_no', e.target.value)} style={styles.input} placeholder="Registration ID" />
+          <input type="text" value={member.reg_no} onChange={e => updateMember('reg_no', e.target.value)} style={styles.input} placeholder="Registration Number" />
         </div>
         <div>
           <label style={styles.label}>Department</label>
@@ -290,18 +295,19 @@ export default function TeamTab({ hasTeam, teamData, teamMembers, user, setTeamM
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', position: 'relative', marginBottom: 20 }}>
             <div style={{ position: 'absolute', left: 0, top: '50%', transform: 'translateY(-50%)', width: '100%', height: 4, background: '#f3f4f6', borderRadius: 10, zIndex: 0 }}></div>
             <div style={{ position: 'absolute', left: 0, top: '50%', transform: 'translateY(-50%)', height: 4, background: '#4C9F38', borderRadius: 10, zIndex: 0, transition: 'width 0.3s ease', width: `${(currentStep / (totalSteps - 1)) * 100}%` }}></div>
-            
+
             {Array.from({ length: totalSteps }).map((_, idx) => {
               const isActive = idx === currentStep;
               const isPast = idx < currentStep;
               return (
-                <div key={idx} style={{ position: 'relative', zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', width: 36, height: 36, borderRadius: '50%', fontWeight: 800, fontSize: 14, border: '3px solid', transition: 'all 0.3s ease', 
-                  background: isActive ? '#4C9F38' : isPast ? '#4C9F38' : '#fff', 
-                  borderColor: isActive ? '#4C9F38' : isPast ? '#4C9F38' : '#e5e7eb', 
+                <div key={idx} style={{
+                  position: 'relative', zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', width: 36, height: 36, borderRadius: '50%', fontWeight: 800, fontSize: 14, border: '3px solid', transition: 'all 0.3s ease',
+                  background: isActive ? '#4C9F38' : isPast ? '#4C9F38' : '#fff',
+                  borderColor: isActive ? '#4C9F38' : isPast ? '#4C9F38' : '#e5e7eb',
                   color: isActive || isPast ? '#fff' : '#9ca3af',
                   boxShadow: isActive ? '0 0 0 4px rgba(76,159,56,0.15)' : 'none'
                 }}>
-                  {isPast ? <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg> : idx + 1}
+                  {isPast ? <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3"><polyline points="20 6 9 17 4 12" /></svg> : idx + 1}
                 </div>
               );
             })}
@@ -315,10 +321,10 @@ export default function TeamTab({ hasTeam, teamData, teamMembers, user, setTeamM
 
         {/* Wizard Content */}
         <div style={styles.card}>
-          
+
           {errorMsg && (
             <div style={{ marginBottom: 24, background: '#fef2f2', border: '1.5px solid #fecaca', color: '#dc2626', padding: '12px 16px', borderRadius: 12, fontSize: 14, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 8 }}>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" /></svg>
               {errorMsg}
             </div>
           )}
@@ -327,7 +333,7 @@ export default function TeamTab({ hasTeam, teamData, teamMembers, user, setTeamM
           {currentStep === 0 && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 24, minHeight: 300 }}>
               <div style={{ background: '#eff6ff', border: '1.5px solid #bfdbfe', borderRadius: 14, padding: 20, display: 'flex', alignItems: 'flex-start', gap: 16 }}>
-                <div style={{ background: '#dbeafe', color: '#2563eb', padding: 8, borderRadius: 10, flexShrink: 0 }}><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div>
+                <div style={{ background: '#dbeafe', color: '#2563eb', padding: 8, borderRadius: 10, flexShrink: 0 }}><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" /><line x1="12" y1="16" x2="12" y2="12" /><line x1="12" y1="8" x2="12.01" y2="8" /></svg></div>
                 <div>
                   <h3 style={{ color: '#1e3a8a', fontWeight: 800, margin: '0 0 6px 0', fontSize: 15 }}>Registration Rules</h3>
                   <p style={{ color: '#1e40af', fontSize: 13, margin: 0, lineHeight: 1.5 }}>Only the Team Lead needs to register the team. Teams must consist of <strong>2 to 4 members</strong> in total (including the leader). Please establish your team size before proceeding.</p>
@@ -336,7 +342,7 @@ export default function TeamTab({ hasTeam, teamData, teamMembers, user, setTeamM
 
               <div>
                 <label style={styles.label}>Team Name</label>
-                <input type="text" value={formData.teamName} onChange={e => setFormData({...formData, teamName: e.target.value})} placeholder="e.g. Innovators, Team Nova" style={styles.input} />
+                <input type="text" value={formData.teamName} onChange={e => setFormData({ ...formData, teamName: e.target.value })} placeholder="e.g. Innovators, Team Nova" style={styles.input} />
               </div>
 
               <div>
@@ -345,7 +351,7 @@ export default function TeamTab({ hasTeam, teamData, teamMembers, user, setTeamM
                   const newSize = parseInt(e.target.value);
                   const requiredTeammates = newSize - 1;
                   let newTeammates = [...formData.teammates];
-                  
+
                   if (newTeammates.length < requiredTeammates) {
                     for (let i = newTeammates.length; i < requiredTeammates; i++) {
                       newTeammates.push({ ...defaultMember });
@@ -353,7 +359,7 @@ export default function TeamTab({ hasTeam, teamData, teamMembers, user, setTeamM
                   } else if (newTeammates.length > requiredTeammates) {
                     newTeammates = newTeammates.slice(0, requiredTeammates);
                   }
-                  
+
                   setFormData(prev => ({ ...prev, teamSize: newSize, teammates: newTeammates }));
                 }} style={{ ...styles.input, cursor: 'pointer' }}>
                   <option value={2}>2 Members (Lead + 1 Teammate)</option>
@@ -393,7 +399,7 @@ export default function TeamTab({ hasTeam, teamData, teamMembers, user, setTeamM
               onMouseLeave={e => { if (currentStep !== 0 && !creating) e.currentTarget.style.background = '#fff'; }}>
               ← Back
             </button>
-            
+
             {currentStep === totalSteps - 1 ? (
               <button type="button" onClick={handleSubmit} disabled={creating} style={creating ? styles.buttonDisabled : styles.buttonPrimary}
                 onMouseEnter={e => { if (!creating) e.currentTarget.style.transform = 'translateY(-2px)'; }}
@@ -415,42 +421,178 @@ export default function TeamTab({ hasTeam, teamData, teamMembers, user, setTeamM
   }
 
   // --- SUMMARY VIEW (After Registration) ---
+  const teamLeader = teamMembers.find(m => m.id === teamData.leader_id) || teamMembers.find(m => m.email === user.email);
+  const leaderName = teamLeader?.full_name || 'Leader';
+  const registeredDate = teamData.created_at ? new Date(teamData.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'N/A';
+
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 20, maxWidth: 800, margin: '0 auto', width: '100%' }}>
-      <div style={{ ...styles.card, display: 'flex', alignItems: 'center', gap: 20, flexWrap: 'wrap' }}>
-        <div style={{ width: 64, height: 64, borderRadius: 16, background: 'linear-gradient(135deg,#4C9F38,#26BDE2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 28, flexShrink: 0 }}>🚀</div>
-        <div style={{ flex: 1, minWidth: 160 }}>
-          <h2 style={{ fontSize: 24, fontWeight: 900, color: '#111', margin: '0 0 4px 0' }}>{teamData.team_name}</h2>
-          <p style={{ fontSize: 13, color: '#6b7280', margin: 0, fontWeight: 600 }}>Total Members: {teamMembers.length}</p>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 24, width: '100%' }}>
+
+      {/* Top Banner */}
+      <div style={{ ...styles.card, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 20 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 24, flexWrap: 'wrap' }}>
+          <div style={{ width: 80, height: 80, borderRadius: 20, background: 'linear-gradient(135deg, #10b981, #059669)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 8px 16px rgba(16,185,129,0.2)' }}>
+            <Rocket size={36} color="#fff" />
+          </div>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
+              <h2 style={{ fontSize: 24, fontWeight: 900, color: '#111', margin: 0 }}>{teamData.team_name}</h2>
+              <span style={{ fontSize: 11, fontWeight: 800, background: '#dcfce7', color: '#166534', padding: '4px 10px', borderRadius: 20 }}>Active</span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 40, flexWrap: 'wrap' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <Users size={18} color="#6b7280" />
+                <div>
+                  <div style={{ fontSize: 14, fontWeight: 800, color: '#111', lineHeight: 1 }}>{teamMembers.length}</div>
+                  <div style={{ fontSize: 12, fontWeight: 600, color: '#6b7280', marginTop: 2 }}>Members</div>
+                </div>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <Flag size={18} color="#6b7280" />
+                <div>
+                  <div style={{ fontSize: 12, fontWeight: 600, color: '#6b7280', lineHeight: 1, marginBottom: 2 }}>Registered on</div>
+                  <div style={{ fontSize: 14, fontWeight: 800, color: '#111' }}>{registeredDate}</div>
+                </div>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <ClipboardList size={18} color="#6b7280" />
+                <div>
+                  <div style={{ fontSize: 12, fontWeight: 600, color: '#6b7280', lineHeight: 1, marginBottom: 2 }}>Team Lead</div>
+                  <div style={{ fontSize: 14, fontWeight: 800, color: '#111' }}>{leaderName}</div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div style={styles.card}>
-        <h3 style={{ fontSize: 18, fontWeight: 900, color: '#111', marginBottom: 20 }}>👥 Team Roster</h3>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          {teamMembers.map((m, idx) => {
-            const isLeader = m.email === user.email;
-            return (
-              <div key={m.id || idx} style={{ display: 'flex', alignItems: 'center', gap: 16, padding: '16px', borderRadius: 14, background: isLeader ? '#f0fdf4' : '#fff', border: isLeader ? '1.5px solid #bbf7d0' : '1.5px solid #e5e7eb' }}>
-                <div style={{ width: 44, height: 44, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 800, fontSize: 18, flexShrink: 0, background: isLeader ? '#4C9F38' : '#26BDE2' }}>
-                  {m.full_name ? m.full_name[0].toUpperCase() : '?'}
-                </div>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontSize: 14, fontWeight: 800, color: '#111', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                    {m.full_name} <span style={{ fontSize: 12, fontWeight: 600, color: '#6b7280' }}>({m.college_name})</span>
+      <div className="dash-grid-2" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: 24, alignItems: 'stretch' }}>
+
+        {/* Left Column: Team Members */}
+        <div style={{ ...styles.card, height: '100%' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+              <h3 style={{ fontSize: 16, fontWeight: 800, color: '#111', margin: 0 }}>Team Members ({teamMembers.length})</h3>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+              {teamMembers.map((m, idx) => {
+                const isLeader = m.id === teamData.leader_id || m.email === user.email;
+                return (
+                  <div key={m.id || idx} style={{ display: 'flex', alignItems: 'flex-start', gap: 16, padding: '16px 0', borderBottom: idx !== teamMembers.length - 1 ? '1px solid #f3f4f6' : 'none' }}>
+                    <div style={{ width: 44, height: 44, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 800, fontSize: 18, flexShrink: 0, background: isLeader ? '#10b981' : '#34d399' }}>
+                      {m.full_name ? m.full_name[0].toUpperCase() : '?'}
+                    </div>
+                    <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                      <span style={{ display: 'inline-block', fontSize: 10, fontWeight: 800, padding: '2px 8px', borderRadius: 12, background: isLeader ? '#dcfce7' : '#f0fdf4', color: isLeader ? '#166534' : '#15803d', marginBottom: 6 }}>
+                        {isLeader ? 'Team Lead' : 'Member'}
+                      </span>
+                      <div style={{ fontSize: 15, fontWeight: 800, color: '#111', marginBottom: 4 }}>
+                        {m.full_name}
+                      </div>
+                      <div style={{ fontSize: 12, color: '#6b7280', marginBottom: 4 }}>
+                        {m.email}
+                      </div>
+                      <div style={{ fontSize: 12, color: '#6b7280', display: 'flex', alignItems: 'center', gap: 6 }}>
+                        📞 +91 {m.phone_number}
+                      </div>
+                    </div>
                   </div>
-                  <div style={{ fontSize: 12, color: '#6b7280', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', marginTop: 2 }}>
-                    {m.email} • {m.phone_number}
+                );
+              })}
+            </div>
+          </div>
+
+        {/* Right Column: Next Steps */}
+        <div style={{ ...styles.card, height: '100%', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
+            <div style={{ width: 32, height: 32, borderRadius: 8, background: '#f0fdf4', color: '#10b981', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Target size={16} />
+            </div>
+            <h3 style={{ fontSize: 18, fontWeight: 900, color: '#111', margin: 0 }}>Next Step</h3>
+          </div>
+          <p style={{ fontSize: 13, color: '#6b7280', marginBottom: 24 }}>Complete the steps below to move forward.</p>
+
+          <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', gap: 32, marginLeft: 10, paddingBottom: 10 }}>
+            <div style={{ position: 'absolute', top: 16, bottom: 16, left: 15, width: 2, background: '#f3f4f6', zIndex: 0 }}></div>
+
+            {[
+              { num: 1, title: 'Open Statement', desc: 'Choose the problem statement you want to work on.', btn: 'Open Innovation', action: null },
+              { num: 2, title: 'Select SDG Goals', desc: 'Select one or more SDG goals related to your solution.', btn: 'Select SDGs', action: null },
+              { num: 3, title: 'Submit Your Next Big Idea', desc: 'Submit your next step to continue in the hackathon.', btn: 'Go to Submissions', action: 'submission' }
+            ].map((step, i) => (
+              <div key={i} style={{ display: 'flex', gap: 20, position: 'relative', zIndex: 1 }}>
+                <div style={{ width: 32, height: 32, borderRadius: '50%', background: '#fff', border: '2px solid #10b981', color: '#10b981', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 800, flexShrink: 0 }}>
+                  {step.num}
+                </div>
+                <div style={{ flex: 1, paddingTop: 4 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 16 }}>
+                    <div style={{ flex: 1, minWidth: 150 }}>
+                      <div style={{ fontSize: 14, fontWeight: 800, color: '#111', marginBottom: 6 }}>{step.title}</div>
+                      <div style={{ fontSize: 12, color: '#6b7280', lineHeight: 1.5 }}>{step.desc}</div>
+                    </div>
+                    <button
+                      onClick={() => { if (step.action && setActiveTab) setActiveTab(step.action) }}
+                      style={{ padding: '8px 16px', borderRadius: 8, border: '1.5px solid #e5e7eb', background: '#fff', color: '#374151', fontSize: 12, fontWeight: 700, cursor: 'pointer', transition: 'background 0.2s', whiteSpace: 'nowrap' }}
+                      onMouseEnter={e => e.currentTarget.style.background = '#f9fafb'}
+                      onMouseLeave={e => e.currentTarget.style.background = '#fff'}>
+                      {step.btn}
+                    </button>
                   </div>
                 </div>
-                <span style={{ fontSize: 11, fontWeight: 800, padding: '4px 12px', borderRadius: 20, background: isLeader ? '#dcfce7' : '#f3f4f6', color: isLeader ? '#166534' : '#4b5563' }}>
-                  {isLeader ? 'Leader' : 'Member'}
-                </span>
               </div>
-            );
-          })}
+            ))}
+          </div>
+
+          <div style={{ marginTop: 24, background: '#f0fdf4', border: '1.5px solid #bbf7d0', borderRadius: 12, padding: '16px 20px', display: 'flex', alignItems: 'center', gap: 16 }}>
+            <div style={{ color: '#10b981' }}>
+              <Calendar size={24} />
+            </div>
+            <div>
+              <div style={{ fontSize: 12, color: '#6b7280', marginBottom: 2 }}>Submit your next step before</div>
+              <div style={{ fontSize: 14, fontWeight: 800, color: '#15803d' }}>July 25, 2026</div>
+            </div>
+          </div>
         </div>
+
       </div>
+
+      {/* Bottom Card */}
+      <div style={{ ...styles.card, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 20 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+          <div style={{ width: 48, height: 48, borderRadius: 12, background: '#f0fdf4', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Rocket size={20} color="#10b981" />
+          </div>
+          <div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: '#111', marginBottom: 4 }}>Ready to submit something?</div>
+            <div style={{ fontSize: 13, color: '#6b7280' }}>Go to submissions to upload your deliverables and track progress.</div>
+          </div>
+        </div>
+        <button
+          onClick={() => { if (setActiveTab) setActiveTab('submission'); }}
+          style={{ padding: '12px 24px', borderRadius: 10, border: 'none', background: '#10b981', color: '#fff', fontSize: 14, fontWeight: 700, cursor: 'pointer', transition: 'background 0.2s' }}
+          onMouseEnter={e => e.currentTarget.style.background = '#059669'}
+          onMouseLeave={e => e.currentTarget.style.background = '#10b981'}>
+          Go to Submissions
+        </button>
+      </div>
+
+      <AnimatePresence>
+        {toastMsg && (
+          <motion.div
+            initial={{ opacity: 0, y: 50, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9, y: 50 }}
+            style={{
+              position: 'fixed', bottom: 40, left: '50%', x: '-50%',
+              background: '#111', color: '#fff', padding: '14px 24px', borderRadius: 100,
+              fontSize: '0.95rem', fontWeight: 700, boxShadow: '0 10px 30px rgba(0,0,0,0.2)',
+              zIndex: 9999, display: 'flex', alignItems: 'center', gap: 10
+            }}
+          >
+            {toastMsg}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

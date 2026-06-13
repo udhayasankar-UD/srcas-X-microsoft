@@ -94,7 +94,7 @@ export default function DashboardPage() {
   return (
     <DashboardLayout activeTab={activeTab} setActiveTab={setActiveTab} hasTeam={hasTeam} announcements={announcements} user={user}>
       {activeTab === 'overview'   && <OverviewTab hasTeam={hasTeam} teamData={teamData} teamMembers={teamMembers} submissions={submissions} user={user} setActiveTab={setActiveTab} announcements={announcements} />}
-      {activeTab === 'team'       && <TeamTab hasTeam={hasTeam} teamData={teamData} teamMembers={teamMembers} user={user} setTeamMembers={setTeamMembers} setTeamData={setTeamData} setHasTeam={setHasTeam} />}
+      {activeTab === 'team'       && <TeamTab hasTeam={hasTeam} teamData={teamData} teamMembers={teamMembers} user={user} setTeamMembers={setTeamMembers} setTeamData={setTeamData} setHasTeam={setHasTeam} setActiveTab={setActiveTab} />}
       {activeTab === 'submission' && <SubmissionTab hasTeam={hasTeam} teamData={teamData} teamMembers={teamMembers} submissions={submissions} setSubmissions={setSubmissions} />}
       {activeTab === 'resources'  && <ResourcesTab hasTeam={hasTeam} submissions={submissions} />}
 

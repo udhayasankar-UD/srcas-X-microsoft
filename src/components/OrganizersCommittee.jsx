@@ -28,7 +28,7 @@ export const organizers = [
   },
   {
     name: 'Dhakshan',
-    role: 'Vice Secretary',
+    role: 'Joint Secretary',
     org: '@ ProClub SRCAS',
     photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80',
     linkedin: '#'
@@ -109,7 +109,7 @@ export default function OrganizersCommittee() {
                   flexDirection: 'column',
                 }}
               >
-                {/* Photo Container with Hover Effect */}
+                {/* Photo Container with Hover Effect 
                 <div
                   className="group relative"
                   style={{
@@ -134,10 +134,10 @@ export default function OrganizersCommittee() {
                     </div>
                   )}
 
-                  {/* Gradient overlay on hover */}
+                  {/* Gradient overlay on hover
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
-                  {/* Connect Button */}
+                  {/* Connect Button 
                   <a
                     href={m.linkedin}
                     target="_blank"
@@ -152,7 +152,7 @@ export default function OrganizersCommittee() {
                     </svg>
                     Connect
                   </a>
-                </div>
+                </div> */}
 
                 {/* Content */}
                 <div

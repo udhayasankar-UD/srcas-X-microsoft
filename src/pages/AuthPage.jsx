@@ -81,7 +81,7 @@ function SDGCard({ mode }) {
           <div style={{ width:28, height:28, borderRadius:'50%', background:'linear-gradient(135deg,#4C9F38,#26BDE2)', display:'flex', alignItems:'center', justifyContent:'center', color:'#fff', fontWeight:800, fontSize:'11px', flexShrink:0 }}>M</div>
           <div>
             <div style={{ fontSize:'11px', fontWeight:700, color:'#111' }}>SRCAS Hackathon 3.0</div>
-            <div style={{ fontSize:'10px', color:'#4C9F38', fontWeight:600 }}>in Association with Microsoft Imagine Cup</div>
+            <div style={{ fontSize:'10px', color:'#4C9F38', fontWeight:600 }}>in Association with iGenius - Authorized Microsoft Partner</div>
           </div>
         </div>
       </div>
@@ -231,14 +231,13 @@ export default function AuthPage() {
         {isLogin ? 'Welcome back!' : 'Create an account'}
       </h1>
       <p style={{ fontSize:'13px', color:'#6b7280', margin:'0 0 24px', lineHeight:1.6 }}>
-        {isLogin ? 'Sign in to access your hackathon dashboard and track your submissions.' : 'Register to join SRCAS Hackathon 3.0 in Association with Microsoft Imagine Cup and showcase your innovation.'}
+        {isLogin ? 'Sign in to access your hackathon dashboard and track your submissions.' : 'Register to join SRCAS Hackathon 3.0 in Association with iGenius - Authorized Microsoft Partner and showcase your innovation.'}
       </p>
 
       {/* ── Social buttons FIRST ── */}
       <div style={{ display:'flex', flexWrap:'wrap', gap:'8px', marginBottom:'16px' }}>
         <SocialBtn label="Google" icon={<GoogleIcon />} onClick={() => handleSocialLogin('google')} />
         <SocialBtn label="GitHub" icon={<GithubIcon />} onClick={() => handleSocialLogin('github')} />
-        <SocialBtn label="Microsoft" icon={<MicrosoftIcon />} onClick={() => handleSocialLogin('azure')} />
       </div>
 
       {/* Divider */}

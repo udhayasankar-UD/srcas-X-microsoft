@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabaseClient';
 import EventTimeline from '../../components/EventTimeline';
+import { motion, AnimatePresence } from 'framer-motion';
+import OfficialPPT from '../../assets/PPT/SRCAS HACKATHON 3.0.pptx';
 
 const TIMELINE_STEPS = [
   { title:'Registration', date:'Jun 21' },
-  { title:'Team Confirmation', date:'Jul 10' },
+  { title:'Team Confirmation', date:'Jul 25' },
   { title:'Idea Submission', date:'Jul 25' },
   { title:'Shortlist Announced', date:'Aug 7' },
   { title:'Grand Finale', date:'Aug 14' },
@@ -37,6 +39,7 @@ const CheckItem = ({ label, status }) => {
 
 export default function OverviewTab({ hasTeam, teamData, teamMembers, submissions, user, setActiveTab, announcements = [] }) {
   const [totalTeams, setTotalTeams] = useState(245);
+  const [showRulebook, setShowRulebook] = useState(false);
 
   useEffect(() => {
     const fetchTeamCount = async () => {
@@ -46,6 +49,15 @@ export default function OverviewTab({ hasTeam, teamData, teamMembers, submission
     fetchTeamCount();
   }, []);
 
+  useEffect(() => {
+    if (showRulebook) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [showRulebook]);
+
   const memberCount = teamMembers?.length || 1;
   const hasSubmitted = submissions?.length > 0;
   const overallProgress = hasTeam ? (hasSubmitted ? 60 : 40) : 20; 
@@ -53,7 +65,7 @@ export default function OverviewTab({ hasTeam, teamData, teamMembers, submission
 
   const now = new Date();
   const milestones = [
-    { title: 'Team Confirmation', dateStr: '2026-07-10T23:59:59', icon: '👥', desc: 'Form your team and confirm details' },
+    { title: 'Team Confirmation', dateStr: '2026-07-25T23:59:59', icon: '👥', desc: 'Form your team and confirm details' },
     { title: 'Idea Submission', dateStr: '2026-07-25T23:59:59', icon: '💡', desc: 'Submit your 300-word abstract' },
     { title: 'Shortlist Announced', dateStr: '2026-08-07T12:00:00', icon: '🚩', desc: 'Top teams will be shortlisted' },
     { title: 'Grand Finale', dateStr: '2026-08-14T09:00:00', icon: '🏆', desc: 'Final presentations and winner announcement' }
@@ -105,36 +117,61 @@ export default function OverviewTab({ hasTeam, teamData, teamMembers, submission
   return (
     <div style={{ display:'flex', flexDirection:'column', gap:24 }}>
       
+      {/* Scroll Notification */}
+      <div style={{ background: '#fee2e2', border: '1px solid #fca5a5', borderRadius: 10, padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 12, overflow: 'hidden' }}>
+        <span style={{ fontSize: 18 }}>🚨</span>
+        <marquee style={{ fontSize: 14, fontWeight: 700, color: '#b91c1c' }} scrollamount="6">
+          Important: All project development and coding must begin strictly on the morning of August 14th. Pre-built projects or pre-written code are not allowed. You have exactly 24 hours to build your solution during the hackathon!
+        </marquee>
+      </div>
+
       {/* 1. Dynamic Timeline */}
       <EventTimeline steps={TIMELINE_STEPS} currentStepIndex={currentStepIndex} />
 
-      {/* 2. Stats Grid (5 columns) */}
+      {/* 2. Stats Grid (4 columns) */}
       <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(200px, 1fr))', gap:16 }}>
-        {/* Card 1 */}
-        <div style={card({ display:'flex', flexDirection:'column', padding:'20px' })}>
+        
+        {/* Rulebook Card */}
+        <div style={card({ display:'flex', flexDirection:'column', padding:'20px', cursor:'pointer', border:'1.5px solid #fca5a5', background:'#fef2f2' })} onClick={() => setShowRulebook(true)}>
           <div style={{ display:'flex', alignItems:'center', gap:16, marginBottom:16 }}>
-            <div style={{ width:48, height:48, borderRadius:12, background:'#ecfdf5', color:'#10b981', display:'flex', alignItems:'center', justifyContent:'center', fontSize:20 }}>👥</div>
+            <div style={{ width:48, height:48, borderRadius:12, background:'#fee2e2', color:'#ef4444', display:'flex', alignItems:'center', justifyContent:'center', fontSize:20 }}>📄</div>
             <div>
-              <div style={{ fontSize:24, fontWeight:800, color:'#111', lineHeight:1 }}>{memberCount}</div>
-              <div style={{ fontSize:13, fontWeight:600, color:'#6b7280', marginTop:4 }}>Team Members</div>
+              <div style={{ fontSize:17, fontWeight:800, color:'#111', lineHeight:1 }}>Rulebook</div>
+              <div style={{ fontSize:12, fontWeight:700, color:'#ef4444', marginTop:4 }}>Important</div>
             </div>
           </div>
-          <div style={{ marginTop:'auto', fontSize:13, fontWeight:700, color:'#374151', cursor:'pointer' }} onClick={() => setActiveTab('team')}>View team →</div>
+          <div style={{ marginTop:'auto', fontSize:13, fontWeight:700, color:'#dc2626' }}>View rules & criteria →</div>
         </div>
 
-        {/* Card 4 */}
+        
+
+        {/* Submission Guidelines Video Card */}
+        <a href="https://www.youtube.com" target="_blank" rel="noreferrer" style={{ textDecoration:'none' }}>
+          <div style={card({ display:'flex', flexDirection:'column', padding:'20px', cursor:'pointer', height:'100%', border:'1.5px solid #c4b5fd', background:'#f5f3ff' })}>
+            <div style={{ display:'flex', alignItems:'center', gap:16, marginBottom:16 }}>
+              <div style={{ width:48, height:48, borderRadius:12, background:'#ede9fe', color:'#8b5cf6', display:'flex', alignItems:'center', justifyContent:'center', fontSize:20 }}>📹</div>
+              <div>
+                <div style={{ fontSize:17, fontWeight:800, color:'#111', lineHeight:1 }}>Submission Guide</div>
+                <div style={{ fontSize:12, fontWeight:700, color:'#8b5cf6', marginTop:4 }}>Video Tutorial</div>
+              </div>
+            </div>
+            <div style={{ marginTop:'auto', fontSize:13, fontWeight:700, color:'#6d28d9' }}>Watch on YouTube ↗</div>
+          </div>
+        </a>
+
+        {/* Days to Next Milestone Card */}
         <div style={card({ display:'flex', flexDirection:'column', padding:'20px' })}>
           <div style={{ display:'flex', alignItems:'center', gap:16, marginBottom:16 }}>
             <div style={{ width:48, height:48, borderRadius:12, background:'#eff6ff', color:'#3b82f6', display:'flex', alignItems:'center', justifyContent:'center', fontSize:20 }}>📅</div>
             <div>
               <div style={{ fontSize:24, fontWeight:800, color:'#111', lineHeight:1 }}>{daysToNext}</div>
-              <div style={{ fontSize:13, fontWeight:600, color:'#6b7280', marginTop:4 }}>Days to Next Milestone</div>
+              <div style={{ fontSize:13, fontWeight:600, color:'#6b7280', marginTop:4 }}>Days to Milestone</div>
             </div>
           </div>
           <div style={{ marginTop:'auto', fontSize:13, fontWeight:700, color:'#9ca3af' }}>{nextMilestone.title}</div>
         </div>
 
-        {/* Card 5 */}
+        {/* Teams Participating Card */}
         <div style={card({ display:'flex', flexDirection:'column', padding:'20px' })}>
           <div style={{ display:'flex', alignItems:'center', gap:16, marginBottom:16 }}>
             <div style={{ width:48, height:48, borderRadius:12, background:'#fefce8', color:'#eab308', display:'flex', alignItems:'center', justifyContent:'center', fontSize:20 }}>⭐</div>
@@ -143,7 +180,9 @@ export default function OverviewTab({ hasTeam, teamData, teamMembers, submission
               <div style={{ fontSize:13, fontWeight:600, color:'#6b7280', marginTop:4 }}>Teams Participating</div>
             </div>
           </div>
+          <div style={{ marginTop:'auto', fontSize:13, fontWeight:700, color:'#9ca3af' }}>Active hackers</div>
         </div>
+
       </div>
 
       {/* 3. Main Grid (3 columns) */}
@@ -212,7 +251,7 @@ export default function OverviewTab({ hasTeam, teamData, teamMembers, submission
             <h3 style={{ fontSize:16, fontWeight:800, color:'#111', margin:0 }}>Upcoming Milestones</h3>
           </div>
           <div style={{ display:'flex', flexDirection:'column', gap:16, flex:1 }}>
-            {upcomingMilestones.slice(0, 3).map((m, i) => (
+            {upcomingMilestones.slice(0, 4).map((m, i) => (
               <div key={i} style={{ display:'flex', alignItems:'center', gap:12 }}>
                 <div style={{ width:40, height:40, borderRadius:10, background: m.icon==='🏆'?'#fefce8':'#eff6ff', color: m.icon==='🏆'?'#eab308':'#3b82f6', display:'flex', alignItems:'center', justifyContent:'center', fontSize:16 }}>{m.icon}</div>
                 <div style={{ flex:1 }}>
@@ -293,6 +332,106 @@ export default function OverviewTab({ hasTeam, teamData, teamMembers, submission
           </div>
         </div>
       </div>
+
+      {/* Rulebook Modal */}
+      <AnimatePresence>
+        {showRulebook && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowRulebook(false)}
+              style={{
+                position: 'fixed', inset: 0, zIndex: 9998,
+                background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)',
+                cursor: 'pointer'
+              }}
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              style={{
+                position: 'fixed', inset: 0, zIndex: 9999,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                padding: '20px', pointerEvents: 'none'
+              }}
+            >
+              <div style={{
+                pointerEvents: 'auto',
+                width: '100%', maxWidth: 700, maxHeight: '85vh',
+                background: '#fff', borderRadius: 24,
+                boxShadow: '0 24px 48px rgba(0,0,0,0.2)',
+                display: 'flex', flexDirection: 'column',
+                overflow: 'hidden', fontFamily: "'Plus Jakarta Sans', sans-serif"
+              }}>
+                {/* Header */}
+                <div style={{ padding: '24px 32px', borderBottom: '1px solid #f0f0f0', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#fafafa' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+                    <div style={{ width: 44, height: 44, borderRadius: 12, background: '#E5243B15', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22 }}>📄</div>
+                    <div>
+                      <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 800, color: '#111' }}>Official Rulebook</h2>
+                      <p style={{ margin: '2px 0 0', fontSize: '0.85rem', color: '#6b7280', fontWeight: 500 }}>SRCAS Hackathon 3.0</p>
+                    </div>
+                  </div>
+                  <button onClick={() => setShowRulebook(false)} style={{ background: 'none', border: 'none', fontSize: 28, cursor: 'pointer', color: '#9ca3af', display: 'flex', alignItems: 'center', justifyContent: 'center', width: 32, height: 32, borderRadius: 8 }}
+                    onMouseEnter={e => e.currentTarget.style.background = '#f3f4f6'}
+                    onMouseLeave={e => e.currentTarget.style.background = 'none'}>&times;</button>
+                </div>
+                
+                {/* Body */}
+                <div style={{ padding: '32px', overflowY: 'auto', fontSize: '0.95rem', color: '#4b5563', lineHeight: 1.7 }}>
+                  <h3 style={{ color: '#111', fontSize: '1.1rem', fontWeight: 800, marginTop: 0, letterSpacing: '-0.01em' }}>1. Eligibility & Team Formation</h3>
+                  <ul style={{ paddingLeft: 20, marginBottom: 24 }}>
+                    <li style={{ marginBottom: 6 }}>All team members must be currently enrolled college students.</li>
+                    <li style={{ marginBottom: 6 }}>Teams must consist of exactly 2 to 4 members. Solo participation is not permitted.</li>
+                    <li style={{ marginBottom: 6 }}>All members must belong to the same institution.</li>
+                    <li>Valid college ID cards are mandatory for the offline finale.</li>
+                  </ul>
+
+                  <h3 style={{ color: '#111', fontSize: '1.1rem', fontWeight: 800, letterSpacing: '-0.01em' }}>2. Problem Statements & Tracks</h3>
+                  <ul style={{ paddingLeft: 20, marginBottom: 24 }}>
+                    <li style={{ marginBottom: 6 }}>Projects must address one of the provided 17 UN Sustainable Development Goals (SDGs).</li>
+                    <li>Teams may change their selected SDG until the Idea Submission deadline.</li>
+                  </ul>
+
+                  <h3 style={{ color: '#111', fontSize: '1.1rem', fontWeight: 800, letterSpacing: '-0.01em' }}>3. Submission & Development Rules</h3>
+                  <ul style={{ paddingLeft: 20, marginBottom: 24 }}>
+                    <li style={{ marginBottom: 6 }}><strong>Round 1 (Idea Submission):</strong> Teams must submit a 300-word abstract and the official PPT format.</li>
+                    <li style={{ marginBottom: 6 }}><strong>Round 2 (Finale):</strong> Shortlisted teams will present their working prototypes offline at the SRCAS campus.</li>
+                    <li style={{ marginBottom: 6 }}><strong>24-Hour Rule:</strong> All coding and development must take place exclusively during the 24-hour hackathon period.</li>
+                    <li>Bringing pre-written code, using proprietary existing projects, or plagiarism will lead to immediate disqualification.</li>
+                  </ul>
+
+                  <h3 style={{ color: '#111', fontSize: '1.1rem', fontWeight: 800, letterSpacing: '-0.01em' }}>4. Judging Criteria</h3>
+                  <ul style={{ paddingLeft: 20, marginBottom: 24 }}>
+                    <li style={{ marginBottom: 6 }}><strong>Innovation & Creativity (25%):</strong> How unique is the approach?</li>
+                    <li style={{ marginBottom: 6 }}><strong>Impact & SDG Alignment (25%):</strong> Does it effectively address the chosen goal?</li>
+                    <li style={{ marginBottom: 6 }}><strong>Technical Complexity (25%):</strong> Quality of code and technology stack used.</li>
+                    <li><strong>Feasibility & Presentation (25%):</strong> Can this be implemented in the real world? How well was it pitched?</li>
+                  </ul>
+
+                  <h3 style={{ color: '#111', fontSize: '1.1rem', fontWeight: 800, letterSpacing: '-0.01em' }}>5. Code of Conduct</h3>
+                  <ul style={{ paddingLeft: 20, marginBottom: 0 }}>
+                    <li style={{ marginBottom: 6 }}>Maintain a respectful and collaborative environment. Harassment of any kind will not be tolerated.</li>
+                    <li>The decisions made by the judges are final and binding.</li>
+                  </ul>
+                </div>
+
+                {/* Footer */}
+                <div style={{ padding: '20px 32px', borderTop: '1px solid #f0f0f0', background: '#fafafa', display: 'flex', justifyContent: 'flex-end' }}>
+                  <button onClick={() => setShowRulebook(false)} style={{ padding: '10px 24px', background: '#111', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 700, cursor: 'pointer', transition: 'background 0.2s' }}
+                    onMouseEnter={e => e.currentTarget.style.background = '#333'}
+                    onMouseLeave={e => e.currentTarget.style.background = '#111'}>
+                    I Understand
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
 
     </div>
   );

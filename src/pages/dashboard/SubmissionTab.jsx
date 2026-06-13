@@ -1,11 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '../../lib/supabaseClient';
 import OfficialPPT from '../../assets/PPT/SRCAS HACKATHON 3.0.pptx';
 
 
 const card = (extra = {}) => ({ background: '#fff', borderRadius: 14, padding: '22px 24px', boxShadow: '0 1px 4px rgba(0,0,0,0.06)', border: '1.5px solid #f0f0f0', ...extra });
 
-const STEPS = ['Project Info', 'Links & Repo', 'Review & Submit'];
+const STEPS = ['Guidelines', 'Project Info', 'Review & Submit'];
 
 const SDG_OPTIONS = [
   "SDG 1 - No Poverty", "SDG 2 - Zero Hunger", "SDG 3 - Good Health", "SDG 4 - Quality Education",
@@ -15,7 +16,7 @@ const SDG_OPTIONS = [
   "SDG 15 - Life on Land", "SDG 16 - Peace & Justice", "SDG 17 - Partnerships"
 ];
 
-function Field({ label, value, onChange, placeholder, type = 'text', hint }) {
+function Field({ label, value, onChange, placeholder, type = 'text', hint, error }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -25,7 +26,8 @@ function Field({ label, value, onChange, placeholder, type = 'text', hint }) {
       <input type={type} value={value} onChange={onChange} placeholder={placeholder}
         onFocus={e => { e.target.style.borderColor = '#4C9F38'; e.target.style.boxShadow = '0 0 0 3px rgba(76,159,56,0.1)'; }}
         onBlur={e => { e.target.style.borderColor = '#e5e7eb'; e.target.style.boxShadow = 'none'; }}
-        style={{ padding: '10px 13px', borderRadius: 10, border: '1.5px solid #e5e7eb', fontSize: 13, color: '#111', outline: 'none', transition: 'border-color 0.2s' }} />
+        style={{ padding: '10px 13px', borderRadius: 10, border: error ? '1.5px solid #ef4444' : '1.5px solid #e5e7eb', fontSize: 13, color: '#111', outline: 'none', transition: 'border-color 0.2s' }} />
+      {error && <span style={{ fontSize: 11, color: '#ef4444', marginTop: 2 }}>{error}</span>}
     </div>
   );
 }
@@ -35,8 +37,10 @@ export default function SubmissionTab({ hasTeam, teamData, teamMembers, submissi
   const [submitting, setSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [success, setSuccess] = useState(false);
-  const [saveMsg, setSaveMsg] = useState('');
+  const [toastMsg, setToastMsg] = useState('');
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState({});
+  const [guidelinesRead, setGuidelinesRead] = useState(false);
 
   const [sdgOpen, setSdgOpen] = useState(false);
   const sdgRef = useRef();
@@ -59,33 +63,14 @@ export default function SubmissionTab({ hasTeam, teamData, teamMembers, submissi
       title: alreadySubmitted ? submissions[0].project_title : '',
       sdg: alreadySubmitted ? (submissions[0].sdg_goal ? submissions[0].sdg_goal.split(', ') : []) : [],
       category: alreadySubmitted ? submissions[0].category : '',
+      category_other: '',
       description: alreadySubmitted ? submissions[0].project_description : '',
-      github: alreadySubmitted ? submissions[0].github_url : '',
-      demo: alreadySubmitted ? submissions[0].demo_video_url : '',
       pdf: null,
       pdf_url: alreadySubmitted ? submissions[0].pdf_url : ''
     };
 
-    if (!alreadySubmitted && teamData) {
-      const draft = localStorage.getItem(`submission_draft_${teamData.id}`);
-      if (draft) {
-        try {
-          const parsed = JSON.parse(draft);
-          initialState = { ...initialState, ...parsed, pdf: null };
-        } catch (err) { console.warn('Draft parse error:', err); }
-      }
-    }
-
     return initialState;
   });
-
-  const handleSaveDraft = () => {
-    if (!teamData) return;
-    const draft = { ...form, pdf: null };
-    localStorage.setItem(`submission_draft_${teamData.id}`, JSON.stringify(draft));
-    setSaveMsg('Progress saved successfully! You can return later.');
-    setTimeout(() => setSaveMsg(''), 4000);
-  };
 
   const set = (k) => (e) => setForm(p => ({ ...p, [k]: e.target ? e.target.value : e }));
 
@@ -128,10 +113,8 @@ export default function SubmissionTab({ hasTeam, teamData, teamMembers, submissi
         team_id: teamData.id,
         project_title: form.title,
         sdg_goal: Array.isArray(form.sdg) ? form.sdg.join(', ') : form.sdg,
-        category: form.category,
+        category: form.category === 'Other' ? form.category_other : form.category,
         project_description: form.description,
-        github_url: form.github,
-        demo_video_url: form.demo,
         pdf_url: pdf_url
       };
 
@@ -143,6 +126,8 @@ export default function SubmissionTab({ hasTeam, teamData, teamMembers, submissi
       if (setSubmissions) setSubmissions(data && data.length > 0 ? data : [newSubmission]);
       setForm(p => ({ ...p, pdf_url: pdf_url }));
       setSuccess(true);
+      setToastMsg('🎉 Project submitted successfully!');
+      setTimeout(() => setToastMsg(''), 4000);
     } catch (err) {
       setErrorMsg(err.message);
     } finally {
@@ -248,18 +233,6 @@ export default function SubmissionTab({ hasTeam, teamData, teamMembers, submissi
               <span style={{ fontSize: 11, fontWeight: 700, color: '#9ca3af', textTransform: 'uppercase' }}>Description</span>
               <span style={{ fontSize: 14, color: '#374151', lineHeight: 1.5 }}>{s.project_description || s.description}</span>
             </div>
-            {(s.github_url || s.github) && (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                <span style={{ fontSize: 11, fontWeight: 700, color: '#9ca3af', textTransform: 'uppercase' }}>GitHub</span>
-                <a href={s.github_url || s.github} target="_blank" rel="noreferrer" style={{ fontSize: 14, color: '#00689D', textDecoration: 'none' }}>{s.github_url || s.github}</a>
-              </div>
-            )}
-            {(s.demo_video_url || s.demo) && (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                <span style={{ fontSize: 11, fontWeight: 700, color: '#9ca3af', textTransform: 'uppercase' }}>Demo Video</span>
-                <a href={s.demo_video_url || s.demo} target="_blank" rel="noreferrer" style={{ fontSize: 14, color: '#00689D', textDecoration: 'none' }}>{s.demo_video_url || s.demo}</a>
-              </div>
-            )}
             {(s.pdf_url) && (
               <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginTop: 8 }}>
                 <span style={{ fontSize: 11, fontWeight: 700, color: '#9ca3af', textTransform: 'uppercase' }}>Presentation Deck</span>
@@ -319,6 +292,38 @@ export default function SubmissionTab({ hasTeam, teamData, teamMembers, submissi
     }
   };
 
+  const handleNext = () => {
+    setErrorMsg('');
+    if (step === 0) {
+      if (!guidelinesRead) {
+        setErrorMsg('Please confirm you have read the guidelines by checking the box below.');
+        return;
+      }
+      setStep(1);
+      return;
+    }
+    if (step === 1) {
+      let errors = {};
+      let hasError = false;
+
+      if (!form.title.trim()) { errors.title = 'Project Title is required.'; hasError = true; }
+      if (!form.sdg || form.sdg.length === 0) { errors.sdg = 'Please select at least one SDG Goal.'; hasError = true; }
+      if (!form.category) { errors.category = 'Please select a Category.'; hasError = true; }
+      else if (form.category === 'Other' && !form.category_other?.trim()) { errors.category_other = 'Please specify the category.'; hasError = true; }
+
+      const wordCount = form.description ? form.description.trim().split(/\s+/).filter(w => w.length > 0).length : 0;
+      if (!form.description || wordCount < 10) { errors.description = 'Please provide a valid project description (min 10 words).'; hasError = true; }
+      else if (wordCount > 500) { errors.description = 'Project description cannot exceed 500 words.'; hasError = true; }
+
+      if (!form.pdf && !form.pdf_url) { errors.pdf = 'Presentation Deck (PDF) is required.'; hasError = true; }
+
+      setFieldErrors(errors);
+      if (hasError) return;
+      
+      setStep(2);
+    }
+  };
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
       {/* Stepper */}
@@ -341,7 +346,6 @@ export default function SubmissionTab({ hasTeam, teamData, teamMembers, submissi
       </div>
 
       {errorMsg && <div style={{ padding: 14, background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 10, color: '#dc2626', fontSize: 13 }}>{errorMsg}</div>}
-      {saveMsg && <div style={{ padding: 14, background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: 10, color: '#166534', fontSize: 13 }}>💾 {saveMsg}</div>}
 
       {/* Step content */}
       <div className="dash-card" style={card()}>
@@ -367,27 +371,46 @@ export default function SubmissionTab({ hasTeam, teamData, teamMembers, submissi
               </div>
             </div>
 
-            {/* Official PPT Note */}
+            {/* Submission Guidelines Note */}
             <div style={{ padding: 14, background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: 10, display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 20 }}>
               <div style={{ fontSize: 13, fontWeight: 700, color: '#14532d', display: 'flex', alignItems: 'center', gap: 6 }}>
-                 Official Presentation Template
+                 Submission Guidelines
               </div>
-              <p style={{ fontSize: 12, color: '#166534', margin: 0, lineHeight: 1.5 }}>
-                You must use the official PPT template for your project presentation. Please download it, fill it out, export it as a PDF, and upload it in Step 2.
-              </p>
+              <ul style={{ fontSize: 12, color: '#166534', margin: 0, paddingLeft: 16, lineHeight: 1.6, display: 'flex', flexDirection: 'column', gap: 4 }}>
+                <li>Download the official PPT template using the button below.</li>
+                <li>Fill out all slides with your project details and team information.</li>
+                <li>Export the completed presentation as a PDF document.</li>
+                <li>Upload the PDF file in the <b>Presentation Deck</b> section below.</li>
+                <li>You may delete and resubmit your project idea at any time before the final submission deadline on July 25th.</li>
+              </ul>
               <a href={OfficialPPT} download="SRCAS_HACKATHON_3.0_Template.pptx" style={{ alignSelf: 'flex-start', display: 'inline-block', padding: '6px 12px', background: '#4C9F38', color: '#fff', borderRadius: 6, fontSize: 12, fontWeight: 700, textDecoration: 'none', marginTop: 4 }}>
                 ↓ Download PPT Template
               </a>
             </div>
 
+            <label style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer', padding: '12px 16px', background: guidelinesRead ? '#f0fdf4' : '#f9fafb', borderRadius: 10, border: guidelinesRead ? '1.5px solid #bbf7d0' : '1.5px solid #e5e7eb', width: 'fit-content', transition: 'all 0.2s' }}>
+              <input 
+                type="checkbox" 
+                checked={guidelinesRead} 
+                onChange={e => { setGuidelinesRead(e.target.checked); if (e.target.checked) setErrorMsg(''); }} 
+                style={{ cursor: 'pointer', width: 16, height: 16, accentColor: '#4C9F38' }} 
+              />
+              <span style={{ fontSize: 13, fontWeight: 700, color: guidelinesRead ? '#166534' : '#374151', transition: 'color 0.2s' }}>
+                I have read and understood the submission guidelines, and I am ready to submit.
+              </span>
+            </label>
+          </div>
+        )}
+        {step === 1 && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
             {/* Section B: Project Info */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               <div style={{ fontSize: 15, fontWeight: 800, color: '#111', marginBottom: 4 }}>Project Information</div>
-              <Field label="Project Title" value={form.title} onChange={set('title')} placeholder="Your project name" />
-              <div className="dash-grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+              <Field label="Project Title" value={form.title} onChange={set('title')} placeholder="Your project name" error={fieldErrors.title} />
+              <div className="dash-grid-2" style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)', gap: 14 }}>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }} ref={sdgRef}>
                   <label style={{ fontSize: 13, fontWeight: 600, color: '#374151' }}>SDG Goals</label>
-                  <div style={{ position: 'relative' }}>
+                  <div style={{ position: 'relative', minWidth: 0 }}>
                     <div
                       onClick={() => setSdgOpen(!sdgOpen)}
                       style={{
@@ -396,7 +419,7 @@ export default function SubmissionTab({ hasTeam, teamData, teamMembers, submissi
                         color: form.sdg && form.sdg.length > 0 ? '#111' : '#9ca3af'
                       }}
                     >
-                      <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', display: 'block', flex: 1 }}>
                         {form.sdg && form.sdg.length > 0 ? form.sdg.join(', ') : 'Select SDG Goals...'}
                       </span>
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ transform: sdgOpen ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s', flexShrink: 0, marginLeft: 8 }}>
@@ -423,16 +446,27 @@ export default function SubmissionTab({ hasTeam, teamData, teamMembers, submissi
                       </div>
                     )}
                   </div>
+                  {fieldErrors.sdg && <span style={{ fontSize: 11, color: '#ef4444', marginTop: 2 }}>{fieldErrors.sdg}</span>}
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
                   <label style={{ fontSize: 13, fontWeight: 600, color: '#374151' }}>Category</label>
-                  <select value={form.category} onChange={set('category')} style={{ padding: '10px 13px', borderRadius: 10, border: '1.5px solid #e5e7eb', fontSize: 13, outline: 'none', background: '#fff', color: form.category ? '#111' : '#9ca3af' }}>
+                  <select value={form.category} onChange={set('category')} style={{ padding: '10px 13px', borderRadius: 10, border: fieldErrors.category ? '1.5px solid #ef4444' : '1.5px solid #e5e7eb', fontSize: 13, outline: 'none', background: '#fff', color: form.category ? '#111' : '#9ca3af' }}>
                     <option value="" disabled>Select Category...</option>
                     <option value="Software">Software</option>
                     <option value="Hardware">Hardware</option>
                     <option value="IoT">IoT</option>
                     <option value="AI/ML">AI/ML</option>
+                    <option value="Other">Other</option>
                   </select>
+                  {fieldErrors.category && <span style={{ fontSize: 11, color: '#ef4444', marginTop: 2 }}>{fieldErrors.category}</span>}
+                  
+                  {form.category === 'Other' && (
+                    <>
+                      <input type="text" value={form.category_other} onChange={set('category_other')} placeholder="Please specify category..."
+                        style={{ padding: '10px 13px', borderRadius: 10, border: fieldErrors.category_other ? '1.5px solid #ef4444' : '1.5px solid #e5e7eb', fontSize: 13, color: '#111', outline: 'none', marginTop: 4 }} />
+                      {fieldErrors.category_other && <span style={{ fontSize: 11, color: '#ef4444', marginTop: 2 }}>{fieldErrors.category_other}</span>}
+                    </>
+                  )}
                 </div>
               </div>
 
@@ -442,38 +476,44 @@ export default function SubmissionTab({ hasTeam, teamData, teamMembers, submissi
                   <span style={{ color: wordCount >= 500 ? '#E5243B' : '#9ca3af', fontWeight: 500, fontSize: 11 }}>{wordCount} / 500 words</span>
                 </label>
                 <textarea value={form.description} onChange={handleDescChange} placeholder="Describe your solution..." rows={6}
-                  style={{ padding: '12px 14px', borderRadius: 10, border: wordCount >= 500 ? '1.5px solid #fecaca' : '1.5px solid #e5e7eb', fontSize: 13, color: '#111', outline: 'none', resize: 'vertical', fontFamily: 'inherit' }} />
+                  style={{ padding: '12px 14px', borderRadius: 10, border: fieldErrors.description ? '1.5px solid #ef4444' : (wordCount >= 500 ? '1.5px solid #fecaca' : '1.5px solid #e5e7eb'), fontSize: 13, color: '#111', outline: 'none', resize: 'vertical', fontFamily: 'inherit' }} />
+                {fieldErrors.description && <span style={{ fontSize: 11, color: '#ef4444', marginTop: 2 }}>{fieldErrors.description}</span>}
               </div>
-            </div>
-          </div>
-        )}
-        {step === 1 && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-            <div style={{ fontSize: 15, fontWeight: 800, color: '#111', marginBottom: 4 }}>Links & Presentation</div>
-            <Field label="GitHub Repository (Optional)" value={form.github} onChange={set('github')} placeholder="https://github.com/your-repo" />
-            <Field label="Demo Video URL (Optional)" value={form.demo} onChange={set('demo')} placeholder="https://youtube.com/..." />
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 5, marginTop: 8 }}>
-              <label style={{ fontSize: 13, fontWeight: 700, color: '#374151', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                Presentation Deck
-                <a href={OfficialPPT} download="SRCAS_HACKATHON_3.0_Template.pptx" style={{ fontSize: 11, color: '#4C9F38', textDecoration: 'none', fontWeight: 600 }}>↓ Download Template</a>
-              </label>
-              <div style={{ fontSize: 11, color: '#6b7280', marginBottom: 4 }}>Please upload your presentation using the official template as a PDF. Max 20MB.</div>
-              <input type="file" accept=".pdf" onChange={e => setForm({ ...form, pdf: e.target.files[0] })}
-                style={{ padding: '10px 13px', borderRadius: 10, border: '1.5px solid #e5e7eb', fontSize: 13, color: '#111', background: '#f9fafb' }} />
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 5, marginTop: 4 }}>
+                <label style={{ fontSize: 13, fontWeight: 700, color: '#374151', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  Presentation Deck
+                  <a href={OfficialPPT} download="SRCAS_HACKATHON_3.0_Template.pptx" style={{ fontSize: 11, color: '#4C9F38', textDecoration: 'none', fontWeight: 600 }}>↓ Download Template</a>
+                </label>
+                <div style={{ fontSize: 11, color: '#6b7280', marginBottom: 4 }}>Please upload your presentation using the official template as a PDF. Max 20MB.</div>
+                <input type="file" accept=".pdf" onChange={e => setForm({ ...form, pdf: e.target.files[0] })}
+                  style={{ padding: '10px 13px', borderRadius: 10, border: fieldErrors.pdf ? '1.5px solid #ef4444' : '1.5px solid #e5e7eb', fontSize: 13, color: '#111', background: '#f9fafb' }} />
+                {fieldErrors.pdf && <span style={{ fontSize: 11, color: '#ef4444', marginTop: 2 }}>{fieldErrors.pdf}</span>}
+              </div>
             </div>
           </div>
         )}
         {step === 2 && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
             <div style={{ fontSize: 15, fontWeight: 800, color: '#111', marginBottom: 4 }}>Review Your Submission</div>
-            {[['Project Title', form.title], ['SDG Goal', form.sdg], ['Category', form.category], ['GitHub', form.github], ['Demo Video', form.demo], ['Presentation PDF', form.pdf ? form.pdf.name : 'No file chosen']].map(([k, v]) => (
+            {[['Project Title', form.title], ['SDG Goal', Array.isArray(form.sdg) ? form.sdg.join(', ') : form.sdg], ['Category', form.category === 'Other' ? form.category_other : form.category], ['Presentation PDF', form.pdf ? form.pdf.name : 'No file chosen']].map(([k, v]) => (
               <div key={k} style={{ display: 'flex', gap: 12, padding: '10px 14px', background: '#f9fafb', borderRadius: 10 }}>
                 <span style={{ fontSize: 12, fontWeight: 700, color: '#6b7280', minWidth: 110, flexShrink: 0 }}>{k}</span>
-                <span style={{ fontSize: 12, color: '#374151', wordBreak: 'break-all' }}>{v || '-'}</span>
+                <span style={{ fontSize: 12, color: '#374151', wordBreak: 'break-word' }}>{v || '-'}</span>
               </div>
             ))}
-            <div style={{ padding: 14, background: '#f0fdf4', border: '1.5px solid #bbf7d0', borderRadius: 10 }}>
+            {form.pdf && (
+              <button 
+                onClick={() => window.open(URL.createObjectURL(form.pdf), '_blank')}
+                style={{ padding: '10px 20px', background: '#f3f4f6', color: '#111', borderRadius: 8, border: '1.5px solid #e5e7eb', cursor: 'pointer', fontWeight: 700, fontSize: 13, alignSelf: 'flex-start', display: 'flex', alignItems: 'center', gap: 6, transition: 'background 0.2s' }}
+                onMouseEnter={e => e.currentTarget.style.background = '#e5e7eb'}
+                onMouseLeave={e => e.currentTarget.style.background = '#f3f4f6'}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                Preview Uploaded PDF
+              </button>
+            )}
+            <div style={{ padding: 14, background: '#f0fdf4', border: '1.5px solid #bbf7d0', borderRadius: 10, marginTop: 8 }}>
               <p style={{ fontSize: 12, color: '#14532d', margin: 0 }}>✅ By submitting, you confirm all information is accurate and your project is your original work. You cannot edit this after submission.</p>
             </div>
           </div>
@@ -487,18 +527,32 @@ export default function SubmissionTab({ hasTeam, teamData, teamMembers, submissi
         </button>
 
         <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
-          <button onClick={handleSaveDraft} style={{ padding: '12px 18px', borderRadius: 10, border: '1.5px solid #e5e7eb', background: '#f9fafb', fontSize: 13, fontWeight: 600, cursor: 'pointer', color: '#374151', transition: 'all 0.2s', textAlign: 'center', whiteSpace: 'nowrap' }}
-            onMouseEnter={e => e.currentTarget.style.background = '#f3f4f6'} onMouseLeave={e => e.currentTarget.style.background = '#f9fafb'}>
-            Save Progress
-          </button>
           {step < STEPS.length - 1
-            ? <button onClick={() => setStep(s => s + 1)} style={{ padding: '12px 24px', borderRadius: 10, border: 'none', background: '#4C9F38', color: '#fff', fontSize: 13, fontWeight: 700, cursor: 'pointer', textAlign: 'center', whiteSpace: 'nowrap' }}>Next →</button>
+            ? <button onClick={handleNext} style={{ padding: '12px 24px', borderRadius: 10, border: 'none', background: '#4C9F38', color: '#fff', fontSize: 13, fontWeight: 700, cursor: 'pointer', textAlign: 'center', whiteSpace: 'nowrap' }}>Next →</button>
             : <button disabled={submitting} onClick={handleSubmit} style={{ padding: '12px 28px', borderRadius: 10, border: 'none', background: 'linear-gradient(135deg,#4C9F38,#3d8a2e)', color: '#fff', fontSize: 13, fontWeight: 700, cursor: submitting ? 'not-allowed' : 'pointer', boxShadow: '0 4px 14px rgba(76,159,56,0.3)', opacity: submitting ? 0.7 : 1, textAlign: 'center', whiteSpace: 'nowrap' }}>
               {submitting ? 'Uploading...' : 'Submit Project 🚀'}
             </button>
           }
         </div>
       </div>
+
+      <AnimatePresence>
+        {toastMsg && (
+          <motion.div
+            initial={{ opacity: 0, y: 50, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9, y: 50 }}
+            style={{
+              position: 'fixed', bottom: 40, left: '50%', x: '-50%',
+              background: '#111', color: '#fff', padding: '14px 24px', borderRadius: 100,
+              fontSize: '0.95rem', fontWeight: 700, boxShadow: '0 10px 30px rgba(0,0,0,0.2)',
+              zIndex: 9999, display: 'flex', alignItems: 'center', gap: 10
+            }}
+          >
+            {toastMsg}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
