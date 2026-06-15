@@ -128,6 +128,43 @@ const ContactSection = () => {
                         }}>
                             Hacker experience is our priority! Have questions, need assistance, or just want to chat about your ideas? Our coordinators are here for you.
                         </motion.p>
+
+                        <motion.a 
+                            variants={fadeInUp}
+                            href="https://chat.whatsapp.com/BXFPp6PTWk4I6wG7UMCbAP"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{
+                                display: 'inline-flex', alignItems: 'center', gap: '16px',
+                                marginTop: '32px', padding: '16px 24px',
+                                background: '#fff', border: '1.5px solid #e5e7eb',
+                                borderRadius: '16px', textDecoration: 'none',
+                                boxShadow: '0 10px 25px rgba(0,0,0,0.02)',
+                                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                                cursor: 'pointer'
+                            }}
+                            onMouseEnter={e => {
+                                e.currentTarget.style.borderColor = '#25D366';
+                                e.currentTarget.style.transform = 'translateY(-4px)';
+                                e.currentTarget.style.boxShadow = '0 20px 40px rgba(37,211,102,0.12)';
+                            }}
+                            onMouseLeave={e => {
+                                e.currentTarget.style.borderColor = '#e5e7eb';
+                                e.currentTarget.style.transform = 'translateY(0)';
+                                e.currentTarget.style.boxShadow = '0 10px 25px rgba(0,0,0,0.02)';
+                            }}
+                        >
+                            <div style={{ width: 48, height: 48, background: '#25D366', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 12px rgba(37,211,102,0.3)' }}>
+                                <MessagesSquare size={24} color="#fff" />
+                            </div>
+                            <div>
+                                <div style={{ fontSize: '0.8rem', fontWeight: 800, color: '#25D366', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '2px' }}>Community</div>
+                                <div style={{ fontSize: '1.1rem', fontWeight: 800, color: '#111' }}>Join WhatsApp Group</div>
+                            </div>
+                            <div style={{ marginLeft: '12px', color: '#9ca3af' }}>
+                                <ExternalLink size={18} />
+                            </div>
+                        </motion.a>
                     </motion.div>
 
                     <motion.div initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 0.6 }} style={{ display: 'flex', justifyContent: 'center' }}>
