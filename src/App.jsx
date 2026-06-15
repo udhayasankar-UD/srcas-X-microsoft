@@ -10,6 +10,7 @@ import HomePage from './pages/HomePage';
 import PrizesPage from './pages/PrizesPage';
 import HighlightsPage from './pages/HighlightsPage';
 import PartnersPage from './pages/PartnersPage';
+import HumansPage from './pages/HumansPage';
 import ContactSection from './pages/ContactSection';
 import FaqSection from './pages/FaqSection';
 import AuthPage from './pages/AuthPage';
@@ -120,6 +121,7 @@ function App() {
               <Route path="/prizes" element={<PrizesPage />} />
               <Route path="/highlights" element={<HighlightsPage />} />
               <Route path="/partners" element={<PartnersPage />} />
+              <Route path="/humans" element={<HumansPage />} />
               <Route path="/faq" element={<FaqSection />} />
               <Route path="/contact" element={<ContactSection />} />
             </Routes>

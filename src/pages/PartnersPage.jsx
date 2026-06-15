@@ -1,7 +1,5 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import PPTSection from '../components/sections/PPTSection';
-import OrganizersCommittee from '../components/OrganizersCommittee';
 
 import srcasLogo from '../assets/logo/srcas-logo.png';
 import programmingClubLogo from '../assets/logo/programming-club-2-logo.png';
@@ -369,7 +367,6 @@ export default function PartnersPage() {
              </div>
             </div>
       </section>
-      <OrganizersCommittee />
 
     </div>
   );

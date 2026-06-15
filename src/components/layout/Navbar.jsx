@@ -21,12 +21,12 @@ import {
   Star,
   Trophy,
   BookOpen,
-  ClipboardList,
   HelpCircle,
   Phone,
   Menu,
   X,
   UserPlus,
+  Users
 } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../lib/useAuth';
@@ -44,6 +44,7 @@ const getNavItems = (user) => [
   { id: 'highlights', label: 'Highlights',          icon: Star,          path: '/highlights', hash: '' },
   { id: 'prizes',     label: 'Prizes',              icon: Trophy,        path: '/prizes', hash: '' },
   { id: 'problems',   label: 'Problem Statements',  icon: BookOpen,      path: '/', hash: '#problems' },
+  { id: 'humans',     label: 'Humans',              icon: Users,         path: '/humans', hash: '' },
   { id: 'faq',        label: 'FAQ',                 icon: HelpCircle,    path: '/faq', hash: '' },
   { id: 'contact',    label: 'Contact',             icon: Phone,         path: '/contact', hash: '' },
   { id: 'register',   label: user ? 'Dashboard' : 'Register', icon: UserPlus, path: user ? '/dashboard' : '/register', hash: '' },
@@ -60,6 +61,7 @@ function useActiveSection() {
       '/prizes':     'prizes',
       '/highlights': 'highlights',
       '/partners':   'partners',
+      '/humans':     'humans',
       '/faq':        'faq',
       '/contact':    'contact',
     };
