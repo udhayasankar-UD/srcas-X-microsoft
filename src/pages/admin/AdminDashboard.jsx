@@ -19,6 +19,8 @@ export default function AdminDashboard() {
   const [teams, setTeams] = useState([]);
   const [members, setMembers] = useState([]);
   const [submissions, setSubmissions] = useState([]);
+  const [adminEmail, setAdminEmail] = useState('');
+  const [showEmail, setShowEmail] = useState(false);
 
   const fetchData = useCallback(async () => {
     const [{ data: t }, { data: m }, { data: s }] = await Promise.all([
@@ -36,6 +38,7 @@ export default function AdminDashboard() {
       const { data: adminList } = await supabase.from('admins').select('email');
       const hardcoded = ADMIN_EMAILS;
       const email = session.user.email.trim().toLowerCase();
+      setAdminEmail(email);
       const ok = hardcoded.includes(email) || adminList?.some(a => a.email.trim().toLowerCase() === email);
       if (ok) { setIsAdmin(true); fetchData(); } else { alert("Not admin!"); navigate('/dashboard'); }
       setLoadingAuth(false);
@@ -147,11 +150,16 @@ export default function AdminDashboard() {
             </div>
           </div>
           <div style={{ display:'flex', alignItems:'center', gap:20 }}>
-            <div style={{ display:'flex', alignItems:'center', gap:10, borderLeft:'1px solid '+S.border, paddingLeft:20, cursor:'pointer' }}>
-              <div style={{ width:34, height:34, borderRadius:'50%', background:'#059669', display:'flex', alignItems:'center', justifyContent:'center', color:'#fff', fontWeight:700, fontSize:14 }}>A</div>
+            <div 
+              onClick={() => setShowEmail(!showEmail)}
+              style={{ display:'flex', alignItems:'center', gap:10, borderLeft:'1px solid '+S.border, paddingLeft:20, cursor:'pointer' }}
+            >
+              <div style={{ width:34, height:34, borderRadius:'50%', background:'#059669', display:'flex', alignItems:'center', justifyContent:'center', color:'#fff', fontWeight:700, fontSize:14 }}>
+                {adminEmail ? adminEmail.charAt(0).toUpperCase() : 'A'}
+              </div>
               <div>
                 <div style={{ fontSize:13, fontWeight:700, color:S.t1 }}>Admin User</div>
-                <div style={{ fontSize:11, fontWeight:500, color:S.t2 }}>Super Admin</div>
+                <div style={{ fontSize:11, fontWeight:500, color:S.t2 }}>{showEmail ? adminEmail : 'Super Admin'}</div>
               </div>
             </div>
           </div>

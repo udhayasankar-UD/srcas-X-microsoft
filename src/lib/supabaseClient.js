@@ -10,5 +10,6 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 // Centralized admin emails to avoid repeating them across components
 export const ADMIN_EMAILS = [
   "udteam06@gmail.com",
-  "udhayasankar200721@gmail.com"
+  "udhayasankar200721@gmail.com",
+  "proclub@srcas.ac.in"
 ];
