@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
 
@@ -137,6 +137,19 @@ export default function AuthPage() {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
+
+  useEffect(() => {
+    // Check if there is an OAuth error in the URL hash (from redirect)
+    if (window.location.hash) {
+      const hashParams = new URLSearchParams(window.location.hash.substring(1));
+      if (hashParams.get('error')) {
+        const desc = hashParams.get('error_description');
+        setErrorMsg(desc ? decodeURIComponent(desc).replace(/\+/g, ' ') : 'Authentication was canceled or failed.');
+        // Clean up the URL so the error doesn't persist on reload
+        window.history.replaceState(null, '', window.location.pathname);
+      }
+    }
+  }, []);
 
   const switchMode = (next) => {
     if (next === mode || animating) return;

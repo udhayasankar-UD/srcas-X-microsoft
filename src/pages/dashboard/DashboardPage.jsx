@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabaseClient';
+import { useNavigate } from 'react-router-dom';
 import DashboardLayout from './DashboardLayout';
 import OverviewTab    from './OverviewTab';
 import TeamTab        from './TeamTab';
@@ -9,6 +10,7 @@ import ResourcesTab   from './ResourcesTab';
 import AnnouncementsTab from './AnnouncementsTab';
 
 export default function DashboardPage() {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('overview');
   
   // Data States
@@ -25,17 +27,22 @@ export default function DashboardPage() {
       setLoading(true);
       try {
         const { data: { user }, error: authError } = await supabase.auth.getUser();
-        if (authError) throw authError;
+        
+        if (authError || !user) {
+          setLoading(false);
+          if (window.location.hash.includes('error=')) {
+            navigate('/register' + window.location.hash);
+          } else {
+            navigate('/register');
+          }
+          return;
+        }
+
         setUser(user);
 
         // Fetch announcements
         const { data: annData } = await supabase.from('announcements').select('*').order('created_at', { ascending: false });
         if (annData) setAnnouncements(annData);
-
-        if (!user) {
-          setLoading(false);
-          return;
-        }
 
         const { data: team, error: teamError } = await supabase
           .from('teams')
