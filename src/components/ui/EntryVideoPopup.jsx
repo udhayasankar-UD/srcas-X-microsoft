@@ -111,7 +111,7 @@ export default function EntryVideoPopup() {
                   <div style={{ position: 'relative', aspectRatio: '16/9', background: '#000' }}>
                     <iframe 
                       width="100%" height="100%" 
-                      src="https://www.youtube.com/embed/zy3QF1tcxzM?autoplay=1" 
+                      src="https://www.youtube.com/embed/xHmikF5qzXc?autoplay=1" 
                       title="YouTube video player" 
                       frameBorder="0" 
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
