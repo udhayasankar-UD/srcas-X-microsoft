@@ -40,6 +40,11 @@ export default function DashboardPage() {
 
         setUser(user);
 
+        // Security: Clean up OAuth tokens from the URL if they are present after redirect
+        if (window.location.hash.includes('access_token=')) {
+          window.history.replaceState(null, '', window.location.pathname);
+        }
+
         // Fetch announcements
         const { data: annData } = await supabase.from('announcements').select('*').order('created_at', { ascending: false });
         if (annData) setAnnouncements(annData);

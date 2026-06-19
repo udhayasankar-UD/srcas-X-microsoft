@@ -13,3 +13,12 @@ export const ADMIN_EMAILS = [
   "udhayasankar200721@gmail.com",
   "proclub@srcas.ac.in"
 ];
+
+// Globally wipe sensitive OAuth tokens from the URL instantly upon sign in
+supabase.auth.onAuthStateChange((event, session) => {
+  if (event === 'SIGNED_IN' || event === 'INITIAL_SESSION') {
+    if (typeof window !== 'undefined' && window.location.hash.includes('access_token=')) {
+      window.history.replaceState(null, '', window.location.pathname);
+    }
+  }
+});

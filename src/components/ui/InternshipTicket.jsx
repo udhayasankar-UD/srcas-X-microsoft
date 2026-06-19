@@ -283,8 +283,8 @@ export const InternshipTicket = () => {
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
               <div style={{ width: 68, height: 68, background: "#fff", padding: 4, borderRadius: 6 }}>
                 <img
-                  src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=MSFT-AI-2026-TICKET"
-                  alt="QR Code" style={{ width: "100%", height: "100%", display: "block" }}
+                  src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://www.hackathon2026.in/"
+                  alt="QR Code"
                 />
               </div>
               <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 5 }}>

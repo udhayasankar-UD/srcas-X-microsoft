@@ -137,6 +137,8 @@ export default function AuthPage() {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
+  const [agreedToLead, setAgreedToLead] = useState(false);
+  const [leadCheckbox, setLeadCheckbox] = useState(false);
 
   useEffect(() => {
     // Check if there is an OAuth error in the URL hash (from redirect)
@@ -155,6 +157,8 @@ export default function AuthPage() {
     if (next === mode || animating) return;
     setErrorMsg('');
     setSuccessMsg('');
+    setAgreedToLead(false);
+    setLeadCheckbox(false);
     setAnimating(true);
     setTimeout(() => { setMode(next); setAnimating(false); }, 380);
   };
@@ -244,7 +248,7 @@ export default function AuthPage() {
         {isLogin ? 'Welcome back!' : 'Create an account'}
       </h1>
       <p style={{ fontSize:'13px', color:'#6b7280', margin:'0 0 24px', lineHeight:1.6 }}>
-        {isLogin ? 'Sign in to access your hackathon dashboard and track your submissions.' : 'Register to join SRCAS Hackathon 3.0 in Association with iGenius - Authorized Microsoft Partner and showcase your innovation.'}
+        {isLogin ? 'Sign in to access your dashboard.' : 'Register to join SRCAS Hackathon 3.0.'}
       </p>
 
       {/* ── Social buttons FIRST ── */}
@@ -314,6 +318,80 @@ export default function AuthPage() {
     </form>
   );
 
+  const gatePanel = (
+    <div style={{ display:'flex', flexDirection:'column', justifyContent:'center', padding:'40px 44px', height:'100%', opacity: animating ? 0 : 1, transform: animating ? `translateX(${isLogin ? '-28px' : '28px'})` : 'translateX(0)', transition:'opacity 0.38s ease, transform 0.38s ease' }}>
+      
+      {/* Logo */}
+      <div style={{ display:'flex', alignItems:'center', gap:'10px', marginBottom:'28px' }}>
+        <SDGWheel size={38} innerRatio={0.36} />
+        <div>
+          <div style={{ fontWeight:800, fontSize:'14px', color:'#111', letterSpacing:'0.04em' }}>SDG FOCUSED</div>
+          <div style={{ fontSize:'11px', color:'#6b7280' }}>Building a sustainable future</div>
+        </div>
+      </div>
+
+      <div style={{ background:'#fff', border:'1.5px solid #e5e7eb', borderRadius:'16px', padding:'24px', boxShadow:'0 4px 20px rgba(0,0,0,0.03)' }}>
+        <div style={{ display:'flex', alignItems:'center', gap:'10px', marginBottom:'16px' }}>
+          <div style={{ width:40, height:40, borderRadius:'10px', background: isLogin ? '#e0e7ff' : '#fee2e2', color: isLogin ? '#4f46e5' : '#ef4444', display:'flex', alignItems:'center', justifyContent:'center' }}>
+            {isLogin ? (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            ) : (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+            )}
+          </div>
+          <h2 style={{ fontSize:'18px', fontWeight:800, color:'#111', margin:0 }}>
+            {isLogin ? 'Team Leader Access' : 'Team Leader Registration Only'}
+          </h2>
+        </div>
+
+        {isLogin ? (
+          <p style={{ fontSize:'13px', color:'#4b5563', lineHeight:1.6, margin:'0 0 24px' }}>
+            This portal is intended for <strong>Team Leaders</strong>.<br/>
+            Team members should contact their Team Leader for updates and submissions.
+          </p>
+        ) : (
+          <>
+            <p style={{ fontSize:'13px', color:'#4b5563', lineHeight:1.6, margin:'0 0 16px' }}>
+              Only the <strong>Team Leader</strong> should create an account. After registration, the Team Leader can:
+            </p>
+            <ul style={{ paddingLeft:'20px', margin:'0 0 20px', fontSize:'13px', color:'#4b5563', lineHeight:1.6, display:'flex', flexDirection:'column', gap:'6px' }}>
+              <li>✓ Create a Team</li>
+              <li>✓ Add Team Members</li>
+              <li>✓ Submit Project Details</li>
+              <li>✓ Receive Official Updates</li>
+            </ul>
+            <p style={{ fontSize:'13px', color:'#ef4444', fontWeight:700, margin:'0 0 20px' }}>
+              Team Members do NOT need to register separately.
+            </p>
+
+            <label style={{ display:'flex', alignItems:'flex-start', gap:'10px', cursor:'pointer', marginBottom:'24px', background:'#f9fafb', padding:'12px', borderRadius:'10px', border:'1px solid #e5e7eb' }}>
+              <input type="checkbox" checked={leadCheckbox} onChange={e => setLeadCheckbox(e.target.checked)} style={{ marginTop:'2px', width:'16px', height:'16px', accentColor:'#4C9F38' }} />
+              <span style={{ fontSize:'13px', color:'#111', fontWeight:600, lineHeight:1.4 }}>
+                I confirm that I am the Team Leader of my team.
+              </span>
+            </label>
+          </>
+        )}
+
+        <button 
+          onClick={() => setAgreedToLead(true)}
+          disabled={!isLogin && !leadCheckbox}
+          style={{ width:'100%', padding:'13px', borderRadius:'10px', background: (!isLogin && !leadCheckbox) ? '#e5e7eb' : 'linear-gradient(135deg,#4C9F38,#3d8a2e)', color: (!isLogin && !leadCheckbox) ? '#9ca3af' : '#fff', fontWeight:800, fontSize:'14px', border:'none', cursor: (!isLogin && !leadCheckbox) ? 'not-allowed' : 'pointer', transition:'all 0.2s', boxShadow: (!isLogin && !leadCheckbox) ? 'none' : '0 4px 16px rgba(76,159,56,0.35)' }}
+        >
+          {isLogin ? 'Login' : 'I Understand, Continue Registration'}
+        </button>
+      </div>
+
+      <p style={{ textAlign:'center', fontSize:'13px', color:'#6b7280', margin:'24px 0 0' }}>
+        {isLogin ? "Don't have an account? " : 'Already have an account? '}
+        <button type="button" onClick={() => switchMode(isLogin ? 'signup' : 'login')}
+          style={{ background:'none', border:'none', cursor:'pointer', color:'#4C9F38', fontWeight:700, fontSize:'13px', padding:0 }}>
+          {isLogin ? 'Sign up' : 'Sign in'}
+        </button>
+      </p>
+    </div>
+  );
+
   const cardPanel = (
     <div style={{ padding:'20px', height:'100%', opacity: animating ? 0 : 1, transform: animating ? `translateX(${isLogin ? '28px' : '-28px'})` : 'translateX(0)', transition:'opacity 0.38s ease, transform 0.38s ease' }}>
       <SDGCard mode={mode} />
@@ -336,13 +414,13 @@ export default function AuthPage() {
       <div className="auth-main-card" style={{ width:'100%', maxWidth:'940px', background:'#fff', borderRadius:'28px', boxShadow:'0 24px 80px rgba(0,0,0,0.10)', display:'grid', gridTemplateColumns:'1fr 1fr', minHeight:'600px', overflow:'hidden' }}>
         {isLogin ? (
           <>
-            <div>{formPanel}</div>
+            <div>{agreedToLead ? formPanel : gatePanel}</div>
             <div className="auth-card-wrapper" style={{ background:'linear-gradient(135deg,#f0fdf4,#e8f5e9)' }}>{cardPanel}</div>
           </>
         ) : (
           <>
             <div className="auth-card-wrapper" style={{ background:'linear-gradient(135deg,#f0fdf4,#e8f5e9)' }}>{cardPanel}</div>
-            <div>{formPanel}</div>
+            <div>{agreedToLead ? formPanel : gatePanel}</div>
           </>
         )}
       </div>

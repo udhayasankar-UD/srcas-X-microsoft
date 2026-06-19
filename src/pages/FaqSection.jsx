@@ -8,7 +8,7 @@ const faqs = [
     question: "How do I register?",
     answer: (
       <>
-        You can register through the official hackathon registration portal at{" "}
+        <strong>Note: Only the Team Leader should register!</strong> You can register through the official hackathon registration portal at{" "}
         <a
           href="https://www.hackathon2026.in/register"
           target="_blank"
@@ -17,7 +17,7 @@ const faqs = [
         >
           https://www.hackathon2026.in/register
         </a>
-        .
+        . Once registered, the Team Leader can add their team members directly from their dashboard. Team members do not need separate accounts.
       </>
     ),
   },

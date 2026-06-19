@@ -387,6 +387,7 @@ export default function OverviewTab({ hasTeam, teamData, teamMembers, submission
                     <li style={{ marginBottom: 6 }}>All team members must be currently enrolled college students.</li>
                     <li style={{ marginBottom: 6 }}>Teams must consist of exactly 2 to 4 members. Solo participation is not permitted.</li>
                     <li style={{ marginBottom: 6 }}>All members must belong to the same institution.</li>
+                    <li style={{ marginBottom: 6 }}><strong>Registration:</strong> Only the Team Leader needs to create an account on the hackathon platform. Team members should NOT register separately.</li>
                     <li>Valid college ID cards are mandatory for the offline finale.</li>
                   </ul>
 
