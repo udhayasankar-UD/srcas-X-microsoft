@@ -282,6 +282,7 @@ const DesktopNavBar = ({ user }) => {
       onMouseLeave={handleMouseLeave}
       onMouseMove={({ clientY }) => mouseY.set(clientY)}
     >
+      
       <motion.div
         animate={{ x: expanded ? 0 : -(panelWidth + 20 - peekWidth) }}
         transition={{ type: 'spring', stiffness: 200, damping: 34, mass: 1 }}
