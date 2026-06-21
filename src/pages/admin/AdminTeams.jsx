@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { supabase, ADMIN_EMAILS } from '../../lib/supabaseClient';
+import { supabase } from '../../lib/supabaseClient';
 import { Users, Flag, CheckSquare, Search, ChevronDown, Download, ChevronRight, MoreVertical, ChevronLeft, Trophy } from 'lucide-react';
 
 const S = {
@@ -43,10 +43,7 @@ export default function AdminTeams() {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session?.user) { navigate('/register'); return; }
       const { data: adminList } = await supabase.from('admins').select('email');
-      const hardcoded = ADMIN_EMAILS;
-      const email = session.user.email.trim().toLowerCase();
-      const ok = hardcoded.includes(email) || adminList?.some(a => a.email.trim().toLowerCase() === email);
-      if (ok) { setIsAdmin(true); fetchData(); } else { alert("Not admin!"); navigate('/dashboard'); }
+      if (adminList && adminList.length > 0) { setIsAdmin(true); fetchData(); } else { alert("Not admin!"); navigate('/dashboard'); }
     };
     checkAuth();
   }, [navigate, fetchData]);

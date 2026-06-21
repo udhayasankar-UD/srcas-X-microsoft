@@ -7,12 +7,7 @@ const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'placeholder-a
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-// Centralized admin emails to avoid repeating them across components
-export const ADMIN_EMAILS = [
-  "udteam06@gmail.com",
-  "udhayasankar200721@gmail.com",
-  "proclub@srcas.ac.in"
-];
+
 
 // Globally wipe sensitive OAuth tokens from the URL instantly upon sign in
 supabase.auth.onAuthStateChange((event, session) => {

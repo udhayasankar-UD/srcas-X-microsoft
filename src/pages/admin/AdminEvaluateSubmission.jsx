@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { supabase, ADMIN_EMAILS } from '../../lib/supabaseClient';
+import { supabase } from '../../lib/supabaseClient';
 import { Search, ChevronDown, ChevronRight, ChevronLeft, Check, Leaf, ExternalLink, Bold, Italic, Underline, List, Link2 } from 'lucide-react';
 
 const S = {
@@ -68,11 +68,7 @@ export default function AdminEvaluateSubmission() {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session?.user) { navigate('/register'); return; }
       const { data: adminList } = await supabase.from('admins').select('email');
-      const hardcoded = ADMIN_EMAILS;
-      const email = session.user.email.trim().toLowerCase();
-      setAdminName(email.split('@')[0]);
-      const ok = hardcoded.includes(email) || adminList?.some(a => a.email.trim().toLowerCase() === email);
-      if (ok) { setIsAdmin(true); fetchData(); } else { alert("Not admin!"); navigate('/dashboard'); }
+      if (adminList && adminList.length > 0) { setIsAdmin(true); fetchData(); } else { alert("Not admin!"); navigate('/dashboard'); }
     };
     checkAuth();
   }, [navigate, id]);
