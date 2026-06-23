@@ -401,8 +401,9 @@ export default function OverviewTab({ hasTeam, teamData, teamMembers, submission
                   <ul style={{ paddingLeft: 20, marginBottom: 24 }}>
                     <li style={{ marginBottom: 6 }}><strong>Round 1 (Idea Submission):</strong> Teams must submit a 300-word abstract and the official PPT format.</li>
                     <li style={{ marginBottom: 6 }}><strong>Round 2 (Finale):</strong> Shortlisted teams will present their working prototypes offline at the SRCAS campus.</li>
-                    <li style={{ marginBottom: 6 }}><strong>24-Hour Rule:</strong> All coding and development must take place exclusively during the 24-hour hackathon period.</li>
-                    <li>Bringing pre-written code, using proprietary existing projects, or plagiarism will lead to immediate disqualification.</li>
+                    <li style={{ marginBottom: 6 }}><strong>24-Hour Software Rule:</strong> All software coding and application development must take place exclusively during the 24-hour hackathon period. Bringing pre-written code, using proprietary existing projects, or plagiarism will lead to immediate disqualification.</li>
+                    <li style={{ marginBottom: 6 }}><strong>Hardware & IoT Exception:</strong> If you are building a hardware-based project, you may procure the required devices, assemble, and test them before the Hackathon. However, during the 24-hour event, you are strictly expected to develop the software application, integrate it with your IoT devices, and demonstrate the final connected solution.</li>
+                    <li><strong>Vibe Coding:</strong> "Vibe coding" (using AI-assisted coding tools and LLMs to help build your project) is completely allowed during the 24-hour hacking period.</li>
                   </ul>
 
                   <h3 style={{ color: '#111', fontSize: '1.1rem', fontWeight: 800, letterSpacing: '-0.01em' }}>4. Judging Criteria</h3>

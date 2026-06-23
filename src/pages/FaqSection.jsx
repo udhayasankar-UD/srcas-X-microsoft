@@ -52,9 +52,19 @@ const faqs = [
       "Please bring your laptop, charger, any hardware required for your project, and lots of creativity. Food, refreshments, Wi-Fi, and a comfortable workspace will be provided by the organizers.",
   },
   {
+    question: "Are we allowed to use AI tools or \"vibe code\" during the hackathon?",
+    answer:
+      "Yes! \"Vibe coding\" (using AI assistants to generate and shape your code) is officially allowed during the 24-hour hackathon. We encourage using modern tools to build faster, as long as the actual development and logic are implemented during the event.",
+  },
+  {
+    question: "We are building an IoT/Hardware project. Do we have to build the hardware from scratch during the 24 hours?",
+    answer:
+      "No. Hardware teams may procure their required devices, sensors, and microcontrollers and test them before the hackathon begins. However, during the 24-hour hackathon window, you must develop the software application from scratch, integrate it with your hardware, and demonstrate the fully working IoT solution.",
+  },
+  {
     question: "Can I start working on my project before the event?",
     answer:
-      "No. All project development must begin only after the official hackathon starts. Pre-existing ideas are allowed, but coding, designing, or building the project before the event is not permitted.",
+      "For software projects, no. All coding must start at the event. For hardware projects, you may procure and test devices beforehand, but software integration must happen during the 24 hours.",
   },
   {
     question: "How are the winners selected?",
