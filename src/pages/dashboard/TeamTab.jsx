@@ -516,8 +516,8 @@ export default function TeamTab({ hasTeam, teamData, teamMembers, user, setTeamM
             <div style={{ position: 'absolute', top: 16, bottom: 16, left: 15, width: 2, background: '#f3f4f6', zIndex: 0 }}></div>
 
             {[
-              { num: 1, title: 'Open Statement', desc: 'Choose the problem statement you want to work on.', btn: 'Open Innovation', action: null },
-              { num: 2, title: 'Select SDG Goals', desc: 'Select one or more SDG goals related to your solution.', btn: 'Select SDGs', action: null },
+              { num: 1, title: 'Open Statement', desc: 'Choose the problem statement you want to work on.' },
+              { num: 2, title: 'Select SDG Goals', desc: 'Select one or more SDG goals related to your solution.'},
               { num: 3, title: 'Submit Your Next Big Idea', desc: 'Submit your next step to continue in the hackathon.', btn: 'Go to Submissions', action: 'submission' }
             ].map((step, i) => (
               <div key={i} style={{ display: 'flex', gap: 20, position: 'relative', zIndex: 1 }}>
