@@ -518,7 +518,7 @@ export default function TeamTab({ hasTeam, teamData, teamMembers, user, setTeamM
             {[
               { num: 1, title: 'Open Statement', desc: 'Choose the problem statement you want to work on.' },
               { num: 2, title: 'Select SDG Goals', desc: 'Select one or more SDG goals related to your solution.'},
-              { num: 3, title: 'Submit Your Next Big Idea', desc: 'Submit your next step to continue in the hackathon.', btn: 'Go to Submissions', action: 'submission' }
+              { num: 3, title: 'Submit Your Next Big Idea', desc: 'Submit your next step to continue in the hackathon.'}
             ].map((step, i) => (
               <div key={i} style={{ display: 'flex', gap: 20, position: 'relative', zIndex: 1 }}>
                 <div style={{ width: 32, height: 32, borderRadius: '50%', background: '#fff', border: '2px solid #10b981', color: '#10b981', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 800, flexShrink: 0 }}>
@@ -530,13 +530,7 @@ export default function TeamTab({ hasTeam, teamData, teamMembers, user, setTeamM
                       <div style={{ fontSize: 14, fontWeight: 800, color: '#111', marginBottom: 6 }}>{step.title}</div>
                       <div style={{ fontSize: 12, color: '#6b7280', lineHeight: 1.5 }}>{step.desc}</div>
                     </div>
-                    <button
-                      onClick={() => { if (step.action && setActiveTab) setActiveTab(step.action) }}
-                      style={{ padding: '8px 16px', borderRadius: 8, border: '1.5px solid #e5e7eb', background: '#fff', color: '#374151', fontSize: 12, fontWeight: 700, cursor: 'pointer', transition: 'background 0.2s', whiteSpace: 'nowrap' }}
-                      onMouseEnter={e => e.currentTarget.style.background = '#f9fafb'}
-                      onMouseLeave={e => e.currentTarget.style.background = '#fff'}>
-                      {step.btn}
-                    </button>
+                    
                   </div>
                 </div>
               </div>
