@@ -34,7 +34,7 @@ const faqs = [
   {
     question: "Can team members be from different colleges?",
     answer:
-      "No. Team members must belong to the same college. Cross-college teams are not permitted for SRCAS Hackathon 3.0.",
+      "No. All team members must belong to the same college. However, students from different departments within the same college are allowed to form a team. Cross-college teams are not permitted for SRCAS Hackathon 3.0.",
   },
   {
     question: "Who is eligible to participate in the hackathon?",
