@@ -109,14 +109,14 @@ const PrizesPage = () => {
 
   const outcomes = [
     { icon: '✈️', title: 'Singapore Science & Innovation Competition', desc: 'Top 3 teams represent India at an international competition in Singapore — all expenses fully covered.' },
-    { icon: '💼', title: 'Microsoft Internship', desc: 'Best performers get a fast-track interview for a Microsoft summer internship with dedicated mentorship.' },
+    { icon: '💼', title: 'Global Internship', desc: 'Best performers get a fast-track interview for a Global summer internship with dedicated mentorship.' },
     { icon: '💰', title: 'Cash Prize Pool', desc: '₹1,80,000+ distributed across categories — Grand Prize, Runner-ups, and Track Awards.' },
     { icon: '🧠', title: '1:1 Mentorship', desc: 'Direct mentorship sessions with engineers from Microsoft and Igenius AI throughout the event.' },
     { icon: '🎁', title: 'Goodies & Certificates', desc: 'Swag kits, certificates of participation, and surprise perks for all registered teams.' },
   ];
 
   const tiers = [
-    { rank: '01', title: 'Grand Prize', amount: '₹1,00,000', desc: 'The ultimate recognition for the most innovative and impactful solution. Includes Microsoft internship fast-track.' },
+    { rank: '01', title: 'Grand Prize', amount: '₹1,00,000', desc: 'The ultimate recognition for the most innovative and impactful solution. Includes Global internship fast-track.' },
     { rank: '02', title: 'First Runner Up', amount: '₹50,000', desc: 'For the team that demonstrated exceptional technical skill and a solid product-market fit.' },
     { rank: '03', title: 'Second Runner Up', amount: '₹30,000', desc: 'Awarded for creativity and a unique approach to solving the problem statement.' },
   ];
@@ -131,7 +131,7 @@ const PrizesPage = () => {
     { icon: '💼', title: 'Trackwise best performers will get internships', amount: '' },
   ];
 
-  const tickerItems = ['₹1.8L+ Prize Pool', 'Microsoft Internship', 'Singapore Trip', '1:1 Mentorship', 'Open Innovation', '17 UN SDGs', 'SRCAS 2026', 'Aug 14'];
+  const tickerItems = ['₹1.8L+ Prize Pool', 'Global Internship', 'Singapore Trip', '1:1 Mentorship', 'Open Innovation', '17 UN SDGs', 'SRCAS 2026', 'Aug 14'];
 
   return (
     <div style={{ background: '#fff', color: '#111', fontFamily: "'Plus Jakarta Sans', sans-serif", overflowX: 'hidden' }}>
@@ -298,7 +298,7 @@ const PrizesPage = () => {
               <span style={{ WebkitTextStroke: '2.5px #111', color: 'transparent' }}>trophy.</span>
             </h2>
             <p style={{ fontSize: '1.05rem', color: '#6b7280', maxWidth: 520, marginTop: 14, lineHeight: 1.6 }}>
-              Top 3 teams fly to Singapore. Best performers land Microsoft internships. Everyone ships something real.
+              Top 3 teams fly to Singapore. Best performers land Global internships. Everyone ships something real.
             </p>
           </motion.div>
 

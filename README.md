@@ -22,6 +22,6 @@ Format: Currently open statements. Participants build their own ideas to solve S
 
 3. Prizes & Incentives (The Hook)
 
-Grand Prize: Microsoft Internships for the best performing students.
+Grand Prize: Global Internships for the best performing students.
 
 Perks: "Unexpected/Mystery" benefits for winners, certificates for all, and national-level recognition.

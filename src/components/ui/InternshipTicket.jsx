@@ -233,7 +233,7 @@ export const InternshipTicket = () => {
                 transformStyle: "preserve-3d",
               }}
             >
-              Top three teams will qualify for the Science and Innovation Competition held in Singapore, with all expenses fully covered. Outstanding performers will also receive opportunities for Microsoft internships.
+              Top three teams will qualify for the Science and Innovation Competition held in Singapore, with all expenses fully covered. Outstanding performers will also receive opportunities for Global internships.
             </motion.p>
 
             {/* CTA — pops out the most */}
