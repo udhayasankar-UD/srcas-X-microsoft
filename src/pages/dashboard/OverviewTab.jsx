@@ -66,7 +66,7 @@ export default function OverviewTab({ hasTeam, teamData, teamMembers, submission
   const now = new Date();
   const milestones = [
     { title: 'Team Confirmation', dateStr: '2026-07-25T23:59:59', icon: '👥', desc: 'Form your team and confirm details' },
-    { title: 'Idea Submission', dateStr: '2026-07-25T23:59:59', icon: '💡', desc: 'Submit your 300-word abstract' },
+    { title: 'Idea Submission', dateStr: '2026-07-25T23:59:59', icon: '💡', desc: 'Submit your Idea' },
     { title: 'Shortlist Announced', dateStr: '2026-08-07T12:00:00', icon: '🚩', desc: 'Top teams will be shortlisted' },
     { title: 'Grand Finale', dateStr: '2026-08-14T09:00:00', icon: '🏆', desc: 'Final presentations and winner announcement' }
   ];
@@ -146,7 +146,7 @@ export default function OverviewTab({ hasTeam, teamData, teamMembers, submission
         
 
         {/* Submission Guidelines Video Card */}
-        <a href="https://www.youtube.com" target="_blank" rel="noreferrer" style={{ textDecoration:'none' }}>
+        {/* <a href="https://www.youtube.com" target="_blank" rel="noreferrer" style={{ textDecoration:'none' }}>
           <div style={card({ display:'flex', flexDirection:'column', padding:'20px', cursor:'pointer', height:'100%', border:'1.5px solid #c4b5fd', background:'#f5f3ff' })}>
             <div style={{ display:'flex', alignItems:'center', gap:16, marginBottom:16 }}>
               <div style={{ width:48, height:48, borderRadius:12, background:'#ede9fe', color:'#8b5cf6', display:'flex', alignItems:'center', justifyContent:'center', fontSize:20 }}>📹</div>
@@ -157,7 +157,7 @@ export default function OverviewTab({ hasTeam, teamData, teamMembers, submission
             </div>
             <div style={{ marginTop:'auto', fontSize:13, fontWeight:700, color:'#6d28d9' }}>Watch on YouTube ↗</div>
           </div>
-        </a>
+        </a> */}
 
         {/* Days to Next Milestone Card */}
         <div style={card({ display:'flex', flexDirection:'column', padding:'20px' })}>
@@ -191,7 +191,7 @@ export default function OverviewTab({ hasTeam, teamData, teamMembers, submission
         <div style={card({ display:'flex', flexDirection:'column' })}>
           <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:20 }}>
             <h3 style={{ fontSize:16, fontWeight:800, color:'#111', margin:0 }}>Announcements</h3>
-            <span style={{ fontSize:13, fontWeight:700, color:'#3b82f6', cursor:'pointer' }}>View all</span>
+            
           </div>
           <div style={{ display:'flex', flexDirection:'column', gap:16, flex:1 }}>
             {announcements.length === 0 ? (
@@ -274,7 +274,7 @@ export default function OverviewTab({ hasTeam, teamData, teamMembers, submission
         <div style={card({ display:'flex', flexDirection:'column' })}>
           <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:20 }}>
             <h3 style={{ fontSize:16, fontWeight:800, color:'#111', margin:0 }}>Recent Activity</h3>
-            <span style={{ fontSize:13, fontWeight:700, color:'#3b82f6', cursor:'pointer' }}>View all</span>
+            
           </div>
           <div style={{ display:'flex', flexDirection:'column', gap:16 }}>
             {recentActivities.length > 0 ? recentActivities.map(act => (
@@ -399,7 +399,7 @@ export default function OverviewTab({ hasTeam, teamData, teamMembers, submission
 
                   <h3 style={{ color: '#111', fontSize: '1.1rem', fontWeight: 800, letterSpacing: '-0.01em' }}>3. Submission & Development Rules</h3>
                   <ul style={{ paddingLeft: 20, marginBottom: 24 }}>
-                    <li style={{ marginBottom: 6 }}><strong>Round 1 (Idea Submission):</strong> Teams must submit a 300-word abstract and the official PPT format.</li>
+                    <li style={{ marginBottom: 6 }}><strong>Round 1 (Idea Submission):</strong> Teams must submit a 500-word Project Description and the official PPT format.</li>
                     <li style={{ marginBottom: 6 }}><strong>Round 2 (Finale):</strong> Shortlisted teams will present their working prototypes offline at the SRCAS campus.</li>
                     <li style={{ marginBottom: 6 }}><strong>24-Hour Software Rule:</strong> All software coding and application development must take place exclusively during the 24-hour hackathon period. Bringing pre-written code, using proprietary existing projects, or plagiarism will lead to immediate disqualification.</li>
                     <li style={{ marginBottom: 6 }}><strong>Hardware & IoT Exception:</strong> If you are building a hardware-based project, you may procure the required devices, assemble, and test them before the Hackathon. However, during the 24-hour event, you are strictly expected to develop the software application, integrate it with your IoT devices, and demonstrate the final connected solution.</li>
