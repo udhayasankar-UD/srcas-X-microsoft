@@ -100,7 +100,7 @@ export default function ResourcesTab({ hasTeam, submissions }) {
   const EVENTS = [
     { date:'Jun 21',    event:'Registration',             status:'done',    desc:'Team registration and idea brief.',       time:'All day' },
     { date:'Jul 25',    event:'Team Confirmation',        status: hasTeam ? 'done' : 'active',    desc:'Form your team and confirm details.',     time:'11:59 PM IST' },
-    { date:'Jul 25',    event:'Idea Submission',          status: hasSubmitted ? 'done' : (hasTeam ? 'active' : 'upcoming'),  desc:'300-word abstract of your solution.',     time:'11:59 PM IST' },
+    { date:'Jul 25',    event:'Idea Submission',          status: hasSubmitted ? 'done' : (hasTeam ? 'active' : 'upcoming'),  desc:'500-word Project Description and Idea PPT of your solution.',     time:'11:59 PM IST' },
     { date:'Aug 7',     event:'Shortlist Announced',      status: hasSubmitted ? 'active' : 'upcoming', desc:'Top teams notified via email.',           time:'12:00 PM IST' },
     { date:'Aug 14',    event:'Grand Finale',             status:'upcoming',desc:'Live presentations and prize ceremony.',  time:'09:00 AM IST' },
   ];
