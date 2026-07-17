@@ -192,6 +192,17 @@ const SDGs = [
       'Build an open data aggregator that standardises development metrics from 50+ countries, enabling transparent progress tracking toward the 2030 Agenda.',
     ],
   },
+  {
+    id: 18, num: '', title: 'Example Problem Statements',
+    color: '#19486A',
+    // logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Sustainable_Development_Goal_17Partnerships.svg/960px-Sustainable_Development_Goal_17Partnerships.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail&_=20240924093233',
+    imageUrl: 'https://images.unsplash.com/photo-1589578527966-fdac0f44566c?w=600&q=80',
+    description: 'Strengthen global partnerships for sustainable development.',
+    challenges: [
+      'Create a cross-sector collaboration platform matching NGOs, governments, and startups based on complementary resources and shared SDG targets.',
+      'Build an open data aggregator that standardises development metrics from 50+ countries, enabling transparent progress tracking toward the 2030 Agenda.',
+    ],
+  },
 ];
 
 export default function ProblemStatements() {
@@ -415,7 +426,6 @@ export default function ProblemStatements() {
                 <div
                   key={sdg.id}
                   style={{
-                    // Each slot is exactly the container width — true gallery behavior
                     minWidth: '100%',
                     padding: '0 6vw',
                     boxSizing: 'border-box',
@@ -551,57 +561,190 @@ export default function ProblemStatements() {
                 height: '100%',
                 display: 'flex',
                 gap: 'clamp(20px, 4vw, 40px)',
+                alignItems: 'center',
               }}
               className="bottom-panel-inner"
             >
-              <div style={{ flex: '0 0 30%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px' }}>
-                  <div style={{
-                    width: '64px', height: '64px',
-                    borderRadius: '16px', background: `${activeSDG.color}15`,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  }}>
-                    <img src={activeSDG.logoUrl} alt="Logo" style={{ width: '40px', height: '40px', objectFit: 'contain' }} />
-                  </div>
-                  <div>
-                    <h3 style={{ fontSize: 'clamp(18px, 3vh, 24px)', fontWeight: 800, color: '#111', margin: 0 }}>{activeSDG.title}</h3>
-                    <p style={{ fontSize: 'clamp(12px, 2vh, 14px)', color: activeSDG.color, fontWeight: 700, margin: 0 }}>SDG {activeSDG.num}</p>
-                  </div>
-                </div>
-                <p style={{ fontSize: 'clamp(13px, 2.2vh, 15px)', color: '#555', lineHeight: 1.6, margin: 0 }}>
-                  {activeSDG.description}
-                </p>
-              </div>
 
-              <div style={{ width: '1px', background: '#eee', margin: '0 10px' }} className="panel-divider" />
-
-              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                <p style={{
-                  fontSize: 'clamp(10px, 1.8vh, 11px)', fontWeight: 700, color: '#999',
-                  letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: 'clamp(8px, 2vh, 16px)', margin: 0,
-                }}>
-                  Challenge Statements
-                </p>
-                {/* Open Innovation Note */}
-                  <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start', marginTop: '4px' }}>
+              {activeSDG.id === 18 ? (
+                /* ── Download panel ── */
+                <div style={{ display: 'flex', alignItems: 'center', gap: 40, width: '100%', flexWrap: 'wrap' }}>
+                  {/* Left: icon + title */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 20, flex: '0 0 auto' }}>
                     <div style={{
-                      width: '28px', height: '28px', borderRadius: '50%',
-                      background: '#fef3c7', border: '1.5px solid #fde68a',
+                      width: 64, height: 64, borderRadius: 18,
+                      background: '#111',
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      fontSize: '14px', flexShrink: 0, marginTop: '2px'
+                      flexShrink: 0,
                     }}>
-                      💡
+                      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="12" y1="18" x2="12" y2="12"/>
+                        <polyline points="9 15 12 18 15 15"/>
+                      </svg>
                     </div>
-                    <p style={{ fontSize: 'clamp(12px, 2vh, 14px)', color: '#6b7280', lineHeight: 1.6, margin: 0 }}>
-                      <strong style={{ color: '#111' }}>Open Innovation:</strong> These are just examples! You are completely free to choose your own problem statement as long as it aligns with this SDG.
+                    <div>
+                      <h3 style={{ fontSize: 'clamp(18px, 3vh, 24px)', fontWeight: 900, color: '#111', margin: '0 0 4px', letterSpacing: '-0.02em' }}>
+                        Example Problem Statements
+                      </h3>
+                      <p style={{ fontSize: '13px', color: '#9ca3af', fontWeight: 600, margin: 0 }}>
+                        30 curated challenges
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Divider */}
+                  <div style={{ width: 1, height: 56, background: '#e5e7eb', flexShrink: 0 }} className="panel-divider" />
+
+                  {/* Middle: description */}
+                  <div style={{ flex: 1, minWidth: 200 }}>
+                    <p style={{ fontSize: 'clamp(13px, 2vh, 15px)', color: '#6b7280', lineHeight: 1.7, margin: 0 }}>
+                      These are curated real-world challenges across 30 problem areas — from climate &amp; water to fraud, farming, and public health. Your idea must align with any UN SDG.
                     </p>
                   </div>
 
-              </div>
+                  {/* Right: download button */}
+                  <a
+                    href="/problem-statement-2026.pdf"
+                    download="Hackathon-Problem-Statement-2026.pdf"
+                    style={{
+                      display: 'inline-flex', alignItems: 'center', gap: 8,
+                      padding: '13px 26px', borderRadius: 100,
+                      background: '#111', color: '#fff',
+                      fontSize: '0.85rem', fontWeight: 800,
+                      letterSpacing: '0.04em', textDecoration: 'none',
+                      boxShadow: '0 4px 16px rgba(0,0,0,0.15)',
+                      transition: 'background 0.2s, transform 0.15s',
+                      flexShrink: 0,
+                    }}
+                    onMouseEnter={e => { e.currentTarget.style.background = '#333'; e.currentTarget.style.transform = 'scale(1.04)'; }}
+                    onMouseLeave={e => { e.currentTarget.style.background = '#111'; e.currentTarget.style.transform = 'scale(1)'; }}
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                      <polyline points="7 10 12 15 17 10"/>
+                      <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                    Download PDF
+                  </a>
+                </div>
+              ) : (
+                /* ── Normal SDG panel ── */
+                <>
+                  <div style={{ flex: '0 0 30%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px' }}>
+                      <div style={{
+                        width: '64px', height: '64px',
+                        borderRadius: '16px', background: `${activeSDG.color}15`,
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      }}>
+                        <img src={activeSDG.logoUrl} alt="Logo" style={{ width: '40px', height: '40px', objectFit: 'contain' }} />
+                      </div>
+                      <div>
+                        <h3 style={{ fontSize: 'clamp(18px, 3vh, 24px)', fontWeight: 800, color: '#111', margin: 0 }}>{activeSDG.title}</h3>
+                        <p style={{ fontSize: 'clamp(12px, 2vh, 14px)', color: activeSDG.color, fontWeight: 700, margin: 0 }}>SDG {activeSDG.num}</p>
+                      </div>
+                    </div>
+                    <p style={{ fontSize: 'clamp(13px, 2.2vh, 15px)', color: '#555', lineHeight: 1.6, margin: 0 }}>
+                      {activeSDG.description}
+                    </p>
+                  </div>
+
+                  <div style={{ width: '1px', background: '#eee', margin: '0 10px' }} className="panel-divider" />
+
+                  <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                    <p style={{
+                      fontSize: 'clamp(10px, 1.8vh, 11px)', fontWeight: 700, color: '#999',
+                      letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: 'clamp(8px, 2vh, 16px)', margin: 0,
+                    }}>
+                      Challenge Statements
+                    </p>
+                    <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start', marginTop: '4px' }}>
+                      <div style={{
+                        width: '28px', height: '28px', borderRadius: '50%',
+                        background: '#fef3c7', border: '1.5px solid #fde68a',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        fontSize: '14px', flexShrink: 0, marginTop: '2px'
+                      }}>
+                        💡
+                      </div>
+                      <p style={{ fontSize: 'clamp(12px, 2vh, 14px)', color: '#6b7280', lineHeight: 1.6, margin: 0 }}>
+                        <strong style={{ color: '#111' }}>Open Innovation:</strong> These are just examples! You are completely free to choose your own problem statement as long as it aligns with this SDG.
+                      </p>
+                    </div>
+                  </div>
+                </>
+              )}
+
             </motion.div>
           </AnimatePresence>
         </div>
       </div>
+
+      {/* ── Mobile-only standalone download card (above Event Guidelines) ── */}
+      {isMobile && (
+        <div style={{ padding: '32px 6vw 8px' }}>
+          <a
+            href="/problem-statement-2026.pdf"
+            download="Hackathon-Problem-Statement-2026.pdf"
+            style={{
+              display: 'flex', alignItems: 'center', gap: 16,
+              padding: '20px 20px',
+              background: '#111',
+              borderRadius: 20,
+              textDecoration: 'none',
+              boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
+              position: 'relative', overflow: 'hidden',
+            }}
+          >
+            {/* Grid texture */}
+            <div style={{
+              position: 'absolute', inset: 0, opacity: 0.07,
+              backgroundImage: 'linear-gradient(rgba(255,255,255,1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px)',
+              backgroundSize: '20px 20px', pointerEvents: 'none',
+            }} />
+            {/* Icon */}
+            <div style={{
+              width: 52, height: 52, borderRadius: 14, flexShrink: 0,
+              background: 'rgba(255,255,255,0.1)',
+              border: '1.5px solid rgba(255,255,255,0.15)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              position: 'relative', zIndex: 1,
+            }}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="12" y1="18" x2="12" y2="12"/>
+                <polyline points="9 15 12 18 15 15"/>
+              </svg>
+            </div>
+            {/* Text */}
+            <div style={{ flex: 1, position: 'relative', zIndex: 1 }}>
+              <p style={{ fontSize: '1rem', fontWeight: 800, color: '#fff', margin: '0 0 3px', letterSpacing: '-0.01em' }}>
+                Example Problem Statements
+              </p>
+              <p style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.5)', margin: 0 }}>
+                30 curated challenges
+              </p>
+            </div>
+            {/* Download pill */}
+            <div style={{
+              display: 'flex', alignItems: 'center', gap: 5, flexShrink: 0,
+              background: '#fff', color: '#111', borderRadius: 100,
+              padding: '7px 14px', fontSize: '12px', fontWeight: 800,
+              position: 'relative', zIndex: 1,
+            }}>
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              PDF
+            </div>
+          </a>
+        </div>
+      )}
 
       <style>{`
         .mobile-filmstrip::-webkit-scrollbar { display: none; }
