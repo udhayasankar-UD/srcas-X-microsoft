@@ -333,7 +333,7 @@ export default function Footer() {
               {[
                 { icon: LinkedinIcon, href: "https://www.linkedin.com/company/proclub-srcas", label: "LinkedIn" },
                 { icon: InstagramIcon, href: "https://www.instagram.com/proclub_srcas", label: "Instagram" },
-                { icon: WhatsAppIcon, href: "https://chat.whatsapp.com/BXFPp6PTWk4I6wG7UMCbAP", label: "WhatsApp" },
+                // { icon: WhatsAppIcon, href: "https://chat.whatsapp.com/BXFPp6PTWk4I6wG7UMCbAP", label: "WhatsApp" },
               ].map(({ icon: Icon, href, label }) => (
                 <MagneticButton
                   key={label}

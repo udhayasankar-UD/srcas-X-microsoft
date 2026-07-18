@@ -129,7 +129,7 @@ const ContactSection = () => {
                             Hacker experience is our priority! Have questions, need assistance, or just want to chat about your ideas? Our coordinators are here for you.
                         </motion.p>
 
-                        <motion.a 
+                        {/* <motion.a 
                             variants={fadeInUp}
                             href="https://chat.whatsapp.com/BXFPp6PTWk4I6wG7UMCbAP"
                             target="_blank"
@@ -164,7 +164,7 @@ const ContactSection = () => {
                             <div style={{ marginLeft: '12px', color: '#9ca3af' }}>
                                 <ExternalLink size={18} />
                             </div>
-                        </motion.a>
+                        </motion.a> */}
                     </motion.div>
 
                     <motion.div initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 0.6 }} style={{ display: 'flex', justifyContent: 'center' }}>

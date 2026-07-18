@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import OfficialPPT from '../../assets/PPT/SRCAS HACKATHON 3.0.pptx';
+import ProblemStatementPDF from '../../assets/PS_example/Hackathon Problem Statement 2026.pdf';
 
 const RESOURCES = [
   { icon: '📝', label: 'Official PPT Template', desc: 'Download the required presentation format', tag: 'PPTX', href: OfficialPPT, download: 'SRCAS_HACKATHON_3.0_Template.pptx', color: '#4C9F38' },
   { icon: '📄', label: 'Hackathon Rulebook', desc: 'Official rules and judging criteria', tag: 'PDF', href: '#', color: '#E5243B' },
+  { icon: '🧩', label: 'Sample Problem Statements', desc: 'Download the sample problem statements for 2026', tag: 'PDF', href: ProblemStatementPDF, download: 'Hackathon-Problem-Statement-2026.pdf', color: '#8b5cf6' },
   { icon: '🎯', label: 'Problem Statements', desc: 'Explore all 17 SDG challenges', tag: 'Link', href: '/#problems', color: '#E5243B' },
-  { icon: '📱', label: 'Whatsapp Community', desc: 'Connect with organizers all detail share there', tag: 'Link', href: 'https://chat.whatsapp.com/BXFPp6PTWk4I6wG7UMCbAP', color: '#3b82f6' },
+  // { icon: '📱', label: 'Whatsapp Community', desc: 'Connect with organizers all detail share there', tag: 'Link', href: 'https://chat.whatsapp.com/BXFPp6PTWk4I6wG7UMCbAP', color: '#3b82f6' },
   { icon: '🏆', label: 'Prize Details', desc: 'Learn about the cash prizes & awards', tag: 'Link', href: '/#prizes', color: '#f59e0b' },
   // { icon:'📹', label:'Submission Guidelines',     desc:'Guidelines for submission',         tag:'Video',  href:'#', color:'#8b5cf6' },
 ];

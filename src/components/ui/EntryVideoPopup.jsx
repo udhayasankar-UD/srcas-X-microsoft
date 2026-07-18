@@ -14,7 +14,7 @@ export default function EntryVideoPopup() {
   }, []);
 
   const closeVideo = () => {
-    setPopupState('whatsapp');
+    setPopupState('hidden');
   };
 
   const closeWhatsapp = () => {
@@ -149,6 +149,7 @@ export default function EntryVideoPopup() {
                 </motion.div>
               )}
 
+//popup whatsapp card 
               {popupState === 'whatsapp' && (
                 <motion.div
                   key="whatsapp-modal"
@@ -169,7 +170,7 @@ export default function EntryVideoPopup() {
                     <X size={16} />
                   </button>
                   
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: 16 }}>
+                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: 16 }}>
                     <div style={{ width: 64, height: 64, background: '#dcfce7', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#16a34a' }}>
                       <MessagesSquare size={32} />
                     </div>
@@ -205,10 +206,10 @@ export default function EntryVideoPopup() {
                     >
                       Maybe later
                     </button>
-                  </div>
+                  </div> 
                 </motion.div>
               )}
-            </AnimatePresence>
+            </AnimatePresence> 
           </div>
           
           <style>{`
