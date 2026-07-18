@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { supabase } from '../../lib/supabaseClient';
 
 const SDG_COLORS = ['#E5243B','#DDA63A','#4C9F38','#C5192D','#FF3A21','#26BDE2','#FCC30B','#A21942','#FD6925','#DD1367','#FD9D24','#BF8B2E','#3F7E44','#0A97D9','#56C02B','#00689D','#19486A'];
@@ -188,6 +188,11 @@ export default function DashboardLayout({ activeTab, setActiveTab, children, has
             </div>
             
             <div style={{ padding:'20px 24px', borderTop:'1px solid #f3f4f6', display:'flex', flexDirection:'column', gap:12 }}>
+              <div style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:16, fontSize:12, fontWeight:600 }}>
+                <Link to="/terms" onClick={() => setShowProfile(false)} style={{ color:'#9ca3af', textDecoration:'none', transition:'color 0.2s' }} onMouseEnter={e => e.currentTarget.style.color='#4C9F38'} onMouseLeave={e => e.currentTarget.style.color='#9ca3af'}>Terms & Conditions</Link>
+                <span style={{ color:'#d1d5db' }}>|</span>
+                <Link to="/privacy" onClick={() => setShowProfile(false)} style={{ color:'#9ca3af', textDecoration:'none', transition:'color 0.2s' }} onMouseEnter={e => e.currentTarget.style.color='#4C9F38'} onMouseLeave={e => e.currentTarget.style.color='#9ca3af'}>Privacy Policy</Link>
+              </div>
               <button onClick={() => navigate('/')} style={{ padding:'12px 18px', borderRadius:10, border:'1.5px solid #e5e7eb', background:'#fff', fontWeight:700, color:'#374151', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', gap:8, width:'100%', transition:'all 0.2s' }}
                 onMouseEnter={e => e.currentTarget.style.background='#f9fafb'} onMouseLeave={e => e.currentTarget.style.background='#fff'}>
                 <span style={{ fontSize:16, color:'#6b7280' }}>←</span> Back to Site

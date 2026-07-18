@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 const EVENTS = [
   { date:'Jun 7–21',  event:'Registration Open',        status:'done',    desc:'Team registration and idea brief.',       time:'All day' },
-  { date:'Jul 25',    event:'Idea Submission Deadline', status:'active',  desc:'300-word abstract of your solution.',     time:'11:59 PM IST' },
+  { date:'Jul 25',    event:'Idea Submission Deadline', status:'active',  desc:'500-word Project Description of your solution.',     time:'11:59 PM IST' },
   { date:'Aug 7',     event:'Shortlist Announced',      status:'upcoming',desc:'Top 30 teams notified via email.',        time:'12:00 PM IST' },
   { date:'Aug 14',    event:'Grand Finale & Awards',    status:'upcoming',desc:'Live presentations and prize ceremony.',  time:'09:00 AM IST' },
 ];

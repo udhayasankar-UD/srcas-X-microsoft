@@ -23,6 +23,7 @@ import AdminEvaluations from './pages/admin/AdminEvaluations';
 import AdminEvaluateSubmission from './pages/admin/AdminEvaluateSubmission';
 import AdminSubmissions from './pages/admin/AdminSubmissions';
 import AdminAnnouncements from './pages/admin/AdminAnnouncements';
+import LegalPage from './pages/LegalPage';
 
 /**
  * ScrollToTop Component
@@ -124,6 +125,8 @@ function App() {
               <Route path="/humans" element={<HumansPage />} />
               <Route path="/faq" element={<FaqSection />} />
               <Route path="/contact" element={<ContactSection />} />
+              <Route path="/terms" element={<LegalPage />} />
+              <Route path="/privacy" element={<LegalPage />} />
             </Routes>
             <Footer />
           </div>

@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabaseClient';
-import { Users, Flag, FileText, CheckSquare, Shield, Search, ChevronDown  , Megaphone, ChevronRight } from 'lucide-react';
+import { Users, Flag, FileText, CheckSquare, Shield, Search, ChevronDown, Megaphone, ChevronRight } from 'lucide-react';
 
 // Style constants
 const S = {
@@ -9,8 +9,6 @@ const S = {
   t1: '#111827', t2: '#6B7280', t3: '#9CA3AF', green: '#059669',
   activeBg: '#EEE8FF', radius: '14px', pad: '24px', gap: '20px',
 };
-
-
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
@@ -21,12 +19,23 @@ export default function AdminDashboard() {
   const [submissions, setSubmissions] = useState([]);
   const [adminEmail, setAdminEmail] = useState('');
   const [showEmail, setShowEmail] = useState(false);
+  const [exactCounts, setExactCounts] = useState({ teams: 0, members: 0, subs: 0, evals: 0 });
 
   const fetchData = useCallback(async () => {
+    // 1. Fetch exact counts (instant, no data download)
+    const [cT, cM, cS, cE] = await Promise.all([
+      supabase.from('teams').select('*', { count: 'exact', head: true }),
+      supabase.from('team_members').select('*', { count: 'exact', head: true }),
+      supabase.from('submissions').select('*', { count: 'exact', head: true }),
+      supabase.from('teams').select('*', { count: 'exact', head: true }).gt('score', 0)
+    ]);
+    setExactCounts({ teams: cT.count || 0, members: cM.count || 0, subs: cS.count || 0, evals: cE.count || 0 });
+
+    // 2. Fetch data for charts & tables
     const [{ data: t }, { data: m }, { data: s }] = await Promise.all([
       supabase.from('teams').select('*').order('created_at', { ascending: false }),
-      supabase.from('team_members').select('*'),
-      supabase.from('submissions').select('*'),
+      supabase.from('team_members').select('*').order('created_at', { ascending: false }),
+      supabase.from('submissions').select('*').order('created_at', { ascending: false }),
     ]);
     if (t) setTeams(t); if (m) setMembers(m); if (s) setSubmissions(s);
   }, []);
@@ -43,8 +52,6 @@ export default function AdminDashboard() {
     checkAuth();
   }, [navigate, fetchData]);
 
-
-
   // eslint-disable-next-line no-unused-vars
   const exportCSV = () => {
     let csv = "data:text/csv;charset=utf-8,Team,Status,Score,Name,Email,Phone,College,Dept,Year\n";
@@ -58,7 +65,6 @@ export default function AdminDashboard() {
     a.download = "hackathon_export.csv";
     document.body.appendChild(a); a.click(); document.body.removeChild(a);
   };
-
 
   const getTrend = useCallback((arr, dateField = 'created_at') => {
     const now = new Date();
@@ -77,10 +83,10 @@ export default function AdminDashboard() {
   }, []);
 
   const statCards = [
-    { title: 'Total Teams', value: teams.length, trend: getTrend(teams), color: '#6C4EFF', bg: '#EEE8FF' },
-    { title: 'Total Participants', value: members.length, trend: getTrend(members), color: '#059669', bg: '#D1FAE5' },
-    { title: 'Submissions', value: submissions.length, trend: getTrend(submissions), color: '#D97706', bg: '#FEF3C7' },
-    { title: 'Evaluations', value: teams.filter(t => t.score > 0).length, trend: getTrend(teams.filter(t => t.score > 0)), color: '#2563EB', bg: '#DBEAFE' },
+    { title: 'Total Teams', value: exactCounts.teams, trend: getTrend(teams), color: '#6C4EFF', bg: '#EEE8FF' },
+    { title: 'Total Participants', value: exactCounts.members, trend: getTrend(members), color: '#059669', bg: '#D1FAE5' },
+    { title: 'Submissions', value: exactCounts.subs, trend: getTrend(submissions), color: '#D97706', bg: '#FEF3C7' },
+    { title: 'Evaluations', value: exactCounts.evals, trend: getTrend(teams.filter(t => t.score > 0)), color: '#2563EB', bg: '#DBEAFE' },
   ];
 
   const chartsData = useMemo(() => {
@@ -108,7 +114,7 @@ export default function AdminDashboard() {
     }
     
     const getPathData = (counts) => {
-      const maxVal = Math.max(...counts, 4); // Minimum max is 4
+      const maxVal = Math.max(...counts, 4);
       const points = counts.map((count, i) => {
         const x = (i / (days - 1)) * 800;
         const y = 200 - (count / maxVal) * 180;
@@ -166,8 +172,6 @@ export default function AdminDashboard() {
         <div style={{ flex:1, overflowY:'auto', padding:S.pad }}>
           <div style={{ display:'flex', flexDirection:'column', gap:S.gap }}>
 
-            
-
             {/* STAT CARDS */}
             <div style={{ display:'grid', gridTemplateColumns:'repeat(4, 1fr)', gap:S.gap }}>
               {statCards.map((c, i) => (
@@ -184,7 +188,7 @@ export default function AdminDashboard() {
 
             {/* CHARTS ROW */}
             <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:S.gap, minHeight:380 }}>
-              {/* Line Chart */}
+              {/* Registration Chart */}
               <div style={{ background:S.card, border:'1px solid '+S.border, borderRadius:S.radius, padding:S.pad, boxShadow:'0 1px 3px rgba(0,0,0,.04)', display:'flex', flexDirection:'column' }}>
                 <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:20 }}>
                   <h3 style={{ fontSize:15, fontWeight:700, margin:0 }}>Registration Graph</h3>
@@ -208,10 +212,10 @@ export default function AdminDashboard() {
                 </div>
                 <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:12, marginTop:16 }}>
                   {[
-                    { dot:'#6C4EFF', label:'Total Users', val: members.length },
-                    { dot:'#D97706', label:'Total Teams', val: teams.length },
-                    { dot:'#059669', label:'Avg Team Size', val: teams.length ? (members.length / teams.length).toFixed(1) : 0 },
-                    { dot:'#2563EB', label:'Submissions', val: submissions.length },
+                    { dot:'#6C4EFF', label:'Total Users', val: exactCounts.members },
+                    { dot:'#D97706', label:'Total Teams', val: exactCounts.teams },
+                    { dot:'#059669', label:'Avg Team Size', val: exactCounts.teams ? (exactCounts.members / exactCounts.teams).toFixed(1) : 0 },
+                    { dot:'#2563EB', label:'Submissions', val: exactCounts.subs },
                   ].map((s,i) => (
                     <div key={i} style={{ background:'#FAFAFA', border:'1px solid #F1F5F9', borderRadius:10, padding:'10px 12px' }}>
                       <div style={{ display:'flex', alignItems:'center', gap:6, marginBottom:4 }}>
@@ -224,6 +228,7 @@ export default function AdminDashboard() {
                 </div>
               </div>
 
+              {/* Submissions Chart */}
               <div style={{ background:S.card, border:'1px solid '+S.border, borderRadius:S.radius, padding:S.pad, boxShadow:'0 1px 3px rgba(0,0,0,.04)', display:'flex', flexDirection:'column' }}>
                 <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:20 }}>
                   <h3 style={{ fontSize:15, fontWeight:700, margin:0 }}>Submissions Graph</h3>
@@ -247,7 +252,7 @@ export default function AdminDashboard() {
                 </div>
                 <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:12, marginTop:16 }}>
                   {[
-                    { dot:'#3b82f6', label:'Submitted', val: submissions.length },
+                    { dot:'#3b82f6', label:'Submitted', val: exactCounts.subs },
                     { dot:'#eab308', label:'Pending', val: teams.filter(t => t.status === 'Pending').length },
                     { dot:'#8b5cf6', label:'Shortlisted', val: teams.filter(t => t.status === 'Shortlisted').length },
                     { dot:'#ef4444', label:'Rejected', val: teams.filter(t => t.status === 'Rejected').length },
@@ -269,8 +274,7 @@ export default function AdminDashboard() {
               {/* Recent Submissions */}
               <div style={{ background:S.card, border:'1px solid '+S.border, borderRadius:S.radius, boxShadow:'0 1px 3px rgba(0,0,0,.04)', overflow:'hidden' }}>
                 <div style={{ padding:'18px 22px', borderBottom:'1px solid #F1F5F9', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
-                  <h3 style={{ fontSize:15, fontWeight:700, margin:0 }}>Recent Submissions</h3>
-                  <span style={{ fontSize:11, fontWeight:700, color:S.primary, cursor:'pointer' }}>View all</span>
+                  <h3 style={{ fontSize:15, fontWeight:700, margin:0 }}>Recently Created Team</h3>
                 </div>
                 <table style={{ width:'100%', borderCollapse:'collapse', fontSize:12 }}>
                   <thead>
@@ -299,9 +303,6 @@ export default function AdminDashboard() {
                             <span style={{ ...st, padding:'4px 10px', borderRadius:6, fontSize:10, fontWeight:700, display:'inline-block' }}>
                               {team.status === 'Pending' ? 'Under Review' : team.status || 'Submitted'}
                             </span>
-                          </td>
-                          <td style={{ padding:'14px 18px', textAlign:'center' }}>
-
                           </td>
                         </tr>
                       );
@@ -342,4 +343,3 @@ export default function AdminDashboard() {
     </>
   );
 }
-

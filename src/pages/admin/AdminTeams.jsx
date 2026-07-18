@@ -26,15 +26,12 @@ export default function AdminTeams() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
+  const [totalTeamsDB, setTotalTeamsDB] = useState(0);
+  const [totalFilteredCount, setTotalFilteredCount] = useState(0);
+
   const fetchData = useCallback(async () => {
-    const [{ data: t }, { data: m }, { data: s }] = await Promise.all([
-      supabase.from('teams').select('*').order('created_at', { ascending: false }),
-      supabase.from('team_members').select('*'),
-      supabase.from('submissions').select('team_id, category')
-    ]);
-    if (t) setTeams(t);
-    if (m) setMembers(m);
-    if (s) setSubmissions(s);
+    const { count: total } = await supabase.from('teams').select('*', { count: 'exact', head: true });
+    setTotalTeamsDB(total || 0);
     setLoading(false);
   }, []);
 
@@ -48,7 +45,42 @@ export default function AdminTeams() {
     checkAuth();
   }, [navigate, fetchData]);
 
+  const buildQuery = (isExport = false) => {
+    let query = supabase.from('teams').select('*', { count: 'exact' });
+    if (searchTerm) {
+      query = query.ilike('team_name', `%${searchTerm}%`);
+    }
+    if (!isExport) {
+      const from = (currentPage - 1) * itemsPerPage;
+      const to = from + itemsPerPage - 1;
+      query = query.range(from, to);
+    }
+    return query.order('created_at', { ascending: false });
+  };
 
+  useEffect(() => {
+    if (loading || !isAdmin) return;
+    const fetchPage = async () => {
+      const query = buildQuery(false);
+      const { data: pageTeams, count } = await query;
+      if (pageTeams) {
+        setTeams(pageTeams);
+        const teamIds = pageTeams.map(t => t.id);
+        if (teamIds.length > 0) {
+          const [{ data: m }, { data: s }] = await Promise.all([
+            supabase.from('team_members').select('*').in('team_id', teamIds),
+            supabase.from('submissions').select('team_id, category').in('team_id', teamIds)
+          ]);
+          if (m) setMembers(m);
+          if (s) setSubmissions(s);
+        } else {
+          setMembers([]); setSubmissions([]);
+        }
+      }
+      if (count !== null) setTotalFilteredCount(count);
+    };
+    fetchPage();
+  }, [loading, isAdmin, currentPage, searchTerm]);
 
   if (loading) return <div style={{minHeight:'100vh',display:'flex',alignItems:'center',justifyContent:'center',background:S.bg}}><div style={{width:40,height:40,border:'3px solid '+S.primary,borderTopColor:'transparent',borderRadius:'50%',animation:'spin 1s linear infinite'}}/></div>;
   if (!isAdmin) return null;
@@ -63,22 +95,41 @@ export default function AdminTeams() {
     }
   };
 
-  const filteredTeams = teams.filter(t => {
-    const matchSearch = t.team_name?.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchSearch;
-  });
+  const totalPages = Math.ceil(totalFilteredCount / itemsPerPage);
+  const currentTeams = teams;
 
-  const totalPages = Math.ceil(filteredTeams.length / itemsPerPage);
-  const currentTeams = filteredTeams.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  const getPageNumbers = () => {
+    const pages = [];
+    if (totalPages <= 7) {
+      for (let i = 1; i <= totalPages; i++) pages.push(i);
+    } else {
+      if (currentPage <= 4) {
+        for (let i = 1; i <= 5; i++) pages.push(i);
+        pages.push('...');
+        pages.push(totalPages);
+      } else if (currentPage >= totalPages - 3) {
+        pages.push(1);
+        pages.push('...');
+        for (let i = totalPages - 4; i <= totalPages; i++) pages.push(i);
+      } else {
+        pages.push(1);
+        pages.push('...');
+        for (let i = currentPage - 1; i <= currentPage + 1; i++) pages.push(i);
+        pages.push('...');
+        pages.push(totalPages);
+      }
+    }
+    return pages;
+  };
 
-  const exportCSV = () => {
-    let csv = "data:text/csv;charset=utf-8,Team,Track,Lead Name,Lead Email,Members Count,Status,Registered On\n";
-    filteredTeams.forEach(t => {
-      const sub = submissions.find(s => s.team_id === t.id);
-      const track = sub?.category || 'General';
-      const lead = members.find(m => m.id === t.leader_id);
-      const memberCount = members.filter(m => m.team_id === t.id).length;
-      csv += `"${t.team_name || ''}","${track}","${lead?.full_name || ''}","${lead?.email || ''}","${memberCount}","${t.status || 'Active'}","${t.created_at || ''}"\n`;
+  const exportCSV = async () => {
+    const query = buildQuery(true);
+    const { data } = await query;
+    if (!data) return;
+
+    let csv = "data:text/csv;charset=utf-8,Team,Status,Registered On\n";
+    data.forEach(t => {
+      csv += `"${t.team_name || ''}","${t.status || 'Active'}","${t.created_at || ''}"\n`;
     });
     const a = document.createElement("a");
     a.href = encodeURI(csv);
@@ -146,17 +197,17 @@ export default function AdminTeams() {
                 <table style={{ width:'100%', borderCollapse:'collapse', fontSize:13 }}>
                   <thead>
                     <tr style={{ background:'#FAFAFA', borderBottom:'1px solid '+S.border }}>
-                      {['Team', 'Team Lead', 'Members', 'Registered On'].map(h => (
+                      {['S.No', 'Team', 'Team Lead', 'Members', 'Registered On'].map(h => (
                         <th key={h} style={{ padding:'16px 20px', fontWeight:600, color:S.t2, textAlign:'left' }}>{h}</th>
                       ))}
                     </tr>
                   </thead>
                   <tbody>
-                    {currentTeams.map(t => {
+                    {currentTeams.map((t, index) => {
                       const sub = submissions.find(s => s.team_id === t.id);
                       const track = sub?.category || 'General';
                       const teamMembers = members.filter(m => m.team_id === t.id);
-                      const lead = teamMembers[0]; // The first member is typically the creator/leader
+                      const lead = teamMembers.find(m => m.is_leader === true) || teamMembers[0];
                       
                       const avatarColors = [
                         {bg: '#EEE8FF', text: '#6C4EFF'}, {bg: '#DBEAFE', text: '#2563EB'},
@@ -190,6 +241,9 @@ export default function AdminTeams() {
 
                       return (
                         <tr key={t.id} style={{ borderBottom:'1px solid #F8FAFC' }}>
+                          <td style={{ padding:'16px 20px', color:S.t2, fontSize:12, fontWeight:600 }}>
+                            {(currentPage - 1) * itemsPerPage + index + 1}
+                          </td>
                           <td style={{ padding:'16px 20px' }}>
                             <div style={{ display:'flex', alignItems:'center', gap:12 }}>
                               <div style={{ width:36, height:36, borderRadius:'8px', background:ac.bg, color:ac.text, display:'flex', alignItems:'center', justifyContent:'center', fontWeight:700, fontSize:13 }}>
@@ -242,13 +296,17 @@ export default function AdminTeams() {
               </div>
 
               <div style={{ padding:'16px 20px', borderTop:'1px solid '+S.border, display:'flex', justifyContent:'space-between', alignItems:'center', fontSize:13 }}>
-                <div style={{ color:S.t2, fontWeight:500 }}>Showing {filteredTeams.length === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, filteredTeams.length)} of {filteredTeams.length} teams</div>
+                <div style={{ color:S.t2, fontWeight:500 }}>Showing {totalFilteredCount === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, totalFilteredCount)} of {totalFilteredCount} teams</div>
                 {totalPages > 1 && (
                   <div style={{ display:'flex', alignItems:'center', gap:6 }}>
                     <button onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1} style={{ background:S.card, border:'1px solid '+S.border, borderRadius:8, width:32, height:32, display:'flex', alignItems:'center', justifyContent:'center', color: currentPage === 1 ? S.border : S.t3, cursor: currentPage === 1 ? 'default' : 'pointer' }}><ChevronLeft size={14}/></button>
                     
-                    {Array.from({length: totalPages}, (_, i) => i + 1).map(p => (
-                      <button key={p} onClick={() => setCurrentPage(p)} style={{ background: currentPage === p ? '#EEE8FF' : S.card, border: currentPage === p ? 'none' : '1px solid '+S.border, borderRadius:8, width:32, height:32, display:'flex', alignItems:'center', justifyContent:'center', color: currentPage === p ? S.primary : S.t2, fontWeight: currentPage === p ? 700 : 600, cursor:'pointer' }}>{p}</button>
+                    {getPageNumbers().map((p, idx) => (
+                      p === '...' ? (
+                        <span key={`ellipsis-${idx}`} style={{ color:S.t3, padding:'0 4px', fontWeight:600 }}>...</span>
+                      ) : (
+                        <button key={p} onClick={() => setCurrentPage(p)} style={{ background: currentPage === p ? '#EEE8FF' : S.card, border: currentPage === p ? 'none' : '1px solid '+S.border, borderRadius:8, width:32, height:32, display:'flex', alignItems:'center', justifyContent:'center', color: currentPage === p ? S.primary : S.t2, fontWeight: currentPage === p ? 700 : 600, cursor:'pointer' }}>{p}</button>
+                      )
                     ))}
                     
                     <button onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages} style={{ background:S.card, border:'1px solid '+S.border, borderRadius:8, width:32, height:32, display:'flex', alignItems:'center', justifyContent:'center', color: currentPage === totalPages ? S.border : S.t3, cursor: currentPage === totalPages ? 'default' : 'pointer' }}><ChevronRight size={14}/></button>

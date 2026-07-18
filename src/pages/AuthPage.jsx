@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
+import { sanitizeInput, isValidEmail, checkLockout, getProgressiveDelay, recordFailedAttempt, clearLoginAttempts, getGenericAuthError } from '../lib/security';
 
 const SDG_COLORS = ['#E5243B','#DDA63A','#4C9F38','#C5192D','#FF3A21','#26BDE2','#FCC30B','#A21942','#FD6925','#DD1367','#FD9D24','#BF8B2E','#3F7E44','#0A97D9','#56C02B','#00689D','#19486A'];
 
@@ -139,6 +140,28 @@ export default function AuthPage() {
   const [successMsg, setSuccessMsg] = useState('');
   const [agreedToLead, setAgreedToLead] = useState(false);
   const [leadCheckbox, setLeadCheckbox] = useState(false);
+  const [lockoutMsg, setLockoutMsg] = useState('');
+  const lockoutTimerRef = useRef(null);
+
+  // Check lockout status on mount and show countdown
+  useEffect(() => {
+    const updateLockout = () => {
+      const status = checkLockout();
+      if (status.locked) {
+        const mins = Math.floor(status.remainingSeconds / 60);
+        const secs = status.remainingSeconds % 60;
+        setLockoutMsg(`Account temporarily locked. Try again in ${mins}:${secs.toString().padStart(2, '0')}`);
+      } else {
+        setLockoutMsg('');
+        if (lockoutTimerRef.current) {
+          clearInterval(lockoutTimerRef.current);
+          lockoutTimerRef.current = null;
+        }
+      }
+    };
+    updateLockout();
+    return () => { if (lockoutTimerRef.current) clearInterval(lockoutTimerRef.current); };
+  }, []);
 
   useEffect(() => {
     // Check if there is an OAuth error in the URL hash (from redirect)
@@ -169,8 +192,33 @@ export default function AuthPage() {
     setErrorMsg('');
     setSuccessMsg('');
 
+    // ── Security: Check lockout ──
+    const lockStatus = checkLockout();
+    if (lockStatus.locked) {
+      setErrorMsg(`Too many failed attempts. Please try again in ${lockStatus.remainingMinutes} minute(s).`);
+      setLoading(false);
+      return;
+    }
+
+    // ── Security: Sanitize inputs ──
+    const cleanEmail = sanitizeInput(email).toLowerCase();
+    const cleanName = sanitizeInput(name);
+
+    // ── Security: Validate email format ──
+    if (!isValidEmail(cleanEmail)) {
+      setErrorMsg('Please enter a valid email address.');
+      setLoading(false);
+      return;
+    }
+
     // Client side validation for sign up
     if (!isLogin) {
+      if (!cleanName || cleanName.length < 2) {
+        setErrorMsg('Please enter a valid name (at least 2 characters).');
+        setLoading(false);
+        return;
+      }
+
       const hasUpper = /[A-Z]/.test(password);
       const hasLower = /[a-z]/.test(password);
       const hasNumber = /[0-9]/.test(password);
@@ -184,32 +232,68 @@ export default function AuthPage() {
       }
     }
 
+    // ── Security: Progressive delay ──
+    const delay = getProgressiveDelay();
+    if (delay > 0) {
+      await new Promise(resolve => setTimeout(resolve, delay));
+    }
+
     try {
       if (isLogin) {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        const { error } = await supabase.auth.signInWithPassword({ email: cleanEmail, password });
         if (error) throw error;
+        // ── Security: Clear attempts on success ──
+        clearLoginAttempts();
         navigate('/dashboard');
       } else {
         const { data, error } = await supabase.auth.signUp({
-          email,
+          email: cleanEmail,
           password,
-          options: { data: { full_name: name } }
+          options: { data: { full_name: cleanName } }
         });
         if (error) throw error;
         
         if (data?.session === null) {
-          // Email confirmation is required
           setSuccessMsg('Registration successful! Please check your email inbox to confirm your account.');
           setName('');
           setEmail('');
           setPassword('');
-          setMode('login'); // switch to login UI visually without clearing success
+          setMode('login');
         } else {
+          clearLoginAttempts();
           navigate('/dashboard');
         }
       }
     } catch (error) {
-      setErrorMsg(error.message);
+      // ── Security: Record failed attempt + generic error ──
+      if (isLogin) {
+        const result = recordFailedAttempt();
+        const genericMsg = getGenericAuthError(error);
+        
+        if (result.locked) {
+          setErrorMsg(`Account temporarily locked for ${result.lockoutMinutes} minutes due to too many failed attempts.`);
+          // Start countdown timer
+          if (lockoutTimerRef.current) clearInterval(lockoutTimerRef.current);
+          lockoutTimerRef.current = setInterval(() => {
+            const s = checkLockout();
+            if (s.locked) {
+              const mins = Math.floor(s.remainingSeconds / 60);
+              const secs = s.remainingSeconds % 60;
+              setLockoutMsg(`Account temporarily locked. Try again in ${mins}:${secs.toString().padStart(2, '0')}`);
+            } else {
+              setLockoutMsg('');
+              clearInterval(lockoutTimerRef.current);
+              lockoutTimerRef.current = null;
+            }
+          }, 1000);
+        } else if (result.attemptsLeft <= 2) {
+          setErrorMsg(`${genericMsg} ${result.attemptsLeft} attempt(s) remaining before lockout.`);
+        } else {
+          setErrorMsg(genericMsg);
+        }
+      } else {
+        setErrorMsg(getGenericAuthError(error));
+      }
     } finally {
       setLoading(false);
     }
@@ -297,8 +381,15 @@ export default function AuthPage() {
       </div>
 
       {/* Submit */}
+      {lockoutMsg && <div style={{ color: '#9a3412', background: '#ffedd5', padding: '12px', borderRadius: '8px', border: '1px solid #fed7aa', fontSize: '13px', marginBottom: '12px', fontWeight: 600 }}>⏳ {lockoutMsg}</div>}
       {errorMsg && <div style={{ color: '#E5243B', fontSize: '13px', marginBottom: '12px', fontWeight: 600 }}>{errorMsg}</div>}
       {successMsg && <div style={{ color: '#166534', background: '#f0fdf4', padding: '12px', borderRadius: '8px', border: '1px solid #bbf7d0', fontSize: '13px', marginBottom: '12px', fontWeight: 600 }}>✉️ {successMsg}</div>}
+      
+      {!isLogin && (
+        <p style={{ fontSize: '12px', color: '#6b7280', textAlign: 'center', marginBottom: '16px', lineHeight: 1.5 }}>
+          By registering, you agree to our <Link to="/terms" style={{ color: '#4C9F38', fontWeight: 600, textDecoration: 'none' }}>Terms & Conditions</Link> and <Link to="/privacy" style={{ color: '#4C9F38', fontWeight: 600, textDecoration: 'none' }}>Privacy Policy</Link>.
+        </p>
+      )}
       
       <button type="submit" disabled={loading} style={{ width:'100%', padding:'13px', borderRadius:'11px', background:'linear-gradient(135deg,#4C9F38,#3d8a2e)', color:'#fff', fontWeight:800, fontSize:'15px', border:'none', cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.7 : 1, letterSpacing:'0.04em', boxShadow:'0 4px 16px rgba(76,159,56,0.35)', transition:'all 0.2s', display:'flex', alignItems:'center', justifyContent:'center', gap:'8px', marginBottom:'20px' }}
         onMouseEnter={e => { if(!loading) { e.currentTarget.style.transform='translateY(-2px)'; e.currentTarget.style.boxShadow='0 8px 24px rgba(76,159,56,0.45)'; } }}

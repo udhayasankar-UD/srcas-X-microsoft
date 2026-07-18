@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '../../lib/supabaseClient';
-import { Rocket, Users, Flag, ClipboardList, MoreVertical, Info, Target, Calendar } from 'lucide-react';
+import { sanitizeInput } from '../../lib/security';
+import { Rocket, Users, Flag, ClipboardList, MoreVertical, Info, Target, Calendar, Check, AlertCircle, Clock } from 'lucide-react';
+// import IdCardUpload from '../../components/IdCardUpload';
 
 const INDIA_STATES_CITIES = {
   "Andaman and Nicobar Islands": ["Port Blair"],
@@ -57,7 +59,7 @@ const DEPARTMENTS = [
 const defaultMember = {
   full_name: '', email: '', phone_number: '',
   state: '', city: '', city_other: '', dept: '', dept_other: '', year: '',
-  college_name: '', reg_no: ''
+  college_name: '', reg_no: '', id_card_front_url: '', id_card_back_url: '', id_card_front_file: null, id_card_back_file: null
 };
 
 // Reusable inline styles to replace Tailwind
@@ -89,6 +91,57 @@ export default function TeamTab({ hasTeam, teamData, teamMembers, user, setTeamM
   const [creating, setCreating] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [toastMsg, setToastMsg] = useState('');
+  const [isEditingTeam, setIsEditingTeam] = useState(false);
+  const [showIdPopup, setShowIdPopup] = useState(false);
+
+  const startEditTeam = (stepToOpen = 0) => {
+    const leader = teamMembers?.find(m => m.id === teamData?.leader_id) || teamMembers?.find(m => m.email === user?.email);
+    const teammates = teamMembers?.filter(m => m.id !== leader?.id) || [];
+    
+    const parseLocation = (loc) => {
+      if (!loc) return { state: '', city: '' };
+      const parts = loc.split(', ');
+      if (parts.length >= 2) {
+        return { city: parts[0], state: parts.slice(1).join(', ') };
+      }
+      return { state: '', city: loc };
+    };
+
+    setFormData({
+      teamName: teamData?.team_name || '',
+      teamSize: teamMembers?.length || 2,
+      leader: {
+        ...defaultMember,
+        ...leader,
+        ...parseLocation(leader?.location),
+        dept: DEPARTMENTS.includes(leader?.dept) ? leader.dept : 'Other',
+        dept_other: DEPARTMENTS.includes(leader?.dept) ? '' : leader?.dept
+      },
+      teammates: teammates.map(m => ({
+        ...defaultMember,
+        ...m,
+        ...parseLocation(m.location),
+        dept: DEPARTMENTS.includes(m.dept) ? m.dept : 'Other',
+        dept_other: DEPARTMENTS.includes(m.dept) ? '' : m.dept
+      }))
+    });
+    setIsEditingTeam(true);
+    setCurrentStep(stepToOpen);
+  };
+
+  // useEffect(() => {
+  //   if (hasTeam && teamMembers && teamMembers.length > 0) {
+  //     const missing = teamMembers.some(m => !m.id_card_front_url || !m.id_card_back_url);
+  //     if (window.location.hash === '#upload-id') {
+  //       window.location.hash = '';
+  //       if (!isEditingTeam) {
+  //         startEditTeam(1);
+  //       }
+  //     } else if (missing && !isEditingTeam) {
+  //       setShowIdPopup(true);
+  //     }
+  //   }
+  // }, [hasTeam, isEditingTeam, teamMembers]);
 
 
 
@@ -105,6 +158,9 @@ export default function TeamTab({ hasTeam, teamData, teamMembers, user, setTeamM
       if (!member.full_name.trim() || !member.email.trim() || !member.phone_number.trim() || !member.state || !member.city || !member.dept || !member.year || !member.college_name.trim() || !member.reg_no.trim()) {
         return "Please fill out all fields.";
       }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(member.email)) {
+        return "Please enter a valid email address.";
+      }
       if (!/^\d{10}$/.test(member.phone_number)) {
         return "Phone number must be exactly 10 digits.";
       }
@@ -114,6 +170,9 @@ export default function TeamTab({ hasTeam, teamData, teamMembers, user, setTeamM
       if (member.city === 'Other' && !member.city_other?.trim()) {
         return "Please specify your city/district.";
       }
+      // if (!member.id_card_front_url || !member.id_card_back_url) {
+      //   return "Please upload and confirm the Student ID Card (Front & Back).";
+      // }
       return true;
     };
 
@@ -154,39 +213,99 @@ export default function TeamTab({ hasTeam, teamData, teamMembers, user, setTeamM
     setCreating(true);
     setErrorMsg('');
     try {
-      // 1. Create Team
-      const { data: team, error: teamErr } = await supabase.from('teams').insert({
-        leader_id: user.id,
-        team_name: formData.teamName
-      }).select().single();
-      if (teamErr) throw teamErr;
+      let currentTeamId = teamData?.id;
+      let finalTeamData = teamData;
+
+      // 1. Create or Update Team
+      const cleanTeamName = sanitizeInput(formData.teamName);
+      
+      if (isEditingTeam) {
+        const { error: teamErr } = await supabase.from('teams').update({
+          team_name: cleanTeamName
+        }).eq('id', currentTeamId);
+        if (teamErr) throw teamErr;
+        finalTeamData = { ...teamData, team_name: cleanTeamName };
+      } else {
+        const { data: team, error: teamErr } = await supabase.from('teams').insert({
+          leader_id: user.id,
+          team_name: cleanTeamName
+        }).select().single();
+        if (teamErr) throw teamErr;
+        currentTeamId = team.id;
+        finalTeamData = team;
+      }
+
+      // --- Upload Files Helper ---
+      const uploadFile = async (file, memberName, side) => {
+        if (!file) return null;
+        const timestamp = Date.now();
+        const randomStr = Math.random().toString(36).substring(2, 8);
+        const safeName = memberName ? memberName.replace(/[^a-zA-Z0-9]/g, '').toLowerCase() : 'member';
+        const path = `uploads/${timestamp}_${randomStr}_${safeName}_${side}.${file.name.split('.').pop()}`;
+        
+        const { error } = await supabase.storage.from('id-cards').upload(path, file, { cacheControl: '3600', upsert: false });
+        if (error) throw error;
+        
+        const { data } = supabase.storage.from('id-cards').getPublicUrl(path);
+        return data.publicUrl;
+      };
+
+      // --- Upload Files for Leader ---
+      if (formData.leader.id_card_front_file) {
+        formData.leader.id_card_front_url = await uploadFile(formData.leader.id_card_front_file, formData.leader.full_name, 'front');
+      }
+      if (formData.leader.id_card_back_file) {
+        formData.leader.id_card_back_url = await uploadFile(formData.leader.id_card_back_file, formData.leader.full_name, 'back');
+      }
+
+      // --- Upload Files for Teammates ---
+      for (let i = 0; i < formData.teammates.length; i++) {
+        if (formData.teammates[i].id_card_front_file) {
+          formData.teammates[i].id_card_front_url = await uploadFile(formData.teammates[i].id_card_front_file, formData.teammates[i].full_name, 'front');
+        }
+        if (formData.teammates[i].id_card_back_file) {
+          formData.teammates[i].id_card_back_url = await uploadFile(formData.teammates[i].id_card_back_file, formData.teammates[i].full_name, 'back');
+        }
+      }
 
       // 2. Format Members (Merge State/City into Location, resolve Dept)
-      const formatMember = (m) => ({
-        team_id: team.id,
-        full_name: m.full_name,
-        email: m.email,
-        phone_number: m.phone_number,
-        location: `${m.city === 'Other' ? m.city_other : m.city}, ${m.state}`,
-        college_name: m.college_name,
-        reg_no: m.reg_no,
-        dept: m.dept === 'Other' ? m.dept_other : m.dept,
-        year: m.year
-      });
+      const formatMember = (m, memberIsLeader = false) => {
+        const cleanCity = sanitizeInput(m.city === 'Other' ? m.city_other : m.city);
+        const cleanState = sanitizeInput(m.state);
+        const cleanDept = sanitizeInput(m.dept === 'Other' ? m.dept_other : m.dept);
+
+        const payload = {
+          team_id: currentTeamId,
+          full_name: sanitizeInput(m.full_name),
+          email: sanitizeInput(m.email).toLowerCase(),
+          phone_number: sanitizeInput(m.phone_number),
+          location: `${cleanCity}, ${cleanState}`,
+          college_name: sanitizeInput(m.college_name),
+          reg_no: sanitizeInput(m.reg_no),
+          dept: cleanDept,
+          year: sanitizeInput(m.year),
+          id_card_front_url: m.id_card_front_url,
+          id_card_back_url: m.id_card_back_url,
+          is_leader: memberIsLeader
+        };
+        if (m.id) payload.id = m.id; // Include ID for upsert if it exists
+        return payload;
+      };
 
       const allMembers = [
-        formatMember(formData.leader),
-        ...formData.teammates.map(formatMember)
+        formatMember(formData.leader, true),
+        ...formData.teammates.map(t => formatMember(t, false))
       ];
 
-      // 3. Insert Members
-      const { data: members, error: memErr } = await supabase.from('team_members').insert(allMembers).select();
+      // 3. Upsert Members
+      const { data: members, error: memErr } = await supabase.from('team_members').upsert(allMembers).select();
       if (memErr) throw memErr;
 
-      setTeamData(team);
+      setTeamData(finalTeamData);
       setTeamMembers(members);
       setHasTeam(true);
-      setToastMsg('🎉 Team created successfully!');
+      setIsEditingTeam(false);
+      setToastMsg(isEditingTeam ? '🎉 Team updated successfully!' : '🎉 Team created successfully!');
       setTimeout(() => setToastMsg(''), 4000);
     } catch (err) {
       setErrorMsg(err.message);
@@ -199,21 +318,24 @@ export default function TeamTab({ hasTeam, teamData, teamMembers, user, setTeamM
   const totalSteps = 2 + formData.teammates.length; // Setup + Leader + Teammates
 
   const renderMemberFields = (member, isLeader, index) => {
-    const updateMember = (field, value) => {
+    const updateMember = (fieldOrObj, value) => {
+      const updates = typeof fieldOrObj === 'object' ? fieldOrObj : { [fieldOrObj]: value };
       if (isLeader) {
-        setFormData(prev => ({ ...prev, leader: { ...prev.leader, [field]: value } }));
+        setFormData(prev => ({ ...prev, leader: { ...prev.leader, ...updates } }));
       } else {
-        const newTeammates = [...formData.teammates];
-        newTeammates[index] = { ...newTeammates[index], [field]: value };
-        // Reset city if state changes
-        if (field === 'state') newTeammates[index].city = '';
-        setFormData(prev => ({ ...prev, teammates: newTeammates }));
+        setFormData(prev => {
+          const newTeammates = [...prev.teammates];
+          newTeammates[index] = { ...newTeammates[index], ...updates };
+          if (updates.state !== undefined) newTeammates[index].city = '';
+          return { ...prev, teammates: newTeammates };
+        });
       }
     };
 
     return (
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px' }}>
-        {/* Personal Details */}
+      <div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px' }}>
+          {/* Personal Details */}
         <div>
           <label style={styles.label}>Full Name</label>
           <input type="text" value={member.full_name} onChange={e => updateMember('full_name', e.target.value)} disabled={isLeader} style={isLeader ? styles.inputDisabled : styles.input} placeholder="Full Name" />
@@ -282,12 +404,52 @@ export default function TeamTab({ hasTeam, teamData, teamMembers, user, setTeamM
             {[1, 2, 3, 4].map(y => <option key={y} value={`${y} Year`}>{y} Year</option>)}
           </select>
         </div>
+        </div>
+        
+        {/* ID Card Upload 
+        <div style={{ marginTop: 24, borderTop: '1.5px solid #e5e7eb', paddingTop: 24 }}>
+          {!member.id_card_front_url ? (
+            <IdCardUpload 
+              memberName={member.full_name} 
+              onComplete={(data) => {
+                updateMember({
+                  id_card_front_url: data.frontPreview,
+                  id_card_back_url: data.backPreview,
+                  id_card_front_file: data.frontFile,
+                  id_card_back_file: data.backFile
+                });
+              }} 
+            />
+          ) : (
+            <div style={{ background: '#f0fdf4', border: '1.5px solid #bbf7d0', padding: 16, borderRadius: 12, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <div style={{ width: 40, height: 40, background: '#dcfce7', color: '#16a34a', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Check size={20} />
+                </div>
+                <div>
+                  <div style={{ fontSize: 15, fontWeight: 700, color: '#166534' }}>ID Card Confirmed</div>
+                  <div style={{ fontSize: 13, color: '#15803d' }}>Front and back images uploaded successfully.</div>
+                </div>
+              </div>
+              <button type="button" onClick={() => { 
+                updateMember({
+                  id_card_front_url: '', 
+                  id_card_back_url: '',
+                  id_card_front_file: null,
+                  id_card_back_file: null
+                }); 
+              }} style={{ padding: '8px 16px', background: '#fff', border: '1.5px solid #bbf7d0', borderRadius: 8, fontSize: 13, fontWeight: 700, color: '#166534', cursor: 'pointer' }}>
+                Replace Images
+              </button>
+            </div>
+          )}
+        </div>*/}
       </div>
     );
   };
 
   // --- MAIN RENDER ---
-  if (!hasTeam) {
+  if (!hasTeam || isEditingTeam) {
     return (
       <div style={{ maxWidth: 800, margin: '0 auto', width: '100%', display: 'flex', flexDirection: 'column', gap: 24 }}>
         {/* Wizard Header / Progress Bar */}
@@ -321,13 +483,6 @@ export default function TeamTab({ hasTeam, teamData, teamMembers, user, setTeamM
 
         {/* Wizard Content */}
         <div style={styles.card}>
-
-          {errorMsg && (
-            <div style={{ marginBottom: 24, background: '#fef2f2', border: '1.5px solid #fecaca', color: '#dc2626', padding: '12px 16px', borderRadius: 12, fontSize: 14, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 8 }}>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" /></svg>
-              {errorMsg}
-            </div>
-          )}
 
           {/* Step 1: Team Setup */}
           {currentStep === 0 && (
@@ -392,6 +547,13 @@ export default function TeamTab({ hasTeam, teamData, teamMembers, user, setTeamM
             </div>
           )}
 
+          {errorMsg && (
+            <div style={{ marginTop: 24, background: '#fef2f2', border: '1.5px solid #fecaca', color: '#dc2626', padding: '12px 16px', borderRadius: 12, fontSize: 14, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 8 }}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" /></svg>
+              {errorMsg}
+            </div>
+          )}
+
           {/* Navigation Controls */}
           <div style={{ marginTop: 32, paddingTop: 24, borderTop: '1.5px solid #f3f4f6', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <button type="button" onClick={handleBack} disabled={currentStep === 0 || creating} style={currentStep === 0 ? { ...styles.buttonBack, opacity: 0, cursor: 'default' } : styles.buttonBack}
@@ -404,7 +566,7 @@ export default function TeamTab({ hasTeam, teamData, teamMembers, user, setTeamM
               <button type="button" onClick={handleSubmit} disabled={creating} style={creating ? styles.buttonDisabled : styles.buttonPrimary}
                 onMouseEnter={e => { if (!creating) e.currentTarget.style.transform = 'translateY(-2px)'; }}
                 onMouseLeave={e => { if (!creating) e.currentTarget.style.transform = 'translateY(0)'; }}>
-                {creating ? 'Submitting...' : 'Submit Team 🚀'}
+                {creating ? 'Submitting...' : (isEditingTeam ? 'Update Team 🚀' : 'Submit Team 🚀')}
               </button>
             ) : (
               <button type="button" onClick={handleNext} style={styles.buttonSecondary}
@@ -424,9 +586,35 @@ export default function TeamTab({ hasTeam, teamData, teamMembers, user, setTeamM
   const teamLeader = teamMembers.find(m => m.id === teamData.leader_id) || teamMembers.find(m => m.email === user.email);
   const leaderName = teamLeader?.full_name || 'Leader';
   const registeredDate = teamData.created_at ? new Date(teamData.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'N/A';
+  // const missingIdCardsCount = teamMembers.filter(m => !m.id_card_front_url || !m.id_card_back_url).length;
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24, width: '100%' }}>
+
+      {/* ID Card warning banner - commented out
+      {missingIdCardsCount > 0 && (
+        <div style={{ background: '#fffbeb', border: '1.5px solid #fde68a', padding: '16px 20px', borderRadius: 16, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+            <div style={{ width: 40, height: 40, borderRadius: '50%', background: '#fef3c7', color: '#d97706', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <AlertCircle size={20} />
+            </div>
+            <div>
+              <div style={{ fontSize: 15, fontWeight: 800, color: '#92400e', marginBottom: 2 }}>Action Required: Upload ID Cards</div>
+              <div style={{ fontSize: 13, color: '#b45309' }}>Please upload Front & Back Student ID cards for {missingIdCardsCount} team member{missingIdCardsCount > 1 ? 's' : ''} to complete verification.</div>
+            </div>
+          </div>
+          <button 
+                    onClick={() => {
+                      setShowIdPopup(false);
+                      startEditTeam(1);
+                    }} 
+                    style={{ flex: 1, padding: '12px', background: '#D97706', color: '#fff', border: 'none', borderRadius: 10, fontWeight: 700, cursor: 'pointer' }}
+                  >
+                    Add ID Cards Now
+                  </button>
+        </div>
+      )}
+      */}
 
       {/* Top Banner */}
       <div style={{ ...styles.card, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 20 }}>
@@ -495,6 +683,25 @@ export default function TeamTab({ hasTeam, teamData, teamMembers, user, setTeamM
                       <div style={{ fontSize: 12, color: '#6b7280', display: 'flex', alignItems: 'center', gap: 6 }}>
                         📞 +91 {m.phone_number}
                       </div>
+
+                      {/* ID Card Status - commented out
+                      <div style={{ marginTop: 12, display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, fontWeight: 600 }}>
+                        {m.id_card_front_url && m.id_card_back_url ? (
+                          <span style={{ display: 'flex', alignItems: 'center', gap: 4, color: '#16a34a' }}>
+                            <Check size={14} /> ID Card Uploaded
+                            {m.id_card_verified ? (
+                              <span style={{ marginLeft: 8, padding: '2px 8px', background: '#dcfce7', color: '#166534', borderRadius: 10, fontSize: 10 }}></span>
+                            ) : (
+                              <span style={{ marginLeft: 8, padding: '2px 8px', background: '#fef9c3', color: '#854d0e', borderRadius: 10, fontSize: 10, display: 'flex', alignItems: 'center', gap: 4 }}> </span>
+                            )}
+                          </span>
+                        ) : (
+                          <span style={{ display: 'flex', alignItems: 'center', gap: 4, color: '#d97706' }}>
+                            <AlertCircle size={14} /> Missing ID
+                          </span>
+                        )}
+                      </div>
+                      */}
                     </div>
                   </div>
                 );
@@ -586,6 +793,62 @@ export default function TeamTab({ hasTeam, teamData, teamMembers, user, setTeamM
             {toastMsg}
           </motion.div>
         )}
+        
+        {/* ID card popup - commented out
+        {showIdPopup && !isEditingTeam && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowIdPopup(false)}
+              style={{
+                position: 'fixed', inset: 0, zIndex: 9998,
+                background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)',
+                cursor: 'pointer'
+              }}
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              style={{
+                position: 'fixed', inset: 0, zIndex: 9999,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                padding: '20px', pointerEvents: 'none'
+              }}
+            >
+              <div style={{
+                pointerEvents: 'auto',
+                width: '100%', maxWidth: 450,
+                background: '#fff', borderRadius: 24,
+                boxShadow: '0 24px 48px rgba(0,0,0,0.2)',
+                display: 'flex', flexDirection: 'column',
+                overflow: 'hidden', fontFamily: "'Plus Jakarta Sans', sans-serif",
+                textAlign: 'center', padding: '32px 24px'
+              }}>
+                <div style={{ fontSize: 48, marginBottom: 16 }}>🆔</div>
+                <h2 style={{ margin: '0 0 8px', fontSize: '1.25rem', fontWeight: 800, color: '#111' }}>Action Required: Upload ID Cards</h2>
+                <p style={{ margin: '0 0 24px', fontSize: '0.9rem', color: '#6b7280', lineHeight: 1.6 }}>
+                  Please upload Front & Back Student ID cards for all team members to complete verification before proceeding.
+                </p>
+                <div style={{ display: 'flex', gap: 12, width: '100%' }}>
+                  <button onClick={() => setShowIdPopup(false)} style={{ flex: 1, padding: '12px', background: '#f3f4f6', color: '#374151', border: 'none', borderRadius: 10, fontWeight: 700, cursor: 'pointer' }}>Later</button>
+                  <button 
+                    onClick={() => {
+                      setShowIdPopup(false);
+                      startEditTeam(1);
+                    }} 
+                    style={{ flex: 1, padding: '12px', background: '#D97706', color: '#fff', border: 'none', borderRadius: 10, fontWeight: 700, cursor: 'pointer' }}
+                  >
+                    Add ID Cards Now
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+        */}
       </AnimatePresence>
     </div>
   );

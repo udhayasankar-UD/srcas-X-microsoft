@@ -40,6 +40,10 @@ const CheckItem = ({ label, status }) => {
 export default function OverviewTab({ hasTeam, teamData, teamMembers, submissions, user, setActiveTab, announcements = [] }) {
   const [totalTeams, setTotalTeams] = useState(245);
   const [showRulebook, setShowRulebook] = useState(false);
+  const [showNotification, setShowNotification] = useState(true);
+  // const missingIds = teamMembers?.some(m => !m.id_card_front_url || !m.id_card_back_url);
+  // const [showIdPopup, setShowIdPopup] = useState(missingIds);
+  const [showIdPopup, setShowIdPopup] = useState(false);
 
   useEffect(() => {
     const fetchTeamCount = async () => {
@@ -66,7 +70,7 @@ export default function OverviewTab({ hasTeam, teamData, teamMembers, submission
   const now = new Date();
   const milestones = [
     { title: 'Team Confirmation', dateStr: '2026-07-25T23:59:59', icon: '👥', desc: 'Form your team and confirm details' },
-    { title: 'Idea Submission', dateStr: '2026-07-25T23:59:59', icon: '💡', desc: 'Submit your 300-word abstract' },
+    { title: 'Idea Submission', dateStr: '2026-07-25T23:59:59', icon: '💡', desc: 'Submit your Idea' },
     { title: 'Shortlist Announced', dateStr: '2026-08-07T12:00:00', icon: '🚩', desc: 'Top teams will be shortlisted' },
     { title: 'Grand Finale', dateStr: '2026-08-14T09:00:00', icon: '🏆', desc: 'Final presentations and winner announcement' }
   ];
@@ -113,19 +117,24 @@ export default function OverviewTab({ hasTeam, teamData, teamMembers, submission
   
   activities.sort((a, b) => b.date - a.date);
   const recentActivities = activities.slice(0, 5);
-  
+
   return (
     <div style={{ display:'flex', flexDirection:'column', gap:24 }}>
       
       {/* Scroll Notification */}
-      <div style={{ background: '#fee2e2', border: '1px solid #fca5a5', borderRadius: 10, padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 12, overflow: 'hidden' }}>
-        <span style={{ fontSize: 18 }}>🚨</span>
-        <marquee style={{ fontSize: 14, fontWeight: 700, color: '#b91c1c' }} scrollamount="6">
-          Important: All project development and coding must begin strictly on the morning of August 14th. Pre-built projects or pre-written code are not allowed. You have exactly 24 hours to build your solution during the hackathon!
-        </marquee>
-      </div>
+      {showNotification && (
+        <div style={{ background: '#fee2e2', border: '1px solid #fca5a5', borderRadius: 10, padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 12, overflow: 'hidden' }}>
+          <span style={{ fontSize: 18 }}>🚨</span>
+          <marquee style={{ fontSize: 14, fontWeight: 700, color: '#b91c1c', flex: 1 }} scrollamount="6">
+            Important: All project development and coding must begin strictly on the morning of August 14th. Pre-built projects or pre-written code are not allowed. You have exactly 24 hours to build your solution during the hackathon!
+          </marquee>
+          <button onClick={() => setShowNotification(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: '#b91c1c', opacity: 0.7 }} onMouseEnter={e => e.currentTarget.style.opacity='1'} onMouseLeave={e => e.currentTarget.style.opacity='0.7'}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+      )}
 
-      {/* 1. Dynamic Timeline */}
+      {/* Scroll Notification */}
       <EventTimeline steps={TIMELINE_STEPS} currentStepIndex={currentStepIndex} />
 
       {/* 2. Stats Grid (4 columns) */}
@@ -146,7 +155,7 @@ export default function OverviewTab({ hasTeam, teamData, teamMembers, submission
         
 
         {/* Submission Guidelines Video Card */}
-        <a href="https://www.youtube.com" target="_blank" rel="noreferrer" style={{ textDecoration:'none' }}>
+        {/* <a href="https://www.youtube.com" target="_blank" rel="noreferrer" style={{ textDecoration:'none' }}>
           <div style={card({ display:'flex', flexDirection:'column', padding:'20px', cursor:'pointer', height:'100%', border:'1.5px solid #c4b5fd', background:'#f5f3ff' })}>
             <div style={{ display:'flex', alignItems:'center', gap:16, marginBottom:16 }}>
               <div style={{ width:48, height:48, borderRadius:12, background:'#ede9fe', color:'#8b5cf6', display:'flex', alignItems:'center', justifyContent:'center', fontSize:20 }}>📹</div>
@@ -157,7 +166,7 @@ export default function OverviewTab({ hasTeam, teamData, teamMembers, submission
             </div>
             <div style={{ marginTop:'auto', fontSize:13, fontWeight:700, color:'#6d28d9' }}>Watch on YouTube ↗</div>
           </div>
-        </a>
+        </a> */}
 
         {/* Days to Next Milestone Card */}
         <div style={card({ display:'flex', flexDirection:'column', padding:'20px' })}>
@@ -191,7 +200,6 @@ export default function OverviewTab({ hasTeam, teamData, teamMembers, submission
         <div style={card({ display:'flex', flexDirection:'column' })}>
           <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:20 }}>
             <h3 style={{ fontSize:16, fontWeight:800, color:'#111', margin:0 }}>Announcements</h3>
-            <span style={{ fontSize:13, fontWeight:700, color:'#3b82f6', cursor:'pointer' }}>View all</span>
           </div>
           <div style={{ display:'flex', flexDirection:'column', gap:16, flex:1 }}>
             {announcements.length === 0 ? (
@@ -274,7 +282,6 @@ export default function OverviewTab({ hasTeam, teamData, teamMembers, submission
         <div style={card({ display:'flex', flexDirection:'column' })}>
           <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:20 }}>
             <h3 style={{ fontSize:16, fontWeight:800, color:'#111', margin:0 }}>Recent Activity</h3>
-            <span style={{ fontSize:13, fontWeight:700, color:'#3b82f6', cursor:'pointer' }}>View all</span>
           </div>
           <div style={{ display:'flex', flexDirection:'column', gap:16 }}>
             {recentActivities.length > 0 ? recentActivities.map(act => (
@@ -399,7 +406,7 @@ export default function OverviewTab({ hasTeam, teamData, teamMembers, submission
 
                   <h3 style={{ color: '#111', fontSize: '1.1rem', fontWeight: 800, letterSpacing: '-0.01em' }}>3. Submission & Development Rules</h3>
                   <ul style={{ paddingLeft: 20, marginBottom: 24 }}>
-                    <li style={{ marginBottom: 6 }}><strong>Round 1 (Idea Submission):</strong> Teams must submit a 300-word abstract and the official PPT format.</li>
+                    <li style={{ marginBottom: 6 }}><strong>Round 1 (Idea Submission):</strong> Teams must submit a 500-word Project Description and the official PPT format.</li>
                     <li style={{ marginBottom: 6 }}><strong>Round 2 (Finale):</strong> Shortlisted teams will present their working prototypes offline at the SRCAS campus.</li>
                     <li style={{ marginBottom: 6 }}><strong>24-Hour Software Rule:</strong> All software coding and application development must take place exclusively during the 24-hour hackathon period. Bringing pre-written code, using proprietary existing projects, or plagiarism will lead to immediate disqualification.</li>
                     <li style={{ marginBottom: 6 }}><strong>Hardware & IoT Exception:</strong> If you are building a hardware-based project, you may procure the required devices, assemble, and test them before the Hackathon. However, during the 24-hour event, you are strictly expected to develop the software application, integrate it with your IoT devices, and demonstrate the final connected solution.</li>
@@ -433,6 +440,63 @@ export default function OverviewTab({ hasTeam, teamData, teamMembers, submission
             </motion.div>
           </>
         )}
+
+        {/* ID card popup - commented out
+        {showIdPopup && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowIdPopup(false)}
+              style={{
+                position: 'fixed', inset: 0, zIndex: 9998,
+                background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)',
+                cursor: 'pointer'
+              }}
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              style={{
+                position: 'fixed', inset: 0, zIndex: 9999,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                padding: '20px', pointerEvents: 'none'
+              }}
+            >
+              <div style={{
+                pointerEvents: 'auto',
+                width: '100%', maxWidth: 450,
+                background: '#fff', borderRadius: 24,
+                boxShadow: '0 24px 48px rgba(0,0,0,0.2)',
+                display: 'flex', flexDirection: 'column',
+                overflow: 'hidden', fontFamily: "'Plus Jakarta Sans', sans-serif",
+                textAlign: 'center', padding: '32px 24px'
+              }}>
+                <div style={{ fontSize: 48, marginBottom: 16 }}>🆔</div>
+                <h2 style={{ margin: '0 0 8px', fontSize: '1.25rem', fontWeight: 800, color: '#111' }}>Action Required: Upload ID Cards</h2>
+                <p style={{ margin: '0 0 24px', fontSize: '0.9rem', color: '#6b7280', lineHeight: 1.6 }}>
+                  Please upload Front & Back Student ID cards for all team members to complete verification before proceeding.
+                </p>
+                <div style={{ display: 'flex', gap: 12, width: '100%' }}>
+                  <button onClick={() => setShowIdPopup(false)} style={{ flex: 1, padding: '12px', background: '#f3f4f6', color: '#374151', border: 'none', borderRadius: 10, fontWeight: 700, cursor: 'pointer' }}>Later</button>
+                  <button 
+                    onClick={() => {
+                      setShowIdPopup(false);
+                      window.location.hash = '#upload-id';
+                      setActiveTab('team');
+                    }} 
+                    style={{ flex: 1, padding: '12px', background: '#D97706', color: '#fff', border: 'none', borderRadius: 10, fontWeight: 700, cursor: 'pointer' }}
+                  >
+                    Add ID Cards Now
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+        */}
       </AnimatePresence>
 
     </div>

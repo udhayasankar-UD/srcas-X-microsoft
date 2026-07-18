@@ -21,29 +21,38 @@ export default function AdminSubmissions() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
+  const [tabCounts, setTabCounts] = useState({ all: 0, pending: 0, shortlisted: 0, rejected: 0 });
+  const [teams, setTeams] = useState([]);
+  const [totalFilteredCount, setTotalFilteredCount] = useState(0);
+
   const fetchData = useCallback(async () => {
-    const [{ data: t }, { data: s }] = await Promise.all([
-      supabase.from('teams').select('*'),
-      supabase.from('submissions').select('*').order('created_at', { ascending: false })
+    const [cAll, cP, cS, cR] = await Promise.all([
+      supabase.from('submissions').select('*', { count: 'exact', head: true }),
+      supabase.from('submissions').select('*', { count: 'exact', head: true }).eq('status', 'Pending'),
+      supabase.from('submissions').select('*', { count: 'exact', head: true }).eq('status', 'Shortlisted'),
+      supabase.from('submissions').select('*', { count: 'exact', head: true }).eq('status', 'Rejected'),
     ]);
     
-    const subs = (s || []).map((sub) => {
-      const team = (t || []).find(tm => tm.id === sub.team_id);
-      
-      return {
-        id: sub.id,
-        teamId: team?.id,
-        teamName: team?.team_name || 'Unknown Team',
-        teamTrack: sub.category || 'General',
-        subTitle: sub.project_title || 'Untitled Project',
-        subDesc: sub.project_description || 'No description provided',
-        status: sub.status || 'Pending',
-        fileUrl: sub.pdf_url || null,
-        date: sub.created_at || new Date().toISOString()
-      };
+    setTabCounts({
+      all: cAll.count || 0,
+      pending: cP.count || 0,
+      shortlisted: cS.count || 0,
+      rejected: cR.count || 0
     });
-    
-    setSubmissionsList(subs);
+
+    let allTeams = [];
+    let p = 0;
+    while (true) {
+      const { data } = await supabase.from('teams').select('id, team_name').range(p * 1000, (p + 1) * 1000 - 1);
+      if (data && data.length > 0) {
+        allTeams.push(...data);
+        if (data.length < 1000) break;
+        p++;
+      } else {
+        break;
+      }
+    }
+    setTeams(allTeams);
     setLoading(false);
   }, []);
 
@@ -57,34 +66,109 @@ export default function AdminSubmissions() {
     checkAuth();
   }, [navigate, fetchData]);
 
+  const buildQuery = (isExport = false) => {
+    let query = supabase.from('submissions').select('*', { count: 'exact' });
+    
+    if (activeTab !== 'All Submissions') {
+      query = query.eq('status', activeTab);
+    }
+
+    if (searchTerm) {
+      const matchingTeamIds = teams.filter(t => t.team_name.toLowerCase().includes(searchTerm.toLowerCase())).map(t => t.id);
+      if (matchingTeamIds.length > 0) {
+        query = query.or(`project_title.ilike.%${searchTerm}%,team_id.in.(${matchingTeamIds.join(',')})`);
+      } else {
+        query = query.ilike('project_title', `%${searchTerm}%`);
+      }
+    }
+
+    if (!isExport) {
+      const from = (currentPage - 1) * itemsPerPage;
+      const to = from + itemsPerPage - 1;
+      query = query.range(from, to);
+    }
+    
+    return query.order('created_at', { ascending: false });
+  };
+
+  useEffect(() => {
+    if (loading || !isAdmin) return;
+    const fetchPage = async () => {
+      const query = buildQuery(false);
+      const { data, count } = await query;
+      if (data) {
+        const subs = data.map((sub) => {
+          const team = teams.find(tm => tm.id === sub.team_id);
+          return {
+            id: sub.id,
+            teamId: team?.id,
+            teamName: team?.team_name || 'Unknown Team',
+            teamTrack: sub.category || 'General',
+            subTitle: sub.project_title || 'Untitled Project',
+            subDesc: sub.project_description || 'No description provided',
+            status: sub.status || 'Pending',
+            fileUrl: sub.pdf_url || null,
+            date: sub.created_at || new Date().toISOString()
+          };
+        });
+        setSubmissionsList(subs);
+      }
+      if (count !== null) setTotalFilteredCount(count);
+    };
+    fetchPage();
+  }, [loading, isAdmin, currentPage, searchTerm, activeTab, teams]);
+
   if (loading) return <div style={{minHeight:'100vh',display:'flex',alignItems:'center',justifyContent:'center',background:S.bg}}><div style={{width:40,height:40,border:'3px solid '+S.primary,borderTopColor:'transparent',borderRadius:'50%',animation:'spin 1s linear infinite'}}/></div>;
   if (!isAdmin) return null;
 
-  const filteredSubs = submissionsList.filter(s => {
-    const matchSearch = s.teamName.toLowerCase().includes(searchTerm.toLowerCase()) || s.subTitle.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchTab = activeTab === 'All Submissions' || s.status === activeTab;
-    return matchSearch && matchTab;
-  });
+  const totalPages = Math.ceil(totalFilteredCount / itemsPerPage);
+  const currentSubs = submissionsList;
 
-  const totalPages = Math.ceil(filteredSubs.length / itemsPerPage);
-  const currentSubs = filteredSubs.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  const getPageNumbers = () => {
+    const pages = [];
+    if (totalPages <= 7) {
+      for (let i = 1; i <= totalPages; i++) pages.push(i);
+    } else {
+      if (currentPage <= 4) {
+        for (let i = 1; i <= 5; i++) pages.push(i);
+        pages.push('...');
+        pages.push(totalPages);
+      } else if (currentPage >= totalPages - 3) {
+        pages.push(1);
+        pages.push('...');
+        for (let i = totalPages - 4; i <= totalPages; i++) pages.push(i);
+      } else {
+        pages.push(1);
+        pages.push('...');
+        for (let i = currentPage - 1; i <= currentPage + 1; i++) pages.push(i);
+        pages.push('...');
+        pages.push(totalPages);
+      }
+    }
+    return pages;
+  };
 
-  const handleExport = () => {
-    if (filteredSubs.length === 0) {
+  const handleExport = async () => {
+    const query = buildQuery(true);
+    const { data } = await query;
+    if (!data || data.length === 0) {
       alert("No data to export");
       return;
     }
     const headers = ['Submission ID', 'Team Name', 'Track', 'Project Title', 'Status', 'Submitted On'];
     const csvContent = [
       headers.join(','),
-      ...filteredSubs.map(s => [
-        `"${s.id}"`,
-        `"${s.teamName}"`,
-        `"${s.teamTrack}"`,
-        `"${s.subTitle}"`,
-        `"${s.status}"`,
-        `"${new Date(s.date).toLocaleString()}"`
-      ])
+      ...data.map(sub => {
+        const team = teams.find(tm => tm.id === sub.team_id);
+        return [
+          `"${sub.id}"`,
+          `"${team?.team_name || 'Unknown'}"`,
+          `"${sub.category || 'General'}"`,
+          `"${sub.project_title || ''}"`,
+          `"${sub.status || 'Pending'}"`,
+          `"${new Date(sub.created_at || new Date()).toLocaleString()}"`
+        ];
+      })
     ].join('\n');
     
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -98,10 +182,10 @@ export default function AdminSubmissions() {
   };
 
   const tabs = [
-    { label: 'All Submissions', count: submissionsList.length, bg: '#F1F5F9', color: '#64748B' },
-    { label: 'Pending', count: submissionsList.filter(s => s.status === 'Pending').length, bg: '#FEF3C7', color: '#D97706' },
-    { label: 'Shortlisted', count: submissionsList.filter(s => s.status === 'Shortlisted').length, bg: '#DBEAFE', color: '#2563EB' },
-    { label: 'Rejected', count: submissionsList.filter(s => s.status === 'Rejected').length, bg: '#FEF2F2', color: '#DC2626' }
+    { label: 'All Submissions', count: tabCounts.all, bg: '#F1F5F9', color: '#64748B' },
+    { label: 'Pending', count: tabCounts.pending, bg: '#FEF3C7', color: '#D97706' },
+    { label: 'Shortlisted', count: tabCounts.shortlisted, bg: '#DBEAFE', color: '#2563EB' },
+    { label: 'Rejected', count: tabCounts.rejected, bg: '#FEF2F2', color: '#DC2626' }
   ];
 
   const getStatusStyle = (status) => {
@@ -180,16 +264,19 @@ export default function AdminSubmissions() {
                 <table style={{ width:'100%', borderCollapse:'collapse', fontSize:13 }}>
                   <thead>
                     <tr style={{ background:'#FAFAFA', borderBottom:'1px solid '+S.border }}>
-                      {['Team Name', 'Project Title', 'Track', 'Status', 'Submitted On', 'PDF File'].map(h => (
+                      {['S.No', 'Team Name', 'Project Title', 'Track', 'Status', 'Submitted On', 'PDF File'].map(h => (
                         <th key={h} style={{ padding:'16px 20px', fontWeight:600, color:S.t2, textAlign: h==='PDF File'?'center':'left' }}>{h}</th>
                       ))}
                     </tr>
                   </thead>
                   <tbody>
-                    {currentSubs.map(s => {
+                    {currentSubs.map((s, index) => {
                       const sc = getStatusStyle(s.status);
                       return (
                         <tr key={s.id} style={{ borderBottom:'1px solid #F8FAFC' }}>
+                          <td style={{ padding:'16px 20px', color:S.t2, fontSize:12, fontWeight:600 }}>
+                            {(currentPage - 1) * itemsPerPage + index + 1}
+                          </td>
                           <td style={{ padding:'16px 20px' }}>
                             <div style={{ fontWeight:700, color:S.t1 }}>{s.teamName}</div>
                           </td>
@@ -226,7 +313,7 @@ export default function AdminSubmissions() {
                     })}
                   </tbody>
                 </table>
-                {filteredSubs.length === 0 && (
+                {currentSubs.length === 0 && (
                   <div style={{ padding:'60px 20px', textAlign:'center', color:S.t3 }}>
                     <FileText size={40} style={{ opacity:0.2, marginBottom:16 }}/>
                     <div style={{ fontSize:15, fontWeight:600, color:S.t2 }}>No submissions found</div>
@@ -235,24 +322,28 @@ export default function AdminSubmissions() {
                 )}
               </div>
 
-              {filteredSubs.length > 0 && (
-                <div style={{ padding:'16px 20px', borderTop:'1px solid '+S.border, display:'flex', justifyContent:'space-between', alignItems:'center', fontSize:13 }}>
-                  <div style={{ color:S.t2 }}>
-                    Showing <span style={{ fontWeight:700, color:S.t1 }}>{(currentPage - 1) * itemsPerPage + 1}</span> to <span style={{ fontWeight:700, color:S.t1 }}>{Math.min(currentPage * itemsPerPage, filteredSubs.length)}</span> of <span style={{ fontWeight:700, color:S.t1 }}>{filteredSubs.length}</span> submissions
-                  </div>
-                  <div style={{ display:'flex', gap:6 }}>
-                    {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
-                      <button 
-                        key={page}
-                        onClick={() => setCurrentPage(page)}
-                        style={{ width:32, height:32, borderRadius:8, border: page === currentPage ? 'none' : '1px solid '+S.border, background: page === currentPage ? S.primary : S.card, color: page === currentPage ? '#fff' : S.t2, fontSize:13, fontWeight:600, cursor:'pointer' }}
-                      >
-                        {page}
-                      </button>
+              <div style={{ padding:'16px 20px', borderTop:'1px solid '+S.border, display:'flex', justifyContent:'space-between', alignItems:'center', fontSize:13 }}>
+                <div style={{ color:S.t2, fontWeight:500 }}>Showing {totalFilteredCount === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, totalFilteredCount)} of {totalFilteredCount} submissions</div>
+                {totalPages > 1 && (
+                  <div style={{ display:'flex', alignItems:'center', gap:6 }}>
+                    <button onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1} style={{ background:S.card, border:'1px solid '+S.border, borderRadius:8, width:32, height:32, display:'flex', alignItems:'center', justifyContent:'center', color: currentPage === 1 ? S.border : S.t3, cursor: currentPage === 1 ? 'default' : 'pointer' }}>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                    </button>
+                    
+                    {getPageNumbers().map((p, idx) => (
+                      p === '...' ? (
+                        <span key={`ellipsis-${idx}`} style={{ color:S.t3, padding:'0 4px', fontWeight:600 }}>...</span>
+                      ) : (
+                        <button key={p} onClick={() => setCurrentPage(p)} style={{ background: currentPage === p ? '#EEE8FF' : S.card, border: currentPage === p ? 'none' : '1px solid '+S.border, borderRadius:8, width:32, height:32, display:'flex', alignItems:'center', justifyContent:'center', color: currentPage === p ? S.primary : S.t2, fontWeight: currentPage === p ? 700 : 600, cursor:'pointer' }}>{p}</button>
+                      )
                     ))}
+                    
+                    <button onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages} style={{ background:S.card, border:'1px solid '+S.border, borderRadius:8, width:32, height:32, display:'flex', alignItems:'center', justifyContent:'center', color: currentPage === totalPages ? S.border : S.t3, cursor: currentPage === totalPages ? 'default' : 'pointer' }}>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    </button>
                   </div>
-                </div>
-              )}
+                )}
+              </div>
 
             </div>
           </div>

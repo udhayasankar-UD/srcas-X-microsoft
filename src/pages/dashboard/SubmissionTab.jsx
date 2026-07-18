@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '../../lib/supabaseClient';
+import { sanitizeInput } from '../../lib/security';
 import OfficialPPT from '../../assets/PPT/SRCAS HACKATHON 3.0.pptx';
 
 
@@ -32,7 +33,7 @@ function Field({ label, value, onChange, placeholder, type = 'text', hint, error
   );
 }
 
-export default function SubmissionTab({ hasTeam, teamData, teamMembers, submissions, setSubmissions }) {
+export default function SubmissionTab({ hasTeam, teamData, teamMembers, submissions, setSubmissions, setActiveTab }) {
   const [step, setStep] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
@@ -109,12 +110,14 @@ export default function SubmissionTab({ hasTeam, teamData, teamMembers, submissi
         pdf_url = publicUrl;
       }
 
+      const cleanCategory = sanitizeInput(form.category === 'Other' ? form.category_other : form.category);
+      
       const newSubmission = {
         team_id: teamData.id,
-        project_title: form.title,
-        sdg_goal: Array.isArray(form.sdg) ? form.sdg.join(', ') : form.sdg,
-        category: form.category === 'Other' ? form.category_other : form.category,
-        project_description: form.description,
+        project_title: sanitizeInput(form.title),
+        sdg_goal: Array.isArray(form.sdg) ? sanitizeInput(form.sdg.join(', ')) : sanitizeInput(form.sdg),
+        category: cleanCategory,
+        project_description: sanitizeInput(form.description),
         pdf_url: pdf_url
       };
 
@@ -147,7 +150,6 @@ export default function SubmissionTab({ hasTeam, teamData, teamMembers, submissi
     );
   }
 
-  // Warning Logic: Lock if team has less than 2 members total (assuming legacy teams might have 0 in teamMembers if only leader exists)
   const isTeamTooSmall = !teamMembers || teamMembers.length === 0;
 
   if (isTeamTooSmall) {
@@ -161,6 +163,33 @@ export default function SubmissionTab({ hasTeam, teamData, teamMembers, submissi
       </div>
     );
   }
+
+  // ID card gate - commented out
+  // const missingIds = teamMembers?.some(m => !m.id_card_front_url || !m.id_card_back_url);
+  // if (missingIds && !alreadySubmitted) {
+  //   return (
+  //     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: 400 }}>
+  //       <div className="dash-card" style={card({ width: '100%', maxWidth: 500 })}>
+  //         <div style={{ fontSize: 40, textAlign: 'center', marginBottom: 12 }}>🆔</div>
+  //         <h2 style={{ fontSize: 20, fontWeight: 900, color: '#111', textAlign: 'center', marginBottom: 8 }}>Action Required: Upload ID Cards</h2>
+  //         <p style={{ fontSize: 14, color: '#6b7280', textAlign: 'center', marginBottom: 24 }}>
+  //           Please upload Front & Back Student ID cards for all team members to complete verification before you can submit your idea.
+  //         </p>
+  //         <button 
+  //           onClick={() => {
+  //             window.location.hash = '#upload-id';
+  //             if (setActiveTab) setActiveTab('team');
+  //           }} 
+  //           style={{ width: '100%', padding: '12px 24px', borderRadius: 10, border: 'none', background: '#D97706', color: '#fff', fontSize: 14, fontWeight: 800, cursor: 'pointer', transition: 'background 0.2s' }}
+  //           onMouseEnter={e => e.currentTarget.style.background = '#b45309'}
+  //           onMouseLeave={e => e.currentTarget.style.background = '#D97706'}
+  //         >
+  //           Add ID Cards Now
+  //         </button>
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   const confirmDeleteSubmission = async (s) => {
     setSubmitting(true);

@@ -23,37 +23,40 @@ export default function AdminEvaluations() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
+  const [tabCounts, setTabCounts] = useState({ all: 0, completed: 0, pending: 0, inProgress: 0, overdue: 0 });
+  const [teams, setTeams] = useState([]);
+  const [totalFilteredCount, setTotalFilteredCount] = useState(0);
+
   const fetchData = useCallback(async () => {
-    const [{ data: t }, { data: s }] = await Promise.all([
-      supabase.from('teams').select('*'),
-      supabase.from('submissions').select('*').order('created_at', { ascending: false })
+    const [cAll, cC, cP, cI, cO] = await Promise.all([
+      supabase.from('submissions').select('*', { count: 'exact', head: true }),
+      supabase.from('submissions').select('*', { count: 'exact', head: true }).eq('status', 'Completed'),
+      supabase.from('submissions').select('*', { count: 'exact', head: true }).eq('status', 'Pending'),
+      supabase.from('submissions').select('*', { count: 'exact', head: true }).eq('status', 'In Progress'),
+      supabase.from('submissions').select('*', { count: 'exact', head: true }).eq('status', 'Overdue'),
     ]);
     
-    // Use real data from submissions
-    const evals = (s || []).map((sub) => {
-      const team = (t || []).find(tm => tm.id === sub.team_id);
-      
-      // Use actual fields if they exist in DB, otherwise safe defaults
-      const status = sub.status || 'Pending';
-      const score = sub.score || null;
-      const round = sub.round || 'Evaluation';
-      const evalName = sub.evaluator_name || 'Unassigned';
-      
-      return {
-        id: sub.id,
-        teamName: team?.team_name || 'Unknown Team',
-        teamTrack: sub.category || 'General',
-        subTitle: sub.project_title || 'Untitled Project',
-        subDesc: sub.project_description || 'No description provided',
-        status: status,
-        score: score,
-        round: round,
-        evaluator: { name: evalName, email: '', inits: evalName.charAt(0).toUpperCase(), color: '#64748B', bg: '#F1F5F9' },
-        date: sub.created_at || new Date().toISOString()
-      };
+    setTabCounts({
+      all: cAll.count || 0,
+      completed: cC.count || 0,
+      pending: cP.count || 0,
+      inProgress: cI.count || 0,
+      overdue: cO.count || 0
     });
-    
-    setEvaluations(evals);
+
+    let allTeams = [];
+    let p = 0;
+    while (true) {
+      const { data } = await supabase.from('teams').select('id, team_name').range(p * 1000, (p + 1) * 1000 - 1);
+      if (data && data.length > 0) {
+        allTeams.push(...data);
+        if (data.length < 1000) break;
+        p++;
+      } else {
+        break;
+      }
+    }
+    setTeams(allTeams);
     setLoading(false);
   }, []);
 
@@ -69,37 +72,115 @@ export default function AdminEvaluations() {
 
 
 
+  const buildQuery = (isExport = false) => {
+    let query = supabase.from('submissions').select('*', { count: 'exact' });
+    
+    if (activeTab !== 'All Evaluations') {
+      query = query.eq('status', activeTab);
+    }
+
+    if (searchTerm) {
+      const matchingTeamIds = teams.filter(t => t.team_name.toLowerCase().includes(searchTerm.toLowerCase())).map(t => t.id);
+      if (matchingTeamIds.length > 0) {
+        query = query.or(`project_title.ilike.%${searchTerm}%,team_id.in.(${matchingTeamIds.join(',')})`);
+      } else {
+        query = query.ilike('project_title', `%${searchTerm}%`);
+      }
+    }
+
+    if (!isExport) {
+      const from = (currentPage - 1) * itemsPerPage;
+      const to = from + itemsPerPage - 1;
+      query = query.range(from, to);
+    }
+    
+    return query.order('created_at', { ascending: false });
+  };
+
+  useEffect(() => {
+    if (loading || !isAdmin) return;
+    const fetchPage = async () => {
+      const query = buildQuery(false);
+      const { data, count } = await query;
+      if (data) {
+        const evals = data.map((sub) => {
+          const team = teams.find(tm => tm.id === sub.team_id);
+          const evalName = sub.evaluator_name || 'Unassigned';
+          return {
+            id: sub.id,
+            teamName: team?.team_name || 'Unknown Team',
+            teamTrack: sub.category || 'General',
+            subTitle: sub.project_title || 'Untitled Project',
+            subDesc: sub.project_description || 'No description provided',
+            status: sub.status || 'Pending',
+            score: sub.score || null,
+            round: sub.round || 'Evaluation',
+            evaluator: { name: evalName, email: '', inits: evalName.charAt(0).toUpperCase(), color: '#64748B', bg: '#F1F5F9' },
+            date: sub.created_at || new Date().toISOString()
+          };
+        });
+        setEvaluations(evals);
+      }
+      if (count !== null) setTotalFilteredCount(count);
+    };
+    fetchPage();
+  }, [loading, isAdmin, currentPage, searchTerm, activeTab, teams]);
+
   if (loading) return <div style={{minHeight:'100vh',display:'flex',alignItems:'center',justifyContent:'center',background:S.bg}}><div style={{width:40,height:40,border:'3px solid '+S.primary,borderTopColor:'transparent',borderRadius:'50%',animation:'spin 1s linear infinite'}}/></div>;
   if (!isAdmin) return null;
 
-  const filteredEvals = evaluations.filter(e => {
-    const matchSearch = e.teamName.toLowerCase().includes(searchTerm.toLowerCase()) || e.subTitle.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchTab = activeTab === 'All Evaluations' || e.status === activeTab;
-    return matchSearch && matchTab;
-  });
+  const totalPages = Math.ceil(totalFilteredCount / itemsPerPage);
+  const currentEvals = evaluations;
 
-  const totalPages = Math.ceil(filteredEvals.length / itemsPerPage);
-  const currentEvals = filteredEvals.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  const getPageNumbers = () => {
+    const pages = [];
+    if (totalPages <= 7) {
+      for (let i = 1; i <= totalPages; i++) pages.push(i);
+    } else {
+      if (currentPage <= 4) {
+        for (let i = 1; i <= 5; i++) pages.push(i);
+        pages.push('...');
+        pages.push(totalPages);
+      } else if (currentPage >= totalPages - 3) {
+        pages.push(1);
+        pages.push('...');
+        for (let i = totalPages - 4; i <= totalPages; i++) pages.push(i);
+      } else {
+        pages.push(1);
+        pages.push('...');
+        for (let i = currentPage - 1; i <= currentPage + 1; i++) pages.push(i);
+        pages.push('...');
+        pages.push(totalPages);
+      }
+    }
+    return pages;
+  };
 
-  const handleExport = () => {
-    if (filteredEvals.length === 0) {
+  const handleExport = async () => {
+    const query = buildQuery(true);
+    const { data } = await query;
+    if (!data || data.length === 0) {
       alert("No data to export");
       return;
     }
     const headers = ['Submission ID', 'Team Name', 'Track', 'Project Title', 'Status', 'Score', 'Round', 'Evaluator', 'Submitted On'];
     const csvContent = [
       headers.join(','),
-      ...filteredEvals.map(e => [
-        `"${e.id}"`,
-        `"${e.teamName}"`,
-        `"${e.teamTrack}"`,
-        `"${e.subTitle}"`,
-        `"${e.status}"`,
-        `"${e.score || 'Pending'}"`,
-        `"${e.round}"`,
-        `"${e.evaluator.name}"`,
-        `"${new Date(e.date).toLocaleString()}"`
-      ].join(','))
+      ...data.map(sub => {
+        const team = teams.find(tm => tm.id === sub.team_id);
+        const evalName = sub.evaluator_name || 'Unassigned';
+        return [
+          `"${sub.id}"`,
+          `"${team?.team_name || 'Unknown'}"`,
+          `"${sub.category || 'General'}"`,
+          `"${sub.project_title || ''}"`,
+          `"${sub.status || 'Pending'}"`,
+          `"${sub.score || 'Pending'}"`,
+          `"${sub.round || 'Evaluation'}"`,
+          `"${evalName}"`,
+          `"${new Date(sub.created_at || new Date()).toLocaleString()}"`
+        ].join(',');
+      })
     ].join('\n');
 
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -112,11 +193,11 @@ export default function AdminEvaluations() {
   };
 
   const statCounts = {
-    total: evaluations.length,
-    completed: evaluations.filter(e => e.status === 'Completed').length,
-    pending: evaluations.filter(e => e.status === 'Pending').length,
-    inProgress: evaluations.filter(e => e.status === 'In Progress').length,
-    overdue: 0
+    total: tabCounts.all,
+    completed: tabCounts.completed,
+    pending: tabCounts.pending,
+    inProgress: tabCounts.inProgress,
+    overdue: tabCounts.overdue
   };
 
   const stats = [
@@ -241,19 +322,22 @@ export default function AdminEvaluations() {
                 <table style={{ width:'100%', borderCollapse:'collapse', fontSize:13 }}>
                   <thead>
                     <tr style={{ background:'#FAFAFA', borderBottom:'1px solid '+S.border }}>
-                      {['Team', 'Submission', 'Round', 'Evaluator', 'Status', 'Score', 'Submitted On', 'Actions'].map(h => (
+                      {['S.No', 'Team', 'Submission', 'Round', 'Evaluator', 'Status', 'Score', 'Submitted On', 'Actions'].map(h => (
                         <th key={h} style={{ padding:'16px 20px', fontWeight:600, color:S.t2, textAlign: h==='Actions'?'center':'left' }}>{h}</th>
                       ))}
                     </tr>
                   </thead>
                   <tbody>
-                    {currentEvals.map(e => {
+                    {currentEvals.map((e, index) => {
                       const ac = {bg: '#EEE8FF', text: '#6C4EFF'};
                       const subIconColor = '#16A34A'; // Greenish
                       const sc = getStatusStyle(e.status);
 
                       return (
                         <tr key={e.id} style={{ borderBottom:'1px solid #F8FAFC' }}>
+                          <td style={{ padding:'16px 20px', color:S.t2, fontSize:12, fontWeight:600 }}>
+                            {(currentPage - 1) * itemsPerPage + index + 1}
+                          </td>
                           <td style={{ padding:'16px 20px' }}>
                             <div style={{ display:'flex', alignItems:'center', gap:12 }}>
                               <div style={{ width:36, height:36, borderRadius:'8px', background:ac.bg, color:ac.text, display:'flex', alignItems:'center', justifyContent:'center', fontWeight:700, fontSize:13 }}>
@@ -325,7 +409,7 @@ export default function AdminEvaluations() {
                     })}
                     {currentEvals.length === 0 && (
                       <tr>
-                        <td colSpan="8" style={{ padding:40, textAlign:'center', color:S.t3 }}>No evaluations found.</td>
+                        <td colSpan="9" style={{ padding:40, textAlign:'center', color:S.t3 }}>No evaluations found.</td>
                       </tr>
                     )}
                   </tbody>
@@ -333,13 +417,17 @@ export default function AdminEvaluations() {
               </div>
 
               <div style={{ padding:'16px 20px', borderTop:'1px solid '+S.border, display:'flex', justifyContent:'space-between', alignItems:'center', fontSize:13 }}>
-                <div style={{ color:S.t2, fontWeight:500 }}>Showing {filteredEvals.length === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, filteredEvals.length)} of {filteredEvals.length} evaluations</div>
+                <div style={{ color:S.t2, fontWeight:500 }}>Showing {totalFilteredCount === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, totalFilteredCount)} of {totalFilteredCount} evaluations</div>
                 {totalPages > 1 && (
                   <div style={{ display:'flex', alignItems:'center', gap:6 }}>
                     <button onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1} style={{ background:S.card, border:'1px solid '+S.border, borderRadius:8, width:32, height:32, display:'flex', alignItems:'center', justifyContent:'center', color: currentPage === 1 ? S.border : S.t3, cursor: currentPage === 1 ? 'default' : 'pointer' }}><ChevronLeft size={14}/></button>
                     
-                    {Array.from({length: totalPages}, (_, i) => i + 1).map(p => (
-                      <button key={p} onClick={() => setCurrentPage(p)} style={{ background: currentPage === p ? '#EEE8FF' : S.card, border: currentPage === p ? 'none' : '1px solid '+S.border, borderRadius:8, width:32, height:32, display:'flex', alignItems:'center', justifyContent:'center', color: currentPage === p ? S.primary : S.t2, fontWeight: currentPage === p ? 700 : 600, cursor:'pointer' }}>{p}</button>
+                    {getPageNumbers().map((p, idx) => (
+                      p === '...' ? (
+                        <span key={`ellipsis-${idx}`} style={{ color:S.t3, padding:'0 4px', fontWeight:600 }}>...</span>
+                      ) : (
+                        <button key={p} onClick={() => setCurrentPage(p)} style={{ background: currentPage === p ? '#EEE8FF' : S.card, border: currentPage === p ? 'none' : '1px solid '+S.border, borderRadius:8, width:32, height:32, display:'flex', alignItems:'center', justifyContent:'center', color: currentPage === p ? S.primary : S.t2, fontWeight: currentPage === p ? 700 : 600, cursor:'pointer' }}>{p}</button>
+                      )
                     ))}
                     
                     <button onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages} style={{ background:S.card, border:'1px solid '+S.border, borderRadius:8, width:32, height:32, display:'flex', alignItems:'center', justifyContent:'center', color: currentPage === totalPages ? S.border : S.t3, cursor: currentPage === totalPages ? 'default' : 'pointer' }}><ChevronRight size={14}/></button>

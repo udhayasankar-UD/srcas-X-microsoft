@@ -3,12 +3,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import OfficialPPT from '../../assets/PPT/SRCAS HACKATHON 3.0.pptx';
 
 const RESOURCES = [
-  { icon:'📝', label:'Official PPT Template',     desc:'Download the required presentation format', tag:'PPTX', href: OfficialPPT, download: 'SRCAS_HACKATHON_3.0_Template.pptx', color:'#4C9F38' },
-  { icon:'📄', label:'Hackathon Rulebook',       desc:'Official rules and judging criteria',   tag:'PDF',    href:'#', color:'#E5243B' },
-  { icon:'🎯', label:'Problem Statements',        desc:'Explore all 17 SDG challenges',         tag:'Link',   href:'/#problems', color:'#E5243B' },
-  { icon:'📱', label:'Whatsapp Community',       desc:'Connect with organizers all detail share there', tag:'Link',   href:'https://chat.whatsapp.com/BXFPp6PTWk4I6wG7UMCbAP', color:'#3b82f6' },
-  { icon:'🏆', label:'Prize Details',             desc:'Learn about the cash prizes & awards',  tag:'Link',   href:'/#prizes', color:'#f59e0b' },
-  { icon:'📹', label:'Submission Guidelines',     desc:'Guidelines for submission',         tag:'Video',  href:'#', color:'#8b5cf6' },
+  { icon: '📝', label: 'Official PPT Template', desc: 'Download the required presentation format', tag: 'PPTX', href: OfficialPPT, download: 'SRCAS_HACKATHON_3.0_Template.pptx', color: '#4C9F38' },
+  { icon: '📄', label: 'Hackathon Rulebook', desc: 'Official rules and judging criteria', tag: 'PDF', href: '#', color: '#E5243B' },
+  { icon: '🎯', label: 'Problem Statements', desc: 'Explore all 17 SDG challenges', tag: 'Link', href: '/#problems', color: '#E5243B' },
+  { icon: '📱', label: 'Whatsapp Community', desc: 'Connect with organizers all detail share there', tag: 'Link', href: 'https://chat.whatsapp.com/BXFPp6PTWk4I6wG7UMCbAP', color: '#3b82f6' },
+  { icon: '🏆', label: 'Prize Details', desc: 'Learn about the cash prizes & awards', tag: 'Link', href: '/#prizes', color: '#f59e0b' },
+  // { icon:'📹', label:'Submission Guidelines',     desc:'Guidelines for submission',         tag:'Video',  href:'#', color:'#8b5cf6' },
 ];
 
 const FAQS = [
@@ -78,9 +78,9 @@ const FAQS = [
 
 
 const STATUS_STYLE = {
-  done:    { dot:'#4C9F38', line:'#4C9F38', label:'Completed', labelColor:'#4C9F38', labelBg:'#f0fdf4' },
-  active:  { dot:'#f59e0b', line:'#e5e7eb', label:'In Progress', labelColor:'#92400e', labelBg:'#fffbeb' },
-  upcoming:{ dot:'#e5e7eb', line:'#e5e7eb', label:'Upcoming',   labelColor:'#6b7280', labelBg:'#f3f4f6' },
+  done: { dot: '#4C9F38', line: '#4C9F38', label: 'Completed', labelColor: '#4C9F38', labelBg: '#f0fdf4' },
+  active: { dot: '#f59e0b', line: '#e5e7eb', label: 'In Progress', labelColor: '#92400e', labelBg: '#fffbeb' },
+  upcoming: { dot: '#e5e7eb', line: '#e5e7eb', label: 'Upcoming', labelColor: '#6b7280', labelBg: '#f3f4f6' },
 };
 
 export default function ResourcesTab({ hasTeam, submissions }) {
@@ -98,37 +98,37 @@ export default function ResourcesTab({ hasTeam, submissions }) {
   }, [showRulebook]);
 
   const EVENTS = [
-    { date:'Jun 21',    event:'Registration',             status:'done',    desc:'Team registration and idea brief.',       time:'All day' },
-    { date:'Jul 25',    event:'Team Confirmation',        status: hasTeam ? 'done' : 'active',    desc:'Form your team and confirm details.',     time:'11:59 PM IST' },
-    { date:'Jul 25',    event:'Idea Submission',          status: hasSubmitted ? 'done' : (hasTeam ? 'active' : 'upcoming'),  desc:'300-word abstract of your solution.',     time:'11:59 PM IST' },
-    { date:'Aug 7',     event:'Shortlist Announced',      status: hasSubmitted ? 'active' : 'upcoming', desc:'Top teams notified via email.',           time:'12:00 PM IST' },
-    { date:'Aug 14',    event:'Grand Finale',             status:'upcoming',desc:'Live presentations and prize ceremony.',  time:'09:00 AM IST' },
+    { date: 'Jun 21', event: 'Registration', status: 'done', desc: 'Team registration and idea brief.', time: 'All day' },
+    { date: 'Jul 25', event: 'Team Confirmation', status: hasTeam ? 'done' : 'active', desc: 'Form your team and confirm details.', time: '11:59 PM IST' },
+    { date: 'Jul 25', event: 'Idea Submission', status: hasSubmitted ? 'done' : (hasTeam ? 'active' : 'upcoming'), desc: '500-word Project Description and Idea PPT of your solution.', time: '11:59 PM IST' },
+    { date: 'Aug 7', event: 'Shortlist Announced', status: hasSubmitted ? 'active' : 'upcoming', desc: 'Top teams notified via email.', time: '12:00 PM IST' },
+    { date: 'Aug 14', event: 'Grand Finale', status: 'upcoming', desc: 'Live presentations and prize ceremony.', time: '09:00 AM IST' },
   ];
 
   return (
-    <div style={{ display:'flex', flexDirection:'column', gap:22 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 22 }}>
       {/* Resources grid */}
       <div>
-        <div style={{ fontSize:14, fontWeight:800, color:'#111', marginBottom:14 }}>📚 Resource Library</div>
-        <div className="dash-grid-resources" style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(220px,1fr))', gap:12 }}>
+        <div style={{ fontSize: 14, fontWeight: 800, color: '#111', marginBottom: 14 }}>📚 Resource Library</div>
+        <div className="dash-grid-resources" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(220px,1fr))', gap: 12 }}>
           {RESOURCES.map((r, i) => (
-            <a key={i} href={r.href} download={r.download} 
-               onClick={(e) => {
-                 if (r.label === 'Hackathon Rulebook') {
-                   e.preventDefault();
-                   setShowRulebook(true);
-                 }
-               }}
-               style={{ textDecoration:'none', display:'flex', flexDirection:'column', height:'100%' }}>
-              <div style={{ background:'#fff', borderRadius:14, padding:'18px 18px', border:'1.5px solid #f0f0f0', boxShadow:'0 1px 4px rgba(0,0,0,0.05)', cursor:'pointer', transition:'all 0.2s', display:'flex', flexDirection:'column', gap:8, flex:1 }}
-                onMouseEnter={e => { e.currentTarget.style.borderColor=r.color; e.currentTarget.style.transform='translateY(-3px)'; e.currentTarget.style.boxShadow=`0 8px 24px ${r.color}22`; }}
-                onMouseLeave={e => { e.currentTarget.style.borderColor='#f0f0f0'; e.currentTarget.style.transform='translateY(0)'; e.currentTarget.style.boxShadow='0 1px 4px rgba(0,0,0,0.05)'; }}>
-                <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between' }}>
-                  <span style={{ fontSize:26 }}>{r.icon}</span>
-                  <span style={{ fontSize:10, fontWeight:700, color:r.color, background:`${r.color}15`, padding:'3px 8px', borderRadius:20 }}>{r.tag}</span>
+            <a key={i} href={r.href} download={r.download}
+              onClick={(e) => {
+                if (r.label === 'Hackathon Rulebook') {
+                  e.preventDefault();
+                  setShowRulebook(true);
+                }
+              }}
+              style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', height: '100%' }}>
+              <div style={{ background: '#fff', borderRadius: 14, padding: '18px 18px', border: '1.5px solid #f0f0f0', boxShadow: '0 1px 4px rgba(0,0,0,0.05)', cursor: 'pointer', transition: 'all 0.2s', display: 'flex', flexDirection: 'column', gap: 8, flex: 1 }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = r.color; e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = `0 8px 24px ${r.color}22`; }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = '#f0f0f0'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 1px 4px rgba(0,0,0,0.05)'; }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <span style={{ fontSize: 26 }}>{r.icon}</span>
+                  <span style={{ fontSize: 10, fontWeight: 700, color: r.color, background: `${r.color}15`, padding: '3px 8px', borderRadius: 20 }}>{r.tag}</span>
                 </div>
-                <div style={{ fontSize:13, fontWeight:700, color:'#111' }}>{r.label}</div>
-                <div style={{ fontSize:11, color:'#9ca3af', lineHeight:1.4 }}>{r.desc}</div>
+                <div style={{ fontSize: 13, fontWeight: 700, color: '#111' }}>{r.label}</div>
+                <div style={{ fontSize: 11, color: '#9ca3af', lineHeight: 1.4 }}>{r.desc}</div>
               </div>
             </a>
           ))}
@@ -137,27 +137,27 @@ export default function ResourcesTab({ hasTeam, submissions }) {
 
       {/* Timeline */}
       <div>
-        <div style={{ fontSize:14, fontWeight:800, color:'#111', marginBottom:14 }}>📅 Full Event Timeline</div>
-        <div className="dash-card" style={{ background:'#fff', borderRadius:14, padding:'22px 24px', boxShadow:'0 1px 4px rgba(0,0,0,0.05)', border:'1.5px solid #f0f0f0' }}>
+        <div style={{ fontSize: 14, fontWeight: 800, color: '#111', marginBottom: 14 }}>📅 Full Event Timeline</div>
+        <div className="dash-card" style={{ background: '#fff', borderRadius: 14, padding: '22px 24px', boxShadow: '0 1px 4px rgba(0,0,0,0.05)', border: '1.5px solid #f0f0f0' }}>
           {EVENTS.map((ev, i) => {
             const s = STATUS_STYLE[ev.status];
             return (
-              <div key={i} style={{ display:'flex', gap:16, paddingBottom: i<EVENTS.length-1?24:0, position:'relative' }}>
-                {i < EVENTS.length-1 && (
-                  <div style={{ position:'absolute', left:9, top:22, width:2, bottom:0, background:'#e5e7eb' }}>
-                    <div style={{ width:'100%', height: EVENTS[i].status === 'done' ? '100%' : '0%', background:'#4C9F38', transition:'height 0.4s ease' }} />
+              <div key={i} style={{ display: 'flex', gap: 16, paddingBottom: i < EVENTS.length - 1 ? 24 : 0, position: 'relative' }}>
+                {i < EVENTS.length - 1 && (
+                  <div style={{ position: 'absolute', left: 9, top: 22, width: 2, bottom: 0, background: '#e5e7eb' }}>
+                    <div style={{ width: '100%', height: EVENTS[i].status === 'done' ? '100%' : '0%', background: '#4C9F38', transition: 'height 0.4s ease' }} />
                   </div>
                 )}
-                <div style={{ width:20, height:20, borderRadius:'50%', background:s.dot, flexShrink:0, zIndex:1, marginTop:2, display:'flex', alignItems:'center', justifyContent:'center', border: ev.status==='active'?'3px solid #fde68a':'none' }}>
-                  {ev.status==='done' && <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3.5"><polyline points="20 6 9 17 4 12"/></svg>}
+                <div style={{ width: 20, height: 20, borderRadius: '50%', background: s.dot, flexShrink: 0, zIndex: 1, marginTop: 2, display: 'flex', alignItems: 'center', justifyContent: 'center', border: ev.status === 'active' ? '3px solid #fde68a' : 'none' }}>
+                  {ev.status === 'done' && <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3.5"><polyline points="20 6 9 17 4 12" /></svg>}
                 </div>
-                <div style={{ flex:1 }}>
-                  <div style={{ display:'flex', alignItems:'center', gap:8, flexWrap:'wrap', marginBottom:2 }}>
-                    <span style={{ fontSize:13, fontWeight:800, color:'#111' }}>{ev.event}</span>
-                    <span style={{ fontSize:10, fontWeight:700, color:s.labelColor, background:s.labelBg, padding:'2px 8px', borderRadius:20 }}>{s.label}</span>
+                <div style={{ flex: 1 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', marginBottom: 2 }}>
+                    <span style={{ fontSize: 13, fontWeight: 800, color: '#111' }}>{ev.event}</span>
+                    <span style={{ fontSize: 10, fontWeight: 700, color: s.labelColor, background: s.labelBg, padding: '2px 8px', borderRadius: 20 }}>{s.label}</span>
                   </div>
-                  <div style={{ fontSize:11, color:'#9ca3af', marginBottom:4 }}>{ev.date} · {ev.time}</div>
-                  <div style={{ fontSize:12, color:'#6b7280' }}>{ev.desc}</div>
+                  <div style={{ fontSize: 11, color: '#9ca3af', marginBottom: 4 }}>{ev.date} · {ev.time}</div>
+                  <div style={{ fontSize: 12, color: '#6b7280' }}>{ev.desc}</div>
                 </div>
               </div>
             );
@@ -167,17 +167,17 @@ export default function ResourcesTab({ hasTeam, submissions }) {
 
       {/* FAQ */}
       <div>
-        <div style={{ fontSize:14, fontWeight:800, color:'#111', marginBottom:14 }}>❓ Frequently Asked Questions</div>
-        <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
+        <div style={{ fontSize: 14, fontWeight: 800, color: '#111', marginBottom: 14 }}>❓ Frequently Asked Questions</div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           {FAQS.map((f, i) => (
-            <div key={i} style={{ background:'#fff', borderRadius:12, border:'1.5px solid #f0f0f0', overflow:'hidden', boxShadow:'0 1px 4px rgba(0,0,0,0.05)' }}>
-              <button onClick={() => setOpenFaq(openFaq===i ? null : i)}
-                style={{ width:'100%', display:'flex', justifyContent:'space-between', alignItems:'center', padding:'14px 18px', background:'none', border:'none', cursor:'pointer', textAlign:'left', gap:12 }}>
-                <span style={{ fontSize:13, fontWeight:700, color:'#111' }}>{f.q}</span>
-                <span style={{ fontSize:18, color:'#9ca3af', flexShrink:0, transform: openFaq===i?'rotate(45deg)':'rotate(0deg)', transition:'transform 0.2s' }}>+</span>
+            <div key={i} style={{ background: '#fff', borderRadius: 12, border: '1.5px solid #f0f0f0', overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.05)' }}>
+              <button onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 18px', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left', gap: 12 }}>
+                <span style={{ fontSize: 13, fontWeight: 700, color: '#111' }}>{f.q}</span>
+                <span style={{ fontSize: 18, color: '#9ca3af', flexShrink: 0, transform: openFaq === i ? 'rotate(45deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}>+</span>
               </button>
               {openFaq === i && (
-                <div style={{ padding:'0 18px 14px', fontSize:13, color:'#6b7280', lineHeight:1.6, borderTop:'1px solid #f3f4f6' }}>
+                <div style={{ padding: '0 18px 14px', fontSize: 13, color: '#6b7280', lineHeight: 1.6, borderTop: '1px solid #f3f4f6' }}>
                   {f.a}
                 </div>
               )}
@@ -231,10 +231,10 @@ export default function ResourcesTab({ hasTeam, submissions }) {
                     onMouseEnter={e => e.currentTarget.style.background = '#f3f4f6'}
                     onMouseLeave={e => e.currentTarget.style.background = 'none'}>&times;</button>
                 </div>
-                
+
                 {/* Body */}
                 <div style={{ padding: '32px', overflowY: 'auto', fontSize: '0.95rem', color: '#4b5563', lineHeight: 1.7 }}>
-                  
+
                   <h3 style={{ color: '#111', fontSize: '1.1rem', fontWeight: 800, marginTop: 0, letterSpacing: '-0.01em' }}>1. Eligibility & Team Formation</h3>
                   <ul style={{ paddingLeft: 20, marginBottom: 24 }}>
                     <li style={{ marginBottom: 6 }}>All team members must be currently enrolled college students.</li>
@@ -252,7 +252,7 @@ export default function ResourcesTab({ hasTeam, submissions }) {
 
                   <h3 style={{ color: '#111', fontSize: '1.1rem', fontWeight: 800, letterSpacing: '-0.01em' }}>3. Submission & Development Rules</h3>
                   <ul style={{ paddingLeft: 20, marginBottom: 24 }}>
-                    <li style={{ marginBottom: 6 }}><strong>Round 1 (Idea Submission):</strong> Teams must submit a 300-word abstract and the official PPT format.</li>
+                    <li style={{ marginBottom: 6 }}><strong>Round 1 (Idea Submission):</strong> Teams must submit a 500-word Project Description and the official PPT format.</li>
                     <li style={{ marginBottom: 6 }}><strong>Round 2 (Finale):</strong> Shortlisted teams will present their working prototypes offline at the SRCAS campus.</li>
                     <li style={{ marginBottom: 6 }}><strong>24-Hour Software Rule:</strong> All software coding and application development must take place exclusively during the 24-hour hackathon period. Bringing pre-written code, using proprietary existing projects, or plagiarism will lead to immediate disqualification.</li>
                     <li style={{ marginBottom: 6 }}><strong>Hardware & IoT Exception:</strong> If you are building a hardware-based project, you may procure the required devices, assemble, and test them before the Hackathon. However, during the 24-hour event, you are strictly expected to develop the software application, integrate it with your IoT devices, and demonstrate the final connected solution.</li>

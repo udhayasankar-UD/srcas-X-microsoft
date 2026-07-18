@@ -1,6 +1,7 @@
 import * as React from "react";
 import { useEffect, useRef } from "react";
 import { useAuth } from "../../lib/useAuth";
+import { Link } from "react-router-dom";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { cn } from "@/lib/utils";
@@ -368,6 +369,16 @@ export default function Footer() {
               <span className="cf-heartbeat" style={{ fontSize: '15px', color: '#ef4444' }}>❤</span>
               <span style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#9ca3af' }}>by</span>
               <span style={{ fontSize: '12px', fontWeight: 900, color: '#111', marginLeft: 2 }}>SRCAS Prog. Club</span>
+            </div>
+
+            {/* Divider — desktop only */}
+            <div className="footer-divider" style={{ width: 1, height: 24, background: '#e5e7eb', flexShrink: 0 }} />
+
+            {/* Legal Links */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', fontSize: '12px', fontWeight: 600 }}>
+              <Link to="/terms" style={{ color: '#9ca3af', textDecoration: 'none', transition: 'color 0.2s' }} onMouseEnter={e => e.currentTarget.style.color = '#111'} onMouseLeave={e => e.currentTarget.style.color = '#9ca3af'}>Terms & Conditions</Link>
+              <span style={{ color: '#d1d5db' }}>|</span>
+              <Link to="/privacy" style={{ color: '#9ca3af', textDecoration: 'none', transition: 'color 0.2s' }} onMouseEnter={e => e.currentTarget.style.color = '#111'} onMouseLeave={e => e.currentTarget.style.color = '#9ca3af'}>Privacy</Link>
             </div>
           </div>
 
