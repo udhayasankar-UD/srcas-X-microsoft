@@ -196,7 +196,7 @@ const SDGs = [
     id: 18, num: '', title: 'Example Problem Statements',
     color: '#19486A',
     // logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Sustainable_Development_Goal_17Partnerships.svg/960px-Sustainable_Development_Goal_17Partnerships.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail&_=20240924093233',
-    imageUrl: 'https://images.unsplash.com/photo-1589578527966-fdac0f44566c?w=600&q=80',
+    imageUrl: 'https://img.magnific.com/free-vector/creative-thinking-original-suggestion-non-standard-decision-problem-solving-man-with-big-lightbulb-cartoon-character-innovative-development_335657-2110.jpg?semt=ais_hybrid&w=740&q=80',
     description: 'Strengthen global partnerships for sustainable development.',
     challenges: [
       'Create a cross-sector collaboration platform matching NGOs, governments, and startups based on complementary resources and shared SDG targets.',
@@ -586,7 +586,7 @@ export default function ProblemStatements() {
                     </div>
                     <div>
                       <h3 style={{ fontSize: 'clamp(18px, 3vh, 24px)', fontWeight: 900, color: '#111', margin: '0 0 4px', letterSpacing: '-0.02em' }}>
-                        Example Problem Statements
+                        Example Problem's
                       </h3>
                       <p style={{ fontSize: '13px', color: '#9ca3af', fontWeight: 600, margin: 0 }}>
                         30 curated challenges
