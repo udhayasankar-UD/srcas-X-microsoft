@@ -48,7 +48,8 @@ export default function AdminTeams() {
   const buildQuery = (isExport = false) => {
     let query = supabase.from('teams').select('*', { count: 'exact' });
     if (searchTerm) {
-      query = query.ilike('team_name', `%${searchTerm}%`);
+      const safeTerm = searchTerm.replace(/[%_\*()]/g, '');
+      query = query.ilike('team_name', `%${safeTerm}%`);
     }
     if (!isExport) {
       const from = (currentPage - 1) * itemsPerPage;

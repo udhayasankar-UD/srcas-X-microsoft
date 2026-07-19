@@ -92,7 +92,7 @@ export default function AdminEvaluateSubmission() {
       }).eq('id', id);
 
       if (error) {
-        console.error(error);
+        // console.error(error);
         alert('Error saving evaluation: ' + error.message + '\n\nPlease run the SQL migration to add evaluation columns to your submissions table.');
         return;
       }
@@ -100,7 +100,7 @@ export default function AdminEvaluateSubmission() {
       alert('Evaluation saved successfully!');
       navigate('/udview/evaluations');
     } catch (err) {
-      console.error(err);
+      // console.error(err);
       alert('An unexpected error occurred.');
     }
   };

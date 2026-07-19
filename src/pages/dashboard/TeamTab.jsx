@@ -238,6 +238,12 @@ export default function TeamTab({ hasTeam, teamData, teamMembers, user, setTeamM
       // --- Upload Files Helper ---
       const uploadFile = async (file, memberName, side) => {
         if (!file) return null;
+        if (!file.type.startsWith('image/')) {
+          throw new Error('Only image files are allowed for ID cards.');
+        }
+        if (file.size > 5 * 1024 * 1024) {
+          throw new Error('ID card image size must be under 5MB.');
+        }
         const timestamp = Date.now();
         const randomStr = Math.random().toString(36).substring(2, 8);
         const safeName = memberName ? memberName.replace(/[^a-zA-Z0-9]/g, '').toLowerCase() : 'member';

@@ -74,11 +74,12 @@ export default function AdminSubmissions() {
     }
 
     if (searchTerm) {
-      const matchingTeamIds = teams.filter(t => t.team_name.toLowerCase().includes(searchTerm.toLowerCase())).map(t => t.id);
+      const safeTerm = searchTerm.replace(/[%_\*()]/g, '');
+      const matchingTeamIds = teams.filter(t => t.team_name.toLowerCase().includes(safeTerm.toLowerCase())).map(t => t.id);
       if (matchingTeamIds.length > 0) {
-        query = query.or(`project_title.ilike.%${searchTerm}%,team_id.in.(${matchingTeamIds.join(',')})`);
+        query = query.or(`project_title.ilike.%${safeTerm}%,team_id.in.(${matchingTeamIds.join(',')})`);
       } else {
-        query = query.ilike('project_title', `%${searchTerm}%`);
+        query = query.ilike('project_title', `%${safeTerm}%`);
       }
     }
 

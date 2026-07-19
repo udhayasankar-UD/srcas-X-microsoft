@@ -72,7 +72,8 @@ export default function AdminUsers() {
     let query = supabase.from('team_members').select('*', { count: 'exact' });
     
     if (searchTerm) {
-      query = query.or(`full_name.ilike.%${searchTerm}%,email.ilike.%${searchTerm}%`);
+      const safeTerm = searchTerm.replace(/[%_\*()]/g, '');
+      query = query.or(`full_name.ilike.%${safeTerm}%,email.ilike.%${safeTerm}%`);
     }
     if (roleFilter === 'Team Lead') {
       query = query.eq('is_leader', true);

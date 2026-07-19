@@ -82,7 +82,7 @@ export default function DashboardPage() {
           setHasTeam(false);
         }
       } catch (error) {
-        console.error('Error fetching dashboard data:', error);
+        // Error fetching dashboard data
       } finally {
         setLoading(false);
       }

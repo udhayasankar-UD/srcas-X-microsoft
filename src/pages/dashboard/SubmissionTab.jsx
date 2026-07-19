@@ -94,6 +94,13 @@ export default function SubmissionTab({ hasTeam, teamData, teamMembers, submissi
 
       // Upload PDF if provided
       if (form.pdf) {
+        if (!form.pdf.type.includes('pdf')) {
+          throw new Error('Only PDF files are allowed for presentation uploads.');
+        }
+        if (form.pdf.size > 5 * 1024 * 1024) {
+          throw new Error('File size is too large. Please compress your PDF to under 5MB and try again.');
+        }
+
         const fileExt = form.pdf.name.split('.').pop();
         const fileName = `${teamData.id}-${Math.random()}.${fileExt}`;
         const { error: uploadError } = await supabase.storage
@@ -202,7 +209,7 @@ export default function SubmissionTab({ hasTeam, teamData, teamMembers, submissi
             await supabase.storage.from('presentations_deck').remove([fileName]);
           }
         } catch (storageErr) {
-          console.error("Error deleting from storage:", storageErr);
+          // Error deleting from storage
         }
       }
 
