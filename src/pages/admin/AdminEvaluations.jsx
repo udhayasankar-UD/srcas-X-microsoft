@@ -62,8 +62,8 @@ export default function AdminEvaluations() {
 
   useEffect(() => {
     const checkAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session?.user) { navigate('/register'); return; }
+      const { data: { user }, error } = await supabase.auth.getUser();
+      if (error || !user) { navigate('/register'); return; }
       const { data: adminList } = await supabase.from('admins').select('email');
       if (adminList && adminList.length > 0) { setIsAdmin(true); fetchData(); } else { alert("Not admin!"); navigate('/dashboard'); }
     };

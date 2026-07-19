@@ -58,9 +58,9 @@ export default function AdminUsers() {
 
   useEffect(() => {
     const checkAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session?.user) { navigate('/register'); return; }
-      setAdminEmail(session.user.email);
+      const { data: { user }, error } = await supabase.auth.getUser();
+      if (error || !user) { navigate('/register'); return; }
+      setAdminEmail(user.email);
       const { data: adminList } = await supabase.from('admins').select('email');
       if (adminList && adminList.length > 0) { setIsAdmin(true); fetchData(); } else { alert("Not admin!"); navigate('/dashboard'); }
     };
