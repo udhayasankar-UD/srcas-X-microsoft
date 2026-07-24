@@ -97,7 +97,7 @@ export default function TeamTab({ hasTeam, teamData, teamMembers, user, setTeamM
   const startEditTeam = (stepToOpen = 0) => {
     const leader = teamMembers?.find(m => m.id === teamData?.leader_id) || teamMembers?.find(m => m.email === user?.email);
     const teammates = teamMembers?.filter(m => m.id !== leader?.id) || [];
-    
+
     const parseLocation = (loc) => {
       if (!loc) return { state: '', city: '' };
       const parts = loc.split(', ');
@@ -218,7 +218,7 @@ export default function TeamTab({ hasTeam, teamData, teamMembers, user, setTeamM
 
       // 1. Create or Update Team
       const cleanTeamName = sanitizeInput(formData.teamName);
-      
+
       if (isEditingTeam) {
         const { error: teamErr } = await supabase.from('teams').update({
           team_name: cleanTeamName
@@ -241,17 +241,17 @@ export default function TeamTab({ hasTeam, teamData, teamMembers, user, setTeamM
         if (!file.type.startsWith('image/')) {
           throw new Error('Only image files are allowed for ID cards.');
         }
-        if (file.size > 5 * 1024 * 1024) {
-          throw new Error('ID card image size must be under 5MB.');
+        if (file.size > 3 * 1024 * 1024) {
+          throw new Error('ID card image size must be under 3MB.');
         }
         const timestamp = Date.now();
         const randomStr = Math.random().toString(36).substring(2, 8);
         const safeName = memberName ? memberName.replace(/[^a-zA-Z0-9]/g, '').toLowerCase() : 'member';
         const path = `uploads/${timestamp}_${randomStr}_${safeName}_${side}.${file.name.split('.').pop()}`;
-        
+
         const { error } = await supabase.storage.from('id-cards').upload(path, file, { cacheControl: '3600', upsert: false });
         if (error) throw error;
-        
+
         const { data } = supabase.storage.from('id-cards').getPublicUrl(path);
         return data.publicUrl;
       };
@@ -342,76 +342,76 @@ export default function TeamTab({ hasTeam, teamData, teamMembers, user, setTeamM
       <div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px' }}>
           {/* Personal Details */}
-        <div>
-          <label style={styles.label}>Full Name</label>
-          <input type="text" value={member.full_name} onChange={e => updateMember('full_name', e.target.value)} disabled={isLeader} style={isLeader ? styles.inputDisabled : styles.input} placeholder="Full Name" />
-        </div>
-        <div>
-          <label style={styles.label}>Email Address</label>
-          <input type="email" value={member.email} onChange={e => updateMember('email', e.target.value)} disabled={isLeader} style={isLeader ? styles.inputDisabled : styles.input} placeholder="Email Address" />
-        </div>
-        <div>
-          <label style={styles.label}>Phone Number</label>
-          <div style={{ display: 'flex', borderRadius: 10, border: '1.5px solid #e5e7eb', overflow: 'hidden', background: '#fff' }}>
-            <span style={{ padding: '12px 14px', background: '#f9fafb', borderRight: '1.5px solid #e5e7eb', color: '#6b7280', fontSize: 14, fontWeight: 600 }}>+91</span>
-            <input type="tel" value={member.phone_number} onChange={e => updateMember('phone_number', e.target.value.replace(/\D/g, '').slice(0, 10))} style={{ width: '100%', padding: '12px 14px', border: 'none', outline: 'none', fontSize: 14, fontFamily: 'inherit' }} placeholder="10-digit mobile number" />
+          <div>
+            <label style={styles.label}>Full Name</label>
+            <input type="text" value={member.full_name} onChange={e => updateMember('full_name', e.target.value)} disabled={isLeader} style={isLeader ? styles.inputDisabled : styles.input} placeholder="Full Name" />
+          </div>
+          <div>
+            <label style={styles.label}>Email Address</label>
+            <input type="email" value={member.email} onChange={e => updateMember('email', e.target.value)} disabled={isLeader} style={isLeader ? styles.inputDisabled : styles.input} placeholder="Email Address" />
+          </div>
+          <div>
+            <label style={styles.label}>Phone Number</label>
+            <div style={{ display: 'flex', borderRadius: 10, border: '1.5px solid #e5e7eb', overflow: 'hidden', background: '#fff' }}>
+              <span style={{ padding: '12px 14px', background: '#f9fafb', borderRight: '1.5px solid #e5e7eb', color: '#6b7280', fontSize: 14, fontWeight: 600 }}>+91</span>
+              <input type="tel" value={member.phone_number} onChange={e => updateMember('phone_number', e.target.value.replace(/\D/g, '').slice(0, 10))} style={{ width: '100%', padding: '12px 14px', border: 'none', outline: 'none', fontSize: 14, fontFamily: 'inherit' }} placeholder="10-digit mobile number" />
+            </div>
+          </div>
+
+          {/* Location Details */}
+          <div>
+            <label style={styles.label}>State</label>
+            <select value={member.state} onChange={e => { updateMember('state', e.target.value); if (isLeader) setFormData(p => ({ ...p, leader: { ...p.leader, state: e.target.value, city: '' } })); }} style={{ ...styles.input, cursor: 'pointer' }}>
+              <option value="" disabled>Select State</option>
+              {Object.keys(INDIA_STATES_CITIES).map(s => <option key={s} value={s}>{s}</option>)}
+            </select>
+          </div>
+          <div>
+            <label style={styles.label}>City / District</label>
+            <select value={member.city} onChange={e => updateMember('city', e.target.value)} disabled={!member.state} style={!member.state ? styles.inputDisabled : { ...styles.input, cursor: 'pointer' }}>
+              <option value="" disabled>Select City</option>
+              {member.state && INDIA_STATES_CITIES[member.state]?.map(c => <option key={c} value={c}>{c}</option>)}
+              {member.state && <option value="Other">Other (Please Specify)</option>}
+            </select>
+          </div>
+          {member.city === 'Other' && (
+            <div>
+              <label style={styles.label}>Specify City / District</label>
+              <input type="text" value={member.city_other || ''} onChange={e => updateMember('city_other', e.target.value)} style={styles.input} placeholder="Your City" />
+            </div>
+          )}
+
+          {/* Academic Details */}
+          <div>
+            <label style={styles.label}>College / Organization</label>
+            <input type="text" value={member.college_name} onChange={e => updateMember('college_name', e.target.value)} style={styles.input} placeholder="E.g., SRCAS" />
+          </div>
+          <div>
+            <label style={styles.label}>Register Number</label>
+            <input type="text" value={member.reg_no} onChange={e => updateMember('reg_no', e.target.value)} style={styles.input} placeholder="Registration Number" />
+          </div>
+          <div>
+            <label style={styles.label}>Department</label>
+            <select value={member.dept} onChange={e => updateMember('dept', e.target.value)} style={{ ...styles.input, cursor: 'pointer' }}>
+              <option value="" disabled>Select Department</option>
+              {DEPARTMENTS.map(d => <option key={d} value={d}>{d}</option>)}
+            </select>
+          </div>
+          {member.dept === 'Other' && (
+            <div>
+              <label style={styles.label}>Specify Department</label>
+              <input type="text" value={member.dept_other} onChange={e => updateMember('dept_other', e.target.value)} style={styles.input} placeholder="Your Department" />
+            </div>
+          )}
+          <div>
+            <label style={styles.label}>Year of Study</label>
+            <select value={member.year} onChange={e => updateMember('year', e.target.value)} style={{ ...styles.input, cursor: 'pointer' }}>
+              <option value="" disabled>Select Year</option>
+              {[1, 2, 3, 4].map(y => <option key={y} value={`${y} Year`}>{y} Year</option>)}
+            </select>
           </div>
         </div>
 
-        {/* Location Details */}
-        <div>
-          <label style={styles.label}>State</label>
-          <select value={member.state} onChange={e => { updateMember('state', e.target.value); if (isLeader) setFormData(p => ({ ...p, leader: { ...p.leader, state: e.target.value, city: '' } })); }} style={{ ...styles.input, cursor: 'pointer' }}>
-            <option value="" disabled>Select State</option>
-            {Object.keys(INDIA_STATES_CITIES).map(s => <option key={s} value={s}>{s}</option>)}
-          </select>
-        </div>
-        <div>
-          <label style={styles.label}>City / District</label>
-          <select value={member.city} onChange={e => updateMember('city', e.target.value)} disabled={!member.state} style={!member.state ? styles.inputDisabled : { ...styles.input, cursor: 'pointer' }}>
-            <option value="" disabled>Select City</option>
-            {member.state && INDIA_STATES_CITIES[member.state]?.map(c => <option key={c} value={c}>{c}</option>)}
-            {member.state && <option value="Other">Other (Please Specify)</option>}
-          </select>
-        </div>
-        {member.city === 'Other' && (
-          <div>
-            <label style={styles.label}>Specify City / District</label>
-            <input type="text" value={member.city_other || ''} onChange={e => updateMember('city_other', e.target.value)} style={styles.input} placeholder="Your City" />
-          </div>
-        )}
-
-        {/* Academic Details */}
-        <div>
-          <label style={styles.label}>College / Organization</label>
-          <input type="text" value={member.college_name} onChange={e => updateMember('college_name', e.target.value)} style={styles.input} placeholder="E.g., SRCAS" />
-        </div>
-        <div>
-          <label style={styles.label}>Register Number</label>
-          <input type="text" value={member.reg_no} onChange={e => updateMember('reg_no', e.target.value)} style={styles.input} placeholder="Registration Number" />
-        </div>
-        <div>
-          <label style={styles.label}>Department</label>
-          <select value={member.dept} onChange={e => updateMember('dept', e.target.value)} style={{ ...styles.input, cursor: 'pointer' }}>
-            <option value="" disabled>Select Department</option>
-            {DEPARTMENTS.map(d => <option key={d} value={d}>{d}</option>)}
-          </select>
-        </div>
-        {member.dept === 'Other' && (
-          <div>
-            <label style={styles.label}>Specify Department</label>
-            <input type="text" value={member.dept_other} onChange={e => updateMember('dept_other', e.target.value)} style={styles.input} placeholder="Your Department" />
-          </div>
-        )}
-        <div>
-          <label style={styles.label}>Year of Study</label>
-          <select value={member.year} onChange={e => updateMember('year', e.target.value)} style={{ ...styles.input, cursor: 'pointer' }}>
-            <option value="" disabled>Select Year</option>
-            {[1, 2, 3, 4].map(y => <option key={y} value={`${y} Year`}>{y} Year</option>)}
-          </select>
-        </div>
-        </div>
-        
         {/* ID Card Upload 
         <div style={{ marginTop: 24, borderTop: '1.5px solid #e5e7eb', paddingTop: 24 }}>
           {!member.id_card_front_url ? (
@@ -665,32 +665,32 @@ export default function TeamTab({ hasTeam, teamData, teamMembers, user, setTeamM
         {/* Left Column: Team Members */}
         <div style={{ ...styles.card, height: '100%' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-              <h3 style={{ fontSize: 16, fontWeight: 800, color: '#111', margin: 0 }}>Team Members ({teamMembers.length})</h3>
-            </div>
+            <h3 style={{ fontSize: 16, fontWeight: 800, color: '#111', margin: 0 }}>Team Members ({teamMembers.length})</h3>
+          </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
-              {teamMembers.map((m, idx) => {
-                const isLeader = m.id === teamData.leader_id || m.email === user.email;
-                return (
-                  <div key={m.id || idx} style={{ display: 'flex', alignItems: 'flex-start', gap: 16, padding: '16px 0', borderBottom: idx !== teamMembers.length - 1 ? '1px solid #f3f4f6' : 'none' }}>
-                    <div style={{ width: 44, height: 44, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 800, fontSize: 18, flexShrink: 0, background: isLeader ? '#10b981' : '#34d399' }}>
-                      {m.full_name ? m.full_name[0].toUpperCase() : '?'}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+            {teamMembers.map((m, idx) => {
+              const isLeader = m.id === teamData.leader_id || m.email === user.email;
+              return (
+                <div key={m.id || idx} style={{ display: 'flex', alignItems: 'flex-start', gap: 16, padding: '16px 0', borderBottom: idx !== teamMembers.length - 1 ? '1px solid #f3f4f6' : 'none' }}>
+                  <div style={{ width: 44, height: 44, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 800, fontSize: 18, flexShrink: 0, background: isLeader ? '#10b981' : '#34d399' }}>
+                    {m.full_name ? m.full_name[0].toUpperCase() : '?'}
+                  </div>
+                  <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                    <span style={{ display: 'inline-block', fontSize: 10, fontWeight: 800, padding: '2px 8px', borderRadius: 12, background: isLeader ? '#dcfce7' : '#f0fdf4', color: isLeader ? '#166534' : '#15803d', marginBottom: 6 }}>
+                      {isLeader ? 'Team Lead' : 'Member'}
+                    </span>
+                    <div style={{ fontSize: 15, fontWeight: 800, color: '#111', marginBottom: 4 }}>
+                      {m.full_name}
                     </div>
-                    <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-                      <span style={{ display: 'inline-block', fontSize: 10, fontWeight: 800, padding: '2px 8px', borderRadius: 12, background: isLeader ? '#dcfce7' : '#f0fdf4', color: isLeader ? '#166534' : '#15803d', marginBottom: 6 }}>
-                        {isLeader ? 'Team Lead' : 'Member'}
-                      </span>
-                      <div style={{ fontSize: 15, fontWeight: 800, color: '#111', marginBottom: 4 }}>
-                        {m.full_name}
-                      </div>
-                      <div style={{ fontSize: 12, color: '#6b7280', marginBottom: 4 }}>
-                        {m.email}
-                      </div>
-                      <div style={{ fontSize: 12, color: '#6b7280', display: 'flex', alignItems: 'center', gap: 6 }}>
-                        📞 +91 {m.phone_number}
-                      </div>
+                    <div style={{ fontSize: 12, color: '#6b7280', marginBottom: 4 }}>
+                      {m.email}
+                    </div>
+                    <div style={{ fontSize: 12, color: '#6b7280', display: 'flex', alignItems: 'center', gap: 6 }}>
+                      📞 +91 {m.phone_number}
+                    </div>
 
-                      {/* ID Card Status - commented out
+                    {/* ID Card Status - commented out
                       <div style={{ marginTop: 12, display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, fontWeight: 600 }}>
                         {m.id_card_front_url && m.id_card_back_url ? (
                           <span style={{ display: 'flex', alignItems: 'center', gap: 4, color: '#16a34a' }}>
@@ -708,12 +708,12 @@ export default function TeamTab({ hasTeam, teamData, teamMembers, user, setTeamM
                         )}
                       </div>
                       */}
-                    </div>
                   </div>
-                );
-              })}
-            </div>
+                </div>
+              );
+            })}
           </div>
+        </div>
 
         {/* Right Column: Next Steps */}
         <div style={{ ...styles.card, height: '100%', display: 'flex', flexDirection: 'column' }}>
@@ -730,8 +730,8 @@ export default function TeamTab({ hasTeam, teamData, teamMembers, user, setTeamM
 
             {[
               { num: 1, title: 'Open Statement', desc: 'Choose the problem statement you want to work on.' },
-              { num: 2, title: 'Select SDG Goals', desc: 'Select one or more SDG goals related to your solution.'},
-              { num: 3, title: 'Submit Your Next Big Idea', desc: 'Submit your next step to continue in the hackathon.'}
+              { num: 2, title: 'Select SDG Goals', desc: 'Select one or more SDG goals related to your solution.' },
+              { num: 3, title: 'Submit Your Next Big Idea', desc: 'Submit your next step to continue in the hackathon.' }
             ].map((step, i) => (
               <div key={i} style={{ display: 'flex', gap: 20, position: 'relative', zIndex: 1 }}>
                 <div style={{ width: 32, height: 32, borderRadius: '50%', background: '#fff', border: '2px solid #10b981', color: '#10b981', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 800, flexShrink: 0 }}>
@@ -743,7 +743,7 @@ export default function TeamTab({ hasTeam, teamData, teamMembers, user, setTeamM
                       <div style={{ fontSize: 14, fontWeight: 800, color: '#111', marginBottom: 6 }}>{step.title}</div>
                       <div style={{ fontSize: 12, color: '#6b7280', lineHeight: 1.5 }}>{step.desc}</div>
                     </div>
-                    
+
                   </div>
                 </div>
               </div>
@@ -799,7 +799,7 @@ export default function TeamTab({ hasTeam, teamData, teamMembers, user, setTeamM
             {toastMsg}
           </motion.div>
         )}
-        
+
         {/* ID card popup - commented out
         {showIdPopup && !isEditingTeam && (
           <>

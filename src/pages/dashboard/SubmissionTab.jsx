@@ -97,8 +97,8 @@ export default function SubmissionTab({ hasTeam, teamData, teamMembers, submissi
         if (!form.pdf.type.includes('pdf')) {
           throw new Error('Only PDF files are allowed for presentation uploads.');
         }
-        if (form.pdf.size > 5 * 1024 * 1024) {
-          throw new Error('File size is too large. Please compress your PDF to under 5MB and try again.');
+        if (form.pdf.size > 3 * 1024 * 1024) {
+          throw new Error('File size is too large. Please compress your PDF to under 3MB and try again.');
         }
 
         const fileExt = form.pdf.name.split('.').pop();
@@ -118,7 +118,7 @@ export default function SubmissionTab({ hasTeam, teamData, teamMembers, submissi
       }
 
       const cleanCategory = sanitizeInput(form.category === 'Other' ? form.category_other : form.category);
-      
+
       const newSubmission = {
         team_id: teamData.id,
         project_title: sanitizeInput(form.title),
@@ -355,7 +355,7 @@ export default function SubmissionTab({ hasTeam, teamData, teamMembers, submissi
 
       setFieldErrors(errors);
       if (hasError) return;
-      
+
       setStep(2);
     }
   };
@@ -410,7 +410,7 @@ export default function SubmissionTab({ hasTeam, teamData, teamMembers, submissi
             {/* Submission Guidelines Note */}
             <div style={{ padding: 14, background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: 10, display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 20 }}>
               <div style={{ fontSize: 13, fontWeight: 700, color: '#14532d', display: 'flex', alignItems: 'center', gap: 6 }}>
-                 Submission Guidelines
+                Submission Guidelines
               </div>
               <ul style={{ fontSize: 12, color: '#166534', margin: 0, paddingLeft: 16, lineHeight: 1.6, display: 'flex', flexDirection: 'column', gap: 4 }}>
                 <li>Download the official PPT template using the button below.</li>
@@ -425,11 +425,11 @@ export default function SubmissionTab({ hasTeam, teamData, teamMembers, submissi
             </div>
 
             <label style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer', padding: '12px 16px', background: guidelinesRead ? '#f0fdf4' : '#f9fafb', borderRadius: 10, border: guidelinesRead ? '1.5px solid #bbf7d0' : '1.5px solid #e5e7eb', width: 'fit-content', transition: 'all 0.2s' }}>
-              <input 
-                type="checkbox" 
-                checked={guidelinesRead} 
-                onChange={e => { setGuidelinesRead(e.target.checked); if (e.target.checked) setErrorMsg(''); }} 
-                style={{ cursor: 'pointer', width: 16, height: 16, accentColor: '#4C9F38' }} 
+              <input
+                type="checkbox"
+                checked={guidelinesRead}
+                onChange={e => { setGuidelinesRead(e.target.checked); if (e.target.checked) setErrorMsg(''); }}
+                style={{ cursor: 'pointer', width: 16, height: 16, accentColor: '#4C9F38' }}
               />
               <span style={{ fontSize: 13, fontWeight: 700, color: guidelinesRead ? '#166534' : '#374151', transition: 'color 0.2s' }}>
                 I have read and understood the submission guidelines, and I am ready to submit.
@@ -495,7 +495,7 @@ export default function SubmissionTab({ hasTeam, teamData, teamMembers, submissi
                     <option value="Other">Other</option>
                   </select>
                   {fieldErrors.category && <span style={{ fontSize: 11, color: '#ef4444', marginTop: 2 }}>{fieldErrors.category}</span>}
-                  
+
                   {form.category === 'Other' && (
                     <>
                       <input type="text" value={form.category_other} onChange={set('category_other')} placeholder="Please specify category..."
@@ -521,7 +521,7 @@ export default function SubmissionTab({ hasTeam, teamData, teamMembers, submissi
                   Presentation Deck
                   <a href={OfficialPPT} download="SRCAS_HACKATHON_3.0_Template.pptx" style={{ fontSize: 11, color: '#4C9F38', textDecoration: 'none', fontWeight: 600 }}>↓ Download Template</a>
                 </label>
-                <div style={{ fontSize: 11, color: '#6b7280', marginBottom: 4 }}>Please upload your presentation using the official template as a PDF. Max 20MB.</div>
+                <div style={{ fontSize: 11, color: '#6b7280', marginBottom: 4 }}>Please upload your presentation using the official template as a PDF. Max 3MB.</div>
                 <input type="file" accept=".pdf" onChange={e => setForm({ ...form, pdf: e.target.files[0] })}
                   style={{ padding: '10px 13px', borderRadius: 10, border: fieldErrors.pdf ? '1.5px solid #ef4444' : '1.5px solid #e5e7eb', fontSize: 13, color: '#111', background: '#f9fafb' }} />
                 {fieldErrors.pdf && <span style={{ fontSize: 11, color: '#ef4444', marginTop: 2 }}>{fieldErrors.pdf}</span>}
@@ -539,13 +539,13 @@ export default function SubmissionTab({ hasTeam, teamData, teamMembers, submissi
               </div>
             ))}
             {form.pdf && (
-              <button 
+              <button
                 onClick={() => window.open(URL.createObjectURL(form.pdf), '_blank')}
                 style={{ padding: '10px 20px', background: '#f3f4f6', color: '#111', borderRadius: 8, border: '1.5px solid #e5e7eb', cursor: 'pointer', fontWeight: 700, fontSize: 13, alignSelf: 'flex-start', display: 'flex', alignItems: 'center', gap: 6, transition: 'background 0.2s' }}
                 onMouseEnter={e => e.currentTarget.style.background = '#e5e7eb'}
                 onMouseLeave={e => e.currentTarget.style.background = '#f3f4f6'}
               >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" /></svg>
                 Preview Uploaded PDF
               </button>
             )}
