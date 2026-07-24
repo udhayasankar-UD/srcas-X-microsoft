@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { supabase } from '../../lib/supabaseClient';
-import { Search, ChevronDown, ChevronRight, ChevronLeft, Check, Leaf, ExternalLink, Bold, Italic, Underline, List, Link2 } from 'lucide-react';
+import { Search, ChevronDown, ChevronRight, ChevronLeft, Check, Leaf, ExternalLink, Bold, Italic, Underline, List, Link2, Mail, Phone, User, MapPin, Building2, Hash } from 'lucide-react';
 
 const S = {
   bg: '#F8FAFC', card: '#FFFFFF', border: '#E5E7EB', primary: '#6C4EFF',
@@ -20,6 +20,7 @@ export default function AdminEvaluateSubmission() {
   const [submission, setSubmission] = useState(null);
   const [team, setTeam] = useState(null);
   const [members, setMembers] = useState([]);
+  const [allSubmissionIds, setAllSubmissionIds] = useState([]);
 
   // Evaluation state
   const [scores, setScores] = useState({
@@ -42,6 +43,9 @@ export default function AdminEvaluateSubmission() {
         if (sub.evaluation_scores) setScores(sub.evaluation_scores);
         if (sub.evaluation_notes) setNotes(sub.evaluation_notes);
 
+        const { data: allSubs } = await supabase.from('submissions').select('id').order('created_at', { ascending: false });
+        if (allSubs) setAllSubmissionIds(allSubs.map(s => s.id));
+
         const { data: tm } = await supabase.from('teams').select('*').eq('id', sub.team_id).single();
         if (tm) setTeam(tm);
         const { data: mbrs } = await supabase.from('team_members').select('*').eq('team_id', sub.team_id);
@@ -57,8 +61,13 @@ export default function AdminEvaluateSubmission() {
           status: 'Under Review',
           round: 'Evaluation'
         });
-        setTeam({ team_name: 'Greenovate' });
-        setMembers([{id:1},{id:2},{id:3},{id:4}]); // Mock 4 members
+        setTeam({ team_name: 'Greenovate', college_name: 'KPR Institute of Engineering and Technology', city: 'Coimbatore', state: 'Tamil Nadu' });
+        setMembers([
+          {id:1, full_name: 'Alice Johnson', role: 'Team Leader', email: 'alice@example.com', phone: '1234567890', college_name: 'KPR Institute of Engineering and Technology', city: 'Coimbatore', state: 'Tamil Nadu'},
+          {id:2, full_name: 'Bob Smith', role: 'Team Member', email: 'bob@example.com', phone: '0987654321'},
+          {id:3, full_name: 'Charlie Brown', role: 'Team Member', email: 'charlie@example.com', phone: '1112223333'},
+          {id:4, full_name: 'Diana Prince', role: 'Team Member', email: 'diana@example.com', phone: '4445556666'}
+        ]); // Mock 4 members
       }
       
       setLoading(false);
@@ -129,6 +138,8 @@ export default function AdminEvaluateSubmission() {
     </div>
   );
 
+  const leadMember = members.find(m => m.is_leader) || members[0];
+
   return (
     <>
         {/* TOP NAV */}
@@ -155,8 +166,26 @@ export default function AdminEvaluateSubmission() {
           
           {/* Top Actions */}
           <div style={{ display:'flex', justifyContent:'flex-end', gap:12 }}>
-            <button style={{ display:'flex', alignItems:'center', gap:6, background:S.card, border:'1px solid '+S.border, padding:'8px 16px', borderRadius:8, fontSize:13, fontWeight:600, color:S.t1, cursor:'pointer' }}><ChevronLeft size={16}/> Previous</button>
-            <button style={{ display:'flex', alignItems:'center', gap:6, background:S.card, border:'1px solid '+S.border, padding:'8px 16px', borderRadius:8, fontSize:13, fontWeight:600, color:S.t1, cursor:'pointer' }}>Next <ChevronRight size={16}/></button>
+            <button 
+              onClick={() => {
+                const currentIndex = allSubmissionIds.indexOf(id);
+                if (currentIndex > 0) navigate(`/udview/evaluations/${allSubmissionIds[currentIndex - 1]}`);
+              }}
+              disabled={allSubmissionIds.indexOf(id) <= 0}
+              style={{ display:'flex', alignItems:'center', gap:6, background:S.card, border:'1px solid '+S.border, padding:'8px 16px', borderRadius:8, fontSize:13, fontWeight:600, color: allSubmissionIds.indexOf(id) <= 0 ? S.t3 : S.t1, cursor: allSubmissionIds.indexOf(id) <= 0 ? 'not-allowed' : 'pointer' }}
+            >
+              <ChevronLeft size={16}/> Previous
+            </button>
+            <button 
+              onClick={() => {
+                const currentIndex = allSubmissionIds.indexOf(id);
+                if (currentIndex >= 0 && currentIndex < allSubmissionIds.length - 1) navigate(`/udview/evaluations/${allSubmissionIds[currentIndex + 1]}`);
+              }}
+              disabled={allSubmissionIds.indexOf(id) === -1 || allSubmissionIds.indexOf(id) >= allSubmissionIds.length - 1}
+              style={{ display:'flex', alignItems:'center', gap:6, background:S.card, border:'1px solid '+S.border, padding:'8px 16px', borderRadius:8, fontSize:13, fontWeight:600, color: (allSubmissionIds.indexOf(id) === -1 || allSubmissionIds.indexOf(id) >= allSubmissionIds.length - 1) ? S.t3 : S.t1, cursor: (allSubmissionIds.indexOf(id) === -1 || allSubmissionIds.indexOf(id) >= allSubmissionIds.length - 1) ? 'not-allowed' : 'pointer' }}
+            >
+              Next <ChevronRight size={16}/>
+            </button>
             <button 
               onClick={handleSave} 
               disabled={!isComplete} 
@@ -204,7 +233,7 @@ export default function AdminEvaluateSubmission() {
                 <div style={{ color:S.t3, fontWeight:500 }}>Submission ID</div>
                 <div style={{ color:S.t1, fontWeight:600 }}>{submission?.id || 'SUB-2025-00156'}</div>
               </div>
-              <button onClick={() => navigate('/udview/teams')} style={{ display:'flex', alignItems:'center', gap:6, color:S.primary, background:'none', border:'none', fontSize:13, fontWeight:600, cursor:'pointer', padding:0 }}>View Team Profile <ExternalLink size={14}/></button>
+              {/* <button onClick={() => navigate('/udview/teams')} style={{ display:'flex', alignItems:'center', gap:6, color:S.primary, background:'none', border:'none', fontSize:13, fontWeight:600, cursor:'pointer', padding:0 }}>View Team Profile <ExternalLink size={14}/></button> */}
             </div>
 
             {/* Right Col */}
@@ -376,18 +405,69 @@ export default function AdminEvaluateSubmission() {
                 </div>
               </div>
 
-             
+              {/* Team Details */}
+              <div style={{ background:S.card, border:'1px solid '+S.border, borderRadius:S.radius, padding:'24px' }}>
+                <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:16 }}>
+                  <h3 style={{ margin:0, fontSize:16, fontWeight:700, color:S.t1 }}>Team Details</h3>
+                  <div style={{ fontSize:12, fontWeight:600, color:S.primary, background:S.activeBg, padding:'4px 8px', borderRadius:6 }}>{team?.team_name || 'Team'}</div>
+                </div>
+                
+                {(leadMember?.college_name || leadMember?.location) && (
+                  <div style={{ marginBottom:16, display:'flex', flexDirection:'column', gap:8, padding:'12px', background:'#F8FAFC', borderRadius:8, border:'1px solid '+S.border }}>
+                    {leadMember?.college_name && (
+                      <div style={{ fontSize:12, color:S.t1, fontWeight:600, display:'flex', alignItems:'center', gap:8 }}>
+                        <Building2 size={14} color={S.primary} /> {leadMember.college_name}
+                      </div>
+                    )}
+                    {leadMember?.location && (
+                      <div style={{ fontSize:12, color:S.t2, display:'flex', alignItems:'center', gap:8 }}>
+                        <MapPin size={14} color={S.t2} /> {leadMember.location}
+                      </div>
+                    )}
+                    {team?.id && (
+                      <div style={{ fontSize:12, color:S.t2, display:'flex', alignItems:'center', gap:8 }}>
+                        <Hash size={14} color={S.t2} /> <span style={{whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis'}} title={team.id}>ID: {team.id}</span>
+                      </div>
+                    )}
+                  </div>
+                )}
 
-              {/* Quick Actions */}
+                <div style={{ display:'flex', flexDirection:'column', gap:16 }}>
+                  {members.map((m, idx) => (
+                    <div key={idx} style={{ display:'flex', alignItems:'flex-start', gap:12, paddingBottom:idx !== members.length-1 ? 16 : 0, borderBottom:idx !== members.length-1 ? '1px solid '+S.border : 'none' }}>
+                      <div style={{ width:36, height:36, borderRadius:'50%', background:'#F8FAFC', border:'1px solid '+S.border, color:S.t1, display:'flex', alignItems:'center', justifyContent:'center', fontSize:14, fontWeight:700, flexShrink:0 }}>
+                        {m.full_name?.charAt(0) || 'U'}
+                      </div>
+                      <div style={{ flex:1, minWidth:0 }}>
+                        <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:6 }}>
+                          <div style={{ fontSize:13, fontWeight:600, color:S.t1, whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>{m.full_name || `Member ${idx+1}`}</div>
+                          <div style={{ fontSize:10, fontWeight:600, color: idx === 0 ? S.primary : S.t2, background: idx === 0 ? S.activeBg : '#F1F5F9', padding:'2px 6px', borderRadius:4, flexShrink:0, marginLeft:8 }}>
+                            {m.role || (idx === 0 ? 'Leader' : 'Member')}
+                          </div>
+                        </div>
+                        <div style={{ display:'flex', flexDirection:'column', gap:4 }}>
+                          {m.id && <div style={{ fontSize:11, color:S.t2, display:'flex', alignItems:'center', gap:6 }}><Hash size={12} style={{flexShrink:0}}/> <span style={{whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis'}} title={m.id}>ID: {m.id}</span></div>}
+                          {m.email && <div style={{ fontSize:11, color:S.t2, display:'flex', alignItems:'center', gap:6 }}><Mail size={12} style={{flexShrink:0}}/> <span style={{whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis'}} title={m.email}>{m.email}</span></div>}
+                          {m.phone && <div style={{ fontSize:11, color:S.t2, display:'flex', alignItems:'center', gap:6 }}><Phone size={12} style={{flexShrink:0}}/> <span>{m.phone}</span></div>}
+                          {m.gender && <div style={{ fontSize:11, color:S.t2, display:'flex', alignItems:'center', gap:6 }}><User size={12} style={{flexShrink:0}}/> <span>{m.gender}</span></div>}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                  {members.length === 0 && (
+                    <div style={{ fontSize:12, color:S.t3, textAlign:'center', padding:'20px 0' }}>No team members found.</div>
+                  )}
+                </div>
+              </div>              {/* Quick Actions */}
               <div style={{ background:S.card, border:'1px solid '+S.border, borderRadius:S.radius, padding:'24px' }}>
                 <h3 style={{ margin:0, fontSize:14, fontWeight:700, color:S.t1 }}>Quick Actions</h3>
                 <div style={{ display:'flex', flexDirection:'column', gap:12, marginTop:16 }}>
                   <button onClick={() => submission?.pdf_url && window.open(submission.pdf_url, '_blank', 'noopener,noreferrer')} disabled={!submission?.pdf_url} style={{ background:'#F8FAFC', border:'1px solid '+S.border, borderRadius:8, padding:12, fontSize:13, fontWeight:600, color: submission?.pdf_url ? S.primary : S.t3, display:'flex', alignItems:'center', justifyContent:'center', gap:8, cursor: submission?.pdf_url ? 'pointer' : 'not-allowed' }}>
                     View Submission <ExternalLink size={14}/>
                   </button>
-                  <button onClick={() => navigate('/udview/teams')} style={{ background:'#F8FAFC', border:'1px solid '+S.border, borderRadius:8, padding:12, fontSize:13, fontWeight:600, color:S.t2, display:'flex', alignItems:'center', justifyContent:'center', gap:8, cursor:'pointer' }}>
+                  {/* <button onClick={() => navigate('/udview/teams')} style={{ background:'#F8FAFC', border:'1px solid '+S.border, borderRadius:8, padding:12, fontSize:13, fontWeight:600, color:S.t2, display:'flex', alignItems:'center', justifyContent:'center', gap:8, cursor:'pointer' }}>
                     View Team Profile <ExternalLink size={14}/>
-                  </button>
+                  </button> */}
                 </div>
               </div>
 

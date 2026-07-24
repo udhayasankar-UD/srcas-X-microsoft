@@ -56,7 +56,25 @@ export default function AdminEvaluations() {
         break;
       }
     }
-    setTeams(allTeams);
+    
+    let allLeaders = [];
+    let lp = 0;
+    while (true) {
+      const { data } = await supabase.from('team_members').select('team_id, full_name, email, college_name, location').eq('is_leader', true).range(lp * 1000, (lp + 1) * 1000 - 1);
+      if (data && data.length > 0) {
+        allLeaders.push(...data);
+        if (data.length < 1000) break;
+        lp++;
+      } else {
+        break;
+      }
+    }
+
+    const enhancedTeams = allTeams.map(t => {
+      const leader = allLeaders.find(l => l.team_id === t.id);
+      return { ...t, leader };
+    });
+    setTeams(enhancedTeams);
     setLoading(false);
   }, []);
 
@@ -110,6 +128,10 @@ export default function AdminEvaluations() {
           return {
             id: sub.id,
             teamName: team?.team_name || 'Unknown Team',
+            leaderName: team?.leader?.full_name || 'Unknown',
+            leaderEmail: team?.leader?.email || 'N/A',
+            college: team?.leader?.college_name || 'N/A',
+            location: team?.leader?.location || 'N/A',
             teamTrack: sub.category || 'General',
             subTitle: sub.project_title || 'Untitled Project',
             subDesc: sub.project_description || 'No description provided',
@@ -164,17 +186,24 @@ export default function AdminEvaluations() {
       alert("No data to export");
       return;
     }
-    const headers = ['Submission ID', 'Team Name', 'Track', 'Project Title', 'Status', 'Score', 'Round', 'Evaluator', 'Submitted On'];
+    const headers = ['Submission ID', 'Team Name', 'Leader Name', 'Leader Email', 'College', 'Location', 'Track', 'Project Title', 'Project Description', 'Status', 'Score', 'Round', 'Evaluator', 'Submitted On'];
     const csvContent = [
       headers.join(','),
       ...data.map(sub => {
         const team = teams.find(tm => tm.id === sub.team_id);
         const evalName = sub.evaluator_name || 'Unassigned';
+        // Escape quotes in description for CSV
+        const safeDesc = sub.project_description ? sub.project_description.replace(/"/g, '""') : '';
         return [
           `"${sub.id}"`,
           `"${team?.team_name || 'Unknown'}"`,
+          `"${team?.leader?.full_name || 'Unknown'}"`,
+          `"${team?.leader?.email || 'N/A'}"`,
+          `"${team?.leader?.college_name || 'N/A'}"`,
+          `"${team?.leader?.location || 'N/A'}"`,
           `"${sub.category || 'General'}"`,
           `"${sub.project_title || ''}"`,
+          `"${safeDesc}"`,
           `"${sub.status || 'Pending'}"`,
           `"${sub.score || 'Pending'}"`,
           `"${sub.round || 'Evaluation'}"`,
@@ -293,21 +322,21 @@ export default function AdminEvaluations() {
                       style={{ paddingLeft:36, paddingRight:16, paddingTop:10, paddingBottom:10, background:S.card, border:'1px solid '+S.border, borderRadius:8, fontSize:13, width:'100%', outline:'none', color:S.t1 }}
                     />
                   </div>
-                  {['All Rounds', 'All Tracks', 'All Evaluators', 'All Status'].map((lbl, i) => (
+                  {/* {['All Rounds', 'All Tracks', 'All Evaluators', 'All Status'].map((lbl, i) => (
                     <select key={i} style={{ padding:'10px 14px', border:'1px solid '+S.border, borderRadius:8, fontSize:13, fontWeight:500, color:S.t1, outline:'none', cursor:'pointer', appearance:'none', background:`url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%239CA3AF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") no-repeat right 10px center`, paddingRight:32 }}>
                       <option>{lbl}</option>
                     </select>
-                  ))}
+                  ))} 
                   <div style={{ display:'flex', alignItems:'center', gap:8, padding:'9px 14px', border:'1px solid '+S.border, borderRadius:8, fontSize:13, fontWeight:500, color:S.t1, cursor:'pointer' }}>
                     <CalendarIcon size={14} style={{color:S.t3}}/> May 20, 2025 - May 26, 2025
-                  </div>
+                  </div>*/}
                 </div>
-                <div style={{ display:'flex', alignItems:'center', gap:16 }}>
+                {/* <div style={{ display:'flex', alignItems:'center', gap:16 }}>
                   <span onClick={() => setSearchTerm('')} style={{ fontSize:13, fontWeight:600, color:S.t2, cursor:'pointer' }}>Clear Filters</span>
                   <button style={{ display:'flex', alignItems:'center', gap:6, background:S.card, color:S.t1, border:'1px solid '+S.border, padding:'10px 16px', borderRadius:8, fontSize:13, fontWeight:600, cursor:'pointer' }}>
                     <Filter size={16}/> Filters
                   </button>
-                </div>
+                </div> */}
               </div>
 
               <div style={{ padding:'0 20px', borderBottom:'1px solid '+S.border, display:'flex', gap:24 }}>
@@ -323,7 +352,7 @@ export default function AdminEvaluations() {
                 <table style={{ width:'100%', borderCollapse:'collapse', fontSize:13 }}>
                   <thead>
                     <tr style={{ background:'#FAFAFA', borderBottom:'1px solid '+S.border }}>
-                      {['S.No', 'Team', 'Submission', 'Round', 'Evaluator', 'Status', 'Score', 'Submitted On', 'Actions'].map(h => (
+                      {['S.No', 'Team Details', 'Submission', 'Evaluator', 'Status', 'Actions'].map(h => (
                         <th key={h} style={{ padding:'16px 20px', fontWeight:600, color:S.t2, textAlign: h==='Actions'?'center':'left' }}>{h}</th>
                       ))}
                     </tr>
@@ -346,25 +375,25 @@ export default function AdminEvaluations() {
                               </div>
                               <div>
                                 <div style={{ fontWeight:700, color:S.t1 }}>{e.teamName}</div>
-                                <div style={{ fontSize:11, color:S.t3, marginTop:2 }}>{e.teamTrack}</div>
+                                <div style={{ fontSize:11, color:S.t3, marginTop:4, display: 'flex', flexDirection: 'column', gap: 2 }}>
+                                  <span>👤 {e.leaderName} ({e.leaderEmail})</span>
+                                  <span>🏛️ {e.college} • {e.location}</span>
+                                </div>
                               </div>
                             </div>
                           </td>
                           <td style={{ padding:'16px 20px' }}>
                             <div style={{ display:'flex', alignItems:'center', gap:10 }}>
-                              <div style={{ width:28, height:28, borderRadius:'6px', background:'#DCFCE7', color:subIconColor, display:'flex', alignItems:'center', justifyContent:'center' }}>
+                              <div style={{ width:28, height:28, borderRadius:'6px', background:'#DCFCE7', color:subIconColor, display:'flex', alignItems:'center', justifyContent:'center', flexShrink: 0 }}>
                                 <FileText size={14}/>
                               </div>
-                              <div>
+                              <div style={{ overflow: 'hidden' }}>
                                 <div style={{ fontWeight:600, color:S.t1, fontSize:12 }}>{e.subTitle}</div>
-                                <div style={{ fontSize:11, color:S.t3 }}>{e.subDesc}</div>
+                                <div style={{ fontSize:11, color:S.t3, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                  {e.subDesc.length > 80 ? e.subDesc.substring(0, 80) + '...' : e.subDesc}
+                                </div>
                               </div>
                             </div>
-                          </td>
-                          <td style={{ padding:'16px 20px' }}>
-                            <span style={{ background: e.round === 'Finale' ? '#DBEAFE' : '#F3E8FF', color: e.round === 'Finale' ? '#2563EB' : '#9333EA', padding:'4px 10px', borderRadius:6, fontSize:11, fontWeight:600 }}>
-                              {e.round}
-                            </span>
                           </td>
                           <td style={{ padding:'16px 20px' }}>
                             <div style={{ display:'flex', alignItems:'center', gap:10 }}>
@@ -381,22 +410,6 @@ export default function AdminEvaluations() {
                             <span style={{ color: sc.color, fontWeight:600, fontSize:12 }}>
                               {e.status}
                             </span>
-                          </td>
-                          <td style={{ padding:'16px 20px', fontWeight:600, color:S.t1 }}>
-                            {e.score ? (
-                              <div style={{ display:'flex', alignItems:'center', gap:4 }}>
-                                {e.score}/100 
-                                {e.score > 85 && <Star size={12} color="#EAB308" fill="#EAB308"/>}
-                              </div>
-                            ) : '-'}
-                          </td>
-                          <td style={{ padding:'16px 20px' }}>
-                            <div style={{ fontSize:12, color:S.t1, fontWeight:500 }}>
-                              {new Date(e.date).toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'})}
-                            </div>
-                            <div style={{ fontSize:11, color:S.t3, marginTop:2 }}>
-                              {new Date(e.date).toLocaleTimeString('en-US', {hour:'2-digit',minute:'2-digit'})}
-                            </div>
                           </td>
                           <td style={{ padding:'16px 20px', textAlign:'center' }}>
                             <div style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:8 }}>
