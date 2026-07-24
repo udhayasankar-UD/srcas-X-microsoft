@@ -1,5 +1,5 @@
 import { useNavigate, useLocation, Link } from 'react-router-dom';
-import { Home, Users, Flag, CheckSquare, Bell, LayoutDashboard, LogOut, FileText } from 'lucide-react';
+import { Home, Users, Flag, CheckSquare, Bell, LayoutDashboard, LogOut, FileText, TrendingUp } from 'lucide-react';
 
 const S = {
   card: '#FFFFFF', border: '#E5E7EB', primary: '#6C4EFF',
@@ -12,6 +12,7 @@ const sidebarItems = [
   { icon: Flag, label: 'Teams', path: '/udview/teams' },
   { icon: FileText, label: 'Submissions', path: '/udview/submissions' },
   { icon: CheckSquare, label: 'Evaluations', path: '/udview/evaluations' },
+  { icon: TrendingUp, label: 'Analytics', path: '/udview/analytics' },
   { icon: Bell, label: 'Announcements', path: '/udview/announcements' },
 ];
 

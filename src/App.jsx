@@ -23,6 +23,7 @@ import AdminEvaluations from './pages/admin/AdminEvaluations';
 import AdminEvaluateSubmission from './pages/admin/AdminEvaluateSubmission';
 import AdminSubmissions from './pages/admin/AdminSubmissions';
 import AdminAnnouncements from './pages/admin/AdminAnnouncements';
+import AdminAnalytics from './pages/admin/AdminAnalytics';
 import LegalPage from './pages/LegalPage';
 
 /**
@@ -108,6 +109,7 @@ function App() {
           <Route path="evaluations" element={<AdminEvaluations />} />
           <Route path="evaluations/:id" element={<AdminEvaluateSubmission />} />
           <Route path="submissions" element={<AdminSubmissions />} />
+          <Route path="analytics" element={<AdminAnalytics />} />
           <Route path="announcements" element={<AdminAnnouncements />} />
         </Route>
 
