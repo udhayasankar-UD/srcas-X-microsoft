@@ -349,14 +349,10 @@ export default function HeroSection7() {
           
           {/* Mini badge */}
           <motion.div className="hero-mini-badge-hide" initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '4px 12px', border: '1px solid #e5e7eb', borderRadius: 100, background: 'rgba(255,255,255,0.8)', backdropFilter: 'blur(10px)' }}>
-            <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#4c9f38', display: 'inline-block' }} />
-            <span style={{ fontSize: '9px', fontWeight: 700, letterSpacing: '0.14em', color: '#4c9f38', textTransform: 'uppercase' }}>
-              Registration Open!
-            </span>
-            {/* <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#cc2611ff', display: 'inline-block' }} />
+            <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#cc2611ff', display: 'inline-block' }} />
             <span style={{ fontSize: '9px', fontWeight: 700, letterSpacing: '0.14em', color: '#cc2611ff', textTransform: 'uppercase' }}>
               Registration Closed!
-            </span> */}
+            </span>
           </motion.div>
         </motion.div>
 
