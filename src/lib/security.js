@@ -63,105 +63,27 @@ export function isValidEmail(email) {
 // 2. RATE LIMITING + PROGRESSIVE DELAY
 // ═══════════════════════════════════════════════════════
 
-const LOGIN_ATTEMPTS_KEY = 'srcas_login_attempts';
 const MAX_ATTEMPTS = 5;
-const LOCKOUT_DURATION_MS = 15 * 60 * 1000; // 15 minutes
 
-// Progressive delay schedule (in seconds): 0, 2, 5, 10, 30
-const DELAY_SCHEDULE = [0, 2, 5, 10, 30];
-
-/**
- * Get the current login attempt record from sessionStorage.
- */
-function getAttemptRecord() {
-  try {
-    const raw = sessionStorage.getItem(LOGIN_ATTEMPTS_KEY);
-    if (!raw) return { count: 0, firstAttempt: null, lockedUntil: null };
-    const record = JSON.parse(raw);
-    
-    // If lock has expired, reset
-    if (record.lockedUntil && Date.now() > record.lockedUntil) {
-      sessionStorage.removeItem(LOGIN_ATTEMPTS_KEY);
-      return { count: 0, firstAttempt: null, lockedUntil: null };
-    }
-    
-    return record;
-  } catch {
-    return { count: 0, firstAttempt: null, lockedUntil: null };
-  }
-}
-
-/**
- * Save the login attempt record.
- */
-function saveAttemptRecord(record) {
-  sessionStorage.setItem(LOGIN_ATTEMPTS_KEY, JSON.stringify(record));
-}
-
-/**
- * Check if user is currently locked out.
- * Returns { locked: boolean, remainingSeconds: number }
- */
 export function checkLockout() {
-  const record = getAttemptRecord();
-  
-  if (record.lockedUntil && Date.now() < record.lockedUntil) {
-    const remainingMs = record.lockedUntil - Date.now();
-    return {
-      locked: true,
-      remainingSeconds: Math.ceil(remainingMs / 1000),
-      remainingMinutes: Math.ceil(remainingMs / 60000)
-    };
-  }
-  
   return { locked: false, remainingSeconds: 0, remainingMinutes: 0 };
 }
 
-/**
- * Get the progressive delay (in ms) for the current attempt count.
- */
 export function getProgressiveDelay() {
-  const record = getAttemptRecord();
-  const idx = Math.min(record.count, DELAY_SCHEDULE.length - 1);
-  return DELAY_SCHEDULE[idx] * 1000;
+  return 0;
 }
 
-/**
- * Record a failed login attempt.
- * Returns { locked: boolean, attemptsLeft: number, delaySeconds: number }
- */
 export function recordFailedAttempt() {
-  const record = getAttemptRecord();
-  record.count += 1;
-  record.firstAttempt = record.firstAttempt || Date.now();
-  
-  if (record.count >= MAX_ATTEMPTS) {
-    record.lockedUntil = Date.now() + LOCKOUT_DURATION_MS;
-    saveAttemptRecord(record);
-    return {
-      locked: true,
-      attemptsLeft: 0,
-      delaySeconds: 0,
-      lockoutMinutes: Math.ceil(LOCKOUT_DURATION_MS / 60000)
-    };
-  }
-  
-  saveAttemptRecord(record);
-  const delayIdx = Math.min(record.count, DELAY_SCHEDULE.length - 1);
-  
   return {
     locked: false,
-    attemptsLeft: MAX_ATTEMPTS - record.count,
-    delaySeconds: DELAY_SCHEDULE[delayIdx],
+    attemptsLeft: MAX_ATTEMPTS,
+    delaySeconds: 0,
     lockoutMinutes: 0
   };
 }
 
-/**
- * Clear all login attempts (call on successful login).
- */
 export function clearLoginAttempts() {
-  sessionStorage.removeItem(LOGIN_ATTEMPTS_KEY);
+  // No-op
 }
 
 

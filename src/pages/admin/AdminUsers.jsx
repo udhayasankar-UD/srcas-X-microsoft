@@ -39,20 +39,6 @@ export default function AdminUsers() {
   const fetchData = useCallback(async () => {
     const { count: total } = await supabase.from('team_members').select('*', { count: 'exact', head: true });
     setTotalUsersDB(total || 0);
-
-    let allTeams = [];
-    let p = 0;
-    while (true) {
-      const { data } = await supabase.from('teams').select('*').range(p * 1000, (p + 1) * 1000 - 1);
-      if (data && data.length > 0) {
-        allTeams.push(...data);
-        if (data.length < 1000) break;
-        p++;
-      } else {
-        break;
-      }
-    }
-    setTeams(allTeams);
     setLoading(false);
   }, []);
 
@@ -68,7 +54,7 @@ export default function AdminUsers() {
   }, [navigate, fetchData]);
 
 
-  const buildQuery = (isExport = false) => {
+  const buildQuery = async (isExport = false) => {
     let query = supabase.from('team_members').select('*', { count: 'exact' });
     
     if (searchTerm) {
@@ -80,9 +66,15 @@ export default function AdminUsers() {
     } else if (roleFilter === 'Member') {
       query = query.not('is_leader', 'is', true);
     }
-    if (teamFilter !== 'All Teams') {
-      const teamObj = teams.find(t => t.team_name === teamFilter);
-      if (teamObj) query = query.eq('team_id', teamObj.id);
+    if (teamFilter && teamFilter !== 'All Teams') {
+      const safeTeamTerm = teamFilter.replace(/[%_\*()]/g, '');
+      const { data: matchTeams } = await supabase.from('teams').select('id').ilike('team_name', `%${safeTeamTerm}%`);
+      const matchingTeamIds = matchTeams ? matchTeams.map(t => t.id) : [];
+      if (matchingTeamIds.length > 0) {
+        query = query.in('team_id', matchingTeamIds);
+      } else {
+        query = query.eq('team_id', '00000000-0000-0000-0000-000000000000'); // Force empty
+      }
     }
     if (yearFilter !== 'All Years') {
       query = query.eq('year', yearFilter);
@@ -103,13 +95,21 @@ export default function AdminUsers() {
   useEffect(() => {
     if (loading || !isAdmin) return;
     const fetchPage = async () => {
-      const query = buildQuery(false);
+      const query = await buildQuery(false);
       const { data, count } = await query;
-      if (data) setMembers(data);
+      if (data && data.length > 0) {
+        const teamIds = data.map(m => m.team_id);
+        const { data: teamsData } = await supabase.from('teams').select('id, team_name').in('id', teamIds);
+        setTeams(teamsData || []);
+        setMembers(data);
+      } else {
+        setMembers([]);
+        setTeams([]);
+      }
       if (count !== null) setTotalFilteredCount(count);
     };
     fetchPage();
-  }, [loading, isAdmin, currentPage, searchTerm, roleFilter, teamFilter, yearFilter, collegeFilter, teams]);
+  }, [loading, isAdmin, currentPage, searchTerm, roleFilter, teamFilter, yearFilter, collegeFilter]);
 
   if (loading) return <div style={{minHeight:'100vh',display:'flex',alignItems:'center',justifyContent:'center',background:S.bg}}><div style={{width:40,height:40,border:'3px solid '+S.primary,borderTopColor:'transparent',borderRadius:'50%',animation:'spin 1s linear infinite'}}/></div>;
   if (!isAdmin) return null;
@@ -169,13 +169,16 @@ export default function AdminUsers() {
   ];
 
   const exportCSV = async () => {
-    const query = buildQuery(true);
+    const query = await buildQuery(true);
     const { data } = await query;
     if (!data) return;
     
+    const teamIds = [...new Set(data.map(m => m.team_id))];
+    const { data: exportTeams } = await supabase.from('teams').select('id, team_name').in('id', teamIds);
+    
     let csv = "data:text/csv;charset=utf-8,User,Role,Team,Email,College,Location,Year,Registered On\n";
     data.forEach(m => {
-      const t = teams.find(team => team.id === m.team_id);
+      const t = exportTeams?.find(team => team.id === m.team_id);
       const isLeader = getIsLeader(m);
       const role = isLeader ? 'Team Lead' : 'Member';
       csv += `"${m.full_name || ''}","${role}","${t ? t.team_name : ''}","${m.email || ''}","${m.college_name || ''}","${m.location || m.city || ''}","${m.year || ''}","${new Date(m.created_at).toLocaleString()}"\n`;
@@ -253,10 +256,7 @@ export default function AdminUsers() {
                     <option>Team Lead</option>
                     <option>Member</option>
                   </select>
-                  <select value={teamFilter} onChange={e => { setTeamFilter(e.target.value); setCurrentPage(1); }} style={{ padding:'10px 14px', border:'1px solid '+S.border, borderRadius:8, fontSize:13, fontWeight:500, color:S.t1, outline:'none', cursor:'pointer', appearance:'none', background:`url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%239CA3AF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") no-repeat right 10px center`, paddingRight:32, flexShrink:0 }}>
-                    <option>All Teams</option>
-                    {teams.map(t => <option key={t.id} value={t.team_name}>{t.team_name}</option>)}
-                  </select>
+                  <input placeholder="Filter by team..." value={teamFilter === 'All Teams' ? '' : teamFilter} onChange={e => { setTeamFilter(e.target.value); setCurrentPage(1); }} style={{ padding:'10px 14px', border:'1px solid '+S.border, borderRadius:8, fontSize:13, outline:'none', minWidth:160, flexShrink:0 }}/>
                   <select value={yearFilter} onChange={e => { setYearFilter(e.target.value); setCurrentPage(1); }} style={{ padding:'10px 14px', border:'1px solid '+S.border, borderRadius:8, fontSize:13, fontWeight:500, color:S.t1, outline:'none', cursor:'pointer', appearance:'none', background:`url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%239CA3AF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") no-repeat right 10px center`, paddingRight:32, flexShrink:0 }}>
                     <option>All Years</option>
                     <option>1</option><option>2</option><option>3</option><option>4</option>

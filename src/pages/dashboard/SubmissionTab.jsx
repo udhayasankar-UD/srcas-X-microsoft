@@ -102,7 +102,7 @@ export default function SubmissionTab({ hasTeam, teamData, teamMembers, submissi
         }
 
         const fileExt = form.pdf.name.split('.').pop();
-        const fileName = `${teamData.id}-${Math.random()}.${fileExt}`;
+        const fileName = `${teamData.id}-${crypto.randomUUID()}.${fileExt}`;
         const { error: uploadError } = await supabase.storage
           .from('presentations_deck')
           .upload(fileName, form.pdf);

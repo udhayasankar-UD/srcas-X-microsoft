@@ -47,8 +47,19 @@ export default function OverviewTab({ hasTeam, teamData, teamMembers, submission
 
   useEffect(() => {
     const fetchTeamCount = async () => {
-      const { count } = await supabase.from('teams').select('id', { count: 'exact', head: true });
-      if (count !== null) setTotalTeams(count);
+      const cachedCount = localStorage.getItem('total_teams_count');
+      const cacheTime = localStorage.getItem('total_teams_time');
+      
+      if (cachedCount && cacheTime && (Date.now() - cacheTime < 300000)) {
+        setTotalTeams(Number(cachedCount));
+      } else {
+        const { count } = await supabase.from('teams').select('id', { count: 'exact', head: true });
+        if (count !== null) {
+          localStorage.setItem('total_teams_count', count);
+          localStorage.setItem('total_teams_time', Date.now());
+          setTotalTeams(count);
+        }
+      }
     };
     fetchTeamCount();
   }, []);

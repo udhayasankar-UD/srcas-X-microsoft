@@ -43,12 +43,14 @@ export default function AdminEvaluateSubmission() {
         if (sub.evaluation_scores) setScores(sub.evaluation_scores);
         if (sub.evaluation_notes) setNotes(sub.evaluation_notes);
 
-        const { data: allSubs } = await supabase.from('submissions').select('id').order('created_at', { ascending: false });
-        if (allSubs) setAllSubmissionIds(allSubs.map(s => s.id));
+        const [ { data: allSubs }, { data: tm }, { data: mbrs } ] = await Promise.all([
+          supabase.from('submissions').select('id').order('created_at', { ascending: false }),
+          supabase.from('teams').select('*').eq('id', sub.team_id).single(),
+          supabase.from('team_members').select('*').eq('team_id', sub.team_id)
+        ]);
 
-        const { data: tm } = await supabase.from('teams').select('*').eq('id', sub.team_id).single();
+        if (allSubs) setAllSubmissionIds(allSubs.map(s => s.id));
         if (tm) setTeam(tm);
-        const { data: mbrs } = await supabase.from('team_members').select('*').eq('team_id', sub.team_id);
         if (mbrs) setMembers(mbrs);
       } else {
         // Fallback for visual mock if ID doesn't exist

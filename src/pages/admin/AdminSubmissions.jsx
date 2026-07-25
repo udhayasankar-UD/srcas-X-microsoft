@@ -39,20 +39,6 @@ export default function AdminSubmissions() {
       shortlisted: cS.count || 0,
       rejected: cR.count || 0
     });
-
-    let allTeams = [];
-    let p = 0;
-    while (true) {
-      const { data } = await supabase.from('teams').select('id, team_name').range(p * 1000, (p + 1) * 1000 - 1);
-      if (data && data.length > 0) {
-        allTeams.push(...data);
-        if (data.length < 1000) break;
-        p++;
-      } else {
-        break;
-      }
-    }
-    setTeams(allTeams);
     setLoading(false);
   }, []);
 
@@ -66,7 +52,7 @@ export default function AdminSubmissions() {
     checkAuth();
   }, [navigate, fetchData]);
 
-  const buildQuery = (isExport = false) => {
+  const buildQuery = async (isExport = false) => {
     let query = supabase.from('submissions').select('*', { count: 'exact' });
     
     if (activeTab !== 'All Submissions') {
@@ -75,7 +61,8 @@ export default function AdminSubmissions() {
 
     if (searchTerm) {
       const safeTerm = searchTerm.replace(/[%_\*()]/g, '');
-      const matchingTeamIds = teams.filter(t => t.team_name.toLowerCase().includes(safeTerm.toLowerCase())).map(t => t.id);
+      const { data: matchTeams } = await supabase.from('teams').select('id').ilike('team_name', `%${safeTerm}%`);
+      const matchingTeamIds = matchTeams ? matchTeams.map(t => t.id) : [];
       if (matchingTeamIds.length > 0) {
         query = query.or(`project_title.ilike.%${safeTerm}%,team_id.in.(${matchingTeamIds.join(',')})`);
       } else {
@@ -95,11 +82,14 @@ export default function AdminSubmissions() {
   useEffect(() => {
     if (loading || !isAdmin) return;
     const fetchPage = async () => {
-      const query = buildQuery(false);
+      const query = await buildQuery(false);
       const { data, count } = await query;
-      if (data) {
+      if (data && data.length > 0) {
+        const teamIds = data.map(s => s.team_id);
+        const { data: teamsData } = await supabase.from('teams').select('id, team_name').in('id', teamIds);
+
         const subs = data.map((sub) => {
-          const team = teams.find(tm => tm.id === sub.team_id);
+          const team = teamsData?.find(tm => tm.id === sub.team_id);
           return {
             id: sub.id,
             teamId: team?.id,
@@ -113,11 +103,13 @@ export default function AdminSubmissions() {
           };
         });
         setSubmissionsList(subs);
+      } else {
+        setSubmissionsList([]);
       }
       if (count !== null) setTotalFilteredCount(count);
     };
     fetchPage();
-  }, [loading, isAdmin, currentPage, searchTerm, activeTab, teams]);
+  }, [loading, isAdmin, currentPage, searchTerm, activeTab]);
 
   if (loading) return <div style={{minHeight:'100vh',display:'flex',alignItems:'center',justifyContent:'center',background:S.bg}}><div style={{width:40,height:40,border:'3px solid '+S.primary,borderTopColor:'transparent',borderRadius:'50%',animation:'spin 1s linear infinite'}}/></div>;
   if (!isAdmin) return null;
@@ -150,17 +142,20 @@ export default function AdminSubmissions() {
   };
 
   const handleExport = async () => {
-    const query = buildQuery(true);
+    const query = await buildQuery(true);
     const { data } = await query;
     if (!data || data.length === 0) {
       alert("No data to export");
       return;
     }
+    const teamIds = [...new Set(data.map(s => s.team_id))];
+    const { data: teamsData } = await supabase.from('teams').select('id, team_name').in('id', teamIds);
+
     const headers = ['Submission ID', 'Team Name', 'Track', 'Project Title', 'Status', 'Submitted On'];
     const csvContent = [
       headers.join(','),
       ...data.map(sub => {
-        const team = teams.find(tm => tm.id === sub.team_id);
+        const team = teamsData?.find(tm => tm.id === sub.team_id);
         return [
           `"${sub.id}"`,
           `"${team?.team_name || 'Unknown'}"`,

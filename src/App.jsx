@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense, lazy } from 'react';
 import { useLocation, BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from './components/layout/Navbar';
@@ -6,25 +6,25 @@ import Footer from './components/layout/Footer';
 import EntryVideoPopup from './components/ui/EntryVideoPopup';
 
 // Pages
-import HomePage from './pages/HomePage';
-import PrizesPage from './pages/PrizesPage';
-import HighlightsPage from './pages/HighlightsPage';
-import PartnersPage from './pages/PartnersPage';
-import HumansPage from './pages/HumansPage';
-import ContactSection from './pages/ContactSection';
-import FaqSection from './pages/FaqSection';
-import AuthPage from './pages/AuthPage';
-import DashboardPage from './pages/dashboard/DashboardPage';
-import AdminDashboard from './pages/admin/AdminDashboard';
-import AdminLayout from './pages/admin/AdminLayout';
-import AdminUsers from './pages/admin/AdminUsers';
-import AdminTeams from './pages/admin/AdminTeams';
-import AdminEvaluations from './pages/admin/AdminEvaluations';
-import AdminEvaluateSubmission from './pages/admin/AdminEvaluateSubmission';
-import AdminSubmissions from './pages/admin/AdminSubmissions';
-import AdminAnnouncements from './pages/admin/AdminAnnouncements';
-import AdminAnalytics from './pages/admin/AdminAnalytics';
-import LegalPage from './pages/LegalPage';
+const HomePage = lazy(() => import('./pages/HomePage'));
+const PrizesPage = lazy(() => import('./pages/PrizesPage'));
+const HighlightsPage = lazy(() => import('./pages/HighlightsPage'));
+const PartnersPage = lazy(() => import('./pages/PartnersPage'));
+const HumansPage = lazy(() => import('./pages/HumansPage'));
+const ContactSection = lazy(() => import('./pages/ContactSection'));
+const FaqSection = lazy(() => import('./pages/FaqSection'));
+const AuthPage = lazy(() => import('./pages/AuthPage'));
+const DashboardPage = lazy(() => import('./pages/dashboard/DashboardPage'));
+const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
+const AdminLayout = lazy(() => import('./pages/admin/AdminLayout'));
+const AdminUsers = lazy(() => import('./pages/admin/AdminUsers'));
+const AdminTeams = lazy(() => import('./pages/admin/AdminTeams'));
+const AdminEvaluations = lazy(() => import('./pages/admin/AdminEvaluations'));
+const AdminEvaluateSubmission = lazy(() => import('./pages/admin/AdminEvaluateSubmission'));
+const AdminSubmissions = lazy(() => import('./pages/admin/AdminSubmissions'));
+const AdminAnnouncements = lazy(() => import('./pages/admin/AdminAnnouncements'));
+const AdminAnalytics = lazy(() => import('./pages/admin/AdminAnalytics'));
+const LegalPage = lazy(() => import('./pages/LegalPage'));
 
 /**
  * ScrollToTop Component
@@ -94,46 +94,48 @@ function App() {
   return (
     <Router>
       <ScrollToTop />
-      <Routes>
-        {/* Auth page — standalone, no Navbar/Footer */}
-        <Route path="/register" element={<AuthPage />} />
+      <Suspense fallback={<div style={{minHeight:'100vh', display:'flex', alignItems:'center', justifyContent:'center'}}>Loading...</div>}>
+        <Routes>
+          {/* Auth page — standalone, no Navbar/Footer */}
+          <Route path="/register" element={<AuthPage />} />
 
-        {/* Dashboard — standalone, no Navbar/Footer */}
-        <Route path="/dashboard" element={<DashboardPage />} />
+          {/* Dashboard — standalone, no Navbar/Footer */}
+          <Route path="/dashboard" element={<DashboardPage />} />
 
-        {/* Admin Dashboard */}
-        <Route path="/udview" element={<AdminLayout />}>
-          <Route index element={<AdminDashboard />} />
-          <Route path="users" element={<AdminUsers />} />
-          <Route path="teams" element={<AdminTeams />} />
-          <Route path="evaluations" element={<AdminEvaluations />} />
-          <Route path="evaluations/:id" element={<AdminEvaluateSubmission />} />
-          <Route path="submissions" element={<AdminSubmissions />} />
-          <Route path="analytics" element={<AdminAnalytics />} />
-          <Route path="announcements" element={<AdminAnnouncements />} />
-        </Route>
+          {/* Admin Dashboard */}
+          <Route path="/udview" element={<AdminLayout />}>
+            <Route index element={<AdminDashboard />} />
+            <Route path="users" element={<AdminUsers />} />
+            <Route path="teams" element={<AdminTeams />} />
+            <Route path="evaluations" element={<AdminEvaluations />} />
+            <Route path="evaluations/:id" element={<AdminEvaluateSubmission />} />
+            <Route path="submissions" element={<AdminSubmissions />} />
+            <Route path="analytics" element={<AdminAnalytics />} />
+            <Route path="announcements" element={<AdminAnnouncements />} />
+          </Route>
 
-        {/* All other pages — with Navbar/Footer */}
-        <Route path="/*" element={
-          <div className="app" style={{ minHeight: '100vh' }}>
-            <EntryVideoPopup />
-            <ScrollToTopButton />
-            <Navbar />
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/prizes" element={<PrizesPage />} />
-              <Route path="/highlights" element={<HighlightsPage />} />
-              <Route path="/partners" element={<PartnersPage />} />
-              <Route path="/humans" element={<HumansPage />} />
-              <Route path="/faq" element={<FaqSection />} />
-              <Route path="/contact" element={<ContactSection />} />
-              <Route path="/terms" element={<LegalPage />} />
-              <Route path="/privacy" element={<LegalPage />} />
-            </Routes>
-            <Footer />
-          </div>
-        } />
-      </Routes>
+          {/* All other pages — with Navbar/Footer */}
+          <Route path="/*" element={
+            <div className="app" style={{ minHeight: '100vh' }}>
+              <EntryVideoPopup />
+              <ScrollToTopButton />
+              <Navbar />
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/prizes" element={<PrizesPage />} />
+                <Route path="/highlights" element={<HighlightsPage />} />
+                <Route path="/partners" element={<PartnersPage />} />
+                <Route path="/humans" element={<HumansPage />} />
+                <Route path="/faq" element={<FaqSection />} />
+                <Route path="/contact" element={<ContactSection />} />
+                <Route path="/terms" element={<LegalPage />} />
+                <Route path="/privacy" element={<LegalPage />} />
+              </Routes>
+              <Footer />
+            </div>
+          } />
+        </Routes>
+      </Suspense>
     </Router>
   );
 }

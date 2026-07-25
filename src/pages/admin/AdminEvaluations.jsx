@@ -44,37 +44,13 @@ export default function AdminEvaluations() {
       overdue: cO.count || 0
     });
 
-    let allTeams = [];
-    let p = 0;
-    while (true) {
-      const { data } = await supabase.from('teams').select('id, team_name').range(p * 1000, (p + 1) * 1000 - 1);
-      if (data && data.length > 0) {
-        allTeams.push(...data);
-        if (data.length < 1000) break;
-        p++;
-      } else {
-        break;
-      }
-    }
-    
-    let allLeaders = [];
-    let lp = 0;
-    while (true) {
-      const { data } = await supabase.from('team_members').select('team_id, full_name, email, college_name, location').eq('is_leader', true).range(lp * 1000, (lp + 1) * 1000 - 1);
-      if (data && data.length > 0) {
-        allLeaders.push(...data);
-        if (data.length < 1000) break;
-        lp++;
-      } else {
-        break;
-      }
-    }
-
-    const enhancedTeams = allTeams.map(t => {
-      const leader = allLeaders.find(l => l.team_id === t.id);
-      return { ...t, leader };
+    setTabCounts({
+      all: cAll.count || 0,
+      completed: cC.count || 0,
+      pending: cP.count || 0,
+      inProgress: cI.count || 0,
+      overdue: cO.count || 0
     });
-    setTeams(enhancedTeams);
     setLoading(false);
   }, []);
 
@@ -90,7 +66,7 @@ export default function AdminEvaluations() {
 
 
 
-  const buildQuery = (isExport = false) => {
+  const buildQuery = async (isExport = false) => {
     let query = supabase.from('submissions').select('*', { count: 'exact' });
     
     if (activeTab !== 'All Evaluations') {
@@ -99,7 +75,9 @@ export default function AdminEvaluations() {
 
     if (searchTerm) {
       const safeTerm = searchTerm.replace(/[%_\*()]/g, '');
-      const matchingTeamIds = teams.filter(t => t.team_name.toLowerCase().includes(safeTerm.toLowerCase())).map(t => t.id);
+      const { data: matchTeams } = await supabase.from('teams').select('id').ilike('team_name', `%${safeTerm}%`);
+      const matchingTeamIds = matchTeams ? matchTeams.map(t => t.id) : [];
+      
       if (matchingTeamIds.length > 0) {
         query = query.or(`project_title.ilike.%${safeTerm}%,team_id.in.(${matchingTeamIds.join(',')})`);
       } else {
@@ -119,19 +97,26 @@ export default function AdminEvaluations() {
   useEffect(() => {
     if (loading || !isAdmin) return;
     const fetchPage = async () => {
-      const query = buildQuery(false);
+      const query = await buildQuery(false);
       const { data, count } = await query;
-      if (data) {
+      if (data && data.length > 0) {
+        const teamIds = data.map(s => s.team_id);
+        const [{ data: teamsData }, { data: leadersData }] = await Promise.all([
+          supabase.from('teams').select('id, team_name').in('id', teamIds),
+          supabase.from('team_members').select('team_id, full_name, email, college_name, location').in('team_id', teamIds).eq('is_leader', true)
+        ]);
+
         const evals = data.map((sub) => {
-          const team = teams.find(tm => tm.id === sub.team_id);
+          const team = teamsData?.find(tm => tm.id === sub.team_id);
+          const leader = leadersData?.find(l => l.team_id === sub.team_id);
           const evalName = sub.evaluator_name || 'Unassigned';
           return {
             id: sub.id,
             teamName: team?.team_name || 'Unknown Team',
-            leaderName: team?.leader?.full_name || 'Unknown',
-            leaderEmail: team?.leader?.email || 'N/A',
-            college: team?.leader?.college_name || 'N/A',
-            location: team?.leader?.location || 'N/A',
+            leaderName: leader?.full_name || 'Unknown',
+            leaderEmail: leader?.email || 'N/A',
+            college: leader?.college_name || 'N/A',
+            location: leader?.location || 'N/A',
             teamTrack: sub.category || 'General',
             subTitle: sub.project_title || 'Untitled Project',
             subDesc: sub.project_description || 'No description provided',
@@ -143,11 +128,13 @@ export default function AdminEvaluations() {
           };
         });
         setEvaluations(evals);
+      } else {
+        setEvaluations([]);
       }
       if (count !== null) setTotalFilteredCount(count);
     };
     fetchPage();
-  }, [loading, isAdmin, currentPage, searchTerm, activeTab, teams]);
+  }, [loading, isAdmin, currentPage, searchTerm, activeTab]);
 
   if (loading) return <div style={{minHeight:'100vh',display:'flex',alignItems:'center',justifyContent:'center',background:S.bg}}><div style={{width:40,height:40,border:'3px solid '+S.primary,borderTopColor:'transparent',borderRadius:'50%',animation:'spin 1s linear infinite'}}/></div>;
   if (!isAdmin) return null;
@@ -180,27 +167,36 @@ export default function AdminEvaluations() {
   };
 
   const handleExport = async () => {
-    const query = buildQuery(true);
+    const query = await buildQuery(true);
     const { data } = await query;
     if (!data || data.length === 0) {
       alert("No data to export");
       return;
     }
+    
+    // Fetch all teams for the exported data
+    const teamIds = [...new Set(data.map(s => s.team_id))];
+    const [{ data: teamsData }, { data: leadersData }] = await Promise.all([
+      supabase.from('teams').select('id, team_name').in('id', teamIds),
+      supabase.from('team_members').select('team_id, full_name, email, college_name, location').in('team_id', teamIds).eq('is_leader', true)
+    ]);
+
     const headers = ['Submission ID', 'Team Name', 'Leader Name', 'Leader Email', 'College', 'Location', 'Track', 'Project Title', 'Project Description', 'Status', 'Score', 'Round', 'Evaluator', 'Submitted On'];
     const csvContent = [
       headers.join(','),
       ...data.map(sub => {
-        const team = teams.find(tm => tm.id === sub.team_id);
+        const team = teamsData?.find(tm => tm.id === sub.team_id);
+        const leader = leadersData?.find(l => l.team_id === sub.team_id);
         const evalName = sub.evaluator_name || 'Unassigned';
         // Escape quotes in description for CSV
         const safeDesc = sub.project_description ? sub.project_description.replace(/"/g, '""') : '';
         return [
           `"${sub.id}"`,
           `"${team?.team_name || 'Unknown'}"`,
-          `"${team?.leader?.full_name || 'Unknown'}"`,
-          `"${team?.leader?.email || 'N/A'}"`,
-          `"${team?.leader?.college_name || 'N/A'}"`,
-          `"${team?.leader?.location || 'N/A'}"`,
+          `"${leader?.full_name || 'Unknown'}"`,
+          `"${leader?.email || 'N/A'}"`,
+          `"${leader?.college_name || 'N/A'}"`,
+          `"${leader?.location || 'N/A'}"`,
           `"${sub.category || 'General'}"`,
           `"${sub.project_title || ''}"`,
           `"${safeDesc}"`,
