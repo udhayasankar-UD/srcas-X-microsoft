@@ -142,6 +142,29 @@ export default function AuthPage() {
   const [leadCheckbox, setLeadCheckbox] = useState(false);
   const [lockoutMsg, setLockoutMsg] = useState('');
   const lockoutTimerRef = useRef(null);
+  const [deadlinePassed, setDeadlinePassed] = useState(false);
+
+  useEffect(() => {
+    const checkDeadline = async () => {
+      try {
+        const res = await fetch('https://worldtimeapi.org/api/timezone/Etc/UTC');
+        const data = await res.json();
+        const currentTime = new Date(data.datetime);
+        const deadline = new Date('2026-07-25T18:59:59Z');
+        if (currentTime > deadline) setDeadlinePassed(true);
+      } catch (err) {
+        if (new Date() > new Date('2026-07-25T18:59:59Z')) setDeadlinePassed(true);
+      }
+    };
+    checkDeadline();
+  }, []);
+
+  useEffect(() => {
+    if (deadlinePassed && mode === 'signup') {
+      setMode('login');
+      alert("Registrations are now closed.");
+    }
+  }, [deadlinePassed, mode]);
 
   // Check lockout status on mount and show countdown
   useEffect(() => {
@@ -177,6 +200,10 @@ export default function AuthPage() {
   }, []);
 
   const switchMode = (next) => {
+    if (next === 'signup' && deadlinePassed) {
+      alert("Registrations are now closed.");
+      return;
+    }
     if (next === mode || animating) return;
     setErrorMsg('');
     setSuccessMsg('');
@@ -402,8 +429,9 @@ export default function AuthPage() {
       <p style={{ textAlign:'center', fontSize:'13px', color:'#6b7280', margin:0 }}>
         {isLogin ? "Don't have an account? " : 'Already have an account? '}
         <button type="button" onClick={() => switchMode(isLogin ? 'signup' : 'login')}
-          style={{ background:'none', border:'none', cursor:'pointer', color:'#4C9F38', fontWeight:700, fontSize:'13px', padding:0 }}>
-          {isLogin ? 'Sign up' : 'Sign in'}
+          disabled={isLogin && deadlinePassed}
+          style={{ background:'none', border:'none', cursor:(isLogin && deadlinePassed) ? 'not-allowed' : 'pointer', color:(isLogin && deadlinePassed) ? '#9ca3af' : '#4C9F38', fontWeight:700, fontSize:'13px', padding:0, textDecoration: (isLogin && deadlinePassed) ? 'line-through' : 'none' }}>
+          {isLogin ? (deadlinePassed ? 'Registrations Closed' : 'Sign up') : 'Sign in'}
         </button>
       </p>
     </form>
@@ -476,8 +504,9 @@ export default function AuthPage() {
       <p style={{ textAlign:'center', fontSize:'13px', color:'#6b7280', margin:'24px 0 0' }}>
         {isLogin ? "Don't have an account? " : 'Already have an account? '}
         <button type="button" onClick={() => switchMode(isLogin ? 'signup' : 'login')}
-          style={{ background:'none', border:'none', cursor:'pointer', color:'#4C9F38', fontWeight:700, fontSize:'13px', padding:0 }}>
-          {isLogin ? 'Sign up' : 'Sign in'}
+          disabled={isLogin && deadlinePassed}
+          style={{ background:'none', border:'none', cursor:(isLogin && deadlinePassed) ? 'not-allowed' : 'pointer', color:(isLogin && deadlinePassed) ? '#9ca3af' : '#4C9F38', fontWeight:700, fontSize:'13px', padding:0, textDecoration: (isLogin && deadlinePassed) ? 'line-through' : 'none' }}>
+          {isLogin ? (deadlinePassed ? 'Registrations Closed' : 'Sign up') : 'Sign in'}
         </button>
       </p>
     </div>

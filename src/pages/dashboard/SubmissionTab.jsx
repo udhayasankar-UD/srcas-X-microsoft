@@ -42,6 +42,22 @@ export default function SubmissionTab({ hasTeam, teamData, teamMembers, submissi
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [fieldErrors, setFieldErrors] = useState({});
   const [guidelinesRead, setGuidelinesRead] = useState(false);
+  const [deadlinePassed, setDeadlinePassed] = useState(false);
+
+  useEffect(() => {
+    const checkDeadline = async () => {
+      try {
+        const res = await fetch('https://worldtimeapi.org/api/timezone/Etc/UTC');
+        const data = await res.json();
+        const currentTime = new Date(data.datetime);
+        const deadline = new Date('2026-07-25T18:59:59Z');
+        if (currentTime > deadline) setDeadlinePassed(true);
+      } catch (err) {
+        if (new Date() > new Date('2026-07-25T18:59:59Z')) setDeadlinePassed(true);
+      }
+    };
+    checkDeadline();
+  }, []);
 
   const [sdgOpen, setSdgOpen] = useState(false);
   const sdgRef = useRef();
@@ -565,8 +581,8 @@ export default function SubmissionTab({ hasTeam, teamData, teamMembers, submissi
         <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
           {step < STEPS.length - 1
             ? <button onClick={handleNext} style={{ padding: '12px 24px', borderRadius: 10, border: 'none', background: '#4C9F38', color: '#fff', fontSize: 13, fontWeight: 700, cursor: 'pointer', textAlign: 'center', whiteSpace: 'nowrap' }}>Next →</button>
-            : <button disabled={submitting} onClick={handleSubmit} style={{ padding: '12px 28px', borderRadius: 10, border: 'none', background: 'linear-gradient(135deg,#4C9F38,#3d8a2e)', color: '#fff', fontSize: 13, fontWeight: 700, cursor: submitting ? 'not-allowed' : 'pointer', boxShadow: '0 4px 14px rgba(76,159,56,0.3)', opacity: submitting ? 0.7 : 1, textAlign: 'center', whiteSpace: 'nowrap' }}>
-              {submitting ? 'Uploading...' : 'Submit Project 🚀'}
+            : <button disabled={submitting || deadlinePassed} onClick={handleSubmit} style={{ padding: '12px 28px', borderRadius: 10, border: 'none', background: (submitting || deadlinePassed) ? '#e5e7eb' : 'linear-gradient(135deg,#4C9F38,#3d8a2e)', color: (submitting || deadlinePassed) ? '#9ca3af' : '#fff', fontSize: 13, fontWeight: 700, cursor: (submitting || deadlinePassed) ? 'not-allowed' : 'pointer', boxShadow: (submitting || deadlinePassed) ? 'none' : '0 4px 14px rgba(76,159,56,0.3)', opacity: submitting ? 0.7 : 1, textAlign: 'center', whiteSpace: 'nowrap' }}>
+              {deadlinePassed ? 'Submissions Closed' : (submitting ? 'Uploading...' : 'Submit Project 🚀')}
             </button>
           }
         </div>

@@ -93,6 +93,22 @@ export default function TeamTab({ hasTeam, teamData, teamMembers, user, setTeamM
   const [toastMsg, setToastMsg] = useState('');
   const [isEditingTeam, setIsEditingTeam] = useState(false);
   const [showIdPopup, setShowIdPopup] = useState(false);
+  const [deadlinePassed, setDeadlinePassed] = useState(false);
+
+  useEffect(() => {
+    const checkDeadline = async () => {
+      try {
+        const res = await fetch('https://worldtimeapi.org/api/timezone/Etc/UTC');
+        const data = await res.json();
+        const currentTime = new Date(data.datetime);
+        const deadline = new Date('2026-07-25T18:59:59Z');
+        if (currentTime > deadline) setDeadlinePassed(true);
+      } catch (err) {
+        if (new Date() > new Date('2026-07-25T18:59:59Z')) setDeadlinePassed(true);
+      }
+    };
+    checkDeadline();
+  }, []);
 
   const startEditTeam = (stepToOpen = 0) => {
     const leader = teamMembers?.find(m => m.id === teamData?.leader_id) || teamMembers?.find(m => m.email === user?.email);
@@ -569,10 +585,10 @@ export default function TeamTab({ hasTeam, teamData, teamMembers, user, setTeamM
             </button>
 
             {currentStep === totalSteps - 1 ? (
-              <button type="button" onClick={handleSubmit} disabled={creating} style={creating ? styles.buttonDisabled : styles.buttonPrimary}
-                onMouseEnter={e => { if (!creating) e.currentTarget.style.transform = 'translateY(-2px)'; }}
-                onMouseLeave={e => { if (!creating) e.currentTarget.style.transform = 'translateY(0)'; }}>
-                {creating ? 'Submitting...' : (isEditingTeam ? 'Update Team 🚀' : 'Submit Team 🚀')}
+              <button type="button" onClick={handleSubmit} disabled={creating || deadlinePassed} style={(creating || deadlinePassed) ? styles.buttonDisabled : styles.buttonPrimary}
+                onMouseEnter={e => { if (!creating && !deadlinePassed) e.currentTarget.style.transform = 'translateY(-2px)'; }}
+                onMouseLeave={e => { if (!creating && !deadlinePassed) e.currentTarget.style.transform = 'translateY(0)'; }}>
+                {deadlinePassed ? 'Deadline Passed' : (creating ? 'Submitting...' : (isEditingTeam ? 'Update Team 🚀' : 'Submit Team 🚀'))}
               </button>
             ) : (
               <button type="button" onClick={handleNext} style={styles.buttonSecondary}

@@ -24,6 +24,7 @@ const AdminEvaluateSubmission = lazy(() => import('./pages/admin/AdminEvaluateSu
 const AdminSubmissions = lazy(() => import('./pages/admin/AdminSubmissions'));
 const AdminAnnouncements = lazy(() => import('./pages/admin/AdminAnnouncements'));
 const AdminAnalytics = lazy(() => import('./pages/admin/AdminAnalytics'));
+const AdminJury = lazy(() => import('./pages/admin/AdminJury'));
 const LegalPage = lazy(() => import('./pages/LegalPage'));
 
 /**
@@ -109,6 +110,7 @@ function App() {
             <Route path="teams" element={<AdminTeams />} />
             <Route path="evaluations" element={<AdminEvaluations />} />
             <Route path="evaluations/:id" element={<AdminEvaluateSubmission />} />
+            <Route path="jury" element={<AdminJury />} />
             <Route path="submissions" element={<AdminSubmissions />} />
             <Route path="analytics" element={<AdminAnalytics />} />
             <Route path="announcements" element={<AdminAnnouncements />} />

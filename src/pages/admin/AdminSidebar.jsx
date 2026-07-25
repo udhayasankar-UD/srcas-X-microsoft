@@ -12,6 +12,7 @@ const sidebarItems = [
   { icon: Flag, label: 'Teams', path: '/udview/teams' },
   { icon: FileText, label: 'Submissions', path: '/udview/submissions' },
   { icon: CheckSquare, label: 'Evaluations', path: '/udview/evaluations' },
+  { icon: FileText, label: 'Jury (Export)', path: '/udview/jury' },
   { icon: TrendingUp, label: 'Analytics', path: '/udview/analytics' },
   { icon: Bell, label: 'Announcements', path: '/udview/announcements' },
 ];
