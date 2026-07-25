@@ -243,14 +243,14 @@ export default function SubmissionTab({ hasTeam, teamData, teamMembers, submissi
         <div className="dash-card" style={card({ width: '100%' })}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, borderBottom: '1px solid #e5e7eb', paddingBottom: 12, flexWrap: 'wrap', gap: 10 }}>
             <h3 style={{ fontSize: 16, fontWeight: 800, color: '#111', margin: 0 }}>Submission Details</h3>
-            {isBeforeDeadline && s.id && (
+            {/* {isBeforeDeadline && s.id && (
               <button
                 onClick={() => setShowDeleteModal(true)}
                 disabled={submitting}
                 style={{ padding: '6px 12px', background: '#fef2f2', color: '#dc2626', border: '1px solid #fecaca', borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: submitting ? 'not-allowed' : 'pointer', transition: 'all 0.2s' }}>
                 Delete & Re-submit
               </button>
-            )}
+            )} */}
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
