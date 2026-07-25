@@ -50,10 +50,10 @@ export default function SubmissionTab({ hasTeam, teamData, teamMembers, submissi
         const res = await fetch('https://worldtimeapi.org/api/timezone/Etc/UTC');
         const data = await res.json();
         const currentTime = new Date(data.datetime);
-        const deadline = new Date('2026-07-25T18:59:59Z');
+        const deadline = new Date('2026-07-25T18:29:59Z');
         if (currentTime > deadline) setDeadlinePassed(true);
       } catch (err) {
-        if (new Date() > new Date('2026-07-25T18:59:59Z')) setDeadlinePassed(true);
+        if (new Date() > new Date('2026-07-25T18:29:59Z')) setDeadlinePassed(true);
       }
     };
     checkDeadline();
@@ -375,6 +375,40 @@ export default function SubmissionTab({ hasTeam, teamData, teamMembers, submissi
       setStep(2);
     }
   };
+  if (deadlinePassed) {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh', padding: 20 }}>
+        <motion.div
+          initial={{ opacity: 0, y: 20, scale: 0.95 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.5, ease: 'easeOut' }}
+          style={{ width: '100%', maxWidth: 550, background: '#ffffff', borderRadius: 24, padding: '40px 32px', boxShadow: '0 20px 40px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.05)', border: '1px solid rgba(229, 231, 235, 0.5)', position: 'relative', overflow: 'hidden' }}
+        >
+          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 4, background: '#DC2626' }} />
+          <div style={{ position: 'absolute', top: -50, right: -50, width: 150, height: 150, background: 'radial-gradient(circle, rgba(239,68,68,0.08) 0%, rgba(255,255,255,0) 70%)', borderRadius: '50%', pointerEvents: 'none' }} />
+
+          <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
+            <motion.div
+              initial={{ scale: 0, rotate: -10 }}
+              animate={{ scale: 1, rotate: 0 }}
+              transition={{ type: 'spring', stiffness: 200, delay: 0.2 }}
+              style={{ width: 64, height: 64, borderRadius: '50%', background: '#FEE2E2', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 20, boxShadow: '0 4px 10px rgba(239, 68, 68, 0.2)' }}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#EF4444" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
+            </motion.div>
+
+            <h2 style={{ fontSize: 'clamp(1.4rem, 4vw, 1.8rem)', fontWeight: 900, color: '#111827', marginBottom: 12, letterSpacing: '-0.02em' }}>
+              Submissions Closed
+            </h2>
+
+            <p style={{ fontSize: '1.05rem', color: '#4B5563', lineHeight: 1.6, margin: 0, maxWidth: '90%' }}>
+              The deadline for project submissions has passed. We thank you for participating and wish you the best of luck!
+            </p>
+          </div>
+        </motion.div>
+      </div>
+    );
+  }
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
