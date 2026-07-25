@@ -353,6 +353,10 @@ export default function HeroSection7() {
             <span style={{ fontSize: '9px', fontWeight: 700, letterSpacing: '0.14em', color: '#4c9f38', textTransform: 'uppercase' }}>
               Registration Open!
             </span>
+            {/* <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#cc2611ff', display: 'inline-block' }} />
+            <span style={{ fontSize: '9px', fontWeight: 700, letterSpacing: '0.14em', color: '#cc2611ff', textTransform: 'uppercase' }}>
+              Registration Closed!
+            </span> */}
           </motion.div>
         </motion.div>
 
