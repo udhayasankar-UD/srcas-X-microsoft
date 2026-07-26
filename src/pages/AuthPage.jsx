@@ -150,10 +150,10 @@ export default function AuthPage() {
         const res = await fetch('https://worldtimeapi.org/api/timezone/Etc/UTC');
         const data = await res.json();
         const currentTime = new Date(data.datetime);
-        const deadline = new Date('2026-07-25T19:10:59Z');
+        const deadline = new Date('2026-07-26T12:40:00Z');
         if (currentTime > deadline) setDeadlinePassed(true);
       } catch (err) {
-        if (new Date() > new Date('2026-07-25T19:10:59Z')) setDeadlinePassed(true);
+        if (new Date() > new Date('2026-07-26T12:40:00Z')) setDeadlinePassed(true);
       }
     };
     checkDeadline();

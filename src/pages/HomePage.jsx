@@ -18,10 +18,10 @@ function DeadlinePopup() {
         const res = await fetch('https://worldtimeapi.org/api/timezone/Etc/UTC');
         const data = await res.json();
         const currentTime = new Date(data.datetime);
-        const deadline = new Date('2026-07-25T19:10:59Z'); // 12:40 AM IST
+        const deadline = new Date('2026-07-26T12:40:00Z'); // 6:10 PM IST
         if (currentTime > deadline) setShowPopup(true);
       } catch (err) {
-        if (new Date() > new Date('2026-07-25T19:10:59Z')) setShowPopup(true);
+        if (new Date() > new Date('2026-07-26T12:40:00Z')) setShowPopup(true);
       }
     };
     checkDeadline();

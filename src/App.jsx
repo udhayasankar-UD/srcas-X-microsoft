@@ -26,6 +26,7 @@ const AdminAnnouncements = lazy(() => import('./pages/admin/AdminAnnouncements')
 const AdminAnalytics = lazy(() => import('./pages/admin/AdminAnalytics'));
 const AdminJury = lazy(() => import('./pages/admin/AdminJury'));
 const LegalPage = lazy(() => import('./pages/LegalPage'));
+const AnalyticsPage = lazy(() => import('./pages/AnalyticsPage'));
 
 /**
  * ScrollToTop Component
@@ -119,7 +120,7 @@ function App() {
           {/* All other pages — with Navbar/Footer */}
           <Route path="/*" element={
             <div className="app" style={{ minHeight: '100vh' }}>
-              <EntryVideoPopup />
+              {/* <EntryVideoPopup /> */}
               <ScrollToTopButton />
               <Navbar />
               <Routes>
@@ -132,6 +133,7 @@ function App() {
                 <Route path="/contact" element={<ContactSection />} />
                 <Route path="/terms" element={<LegalPage />} />
                 <Route path="/privacy" element={<LegalPage />} />
+                <Route path="/analytics" element={<AnalyticsPage />} />
               </Routes>
               <Footer />
             </div>

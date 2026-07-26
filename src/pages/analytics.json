@@ -1,0 +1,254 @@
+{
+  "summary_metrics": {
+    "total_participants": 5323,
+    "total_teams": 1561,
+    "total_submissions": 1072,
+    "estimated_gender_breakdown": {
+      "male": 2835,
+      "female": 2488,
+      "unknown": 0
+    },
+    "average_team_size_submitted": 3.48
+  },
+  "demographics": {
+    "top_10_colleges": [
+      {
+        "name": "Sri Eshwar College of Engineering",
+        "count": 209
+      },
+      {
+        "name": "SRCAS",
+        "count": 174
+      },
+      {
+        "name": "KPRCAS",
+        "count": 104
+      },
+      {
+        "name": "Rathinam Technical Campus",
+        "count": 98
+      },
+      {
+        "name": "Chennai Institute of Technology",
+        "count": 97
+      },
+      {
+        "name": "RATHINAM TECHNICAL CAMPUS",
+        "count": 81
+      },
+      {
+        "name": "SKCET",
+        "count": 73
+      },
+      {
+        "name": "Sri Eshwar College Of Engineering",
+        "count": 50
+      },
+      {
+        "name": "Sri Shakthi Institute of Engineering and Technology",
+        "count": 41
+      },
+      {
+        "name": "KPR College of Arts Science and Research",
+        "count": 40
+      }
+    ],
+    "year_of_study": [
+      {
+        "year": "3 Year",
+        "count": 2463
+      },
+      {
+        "year": "2 Year",
+        "count": 2289
+      },
+      {
+        "year": "4 Year",
+        "count": 358
+      },
+      {
+        "year": "1 Year",
+        "count": 210
+      },
+      {
+        "year": "III",
+        "count": 2
+      },
+      {
+        "year": "3rd",
+        "count": 1
+      }
+    ],
+    "top_10_departments": [
+      {
+        "department": "Computer Science",
+        "count": 2229
+      },
+      {
+        "department": "Artificial Intelligence",
+        "count": 836
+      },
+      {
+        "department": "Information Technology",
+        "count": 617
+      },
+      {
+        "department": "Electronics and Communication",
+        "count": 361
+      },
+      {
+        "department": "Data Science",
+        "count": 189
+      },
+      {
+        "department": "Electrical and Electronics",
+        "count": 68
+      },
+      {
+        "department": "Artificial Intelligence and Data Science",
+        "count": 49
+      },
+      {
+        "department": "Mechanical Engineering",
+        "count": 37
+      },
+      {
+        "department": "ARTIFICIAL INTELLIGENCE AND DATA SCIENCE",
+        "count": 22
+      },
+      {
+        "department": "BCA",
+        "count": 22
+      }
+    ],
+    "top_10_cities": [
+      {
+        "city": "Coimbatore, Tamil Nadu",
+        "count": 3132
+      },
+      {
+        "city": "Chennai, Tamil Nadu",
+        "count": 703
+      },
+      {
+        "city": "Tiruppur, Tamil Nadu",
+        "count": 209
+      },
+      {
+        "city": "Erode, Tamil Nadu",
+        "count": 199
+      },
+      {
+        "city": "Tiruchirappalli, Tamil Nadu",
+        "count": 67
+      },
+      {
+        "city": "Puducherry, Puducherry",
+        "count": 67
+      },
+      {
+        "city": "Bengaluru, Karnataka",
+        "count": 65
+      },
+      {
+        "city": "Pune, Maharashtra",
+        "count": 50
+      },
+      {
+        "city": "Dindigul, Tamil Nadu",
+        "count": 35
+      },
+      {
+        "city": "Salem, Tamil Nadu",
+        "count": 33
+      }
+    ]
+  },
+  "submission_details": {
+    "by_category": [
+      {
+        "category": "Software",
+        "count": 600
+      },
+      {
+        "category": "AI/ML",
+        "count": 254
+      },
+      {
+        "category": "IoT",
+        "count": 101
+      },
+      {
+        "category": "Hardware",
+        "count": 55
+      },
+      {
+        "category": "Software + Hardware",
+        "count": 3
+      },
+      {
+        "category": "Intergrated Hardware, IOT, AL/ML.",
+        "count": 1
+      },
+      {
+        "category": "Disaster Preparedness & Climate Resilience, Environmental Sustainability",
+        "count": 1
+      },
+      {
+        "category": "CYBERSECURITY",
+        "count": 1
+      },
+      {
+        "category": "Open Innovation",
+        "count": 1
+      },
+      {
+        "category": "Software, Hardware , IOT , AI/ML",
+        "count": 1
+      }
+    ],
+    "by_sdg_goal": [
+      {
+        "sdg": "SDG 9 - Industry & Innovation",
+        "count": 88
+      },
+      {
+        "sdg": "SDG 3 - Good Health",
+        "count": 86
+      },
+      {
+        "sdg": "SDG 4 - Quality Education",
+        "count": 74
+      },
+      {
+        "sdg": "SDG 11 - Sustainable Cities",
+        "count": 49
+      },
+      {
+        "sdg": "SDG 16 - Peace & Justice",
+        "count": 37
+      },
+      {
+        "sdg": "SDG 2 - Zero Hunger",
+        "count": 33
+      },
+      {
+        "sdg": "SDG 8 - Economic Growth",
+        "count": 23
+      },
+      {
+        "sdg": "SDG 12 - Responsible Consumption",
+        "count": 22
+      },
+      {
+        "sdg": "SDG 13 - Climate Action",
+        "count": 15
+      },
+      {
+        "sdg": "SDG 10 - Reduced Inequalities",
+        "count": 15
+      }
+    ],
+    "peak_submission_time": "11:00 PM - 12:00 AM"
+  }
+}
