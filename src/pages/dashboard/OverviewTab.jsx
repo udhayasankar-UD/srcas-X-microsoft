@@ -137,7 +137,7 @@ export default function OverviewTab({ hasTeam, teamData, teamMembers, submission
         <div style={{ background: '#fee2e2', border: '1px solid #fca5a5', borderRadius: 10, padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 12, overflow: 'hidden' }}>
           <span style={{ fontSize: 18 }}>🚨</span>
           <marquee style={{ fontSize: 14, fontWeight: 700, color: '#b91c1c', flex: 1 }} scrollamount="6">
-            Important: All project development and coding must begin strictly on the morning of August 14th. Pre-built projects or pre-written code are not allowed. You have exactly 24 hours to build your solution during the hackathon!
+            Final Extension: Submit your project presentation by today, July 26, 6:00 PM IST—no further extensions or late submissions will be accepted.
           </marquee>
           <button onClick={() => setShowNotification(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: '#b91c1c', opacity: 0.7 }} onMouseEnter={e => e.currentTarget.style.opacity='1'} onMouseLeave={e => e.currentTarget.style.opacity='0.7'}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>

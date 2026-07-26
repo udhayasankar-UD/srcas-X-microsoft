@@ -18,10 +18,10 @@ function DeadlinePopup() {
         const res = await fetch('https://worldtimeapi.org/api/timezone/Etc/UTC');
         const data = await res.json();
         const currentTime = new Date(data.datetime);
-        const deadline = new Date('2026-07-26T12:40:00Z'); // 6:10 PM IST
+        const deadline = new Date('2026-07-26T12:30:00Z'); // 6:00 PM IST
         if (currentTime > deadline) setShowPopup(true);
       } catch (err) {
-        if (new Date() > new Date('2026-07-26T12:40:00Z')) setShowPopup(true);
+        if (new Date() > new Date('2026-07-26T12:30:00Z')) setShowPopup(true);
       }
     };
     checkDeadline();
@@ -75,10 +75,75 @@ function DeadlinePopup() {
   );
 }
 
+function FloatingCountdown() {
+  const [timeLeft, setTimeLeft] = useState(null);
+
+  useEffect(() => {
+    const target = new Date('2026-07-26T12:30:00Z').getTime();
+
+    const timer = setInterval(() => {
+      const now = new Date().getTime();
+      const difference = target - now;
+      
+      if (difference <= 0) {
+        clearInterval(timer);
+        setTimeLeft(0);
+      } else {
+        setTimeLeft(difference);
+      }
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  if (timeLeft === null || timeLeft <= 0) return null;
+
+  const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 50 }}
+      animate={{ opacity: 1, y: 0 }}
+      style={{
+        position: 'fixed',
+        bottom: 24,
+        left: '50%',
+        transform: 'translateX(-50%)',
+        background: '#111',
+        color: '#fff',
+        padding: '12px 24px',
+        borderRadius: 100,
+        display: 'flex',
+        alignItems: 'center',
+        gap: 12,
+        boxShadow: '0 10px 30px rgba(0,0,0,0.2)',
+        zIndex: 9000,
+        fontWeight: 700,
+        fontSize: '14px',
+        border: '1px solid #333'
+      }}
+    >
+      <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#ef4444' }}>
+        <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#ef4444', animation: 'pulse 1.5s infinite' }} />
+        Submissions close in:
+      </div>
+      <div style={{ display: 'flex', gap: 6, color: '#fff', letterSpacing: '1px' }}>
+        <span>{String(hours).padStart(2, '0')}</span>:
+        <span>{String(minutes).padStart(2, '0')}</span>:
+        <span>{String(seconds).padStart(2, '0')}</span>
+      </div>
+      <style>{`@keyframes pulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.2); } 100% { opacity: 1; transform: scale(1); } }`}</style>
+    </motion.div>
+  );
+}
+
 function HomePage() {
   return (
     <main>
       <DeadlinePopup />
+      <FloatingCountdown />
       <HeroSection7 />
       
       {/* ── Rest of the page ── */}
