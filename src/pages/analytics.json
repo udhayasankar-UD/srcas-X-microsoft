@@ -1,254 +1,102 @@
 {
   "summary_metrics": {
-    "total_participants": 5323,
-    "total_teams": 1561,
-    "total_submissions": 1072,
+    "total_participants": 5164,
+    "total_submissions": 1131,
     "estimated_gender_breakdown": {
-      "male": 2835,
-      "female": 2488,
-      "unknown": 0
+      "male": 2844,
+      "female": 2108,
+      "unknown": 212
     },
-    "average_team_size_submitted": 3.48
+    "average_team_size_submitted": 3.48,
+    "total_teams_registered": 1577,
+    "total_teams_submitted": 1131,
+    "team_submission_rate_pct": 71.72
   },
   "demographics": {
     "top_10_colleges": [
-      {
-        "name": "Sri Eshwar College of Engineering",
-        "count": 209
-      },
-      {
-        "name": "SRCAS",
-        "count": 174
-      },
-      {
-        "name": "KPRCAS",
-        "count": 104
-      },
-      {
-        "name": "Rathinam Technical Campus",
-        "count": 98
-      },
-      {
-        "name": "Chennai Institute of Technology",
-        "count": 97
-      },
-      {
-        "name": "RATHINAM TECHNICAL CAMPUS",
-        "count": 81
-      },
-      {
-        "name": "SKCET",
-        "count": 73
-      },
-      {
-        "name": "Sri Eshwar College Of Engineering",
-        "count": 50
-      },
-      {
-        "name": "Sri Shakthi Institute of Engineering and Technology",
-        "count": 41
-      },
-      {
-        "name": "KPR College of Arts Science and Research",
-        "count": 40
-      }
+      { "name": "Sri Eshwar College Of Engineering", "count": 433 },
+      { "name": "Rathinam Technical Campus",         "count": 282 },
+      { "name": "Chennai Institute Of Technology",   "count": 228 },
+      { "name": "Srcas",                             "count": 210 },
+      { "name": "Kpr College Of Arts Science And Research", "count": 149 },
+      { "name": "Sns College Of Technology",         "count": 135 },
+      { "name": "Kprcas",                            "count": 126 },
+      { "name": "Sri Krishna College Of Engineering And Technology", "count": 108 },
+      { "name": "Kgisl Institute Of Technology",     "count": 106 },
+      { "name": "Skcet",                             "count": 88 }
     ],
+    "college_type_breakdown": [
+      { "type": "Engineering",          "participant_count": 3466, "unique_colleges": 370 },
+      { "type": "Arts & Science",       "participant_count": 1241, "unique_colleges": 87  },
+      { "type": "Other / Unclassified", "participant_count": 348,  "unique_colleges": 150 },
+      { "type": "University (Other)",   "participant_count": 325,  "unique_colleges": 76  }
+    ],
+    "srcas_sri_ramakrishna_arts_science_count": 275,
     "year_of_study": [
-      {
-        "year": "3 Year",
-        "count": 2463
-      },
-      {
-        "year": "2 Year",
-        "count": 2289
-      },
-      {
-        "year": "4 Year",
-        "count": 358
-      },
-      {
-        "year": "1 Year",
-        "count": 210
-      },
-      {
-        "year": "III",
-        "count": 2
-      },
-      {
-        "year": "3rd",
-        "count": 1
-      }
+      { "year": "3rd Year", "count": 2494 },
+      { "year": "2nd Year", "count": 2310 },
+      { "year": "4th Year", "count": 362  },
+      { "year": "1st Year", "count": 214  }
     ],
     "top_10_departments": [
-      {
-        "department": "Computer Science",
-        "count": 2229
-      },
-      {
-        "department": "Artificial Intelligence",
-        "count": 836
-      },
-      {
-        "department": "Information Technology",
-        "count": 617
-      },
-      {
-        "department": "Electronics and Communication",
-        "count": 361
-      },
-      {
-        "department": "Data Science",
-        "count": 189
-      },
-      {
-        "department": "Electrical and Electronics",
-        "count": 68
-      },
-      {
-        "department": "Artificial Intelligence and Data Science",
-        "count": 49
-      },
-      {
-        "department": "Mechanical Engineering",
-        "count": 37
-      },
-      {
-        "department": "ARTIFICIAL INTELLIGENCE AND DATA SCIENCE",
-        "count": 22
-      },
-      {
-        "department": "BCA",
-        "count": 22
-      }
+      { "department": "Computer Science",                          "count": 2253 },
+      { "department": "Artificial Intelligence",                   "count": 851  },
+      { "department": "Information Technology",                    "count": 621  },
+      { "department": "Electronics And Communication",             "count": 372  },
+      { "department": "Data Science",                              "count": 189  },
+      { "department": "Artificial Intelligence And Data Science",  "count": 95   },
+      { "department": "Electrical And Electronics",                "count": 68   },
+      { "department": "Computer Science With Data Analytics",      "count": 43   },
+      { "department": "Artificial Intelligence And Machine Learning", "count": 39 },
+      { "department": "Mechanical Engineering",                    "count": 37   }
     ],
     "top_10_cities": [
-      {
-        "city": "Coimbatore, Tamil Nadu",
-        "count": 3132
-      },
-      {
-        "city": "Chennai, Tamil Nadu",
-        "count": 703
-      },
-      {
-        "city": "Tiruppur, Tamil Nadu",
-        "count": 209
-      },
-      {
-        "city": "Erode, Tamil Nadu",
-        "count": 199
-      },
-      {
-        "city": "Tiruchirappalli, Tamil Nadu",
-        "count": 67
-      },
-      {
-        "city": "Puducherry, Puducherry",
-        "count": 67
-      },
-      {
-        "city": "Bengaluru, Karnataka",
-        "count": 65
-      },
-      {
-        "city": "Pune, Maharashtra",
-        "count": 50
-      },
-      {
-        "city": "Dindigul, Tamil Nadu",
-        "count": 35
-      },
-      {
-        "city": "Salem, Tamil Nadu",
-        "count": 33
-      }
-    ]
+      { "city": "Coimbatore",    "count": 3170 },
+      { "city": "Chennai",       "count": 712  },
+      { "city": "Tiruppur",      "count": 211  },
+      { "city": "Erode",         "count": 203  },
+      { "city": "Puducherry",    "count": 69   },
+      { "city": "Tiruchirappalli", "count": 67 },
+      { "city": "Bengaluru",     "count": 65   },
+      { "city": "Pune",          "count": 50   },
+      { "city": "Dindigul",      "count": 35   },
+      { "city": "Salem",         "count": 33   }
+    ],
+    "top_5_states": [
+      { "state": "Tamil Nadu",   "count": 4649 },
+      { "state": "Maharashtra",  "count": 199  },
+      { "state": "Karnataka",    "count": 102  },
+      { "state": "Uttar Pradesh","count": 78   },
+      { "state": "Puducherry",   "count": 69   }
+    ],
+    "total_unique_colleges": 683,
+    "total_states_uts_represented": 25
   },
   "submission_details": {
     "by_category": [
-      {
-        "category": "Software",
-        "count": 600
-      },
-      {
-        "category": "AI/ML",
-        "count": 254
-      },
-      {
-        "category": "IoT",
-        "count": 101
-      },
-      {
-        "category": "Hardware",
-        "count": 55
-      },
-      {
-        "category": "Software + Hardware",
-        "count": 3
-      },
-      {
-        "category": "Intergrated Hardware, IOT, AL/ML.",
-        "count": 1
-      },
-      {
-        "category": "Disaster Preparedness & Climate Resilience, Environmental Sustainability",
-        "count": 1
-      },
-      {
-        "category": "CYBERSECURITY",
-        "count": 1
-      },
-      {
-        "category": "Open Innovation",
-        "count": 1
-      },
-      {
-        "category": "Software, Hardware , IOT , AI/ML",
-        "count": 1
-      }
+      { "category": "Software",  "count": 1044 },
+      { "category": "Hardware",  "count": 87   }
     ],
     "by_sdg_goal": [
-      {
-        "sdg": "SDG 9 - Industry & Innovation",
-        "count": 88
-      },
-      {
-        "sdg": "SDG 3 - Good Health",
-        "count": 86
-      },
-      {
-        "sdg": "SDG 4 - Quality Education",
-        "count": 74
-      },
-      {
-        "sdg": "SDG 11 - Sustainable Cities",
-        "count": 49
-      },
-      {
-        "sdg": "SDG 16 - Peace & Justice",
-        "count": 37
-      },
-      {
-        "sdg": "SDG 2 - Zero Hunger",
-        "count": 33
-      },
-      {
-        "sdg": "SDG 8 - Economic Growth",
-        "count": 23
-      },
-      {
-        "sdg": "SDG 12 - Responsible Consumption",
-        "count": 22
-      },
-      {
-        "sdg": "SDG 13 - Climate Action",
-        "count": 15
-      },
-      {
-        "sdg": "SDG 10 - Reduced Inequalities",
-        "count": 15
-      }
+      { "sdg": "SDG 1 - No Poverty",               "count": 59  },
+      { "sdg": "SDG 2 - Zero Hunger",               "count": 120 },
+      { "sdg": "SDG 3 - Good Health",               "count": 293 },
+      { "sdg": "SDG 4 - Quality Education",         "count": 157 },
+      { "sdg": "SDG 5 - Gender Equality",           "count": 45  },
+      { "sdg": "SDG 6 - Clean Water",               "count": 92  },
+      { "sdg": "SDG 7 - Clean Energy",              "count": 55  },
+      { "sdg": "SDG 8 - Economic Growth",           "count": 181 },
+      { "sdg": "SDG 9 - Industry & Innovation",     "count": 457 },
+      { "sdg": "SDG 10 - Reduced Inequalities",     "count": 148 },
+      { "sdg": "SDG 11 - Sustainable Cities",       "count": 297 },
+      { "sdg": "SDG 12 - Responsible Consumption",  "count": 196 },
+      { "sdg": "SDG 13 - Climate Action",           "count": 193 },
+      { "sdg": "SDG 14 - Life Below Water",         "count": 43  },
+      { "sdg": "SDG 15 - Life on Land",             "count": 79  },
+      { "sdg": "SDG 16 - Peace & Justice",          "count": 169 },
+      { "sdg": "SDG 17 - Partnerships",             "count": 92  }
     ],
-    "peak_submission_time": "11:00 PM - 12:00 AM"
+    "peak_submission_time": "11:00 PM – 12:00 AM IST (115 submissions)",
+    "busiest_submission_day": "July 25, 2026 (500 submissions)"
   }
 }

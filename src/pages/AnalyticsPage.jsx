@@ -6,7 +6,8 @@ import {
 import {
   Users, FileText, Activity, Clock, MapPin, BookOpen, GraduationCap,
   ArrowUp, Calendar, Info, RefreshCw, Trophy, ChevronDown,
-  Monitor, Cpu, Database, Zap, Briefcase, Award, PieChart as PieChartIcon
+  Monitor, Cpu, Database, Zap, Briefcase, Award, PieChart as PieChartIcon,
+  Globe, Building2
 } from 'lucide-react';
 import analyticsData from './analytics.json';
 
@@ -47,17 +48,14 @@ const ChartTip = ({ active, payload, label }) => {
 export default function AnalyticsPage() {
   const { summary_metrics: sm, demographics: demo, submission_details: sub } = analyticsData;
 
-  const submissionRate = ((sm.total_submissions / sm.total_teams) * 100).toFixed(1);
-  const totalGender    = sm.estimated_gender_breakdown.male + sm.estimated_gender_breakdown.female;
-  const genderData     = [
+  const totalGender = sm.estimated_gender_breakdown.male + sm.estimated_gender_breakdown.female;
+  const genderData  = [
     { name: 'Female', value: sm.estimated_gender_breakdown.female },
     { name: 'Male',   value: sm.estimated_gender_breakdown.male   },
   ];
 
-  const topYears = demo.year_of_study.slice(0, 4);
-  const otherCnt = demo.year_of_study.slice(4).reduce((a, c) => a + c.count, 0);
-  const yearData  = [...topYears, ...(otherCnt ? [{ year: 'Other', count: otherCnt }] : [])];
-  const totalYrs  = yearData.reduce((a, c) => a + c.count, 0);
+  const yearData = demo.year_of_study.slice(0, 4);
+  const totalYrs = yearData.reduce((a, c) => a + c.count, 0);
 
   const sdgData = sub.by_sdg_goal.map(d => ({
     name: d.sdg.replace(/SDG (\d+) -.*/, 'SDG $1'),
@@ -67,10 +65,10 @@ export default function AnalyticsPage() {
 
   /* stat card data */
   const stats = [
-    { title:'Total Participants', value: sm.total_participants.toLocaleString(), sub:'Registered individuals',        trend:'12.5%', Icon:Users,          color:'#3b82f6', bg:'#eff6ff' },
-    { title:'Total Teams',        value: sm.total_teams.toLocaleString(),        sub:`Avg ${sm.average_team_size_submitted} members/team`, trend:'8.3%',  Icon:Users,          color:'#10b981', bg:'#ecfdf5' },
-    { title:'Total Submissions',  value: sm.total_submissions.toLocaleString(),  sub:'Projects submitted',            trend:'15.4%', Icon:FileText,       color:'#8b5cf6', bg:'#f5f3ff' },
-    { title:'Submission Rate',    value:`${submissionRate}%`,                    sub:'Teams that submitted',          trend:'6.2%',  Icon:PieChartIcon,   color:'#f97316', bg:'#fff7ed' },
+    { title:'Total Participants',   value: sm.total_participants.toLocaleString(),    sub:'Registered individuals',                           Icon:Users,        color:'#3b82f6', bg:'#eff6ff' },
+    { title:'Teams Registered',     value: sm.total_teams_registered.toLocaleString(), sub:`Avg ${sm.average_team_size_submitted} members/team`, Icon:Users,        color:'#10b981', bg:'#ecfdf5' },
+    { title:'Total Submissions',    value: sm.total_submissions.toLocaleString(),      sub:'Projects submitted',                               Icon:FileText,     color:'#8b5cf6', bg:'#f5f3ff' },
+    { title:'Submission Rate',      value:`${sm.team_submission_rate_pct}%`,           sub:'Teams that submitted',                             Icon:PieChartIcon, color:'#f97316', bg:'#fff7ed' },
   ];
 
   return (
@@ -93,14 +91,14 @@ export default function AnalyticsPage() {
               <Activity size={13} /> Live Data
             </span>
             <span style={{ display:'flex', alignItems:'center', gap:6, background:'#fff', border:'1px solid #e5e7eb', color:'#374151', fontSize:12, fontWeight:600, padding:'7px 16px', borderRadius:10, cursor:'pointer' }}>
-              <Calendar size={14} color="#9ca3af" /> As of July 20, 2026 <ChevronDown size={14} color="#9ca3af" />
+              <Calendar size={14} color="#9ca3af" /> As of July 27, 2026 <ChevronDown size={14} color="#9ca3af" />
             </span>
           </div>
         </div>
 
         {/* ── STAT CARDS ── */}
         <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:24, marginBottom:32 }}>
-          {stats.map(({ title, value, sub: subtitle, trend, Icon, color, bg }) => (
+          {stats.map(({ title, value, sub: subtitle, Icon, color, bg }) => (
             <div key={title} style={{ background:'#fff', border:'1px solid #e5e7eb', borderRadius:20, padding:'28px 28px 24px', boxShadow:'0 1px 4px rgba(0,0,0,.04)', transition:'box-shadow .2s' }}
               onMouseEnter={e=>e.currentTarget.style.boxShadow='0 6px 24px rgba(0,0,0,.08)'}
               onMouseLeave={e=>e.currentTarget.style.boxShadow='0 1px 4px rgba(0,0,0,.04)'}>
@@ -114,13 +112,33 @@ export default function AnalyticsPage() {
                   <p style={{ fontSize:12, color:'#9ca3af', fontWeight:500, margin:0 }}>{subtitle}</p>
                 </div>
               </div>
-              <div style={{ marginTop:16, paddingTop:14, borderTop:'1px solid #f3f4f6', display:'flex', alignItems:'center', gap:6 }}>
-                <ArrowUp size={13} color="#10b981" strokeWidth={3} />
-                <span style={{ fontSize:12, fontWeight:700, color:'#10b981' }}>{trend}</span>
-                <span style={{ fontSize:12, color:'#9ca3af', fontWeight:500 }}>vs last 7 days</span>
-              </div>
             </div>
           ))}
+        </div>
+
+        {/* ── REACH BANNER ── */}
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:20, marginBottom:32 }}>
+          <div style={{ background:'linear-gradient(135deg,#0f172a 0%,#1e3a5f 100%)', borderRadius:16, padding:'22px 28px', display:'flex', alignItems:'center', gap:16, boxShadow:'0 4px 20px rgba(0,0,0,.15)' }}>
+            <Globe size={32} color="#60a5fa" strokeWidth={1.8} />
+            <div>
+              <p style={{ fontSize:11, fontWeight:700, color:'rgba(255,255,255,.6)', textTransform:'uppercase', letterSpacing:'.08em', margin:'0 0 4px' }}>States / UTs Represented</p>
+              <p style={{ fontSize:30, fontWeight:900, color:'#fff', margin:0, lineHeight:1 }}>{demo.total_states_uts_represented}</p>
+            </div>
+          </div>
+          <div style={{ background:'linear-gradient(135deg,#1a1a2e 0%,#16213e 100%)', borderRadius:16, padding:'22px 28px', display:'flex', alignItems:'center', gap:16, boxShadow:'0 4px 20px rgba(0,0,0,.15)' }}>
+            <Building2 size={32} color="#a78bfa" strokeWidth={1.8} />
+            <div>
+              <p style={{ fontSize:11, fontWeight:700, color:'rgba(255,255,255,.6)', textTransform:'uppercase', letterSpacing:'.08em', margin:'0 0 4px' }}>Unique Colleges</p>
+              <p style={{ fontSize:30, fontWeight:900, color:'#fff', margin:0, lineHeight:1 }}>{demo.total_unique_colleges}</p>
+            </div>
+          </div>
+          <div style={{ background:'linear-gradient(135deg,#0d2137 0%,#0a3d2b 100%)', borderRadius:16, padding:'22px 28px', display:'flex', alignItems:'center', gap:16, boxShadow:'0 4px 20px rgba(0,0,0,.15)' }}>
+            <Calendar size={32} color="#34d399" strokeWidth={1.8} />
+            <div>
+              <p style={{ fontSize:11, fontWeight:700, color:'rgba(255,255,255,.6)', textTransform:'uppercase', letterSpacing:'.08em', margin:'0 0 4px' }}>Busiest Submission Day</p>
+              <p style={{ fontSize:18, fontWeight:900, color:'#fff', margin:0, lineHeight:1.2 }}>{sub.busiest_submission_day}</p>
+            </div>
+          </div>
         </div>
 
         {/* ── ROW 2 : COLLEGES + GENDER ── */}
@@ -151,7 +169,7 @@ export default function AnalyticsPage() {
               </ResponsiveContainer>
             </div>
             <div style={{ display:'flex', justifyContent:'space-between', fontSize:11, color:'#9ca3af', fontWeight:600, marginTop:8, paddingTop:10, borderTop:'1px solid #f3f4f6', paddingLeft:200 }}>
-              {['0','55','110','165','220'].map(v=><span key={v}>{v}</span>)}
+              {['0','110','220','330','440'].map(v=><span key={v}>{v}</span>)}
             </div>
           </div>
 
@@ -272,7 +290,57 @@ export default function AnalyticsPage() {
           </div>
         </div>
 
-        {/* ── ROW 4 : SDG CHART + HIGHLIGHTS ── */}
+        {/* ── ROW 4 : COLLEGE TYPE + TOP STATES ── */}
+        <div style={{ display:'grid', gridTemplateColumns:'3fr 2fr', gap:20, marginBottom:24 }}>
+
+          {/* College type breakdown */}
+          <div style={{ background:'#fff', border:'1px solid #e5e7eb', borderRadius:18, padding:'28px 32px', boxShadow:'0 1px 4px rgba(0,0,0,.04)' }}>
+            <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:24 }}>
+              <Building2 size={18} color="#6366f1" strokeWidth={2} />
+              <span style={{ fontSize:16, fontWeight:800, color:'#111827' }}>College Type Breakdown</span>
+            </div>
+            <div style={{ display:'flex', flexDirection:'column', gap:14 }}>
+              {demo.college_type_breakdown.map((c, i) => {
+                const total = demo.college_type_breakdown.reduce((a, x) => a + x.participant_count, 0);
+                const pct   = (c.participant_count / total * 100).toFixed(1);
+                return (
+                  <div key={i}>
+                    <div style={{ display:'flex', justifyContent:'space-between', marginBottom:6 }}>
+                      <span style={{ fontSize:13, fontWeight:700, color:'#374151' }}>{c.type}</span>
+                      <span style={{ fontSize:13, fontWeight:700, color:'#6b7280' }}>
+                        {c.participant_count.toLocaleString()} <span style={{ color:'#9ca3af', fontWeight:500 }}>({pct}%) · {c.unique_colleges} colleges</span>
+                      </span>
+                    </div>
+                    <div style={{ background:'#f3f4f6', borderRadius:99, height:8, overflow:'hidden' }}>
+                      <div style={{ width:`${pct}%`, height:'100%', borderRadius:99, background:BAR_COLORS[i] }} />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Top 5 States */}
+          <div style={{ background:'#fff', border:'1px solid #e5e7eb', borderRadius:18, padding:'28px 32px', boxShadow:'0 1px 4px rgba(0,0,0,.04)', display:'flex', flexDirection:'column' }}>
+            <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:24 }}>
+              <Globe size={18} color="#6366f1" strokeWidth={2} />
+              <span style={{ fontSize:16, fontWeight:800, color:'#111827' }}>Top States / UTs</span>
+            </div>
+            <div style={{ display:'flex', flexDirection:'column' }}>
+              {demo.top_5_states.map((s, i) => (
+                <div key={i} style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'12px 8px', borderBottom: i < demo.top_5_states.length - 1 ? '1px solid #f3f4f6' : 'none' }}>
+                  <div style={{ display:'flex', alignItems:'center', gap:10 }}>
+                    <span style={{ width:24, height:24, borderRadius:6, background:BAR_COLORS[i], display:'flex', alignItems:'center', justifyContent:'center', fontSize:11, fontWeight:900, color:'#fff', flexShrink:0 }}>{i+1}</span>
+                    <span style={{ fontSize:14, fontWeight:700, color:'#374151' }}>{s.state}</span>
+                  </div>
+                  <span style={{ fontSize:15, fontWeight:900, color:'#3b82f6' }}>{s.count.toLocaleString()}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* ── ROW 5 : SDG CHART + HIGHLIGHTS ── */}
         <div style={{ display:'grid', gridTemplateColumns:'3fr 2fr', gap:20, marginBottom:24 }}>
 
           {/* SDG bar chart */}
@@ -311,8 +379,8 @@ export default function AnalyticsPage() {
                   <Clock size={18} color="rgba(255,255,255,.8)" />
                   <span style={{ fontSize:11, fontWeight:700, color:'rgba(255,255,255,.8)', textTransform:'uppercase', letterSpacing:'.08em' }}>Peak Submission Time</span>
                 </div>
-                <p style={{ fontSize:28, fontWeight:900, color:'#fff', margin:'0 0 6px', letterSpacing:'-.5px', lineHeight:1.15 }}>{sub.peak_submission_time}</p>
-                <p style={{ fontSize:13, color:'rgba(255,255,255,.65)', fontWeight:500, margin:0 }}>Highest traffic hour</p>
+                <p style={{ fontSize:24, fontWeight:900, color:'#fff', margin:'0 0 6px', letterSpacing:'-.5px', lineHeight:1.25 }}>{sub.peak_submission_time}</p>
+                <p style={{ fontSize:13, color:'rgba(255,255,255,.65)', fontWeight:500, margin:0 }}>Highest traffic window</p>
               </div>
             </div>
 
@@ -340,7 +408,7 @@ export default function AnalyticsPage() {
             <span>All data is real-time and updated automatically.</span>
           </div>
           <div style={{ display:'flex', alignItems:'center', gap:10 }}>
-            <span>Last updated: July 20, 2026 • 10:30 AM IST</span>
+            <span>Last updated: July 27, 2026 • 11:59 PM IST</span>
             <RefreshCw size={15} color="#9ca3af" style={{ cursor:'pointer' }} />
           </div>
         </div>
