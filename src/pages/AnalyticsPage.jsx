@@ -87,11 +87,8 @@ export default function AnalyticsPage() {
             </div>
           </div>
           <div style={{ display:'flex', gap:12, alignItems:'center' }}>
-            <span style={{ display:'flex', alignItems:'center', gap:6, background:'#ecfdf5', border:'1px solid #a7f3d0', color:'#065f46', fontSize:12, fontWeight:700, padding:'7px 14px', borderRadius:99 }}>
-              <Activity size={13} /> Live Data
-            </span>
-            <span style={{ display:'flex', alignItems:'center', gap:6, background:'#fff', border:'1px solid #e5e7eb', color:'#374151', fontSize:12, fontWeight:600, padding:'7px 16px', borderRadius:10, cursor:'pointer' }}>
-              <Calendar size={14} color="#9ca3af" /> As of July 27, 2026 <ChevronDown size={14} color="#9ca3af" />
+            <span style={{ display:'flex', alignItems:'center', gap:6, background:'#fff', border:'1px solid #e5e7eb', color:'#374151', fontSize:12, fontWeight:600, padding:'7px 16px', borderRadius:10 }}>
+              <Calendar size={14} color="#9ca3af" /> Final Event Data • July 26, 2026
             </span>
           </div>
         </div>
@@ -394,11 +391,10 @@ export default function AnalyticsPage() {
         <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', background:'#fff', border:'1px solid #e5e7eb', borderRadius:14, padding:'14px 24px', fontSize:12, color:'#6b7280', fontWeight:600 }}>
           <div style={{ display:'flex', alignItems:'center', gap:8, color:'#4f46e5' }}>
             <Info size={15} />
-            <span>All data is real-time and updated automatically.</span>
+            <span>Final analytics from SRCAS Hackathon 3.0</span>
           </div>
           <div style={{ display:'flex', alignItems:'center', gap:10 }}>
-            <span>Last updated: July 27, 2026 • 11:59 PM IST</span>
-            <RefreshCw size={15} color="#9ca3af" style={{ cursor:'pointer' }} />
+            <span>Event concluded: July 26, 2026 • 6:00 PM IST</span>
           </div>
         </div>
 
