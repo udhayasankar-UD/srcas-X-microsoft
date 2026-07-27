@@ -146,14 +146,9 @@ export default function AnalyticsPage() {
 
           {/* colleges */}
           <div style={{ background:'#fff', border:'1px solid #e5e7eb', borderRadius:18, padding:'28px 32px', boxShadow:'0 1px 4px rgba(0,0,0,.04)' }}>
-            <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:24 }}>
-              <div style={{ display:'flex', alignItems:'center', gap:10 }}>
-                <GraduationCap size={18} color="#6366f1" strokeWidth={2} />
-                <span style={{ fontSize:16, fontWeight:800, color:'#111827' }}>Top 10 Colleges</span>
-              </div>
-              <button style={{ fontSize:11, fontWeight:700, color:'#6366f1', background:'#eef2ff', border:'1px solid #c7d2fe', borderRadius:99, padding:'5px 14px', cursor:'pointer', textTransform:'uppercase', letterSpacing:'.05em' }}>
-                View All
-              </button>
+            <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:24 }}>
+              <GraduationCap size={18} color="#6366f1" strokeWidth={2} />
+              <span style={{ fontSize:16, fontWeight:800, color:'#111827' }}>Top 10 Colleges</span>
             </div>
             <div style={{ height:340 }}>
               <ResponsiveContainer width="100%" height="100%">
@@ -243,12 +238,9 @@ export default function AnalyticsPage() {
 
           {/* Top Departments */}
           <div style={{ background:'#fff', border:'1px solid #e5e7eb', borderRadius:18, padding:'28px 32px', boxShadow:'0 1px 4px rgba(0,0,0,.04)', display:'flex', flexDirection:'column' }}>
-            <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:24 }}>
-              <div style={{ display:'flex', alignItems:'center', gap:10 }}>
-                <Users size={18} color="#6366f1" strokeWidth={2} />
-                <span style={{ fontSize:16, fontWeight:800, color:'#111827' }}>Top Departments</span>
-              </div>
-              <button style={{ fontSize:11, fontWeight:700, color:'#6366f1', background:'#eef2ff', border:'1px solid #c7d2fe', borderRadius:99, padding:'5px 14px', cursor:'pointer', textTransform:'uppercase', letterSpacing:'.05em' }}>View All</button>
+            <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:24 }}>
+              <Users size={18} color="#6366f1" strokeWidth={2} />
+              <span style={{ fontSize:16, fontWeight:800, color:'#111827' }}>Top Departments</span>
             </div>
             <div style={{ display:'flex', flexDirection:'column', gap:4 }}>
               {demo.top_10_departments.slice(0,6).map((d, i) => {
@@ -272,12 +264,9 @@ export default function AnalyticsPage() {
 
           {/* Top Cities */}
           <div style={{ background:'#fff', border:'1px solid #e5e7eb', borderRadius:18, padding:'28px 32px', boxShadow:'0 1px 4px rgba(0,0,0,.04)', display:'flex', flexDirection:'column' }}>
-            <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:24 }}>
-              <div style={{ display:'flex', alignItems:'center', gap:10 }}>
-                <MapPin size={18} color="#6366f1" strokeWidth={2} />
-                <span style={{ fontSize:16, fontWeight:800, color:'#111827' }}>Top Cities</span>
-              </div>
-              <button style={{ fontSize:11, fontWeight:700, color:'#6366f1', background:'#eef2ff', border:'1px solid #c7d2fe', borderRadius:99, padding:'5px 14px', cursor:'pointer', textTransform:'uppercase', letterSpacing:'.05em' }}>View All</button>
+            <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:24 }}>
+              <MapPin size={18} color="#6366f1" strokeWidth={2} />
+              <span style={{ fontSize:16, fontWeight:800, color:'#111827' }}>Top Cities</span>
             </div>
             <div style={{ display:'flex', flexDirection:'column' }}>
               {demo.top_10_cities.slice(0,6).map((c, i) => (
