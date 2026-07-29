@@ -30,10 +30,15 @@ const getDeptIcon = (n) => {
 
 const ChartTip = ({ active, payload, label }) => {
   if (!active || !payload?.length) return null;
+  // Prefer the actual data field name over the index-based label Recharts sends for PieCharts
+  const title = payload[0].payload?.year
+    || payload[0].payload?.fullName
+    || payload[0].name
+    || label;
   return (
     <div style={{ background:'#fff', border:'1px solid #e5e7eb', borderRadius:10, padding:'10px 14px', boxShadow:'0 4px 20px rgba(0,0,0,.1)' }}>
       <p style={{ fontSize:11, color:'#6b7280', fontWeight:700, textTransform:'uppercase', letterSpacing:'.05em', marginBottom:4 }}>
-        {label || payload[0].payload?.fullName || payload[0].name}
+        {title}
       </p>
       <p style={{ fontSize:16, fontWeight:800, color:'#111827' }}>
         {payload[0].value} <span style={{ fontSize:11, fontWeight:500, color:'#9ca3af' }}>count</span>
@@ -159,15 +164,15 @@ export default function AnalyticsPage() {
               <GraduationCap size={17} color="#6366f1" strokeWidth={2} />
               <span style={{ fontSize:15, fontWeight:800, color:'#111827' }}>Top 10 Colleges</span>
             </div>
-            <div style={{ height: isMobile ? 290 : 340 }}>
+            <div style={{ height: isMobile ? 360 : 360 }}>
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={demo.top_10_colleges} layout="vertical" margin={{ top:0, right: isMobile ? 34 : 44, left:0, bottom:0 }}>
+                <BarChart data={demo.top_10_colleges} layout="vertical" margin={{ top:0, right: isMobile ? 38 : 44, left:0, bottom:0 }}>
                   <XAxis type="number" hide />
-                  <YAxis dataKey="name" type="category" width={isMobile ? 120 : 200}
+                  <YAxis dataKey="name" type="category" width={isMobile ? 130 : 200}
                     tick={{ fontSize: isMobile ? 10 : 12, fill:'#374151', fontWeight:600 }}
                     tickLine={false} axisLine={false} interval={0} />
                   <Tooltip cursor={{ fill:'#f9fafb' }} content={<ChartTip />} />
-                  <Bar dataKey="count" radius={[0,5,5,0]} barSize={isMobile ? 12 : 17}>
+                  <Bar dataKey="count" radius={[0,5,5,0]} barSize={isMobile ? 18 : 22} maxBarSize={28}>
                     {demo.top_10_colleges.map((_, i) => <Cell key={i} fill={BAR_COLORS[i % BAR_COLORS.length]} />)}
                     <LabelList dataKey="count" position="right" style={{ fontSize: isMobile ? 10 : 12, fontWeight:700, fill:'#374151' }} />
                   </Bar>
@@ -223,7 +228,7 @@ export default function AnalyticsPage() {
               <div style={{ width:'45%', height:'100%' }}>
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
-                    <Pie data={yearData} cx="50%" cy="50%" innerRadius={28} outerRadius={76} dataKey="count" stroke="#fff" strokeWidth={3}>
+                    <Pie data={yearData} cx="50%" cy="50%" innerRadius={28} outerRadius={76} dataKey="count" nameKey="year" stroke="#fff" strokeWidth={3}>
                       {yearData.map((_, i) => <Cell key={i} fill={YEAR_CLR[i % YEAR_CLR.length]} />)}
                     </Pie>
                     <Tooltip content={<ChartTip />} />
@@ -341,36 +346,56 @@ export default function AnalyticsPage() {
         {/* ── ROW 5 : SDG CHART + HIGHLIGHTS ── */}
         <div style={{ display:'grid', gridTemplateColumns: isMobile || isTablet ? '1fr' : '3fr 2fr', gap:20, marginBottom:24 }}>
 
-          {/* SDG bar chart */}
+          {/* SDG chart — horizontal bars on mobile, vertical bars on desktop */}
           <div style={card}>
             <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:20 }}>
               <Activity size={17} color="#6366f1" strokeWidth={2} />
               <span style={{ fontSize:15, fontWeight:800, color:'#111827' }}>Submissions by UN SDG Goal</span>
             </div>
-            <div style={{ overflowX: isMobile ? 'auto' : 'visible' }}>
-              <div style={{ minWidth: isMobile ? 500 : '100%', height: isMobile ? 250 : 310 }}>
+
+            {isMobile ? (
+              /* ── MOBILE: horizontal bar chart (like colleges) ── */
+              <div style={{ height: sdgData.length * 38 + 20 }}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={sdgData} layout="vertical" margin={{ top:0, right:44, left:0, bottom:0 }}>
+                    <XAxis type="number" hide />
+                    <YAxis dataKey="fullName" type="category" width={160}
+                      tick={{ fontSize:10, fill:'#374151', fontWeight:600 }}
+                      tickLine={false} axisLine={false} interval={0}
+                      tickFormatter={(v) => v.replace(/SDG \d+ - /, 'SDG: ').substring(0,24)}
+                    />
+                    <Tooltip cursor={{ fill:'#f9fafb' }} content={<ChartTip />} />
+                    <Bar dataKey="count" radius={[0,5,5,0]} barSize={20}>
+                      {sdgData.map((_, i) => <Cell key={i} fill={SDG_COLORS[i % SDG_COLORS.length]} />)}
+                      <LabelList dataKey="count" position="right" style={{ fontSize:10, fontWeight:700, fill:'#374151' }} />
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            ) : (
+              /* ── DESKTOP: vertical bar chart ── */
+              <div style={{ height:310 }}>
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={sdgData} margin={{ top:24, right:8, left:-16, bottom:36 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" vertical={false} />
                     <XAxis dataKey="name" tick={{ fontSize:10, fill:'#6b7280', fontWeight:600 }} angle={-45} textAnchor="end" height={48} tickLine={false} axisLine={false} />
                     <YAxis tick={{ fontSize:11, fill:'#9ca3af' }} tickLine={false} axisLine={false} />
                     <Tooltip cursor={{ fill:'#f9fafb' }} content={<ChartTip />} />
-                    <Bar dataKey="count" radius={[4,4,0,0]} barSize={isMobile ? 16 : 26}>
+                    <Bar dataKey="count" radius={[4,4,0,0]} barSize={26}>
                       {sdgData.map((_, i) => <Cell key={i} fill={SDG_COLORS[i % SDG_COLORS.length]} />)}
                       <LabelList dataKey="count" position="top" style={{ fontSize:10, fontWeight:700, fill:'#374151' }} offset={5} />
                     </Bar>
                   </BarChart>
                 </ResponsiveContainer>
               </div>
-            </div>
-            {isMobile && <p style={{ fontSize:11, color:'#9ca3af', textAlign:'center', margin:'6px 0 0' }}>← Scroll to see all SDGs →</p>}
+            )}
           </div>
 
-          {/* peak time + top category */}
+          {/* peak time + top category — on mobile these stack below SDG chart */}
           <div style={{ display:'flex', flexDirection:'column', gap:16 }}>
 
             {/* peak time */}
-            <div style={{ background:'linear-gradient(135deg,#4f46e5 0%,#7c3aed 100%)', borderRadius:16, padding: isMobile ? '22px 18px' : '28px 30px', flex:1, position:'relative', overflow:'hidden', boxShadow:'0 8px 32px rgba(79,70,229,.25)' }}>
+            <div style={{ background:'linear-gradient(135deg,#4f46e5 0%,#7c3aed 100%)', borderRadius:16, padding: isMobile ? '22px 20px' : '28px 30px', flex:1, position:'relative', overflow:'hidden', boxShadow:'0 8px 32px rgba(79,70,229,.25)' }}>
               <svg style={{ position:'absolute', bottom:0, left:0, right:0, width:'100%', opacity:.2 }} viewBox="0 0 400 60" preserveAspectRatio="none">
                 <path d="M0,30 C50,0 100,60 150,30 C200,0 250,60 300,30 C350,0 400,60 400,30 L400,60 L0,60 Z" fill="white"/>
               </svg>
@@ -379,20 +404,20 @@ export default function AnalyticsPage() {
                   <Clock size={15} color="rgba(255,255,255,.8)" />
                   <span style={{ fontSize:10, fontWeight:700, color:'rgba(255,255,255,.8)', textTransform:'uppercase', letterSpacing:'.08em' }}>Peak Submission Time</span>
                 </div>
-                <p style={{ fontSize: isMobile ? 17 : 22, fontWeight:900, color:'#fff', margin:'0 0 6px', lineHeight:1.3 }}>{sub.peak_submission_time}</p>
+                <p style={{ fontSize: isMobile ? 20 : 22, fontWeight:900, color:'#fff', margin:'0 0 6px', lineHeight:1.3 }}>{sub.peak_submission_time}</p>
                 <p style={{ fontSize:12, color:'rgba(255,255,255,.65)', fontWeight:500, margin:0 }}>Highest traffic window</p>
               </div>
             </div>
 
             {/* top category */}
-            <div style={{ background:'#f0fdf4', border:'1px solid #bbf7d0', borderRadius:16, padding: isMobile ? '22px 18px' : '28px 30px', flex:1, position:'relative', overflow:'hidden', boxShadow:'0 1px 4px rgba(0,0,0,.04)' }}>
+            <div style={{ background:'#f0fdf4', border:'1px solid #bbf7d0', borderRadius:16, padding: isMobile ? '22px 20px' : '28px 30px', flex:1, position:'relative', overflow:'hidden', boxShadow:'0 1px 4px rgba(0,0,0,.04)' }}>
               <Trophy size={60} color="#86efac" style={{ position:'absolute', right:10, bottom:6, opacity:.5 }} />
               <div style={{ position:'relative', zIndex:1 }}>
                 <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:10 }}>
                   <Award size={15} color="#15803d" />
                   <span style={{ fontSize:10, fontWeight:700, color:'#15803d', textTransform:'uppercase', letterSpacing:'.08em' }}>Top Category</span>
                 </div>
-                <p style={{ fontSize: isMobile ? 20 : 24, fontWeight:900, color:'#14532d', margin:'0 0 8px' }}>{sub.by_category[0]?.category}</p>
+                <p style={{ fontSize: isMobile ? 22 : 24, fontWeight:900, color:'#14532d', margin:'0 0 8px' }}>{sub.by_category[0]?.category}</p>
                 <p style={{ fontSize:13, fontWeight:700, color:'#16a34a', margin:0 }}>
                   {sub.by_category[0]?.count} submissions ({(sub.by_category[0]?.count/sm.total_submissions*100).toFixed(1)}%)
                 </p>
