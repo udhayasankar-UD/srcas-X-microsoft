@@ -75,7 +75,7 @@ function GoldenTrophyCard({ width = 175, rotate = 0, style }) {
    SDG LOGO WHEEL, LEAF, AND SDG CARD COMPONENTS
    ═══════════════════════════════════════════════════════════════════════════════ */
 const SDGWheel = ({ size = 60, blur = 0, style }) => (
-  <img 
+  <img
     src={sdgLogoCircle}
     alt="SDG Logo Wheel"
     style={{
@@ -91,12 +91,12 @@ const SDGWheel = ({ size = 60, blur = 0, style }) => (
 );
 
 const Leaf = ({ size = 32, blur = 0, color = "#22c55e", rotate = 0 }) => (
-  <svg 
-    width={size} 
-    height={size} 
-    viewBox="0 0 32 32" 
-    fill="none" 
-    style={{ 
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 32 32"
+    fill="none"
+    style={{
       filter: blur ? `blur(${blur}px)` : 'drop-shadow(0 4px 10px rgba(34, 197, 94, 0.28))',
       transform: `rotate(${rotate}deg)`,
       display: 'inline-block'
@@ -133,10 +133,10 @@ const SDGCard = ({ imgSrc, alt, style }) => (
     transition: 'transform 0.3s ease, box-shadow 0.3s ease',
     ...style
   }}>
-    <img 
-      src={imgSrc} 
-      alt={alt} 
-      style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} 
+    <img
+      src={imgSrc}
+      alt={alt}
+      style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
       onError={(e) => { e.target.style.display = 'none'; }}
     />
   </div>
@@ -144,7 +144,7 @@ const SDGCard = ({ imgSrc, alt, style }) => (
 
 const ParallaxElement = ({ children, yOffset = 100, initialRotate = 0, initialScale = 1, rotationSpeed = 0, style, className }) => {
   const { scrollY } = useScroll();
-  
+
   const smoothScrollY = useSpring(scrollY, {
     stiffness: 50,
     damping: 15,
@@ -590,10 +590,10 @@ export default function ShortlistedPage() {
 
   // Exact 4 stat metrics
   const stats = [
-    { type: 'teams', label: 'Total Shortlisted Teams', value: '50', barWidth: 32 },
+    { type: 'teams', label: 'Total Shortlisted Teams', value: '100', barWidth: 32 },
     { type: 'members', label: 'Total Members', value: '200', barWidth: 32 },
-    { type: 'institution', label: 'Top Institutions', value: '35', barWidth: 26 },
-    { type: 'sdg', label: 'SDGs Covered', value: '16 / 17', barWidth: 48 },
+    { type: 'institution', label: 'Top Institutions', value: '78', barWidth: 26 },
+    { type: 'sdg', label: 'SDGs Covered', value: '17 / 17', barWidth: 48 },
   ];
 
   return (
@@ -687,7 +687,7 @@ export default function ShortlistedPage() {
       >
         {/* ════════ FLOATING PARALLAX 3D CUPS, SDG CARDS, WHEELS & LEAVES ══════ */}
         <div className="shortlisted-hero-floating-decorations hero-hide-mobile" style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 3 }}>
-          
+
           {/* Left Side 3D Golden Trophy (~170px) with Ambient Gold Glow & Float */}
           <motion.div
             initial={{ opacity: 0, scale: 0.85 }}
@@ -776,7 +776,7 @@ export default function ShortlistedPage() {
             <ParallaxElement yOffset={-100} initialRotate={0} rotationSpeed={45} style={{ position: 'absolute', top: '38%', left: '1%' }}>
               <SDGWheel size={110} blur={2} />
             </ParallaxElement>
-            
+
             <ParallaxElement yOffset={-300} initialRotate={0} rotationSpeed={-30} style={{ position: 'absolute', top: '32%', right: '1%' }}>
               <SDGWheel size={145} blur={3} />
             </ParallaxElement>
