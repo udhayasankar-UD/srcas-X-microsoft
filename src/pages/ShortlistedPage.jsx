@@ -591,7 +591,7 @@ export default function ShortlistedPage() {
   // 3 stat metrics
   const stats = [
     { type: 'teams', label: 'Total Shortlisted Teams', value: '100', barWidth: 32 },
-    { type: 'institution', label: 'Top Institutions', value: '78', barWidth: 26 },
+    { type: 'institution', label: 'Total Institutions', value: '67', barWidth: 26 },
     { type: 'sdg', label: 'SDGs Covered', value: '17 / 17', barWidth: 48 },
   ];
 
