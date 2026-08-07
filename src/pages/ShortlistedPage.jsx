@@ -630,6 +630,12 @@ export default function ShortlistedPage() {
           .shortlisted-search-bar {
             height: 54px !important;
           }
+          .shortlisted-main-wrapper {
+            margin-top: 24px !important;
+            padding-left: 16px !important;
+            padding-right: 16px !important;
+            padding-bottom: 60px !important;
+          }
           .shortlisted-stats-container {
             grid-template-columns: 1fr !important;
             padding: 20px 18px !important;
@@ -1016,7 +1022,7 @@ export default function ShortlistedPage() {
       </section>
 
       {/* ════════ MAIN CONTENT WRAPPER ═══════════════════════════════════════ */}
-      <div style={{ maxWidth: 1200, margin: '-40px auto 0', padding: '0 24px 80px', position: 'relative', zIndex: 12 }}>
+      <div className="shortlisted-main-wrapper" style={{ maxWidth: 1200, margin: '-40px auto 0', padding: '0 24px 80px', position: 'relative', zIndex: 12 }}>
         {/* — Statistics Card (3 Metrics: Shortlisted Teams, Institutions, SDGs) — */}
         <motion.div
           initial={{ opacity: 0, y: 24 }}
