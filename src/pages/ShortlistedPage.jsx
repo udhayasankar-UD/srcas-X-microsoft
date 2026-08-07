@@ -567,7 +567,7 @@ export default function ShortlistedPage() {
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(1);
   const [searchFocused, setSearchFocused] = useState(false);
-  const PER_PAGE = 8;
+  const PER_PAGE = 20;
 
   useEffect(() => {
     setPage(1);
@@ -588,10 +588,9 @@ export default function ShortlistedPage() {
   const totalPages = Math.ceil(filtered.length / PER_PAGE);
   const pageData = filtered.slice((page - 1) * PER_PAGE, page * PER_PAGE);
 
-  // Exact 4 stat metrics
+  // 3 stat metrics
   const stats = [
     { type: 'teams', label: 'Total Shortlisted Teams', value: '100', barWidth: 32 },
-    { type: 'members', label: 'Total Members', value: '200', barWidth: 32 },
     { type: 'institution', label: 'Top Institutions', value: '78', barWidth: 26 },
     { type: 'sdg', label: 'SDGs Covered', value: '17 / 17', barWidth: 48 },
   ];
@@ -1018,7 +1017,7 @@ export default function ShortlistedPage() {
 
       {/* ════════ MAIN CONTENT WRAPPER ═══════════════════════════════════════ */}
       <div style={{ maxWidth: 1200, margin: '-40px auto 0', padding: '0 24px 80px', position: 'relative', zIndex: 12 }}>
-        {/* — Statistics Card (4 Metrics: Shortlisted Teams, Members, Institutions, SDGs) — */}
+        {/* — Statistics Card (3 Metrics: Shortlisted Teams, Institutions, SDGs) — */}
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
@@ -1031,7 +1030,7 @@ export default function ShortlistedPage() {
             boxShadow: '0 20px 60px rgba(0,0,0,0.08)',
             border: '1px solid #E5E7EB',
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
             gap: 20,
             marginBottom: 32,
             alignItems: 'center',
@@ -1102,14 +1101,14 @@ export default function ShortlistedPage() {
           <div
             style={{
               display: 'grid',
-              gridTemplateColumns: '70px 1.4fr 1.1fr 140px 1.6fr 130px',
+              gridTemplateColumns: '70px 1.5fr 1.2fr 1.8fr 180px',
               padding: '18px 30px',
               borderBottom: '1.5px solid #F3F4F6',
               background: '#FFFFFF',
             }}
           >
-            {['S.NO', 'TEAM NAME', 'TEAM LEADER', 'TOTAL MEMBERS', 'INSTITUTION', 'CITY'].map((h, i) => (
-              <div key={i} style={{ fontSize: 12, fontWeight: 800, color: '#16A34A', letterSpacing: '0.06em' }}>
+            {['S.NO', 'TEAM NAME', 'TEAM LEADER', 'INSTITUTION', 'CITY'].map((h, i) => (
+              <div key={i} style={{ fontSize: 12, fontWeight: 800, color: '#16A34A', letterSpacing: '0.06em', whiteSpace: 'nowrap' }}>
                 {h}
               </div>
             ))}
@@ -1139,7 +1138,7 @@ export default function ShortlistedPage() {
                       transition={{ delay: idx * 0.025, duration: 0.2 }}
                       style={{
                         display: 'grid',
-                        gridTemplateColumns: '70px 1.4fr 1.1fr 140px 1.6fr 130px',
+                        gridTemplateColumns: '70px 1.5fr 1.2fr 1.8fr 180px',
                         padding: '14px 30px',
                         borderBottom: '1px solid #F9FAFB',
                         alignItems: 'center',
@@ -1182,24 +1181,13 @@ export default function ShortlistedPage() {
                         {team.teamLeader}
                       </div>
 
-                      {/* Total Members with User Group Icon */}
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13.5, color: '#4B5563' }}>
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6B7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                          <circle cx="9" cy="7" r="4" />
-                          <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-                          <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                        </svg>
-                        <span style={{ fontWeight: 700, color: '#111827' }}>{team.totalMembers}</span>
-                      </div>
-
                       {/* Institution */}
                       <div style={{ fontSize: 13, color: '#4B5563', lineHeight: 1.4, fontWeight: 500, paddingRight: 10 }}>
                         {team.institution}
                       </div>
 
-                      {/* City with Location Pin Icon */}
-                      <div>
+                      {/* City with Location Pin Icon (Single Line) */}
+                      <div style={{ whiteSpace: 'nowrap' }}>
                         <span
                           style={{
                             display: 'inline-flex',
@@ -1208,9 +1196,10 @@ export default function ShortlistedPage() {
                             fontSize: 13,
                             color: '#16A34A',
                             fontWeight: 700,
+                            whiteSpace: 'nowrap',
                           }}
                         >
-                          <svg width="13" height="13" viewBox="0 0 24 24" fill="#16A34A" stroke="#16A34A" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+                          <svg width="13" height="13" viewBox="0 0 24 24" fill="#16A34A" stroke="#16A34A" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
                             <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z" />
                             <circle cx="12" cy="10" r="3" fill="#FFFFFF" />
                           </svg>
@@ -1328,21 +1317,14 @@ export default function ShortlistedPage() {
                         </div>
                       </div>
 
-                      {/* Bottom Row: City & Members count */}
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: 10, borderTop: '1px solid #F8FAFC', fontSize: 12.5 }}>
-                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, color: '#16A34A', fontWeight: 700 }}>
-                          <svg width="13" height="13" viewBox="0 0 24 24" fill="#16A34A" stroke="#16A34A" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+                      {/* Bottom Row: City in Single Line */}
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', paddingTop: 10, borderTop: '1px solid #F8FAFC', fontSize: 12.5 }}>
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, color: '#16A34A', fontWeight: 700, whiteSpace: 'nowrap' }}>
+                          <svg width="13" height="13" viewBox="0 0 24 24" fill="#16A34A" stroke="#16A34A" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
                             <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z" />
                             <circle cx="12" cy="10" r="3" fill="#FFFFFF" />
                           </svg>
                           {team.city}
-                        </span>
-                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, color: '#64748B', fontWeight: 600 }}>
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#64748B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                            <circle cx="9" cy="7" r="4" />
-                          </svg>
-                          {team.totalMembers} Members
                         </span>
                       </div>
                     </motion.div>
