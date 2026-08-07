@@ -285,7 +285,68 @@ export default function SubmissionTab({ hasTeam, teamData, teamMembers, submissi
               <span style={{ fontSize: 11, fontWeight: 700, color: '#9ca3af', textTransform: 'uppercase' }}>Description</span>
               <span style={{ fontSize: 14, color: '#374151', lineHeight: 1.5 }}>{s.project_description || s.description}</span>
             </div>
-            {(s.pdf_url) && (
+            <div style={{ 
+              display: 'flex', 
+              flexDirection: 'column', 
+              gap: 8, 
+              padding: '14px 18px', 
+              background: '#F0FDF4', 
+              borderRadius: 12, 
+              border: '1px solid #BBF7D0',
+              marginTop: 4
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <span style={{ 
+                  display: 'inline-flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center', 
+                  width: 20, 
+                  height: 20, 
+                  borderRadius: '50%', 
+                  background: '#16A34A', 
+                  color: '#fff', 
+                  fontSize: 12, 
+                  fontWeight: 'bold' 
+                }}>✓</span>
+                <span style={{ fontSize: 12, fontWeight: 800, color: '#166534', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                  Results Announced!
+                </span>
+              </div>
+              <span style={{ fontSize: 13.5, color: '#15803D', lineHeight: 1.5 }}>
+                We have announced the shortlisted teams! You can view the results here:
+              </span>
+              <div>
+                <a
+                  href="https://www.hackathon2026.in/shortlisted"
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 6,
+                    padding: '8px 14px',
+                    background: '#16A34A',
+                    color: '#FFFFFF',
+                    fontWeight: 700,
+                    fontSize: 13,
+                    borderRadius: 8,
+                    textDecoration: 'none',
+                    boxShadow: '0 2px 6px rgba(22, 163, 74, 0.25)',
+                    transition: 'background 0.2s'
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.background = '#15803D'; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = '#16A34A'; }}
+                >
+                  <span>View Shortlisted Teams</span>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                    <polyline points="15 3 21 3 21 9" />
+                    <line x1="10" y1="14" x2="21" y2="3" />
+                  </svg>
+                </a>
+              </div>
+            </div>
+            {/* {(s.pdf_url) && (
               <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginTop: 8 }}>
                 <span style={{ fontSize: 11, fontWeight: 700, color: '#9ca3af', textTransform: 'uppercase' }}>Presentation Deck</span>
                 <a href={s.pdf_url} target="_blank" rel="noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '10px 16px', background: '#f3f4f6', color: '#111', fontWeight: 600, fontSize: 13, borderRadius: 8, textDecoration: 'none', width: 'fit-content', border: '1px solid #e5e7eb', transition: 'all 0.2s' }}
@@ -295,7 +356,7 @@ export default function SubmissionTab({ hasTeam, teamData, teamMembers, submissi
                   View PDF
                 </a>
               </div>
-            )}
+            )} */}
           </div>
         </div>
 

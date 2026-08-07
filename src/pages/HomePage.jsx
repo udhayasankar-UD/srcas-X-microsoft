@@ -42,28 +42,26 @@ function DeadlinePopup() {
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            style={{ position: 'relative', background: '#fff', padding: '32px', borderRadius: 24, maxWidth: 420, width: '100%', textAlign: 'center', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)' }}
+            style={{ position: 'relative', background: '#fff', padding: '32px', borderRadius: 24, maxWidth: 440, width: '100%', textAlign: 'center', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)' }}
           >
-            <div style={{ width: 64, height: 64, background: '#fee2e2', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px' }}>
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-              </svg>
+            {/* Trophy icon */}
+            <div style={{ width: 72, height: 72, background: 'linear-gradient(135deg, #fef3c7, #fde68a)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px', fontSize: 36 }}>
+              🏆
             </div>
             
-            <h2 style={{ fontSize: 24, fontWeight: 900, color: '#111', marginBottom: 12 }}>Registration Closed</h2>
+            <h2 style={{ fontSize: 24, fontWeight: 900, color: '#111', marginBottom: 8 }}>Shortlisted Teams Announced!</h2>
             
             <p style={{ fontSize: 15, color: '#4b5563', lineHeight: 1.6, marginBottom: 24 }}>
-              The deadline for SRCAS Hackathon 3.0 has officially passed. You can still log in to view your team details and submission data.
+              Registration is now closed. The shortlisted teams for SRCAS Hackathon 3.0 have been announced — check if your team made it! 🎉
             </p>
             
             <div style={{ display: 'flex', gap: 12, flexDirection: 'column' }}>
-              <a href="/register" style={{ width: '100%', padding: '14px', background: '#4C9F38', color: '#fff', borderRadius: 12, fontWeight: 700, textDecoration: 'none', display: 'inline-block' }}>
-                Go to Login
+              <a href="/shortlisted" style={{ width: '100%', padding: '14px', background: 'linear-gradient(135deg, #4C9F38, #2d7a2d)', color: '#fff', borderRadius: 12, fontWeight: 700, textDecoration: 'none', display: 'inline-block', fontSize: 15, boxShadow: '0 4px 12px rgba(76,159,56,0.35)' }}>
+                🏆 View Shortlisted Teams
               </a>
               <button 
                 onClick={() => setShowPopup(false)}
-                style={{ width: '100%', padding: '14px', background: 'transparent', color: '#6b7280', border: 'none', fontWeight: 600, cursor: 'pointer' }}
+                style={{ width: '100%', padding: '14px', background: 'transparent', color: '#9ca3af', border: 'none', fontWeight: 600, cursor: 'pointer', fontSize: 14 }}
               >
                 Close Window
               </button>

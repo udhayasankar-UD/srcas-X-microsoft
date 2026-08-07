@@ -424,7 +424,7 @@ export default function HeroSection7() {
 
         {/* Buttons */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', justifyContent: 'center' }}>
-          <Link to={user ? "/dashboard" : "/register"} style={{ textDecoration: 'none' }}>
+          <Link to="/shortlisted" style={{ textDecoration: 'none' }}>
             <div className="hero-btn">
               <div className="hero-bg" />
               <div className="hero-border" />
@@ -440,7 +440,7 @@ export default function HeroSection7() {
                     <line className="hero-line" x1={0} y1={2} x2={100} y2={2} fill="none" strokeLinecap="round" strokeWidth={2} strokeDasharray={60} />
                   </svg>
                 </div>
-                <span className="hero-text" data-text="GO">{user ? "My Dashboard" : "REGISTER NOW"}</span>
+                <span className="hero-text" data-text="GO">Finalist TEAMS</span>
               </div>
             </div>
           </Link>

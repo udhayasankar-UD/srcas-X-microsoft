@@ -208,7 +208,7 @@ const PrizesPage = () => {
             >
               Explore Prizes ↓
             </a>
-            <a href={user ? "/dashboard" : "/register"} style={{
+            <a href="/shortlisted" style={{
               display: 'inline-flex', alignItems: 'center', gap: 8,
               padding: '13px 28px', background: 'transparent', color: '#fff',
               fontSize: '0.85rem', fontWeight: 700, borderRadius: 100,
@@ -219,7 +219,7 @@ const PrizesPage = () => {
               onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.8)'}
               onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)'}
             >
-              {user ? "Dashboard" : "Register Now"}
+              Shortlisted Teams
             </a>
           </motion.div>
         </motion.div>
@@ -436,7 +436,7 @@ const PrizesPage = () => {
             <span style={{ WebkitTextStroke: '2.5px #111', color: 'transparent' }}>your reward?</span>
           </h2>
           <motion.a
-            href={user ? "/dashboard" : "/register"}
+            href="/shortlisted"
             whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.97 }}
             style={{
@@ -447,7 +447,7 @@ const PrizesPage = () => {
               boxShadow: '0 8px 32px rgba(0,0,0,0.15)',
             }}
           >
-            {user ? "📊 My Dashboard" : "🚀 Register Now"}
+            🏆 View Shortlisted Teams
           </motion.a>
         </motion.div>
       </section>

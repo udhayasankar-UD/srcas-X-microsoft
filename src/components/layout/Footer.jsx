@@ -310,10 +310,10 @@ export default function Footer() {
             <div ref={linksRef} className="flex flex-col items-center gap-3 w-full">
               <MagneticButton
                 as="a"
-                href={user ? "/dashboard" : "/register"}
+                href="/shortlisted"
                 className="cf-pill px-7 py-2.5 rounded-full text-neutral-900 font-black text-sm border-neutral-300 hover:border-neutral-900"
               >
-                {user ? "🚀 Go to Dashboard →" : "🚀 Register Now →"}
+                🏆 View Shortlisted Teams →
               </MagneticButton>
             </div>
           </div>

@@ -5,19 +5,19 @@ import PPTSection from '../components/sections/PPTSection';
 
 const faqs = [
   {
-    question: "How do I register?",
+    question: "Where can I view the shortlisted teams?",
     answer: (
       <>
-        <strong>Note: Only the Team Leader should register!</strong> You can register through the official hackathon registration portal at{" "}
+        Registration is now closed. You can view the shortlisted teams for SRCAS Hackathon 3.0 at{" "}
         <a
-          href="https://www.hackathon2026.in/register"
+          href="https://www.hackathon2026.in/shortlisted"
           target="_blank"
           rel="noopener noreferrer"
           className="text-blue-600 underline"
         >
-          https://www.hackathon2026.in/register
+          https://www.hackathon2026.in/shortlisted
         </a>
-        . Once registered, the Team Leader can add their team members directly from their dashboard. Team members do not need separate accounts.
+        .
       </>
     ),
   },

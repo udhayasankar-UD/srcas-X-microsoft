@@ -414,7 +414,7 @@ function CTABanner({ mobile }) {
       </div>
 
       <a
-        href={user ? "/dashboard" : "/register"}
+        href="/shortlisted"
         style={{
           display: "inline-flex", alignItems: "center", gap: 10,
           padding: mobile ? "12px 22px" : "15px 30px",
@@ -434,7 +434,7 @@ function CTABanner({ mobile }) {
           e.currentTarget.style.boxShadow = "none";
         }}
       >
-        {user ? "Dashboard" : "Register Now"}
+        View Shortlisted Teams
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
           <path d="M5 12h14M12 5l7 7-7 7"/>
         </svg>

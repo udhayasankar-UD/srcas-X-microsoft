@@ -11,7 +11,7 @@ node_modules
 dist
 dist-ssr
 *.local
-data/
+public/data/
 
 # Environment variables
 .env
@@ -29,3 +29,6 @@ data/
 *.njsproj
 *.sln
 *.sw?
+
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*

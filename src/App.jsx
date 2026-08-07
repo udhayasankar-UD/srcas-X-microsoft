@@ -1,5 +1,5 @@
 import React, { useEffect, useState, Suspense, lazy } from 'react';
-import { useLocation, BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { useLocation, BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
@@ -27,6 +27,7 @@ const AdminAnalytics = lazy(() => import('./pages/admin/AdminAnalytics'));
 const AdminJury = lazy(() => import('./pages/admin/AdminJury'));
 const LegalPage = lazy(() => import('./pages/LegalPage'));
 const AnalyticsPage = lazy(() => import('./pages/AnalyticsPage'));
+const ShortlistedPage = lazy(() => import('./pages/ShortlistedPage'));
 
 /**
  * ScrollToTop Component
@@ -98,11 +99,10 @@ function App() {
       <ScrollToTop />
       <Suspense fallback={<div style={{minHeight:'100vh', display:'flex', alignItems:'center', justifyContent:'center'}}>Loading...</div>}>
         <Routes>
-          {/* Auth page — standalone, no Navbar/Footer */}
-          <Route path="/register" element={<AuthPage />} />
-
-          {/* Dashboard — standalone, no Navbar/Footer */}
-          <Route path="/dashboard" element={<DashboardPage />} />
+          {/* Direct redirects to shortlisted page */}
+          <Route path="/register" element={<Navigate to="/shortlisted" replace />} />
+          <Route path="/login" element={<Navigate to="/shortlisted" replace />} />
+          <Route path="/dashboard" element={<Navigate to="/shortlisted" replace />} />
 
           {/* Admin Dashboard */}
           <Route path="/udview" element={<AdminLayout />}>
@@ -134,6 +134,7 @@ function App() {
                 <Route path="/terms" element={<LegalPage />} />
                 <Route path="/privacy" element={<LegalPage />} />
                 <Route path="/analytics" element={<AnalyticsPage />} />
+                <Route path="/shortlisted" element={<ShortlistedPage />} />
               </Routes>
               <Footer />
             </div>

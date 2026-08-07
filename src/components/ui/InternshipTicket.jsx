@@ -247,7 +247,7 @@ export const InternshipTicket = () => {
                 transformStyle: "preserve-3d",
               }}
             >
-              <a href="/register" style={{
+              <a href="/shortlisted" style={{
                 display: "inline-flex", alignItems: "center", gap: 8,
                 padding: "12px 24px", background: "#59c23a", color: "#000",
                 fontSize: "0.83rem", fontWeight: 700, borderRadius: 9,
@@ -258,7 +258,7 @@ export const InternshipTicket = () => {
                 onMouseEnter={e => e.currentTarget.style.transform = "translateY(-2px)"}
                 onMouseLeave={e => e.currentTarget.style.transform = "translateY(0)"}
               >
-                Register to Compete →
+                View Shortlisted Teams →
               </a>
             </motion.div>
 

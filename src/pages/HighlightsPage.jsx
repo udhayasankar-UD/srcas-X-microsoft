@@ -4,7 +4,6 @@ import HeroParallaxDemo from "../components/hero-parallax-demo";
 import PPTSection from "../components/sections/PPTSection";
 
 import crewImage from "../assets/highlights/crew.png"
-import SRCASHackVideo from "../assets/highlights/srcas-1.0.mp4"
 
 /* ── Lightbox ── */
 const Lightbox = ({ photo, onClose }) => (
@@ -55,52 +54,6 @@ export default function HighlightsPage() {
 
       {/* ── PARALLAX HERO ── */}
       <HeroParallaxDemo />
-
-      {/* ── SRCAS HACKATHON ── */}
-      <section style={{ padding: "80px clamp(16px, 5vw, 60px)" }}>
-        <div style={{ maxWidth: 860, margin: "0 auto", textAlign: "center" }}>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <h2 style={{ fontSize: "clamp(2rem, 4vw, 3.2rem)", fontWeight: 900, letterSpacing: "-0.03em", color: "#111", margin: "0 0 12px" }}>
-              SRCAS Hackathon
-            </h2>
-            <p style={{ fontSize: "1.05rem", color: "#6b7280", marginBottom: 36 }}>
-              Relive the memories from our first hackathon
-            </p>
-          </motion.div>
-
-          {/* Video embed */}
-          <div
-            style={{
-              width: "100%",
-              aspectRatio: "16/9",
-              overflow: "hidden",
-              borderRadius: 16,
-              border: "1px solid #e5e7eb",
-              boxShadow: "0 8px 32px rgba(0,0,0,0.08)",
-              background: "#000",
-            }}
-          >
-            <video
-              controls
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-                display: "block",
-              }}
-            >
-              <source src={SRCASHackVideo} type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
-          </div>
-        </div>
-      </section>
-
       {/* ── COMMITTEE CREW ── */}
       <section style={{ padding: "80px clamp(16px, 5vw, 60px) 120px" }}>
         <div style={{ maxWidth: 1100, margin: "0 auto", textAlign: "center" }}>

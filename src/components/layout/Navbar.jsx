@@ -26,7 +26,8 @@ import {
   Menu,
   X,
   UserPlus,
-  Users
+  Users,
+  Award
 } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../lib/useAuth';
@@ -38,16 +39,16 @@ const BG_PANEL  = 'rgba(255,255,255,0.88)';
 const BORDER    = 'rgba(0,0,0,0.12)';
 
 // ─── Nav items ────────────────────────────────────────────────────────────────
-const getNavItems = (user) => [
-  { id: 'home',       label: 'Home',               icon: House,         path: '/', hash: '#hero' },
-  { id: 'partners',   label: 'Partners',            icon: Handshake,     path: '/partners', hash: '' },
-  { id: 'highlights', label: 'Highlights',          icon: Star,          path: '/highlights', hash: '' },
-  { id: 'prizes',     label: 'Prizes',              icon: Trophy,        path: '/prizes', hash: '' },
-  { id: 'problems',   label: 'Problem Statements',  icon: BookOpen,      path: '/', hash: '#problems' },
-  { id: 'humans',     label: 'Humans',              icon: Users,         path: '/humans', hash: '' },
-  { id: 'faq',        label: 'FAQ',                 icon: HelpCircle,    path: '/faq', hash: '' },
-  { id: 'contact',    label: 'Contact',             icon: Phone,         path: '/contact', hash: '' },
-  { id: 'register',   label: user ? 'Dashboard' : 'Register', icon: UserPlus, path: user ? '/dashboard' : '/register', hash: '' },
+const getNavItems = () => [
+  { id: 'home',        label: 'Home',               icon: House,         path: '/', hash: '#hero' },
+  { id: 'shortlisted', label: 'Shortlisted',         icon: Award,         path: '/shortlisted', hash: '' },
+  { id: 'partners',    label: 'Partners',            icon: Handshake,     path: '/partners', hash: '' },
+  { id: 'highlights',  label: 'Highlights',          icon: Star,          path: '/highlights', hash: '' },
+  { id: 'prizes',      label: 'Prizes',              icon: Trophy,        path: '/prizes', hash: '' },
+  { id: 'problems',    label: 'Problem Statements',  icon: BookOpen,      path: '/', hash: '#problems' },
+  { id: 'humans',      label: 'Humans',              icon: Users,         path: '/humans', hash: '' },
+  { id: 'faq',         label: 'FAQ',                 icon: HelpCircle,    path: '/faq', hash: '' },
+  { id: 'contact',     label: 'Contact',             icon: Phone,         path: '/contact', hash: '' },
 ];
 
 // ─── Active-section tracker ───────────────────────────────────────────────────
@@ -58,12 +59,13 @@ function useActiveSection() {
   useEffect(() => {
     // Non-home routes — set immediately from pathname
     const routeMap = {
-      '/prizes':     'prizes',
-      '/highlights': 'highlights',
-      '/partners':   'partners',
-      '/humans':     'humans',
-      '/faq':        'faq',
-      '/contact':    'contact',
+      '/prizes':      'prizes',
+      '/highlights':  'highlights',
+      '/partners':    'partners',
+      '/humans':      'humans',
+      '/faq':         'faq',
+      '/contact':     'contact',
+      '/shortlisted': 'shortlisted',
     };
 
     if (routeMap[location.pathname]) {
@@ -517,12 +519,12 @@ const Navbar = () => {
       <DesktopNavBar user={user} />
       <MobileNavBar user={user} />
 
-      {/* Floating Auth Button - Top Right */}
+      {/* Floating Action Button - Top Right */}
       {activeSection !== 'home' && (
         <div className="fixed top-6 right-8 z-50 hidden sm:flex items-center gap-3">
-          <a href={user ? "/dashboard" : "/register"} style={{ textDecoration: 'none' }}>
+          <a href="/shortlisted" style={{ textDecoration: 'none' }}>
             <button className="nav-register-btn">
-              {user ? "DASHBOARD" : "REGISTER"}
+              Finalist teams
             </button>
           </a>
         </div>

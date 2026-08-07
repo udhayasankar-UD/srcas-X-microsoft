@@ -11,6 +11,7 @@ const __dirname = path.dirname(__filename)
 export default defineConfig({
   build: {
     sourcemap: false,
+    chunkSizeWarningLimit: 1000,
   },
   assetsInclude: ['**/*.pptx', '**/*.JPG'],
   plugins: [
@@ -21,5 +22,8 @@ export default defineConfig({
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
+  },
+  optimizeDeps: {
+    force: false,
   },
 })
