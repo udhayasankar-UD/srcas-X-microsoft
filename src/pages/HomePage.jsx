@@ -52,7 +52,7 @@ function DeadlinePopup() {
             <h2 style={{ fontSize: 24, fontWeight: 900, color: '#111', marginBottom: 8 }}>Shortlisted Teams Announced!</h2>
             
             <p style={{ fontSize: 15, color: '#4b5563', lineHeight: 1.6, marginBottom: 24 }}>
-              Registration is now closed. The shortlisted teams for SRCAS Hackathon 3.0 have been announced — check if your team made it! 🎉
+              The shortlisted teams for SRCAS Hackathon 3.0 have been announced — check if your team made it! 🎉
             </p>
             
             <div style={{ display: 'flex', gap: 12, flexDirection: 'column' }}>
