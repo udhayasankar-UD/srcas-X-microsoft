@@ -12,6 +12,7 @@ dist
 dist-ssr
 *.local
 public/data/
+dont_push_data/
 
 # Environment variables
 .env
