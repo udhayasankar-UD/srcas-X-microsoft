@@ -1,0 +1,1902 @@
+[
+  {
+    "id": 1,
+    "teamName": "LuminaXR",
+    "teamLeader": "Arul Aravind Sivasankar",
+    "excel_teamName": "LuminaXR",
+    "excel_tlName": "Arul Aravind Sivasankar",
+    "tl_email": "arularavind168@gmail.com",
+    "tl_phone": "7305157050",
+    "total_members": 4,
+    "members_list": [
+      "Arul Aravind Sivasankar",
+      "Ajai Kumar S",
+      "Asvat V S",
+      "Joe Fiesto S"
+    ],
+    "institution": "Chennai Institute of Technology",
+    "city": "Chennai, Tamil Nadu",
+    "sdg": 1
+  },
+  {
+    "id": 2,
+    "teamName": "Innov8ors",
+    "teamLeader": "SHYAM GANESH SS",
+    "excel_teamName": "Innov8ors",
+    "excel_tlName": "SHYAM GANESH SS",
+    "tl_email": "ssshyamganesh@gmail.com",
+    "tl_phone": "9442645357",
+    "total_members": 4,
+    "members_list": [
+      "SHYAM GANESH SS",
+      "Sabari Krishna B M",
+      "THARSANSARVESH M",
+      "Ram Nandesh R"
+    ],
+    "institution": "SKCET",
+    "city": "Coimbatore, Tamil Nadu",
+    "sdg": 2
+  },
+  {
+    "id": 3,
+    "teamName": "Project Helix",
+    "teamLeader": "Sasi",
+    "excel_teamName": "Project Helix",
+    "excel_tlName": "Sasi",
+    "tl_email": "shreesasikumara@gmail.com",
+    "tl_phone": "7598796669",
+    "total_members": 4,
+    "members_list": [
+      "Sasi",
+      "Kishore K",
+      "Suriya KS",
+      "Logesh R"
+    ],
+    "institution": "Chennai Institute of technology",
+    "city": "Chennai, Tamil Nadu",
+    "sdg": 3
+  },
+  {
+    "id": 4,
+    "teamName": "BarterBrains",
+    "teamLeader": "Prathamjit Kaur",
+    "excel_teamName": "BarterBrains",
+    "excel_tlName": "Prathamjit Kaur",
+    "tl_email": "pratham18122007@gmail.com",
+    "tl_phone": "8059552474",
+    "total_members": 4,
+    "members_list": [
+      "Prathamjit Kaur",
+      "Bhoomi Singh",
+      "No member",
+      "No member"
+    ],
+    "institution": "Guru Tegh Bahadur Institute of Technology",
+    "city": "New Delhi, Delhi",
+    "sdg": 4
+  },
+  {
+    "id": 5,
+    "teamName": "Solvex",
+    "teamLeader": "Nivedha Krishnamurthy",
+    "excel_teamName": "Solvex",
+    "excel_tlName": "Nivedha Krishnamurthy",
+    "tl_email": "nivedhakrishnamurthy1@gmail.com",
+    "tl_phone": "8807411027",
+    "total_members": 4,
+    "members_list": [
+      "Nivedha Krishnamurthy",
+      "Neha N K",
+      "Navithanjali M S",
+      "Nivasri T"
+    ],
+    "institution": "Kumaraguru College Of Technology",
+    "city": "Coimbatore, Tamil Nadu",
+    "sdg": 5
+  },
+  {
+    "id": 6,
+    "teamName": "Magnum Opus",
+    "teamLeader": "S.Aravind",
+    "excel_teamName": "Magnum Opus",
+    "excel_tlName": "S.Aravind",
+    "tl_email": "aravind2007sankar@gmail.com",
+    "tl_phone": "9321456992",
+    "total_members": 4,
+    "members_list": [
+      "S.Aravind",
+      "Sam Roger X",
+      "Sasi Kirran R",
+      "Sanjay Kanth"
+    ],
+    "institution": "Chennai Institute of Technology",
+    "city": "Chennai, Tamil Nadu",
+    "sdg": 6
+  },
+  {
+    "id": 7,
+    "teamName": "Praan",
+    "teamLeader": "Kalash Batra",
+    "excel_teamName": "Praan",
+    "excel_tlName": "Kalash Batra",
+    "tl_email": "kalashbatra1807@gmail.com",
+    "tl_phone": "9226681140",
+    "total_members": 4,
+    "members_list": [
+      "Kalash Batra",
+      "Siddhi Firodiya",
+      "Durgesh Kayastha",
+      "Akangsha Adhav"
+    ],
+    "institution": "Sanjivani College of Engineering",
+    "city": "Kopargaon, Maharashtra",
+    "sdg": 7
+  },
+  {
+    "id": 8,
+    "teamName": "ZenYukti",
+    "teamLeader": "Ayush Sharma",
+    "excel_teamName": "ZenYukti",
+    "excel_tlName": "Ayush Sharma",
+    "tl_email": "ayushhardeniya.grid@gmail.com",
+    "tl_phone": "9548373388",
+    "total_members": 4,
+    "members_list": [
+      "Ayush Sharma",
+      "Ashutosh Mishra",
+      "No member",
+      "No member"
+    ],
+    "institution": "ABES Engineering College",
+    "city": "Ghaziabad, Uttar Pradesh",
+    "sdg": 8
+  },
+  {
+    "id": 9,
+    "teamName": "Santra",
+    "teamLeader": "Preyoshi Chakrabarti 24MSI0155",
+    "excel_teamName": "Santra",
+    "excel_tlName": "Preyoshi Chakrabarti 24MSI0155",
+    "tl_email": "preyoshi.2024@vitstudent.ac.in",
+    "tl_phone": "6360584075",
+    "total_members": 4,
+    "members_list": [
+      "Preyoshi Chakrabarti 24MSI0155",
+      "Rudrabha Dasgupta",
+      "No member",
+      "No member"
+    ],
+    "institution": "Vellore Institute of Technology",
+    "city": "Vellore, Tamil Nadu",
+    "sdg": 9
+  },
+  {
+    "id": 10,
+    "teamName": "Boom Sakka Boom",
+    "teamLeader": "Sunagaa M",
+    "excel_teamName": "Boom Sakka Boom",
+    "excel_tlName": "Sunagaa M",
+    "tl_email": "sunagaam38@gmail.com",
+    "tl_phone": "7904757545",
+    "total_members": 4,
+    "members_list": [
+      "Sunagaa M",
+      "Sakira Anjum",
+      "No member",
+      "No member"
+    ],
+    "institution": "Psg college of technology",
+    "city": "Coimbatore, Tamil Nadu",
+    "sdg": 10
+  },
+  {
+    "id": 11,
+    "teamName": "Dynamos",
+    "teamLeader": "Aswitha S",
+    "excel_teamName": "Dynamos",
+    "excel_tlName": "Aswitha S",
+    "tl_email": "aswithasenthilkumarsa@gmail.com",
+    "tl_phone": "9629796086",
+    "total_members": 4,
+    "members_list": [
+      "Aswitha S",
+      "SAHAYA JEBASNI A",
+      "SHALINI R",
+      "No member"
+    ],
+    "institution": "CHENNAI INSTITUTE OF TECHNOLOGY",
+    "city": "Chennai, Tamil Nadu",
+    "sdg": 11
+  },
+  {
+    "id": 12,
+    "teamName": "Hackstronauts",
+    "teamLeader": "Swaleha Shaikh",
+    "excel_teamName": "Hackstronauts",
+    "excel_tlName": "Swaleha Shaikh",
+    "tl_email": "swalehayunusshaikh@gmail.com",
+    "tl_phone": "9819460017",
+    "total_members": 4,
+    "members_list": [
+      "Swaleha Shaikh",
+      "Kanhayya Gupta",
+      "Arpit Mishra",
+      "No member"
+    ],
+    "institution": "Rajiv Gandhi Institute of Technology",
+    "city": "Mumbai, Maharashtra",
+    "sdg": 12
+  },
+  {
+    "id": 13,
+    "teamName": "AARIVYN",
+    "teamLeader": "Sumit Pandey",
+    "excel_teamName": "AARIVYN",
+    "excel_tlName": "Sumit Pandey",
+    "tl_email": "26f1000304@ds.study.iitm.ac.in",
+    "tl_phone": "9516212295",
+    "total_members": 4,
+    "members_list": [
+      "Sumit Pandey",
+      "ALHAMDA IQBAL SADIQ",
+      "Koshin S Hegde",
+      "Kanika Kaushal"
+    ],
+    "institution": "IIT MADRAS",
+    "city": "Rewa, Madhya Pradesh",
+    "sdg": 13
+  },
+  {
+    "id": 14,
+    "teamName": "Void Swarm",
+    "teamLeader": "VARUN",
+    "excel_teamName": "Void Swarm",
+    "excel_tlName": "VARUN",
+    "tl_email": "jp.vxrun@gmail.com",
+    "tl_phone": "8220343741",
+    "total_members": 4,
+    "members_list": [
+      "VARUN",
+      "Surya Prakash V",
+      "Joshna Shine R",
+      "No member"
+    ],
+    "institution": "Anna University Regional Campus, Coimbatore",
+    "city": "Coimbatore, Tamil Nadu",
+    "sdg": 14
+  },
+  {
+    "id": 15,
+    "teamName": "Inovates",
+    "teamLeader": "V Vishnu",
+    "excel_teamName": "Inovates",
+    "excel_tlName": "V Vishnu",
+    "tl_email": "vishnusagarv3@gmail.com",
+    "tl_phone": "9488086900",
+    "total_members": 4,
+    "members_list": [
+      "V Vishnu",
+      "Sudhan A C",
+      "No member",
+      "No member"
+    ],
+    "institution": "Sri Eshwar",
+    "city": "Coimbatore, Tamil Nadu",
+    "sdg": 15
+  },
+  {
+    "id": 16,
+    "teamName": "WarriorShe",
+    "teamLeader": "Amruta Jeyakumar",
+    "excel_teamName": "WarriorShe",
+    "excel_tlName": "Amruta Jeyakumar",
+    "tl_email": "amrutadd2020@gmail.com",
+    "tl_phone": "9600076149",
+    "total_members": 4,
+    "members_list": [
+      "Amruta Jeyakumar",
+      "Bhooma Shree M",
+      "Aishwarya R",
+      "No member"
+    ],
+    "institution": "velammal engineering college",
+    "city": "Chennai, Tamil Nadu",
+    "sdg": 16
+  },
+  {
+    "id": 17,
+    "teamName": "SaturnX",
+    "teamLeader": "Navaneeth S",
+    "excel_teamName": "SaturnX",
+    "excel_tlName": "Navaneeth S",
+    "tl_email": "navaneeths345@gmail.com",
+    "tl_phone": "7907911864",
+    "total_members": 4,
+    "members_list": [
+      "Navaneeth S",
+      "Nath S",
+      "Pragatheesh M",
+      "Anush Sangeeth S"
+    ],
+    "institution": "Ahalia School of Engineering and Technology",
+    "city": "Palakkad, Kerala",
+    "sdg": 17
+  },
+  {
+    "id": 18,
+    "teamName": "Twin tech",
+    "teamLeader": "suhita .M",
+    "excel_teamName": "Twin tech",
+    "excel_tlName": "suhita .M",
+    "tl_email": "suhitamuthusamy@gmail.com",
+    "tl_phone": "7810062201",
+    "total_members": 4,
+    "members_list": [
+      "suhita .M",
+      "Antony Joshua D",
+      "Gokul Krishnan A 24BEI017",
+      "Samiksha S"
+    ],
+    "institution": "KCT-Kumaraguru college of technology",
+    "city": "Coimbatore, Tamil Nadu",
+    "sdg": 1
+  },
+  {
+    "id": 19,
+    "teamName": "TECH ROOKIES",
+    "teamLeader": "SUNDARA SARATHI P",
+    "excel_teamName": "TECH ROOKIES",
+    "excel_tlName": "SUNDARA SARATHI P",
+    "tl_email": "sundarasarathi78@gmail.com",
+    "tl_phone": "6380101470",
+    "total_members": 4,
+    "members_list": [
+      "SUNDARA SARATHI P",
+      "NAVEEN K",
+      "SANJAY P",
+      "SAKTHIVEL S"
+    ],
+    "institution": "KGISL",
+    "city": "Tiruppur, Tamil Nadu",
+    "sdg": 2
+  },
+  {
+    "id": 20,
+    "teamName": "Zero",
+    "teamLeader": "Nishun",
+    "excel_teamName": "Zero",
+    "excel_tlName": "Nishun",
+    "tl_email": "neshun7413@gmail.com",
+    "tl_phone": "9791613205",
+    "total_members": 4,
+    "members_list": [
+      "Nishun",
+      "Anagesh RJ",
+      "Darshan SS",
+      "Senthilkumar D"
+    ],
+    "institution": "Sri Sivasubramaniya Nadar College Of Engineering",
+    "city": "Vellore, Tamil Nadu",
+    "sdg": 3
+  },
+  {
+    "id": 21,
+    "teamName": "Ctrl Win",
+    "teamLeader": "Lakshya",
+    "excel_teamName": "Ctrl Win",
+    "excel_tlName": "Lakshya",
+    "tl_email": "lakshyaa0014@gmail.com",
+    "tl_phone": "8077356631",
+    "total_members": 4,
+    "members_list": [
+      "Lakshya",
+      "Taashu Sharma",
+      "No member",
+      "No member"
+    ],
+    "institution": "Manipal Institute Of Technology",
+    "city": "Lucknow, Uttar Pradesh",
+    "sdg": 4
+  },
+  {
+    "id": 22,
+    "teamName": "Heisenbug",
+    "teamLeader": "Tino Britty",
+    "excel_teamName": "Heisenbug",
+    "excel_tlName": "Tino Britty",
+    "tl_email": "brittytino08@gmail.com",
+    "tl_phone": "9786350537",
+    "total_members": 4,
+    "members_list": [
+      "Tino Britty",
+      "Barath Vikraman SK",
+      "Chinnaya K",
+      "No member"
+    ],
+    "institution": "PSG Colllege Of Technology",
+    "city": "Coimbatore, Tamil Nadu",
+    "sdg": 5
+  },
+  {
+    "id": 23,
+    "teamName": "Hack Forge",
+    "teamLeader": "Kaviya",
+    "excel_teamName": "Hack Forge",
+    "excel_tlName": "Kaviya",
+    "tl_email": "kaviya2180@gmail.com",
+    "tl_phone": "7092725215",
+    "total_members": 4,
+    "members_list": [
+      "Kaviya",
+      "Nethra Balaji",
+      "Lohith Somasundaram",
+      "Jeevan Sai V"
+    ],
+    "institution": "SSN College Of Engineering",
+    "city": "Chennai, Tamil Nadu",
+    "sdg": 6
+  },
+  {
+    "id": 24,
+    "teamName": "Zephyr",
+    "teamLeader": "Shwetha Sujithkumar",
+    "excel_teamName": "Zephyr",
+    "excel_tlName": "Shwetha Sujithkumar",
+    "tl_email": "shwethasmrithi@gmail.com",
+    "tl_phone": "9345292221",
+    "total_members": 4,
+    "members_list": [
+      "Shwetha Sujithkumar",
+      "Srihari T",
+      "Ranjan",
+      "Visnu Mitran G"
+    ],
+    "institution": "Sri Eshwar college of Engineering",
+    "city": "Coimbatore, Tamil Nadu",
+    "sdg": 7
+  },
+  {
+    "id": 25,
+    "teamName": "Team W",
+    "teamLeader": "Kaustubh G",
+    "excel_teamName": "Team W",
+    "excel_tlName": "Kaustubh G",
+    "tl_email": "kaustubh9306@gmail.com",
+    "tl_phone": "9945562003",
+    "total_members": 4,
+    "members_list": [
+      "Kaustubh G",
+      "Sri Ram B G",
+      "Pushkarni I S",
+      "No member"
+    ],
+    "institution": "SJBIT",
+    "city": "Bengaluru, Karnataka",
+    "sdg": 8
+  },
+  {
+    "id": 26,
+    "teamName": "XLR8",
+    "teamLeader": "JOSHUA S ECE",
+    "excel_teamName": "XLR8",
+    "excel_tlName": "JOSHUA S ECE",
+    "tl_email": "joshua.2502110@srec.ac.in",
+    "tl_phone": "9487284021",
+    "total_members": 4,
+    "members_list": [
+      "JOSHUA S ECE",
+      "KAMALESH N",
+      "PRANAV A",
+      "No member"
+    ],
+    "institution": "Sri Ramakrishna Engineering College",
+    "city": "Coimbatore, Tamil Nadu",
+    "sdg": 9
+  },
+  {
+    "id": 27,
+    "teamName": "Synapse",
+    "teamLeader": "DEVASENA S PSGRKCW",
+    "excel_teamName": "Synapse",
+    "excel_tlName": "DEVASENA S PSGRKCW",
+    "tl_email": "25sbds010@psgrkcw.ac.in",
+    "tl_phone": "9363438233",
+    "total_members": 4,
+    "members_list": [
+      "DEVASENA S PSGRKCW",
+      "Kanishga K",
+      "Devavarnini A P",
+      "Yashana Devi M"
+    ],
+    "institution": "PSGR Krishnammal College For Women",
+    "city": "Coimbatore, Tamil Nadu",
+    "sdg": 10
+  },
+  {
+    "id": 28,
+    "teamName": "CIRCLEUP",
+    "teamLeader": "Thiru Sm",
+    "excel_teamName": "CIRCLEUP",
+    "excel_tlName": "Thiru Sm",
+    "tl_email": "thirusm750@gmail.com",
+    "tl_phone": "9952739139",
+    "total_members": 4,
+    "members_list": [
+      "Thiru Sm",
+      "JAISHREE M",
+      "AKILANDESHWARI GS",
+      "KEERTHANA K"
+    ],
+    "institution": "SRCAS",
+    "city": "Coimbatore, Tamil Nadu",
+    "sdg": 11
+  },
+  {
+    "id": 29,
+    "teamName": "Team Nexus",
+    "teamLeader": "Shreya",
+    "excel_teamName": "Team Nexus",
+    "excel_tlName": "Shreya",
+    "tl_email": "shreya.v2308@gmail.com",
+    "tl_phone": "9043528576",
+    "total_members": 4,
+    "members_list": [
+      "Shreya",
+      "Ashwin Jayanand",
+      "Amardeep Velamala",
+      "Nithya Sree GV"
+    ],
+    "institution": "Amrita Vishwa Vidyapeetham",
+    "city": "Coimbatore, Tamil Nadu",
+    "sdg": 12
+  },
+  {
+    "id": 30,
+    "teamName": "MasterMinds",
+    "teamLeader": "Dhruv Talnewar",
+    "excel_teamName": "MasterMinds",
+    "excel_tlName": "Dhruv Talnewar",
+    "tl_email": "dhruvtalnewar0106@gmail.com",
+    "tl_phone": "9860486657",
+    "total_members": 4,
+    "members_list": [
+      "Dhruv Talnewar",
+      "Sanika Pokale",
+      "No member",
+      "No member"
+    ],
+    "institution": "PES Modern College of Engineering, Pune",
+    "city": "Coimbatore, Tamil Nadu",
+    "sdg": 13
+  },
+  {
+    "id": 31,
+    "teamName": "Waste2Worth",
+    "teamLeader": "suraj prajapati",
+    "excel_teamName": "Waste2Worth",
+    "excel_tlName": "suraj prajapati",
+    "tl_email": "prajapatisuraj2181@gmail.com",
+    "tl_phone": "9322063093",
+    "total_members": 4,
+    "members_list": [
+      "suraj prajapati",
+      "Srushti Sandeep Aware",
+      "Aarya Swapnil Wagh",
+      "No member"
+    ],
+    "institution": "Loknete Gopinathji Munde Institute of Engineering Education & Research",
+    "city": "Coimbatore, Tamil Nadu",
+    "sdg": 14
+  },
+  {
+    "id": 32,
+    "teamName": "Nothing404",
+    "teamLeader": "Balaji",
+    "excel_teamName": "Nothing404",
+    "excel_tlName": "Balaji",
+    "tl_email": "balajirs1910@gmail.com",
+    "tl_phone": "9080161115",
+    "total_members": 4,
+    "members_list": [
+      "Balaji",
+      "Rohivarshini S",
+      "Natpu Enean",
+      "Vishnu Priya K"
+    ],
+    "institution": "KPR",
+    "city": "Coimbatore, Tamil Nadu",
+    "sdg": 15
+  },
+  {
+    "id": 33,
+    "teamName": "GenZ exe",
+    "teamLeader": "Ragul D",
+    "excel_teamName": "GenZ exe",
+    "excel_tlName": "Ragul D",
+    "tl_email": "24124046@srcas.ac.in",
+    "tl_phone": "7305973427",
+    "total_members": 4,
+    "members_list": [
+      "Ragul D",
+      "Akalya S",
+      "Joshua Daniel J",
+      "Renuka Devi B K"
+    ],
+    "institution": "SRCAS",
+    "city": "Coimbatore, Tamil Nadu",
+    "sdg": 16
+  },
+  {
+    "id": 34,
+    "teamName": "Brainy Fools",
+    "teamLeader": "Om Gupta",
+    "excel_teamName": "Brainy Fools",
+    "excel_tlName": "Om Gupta",
+    "tl_email": "guptaom750@gmail.com",
+    "tl_phone": "8356889279",
+    "total_members": 4,
+    "members_list": [
+      "Om Gupta",
+      "Rishik Grandhi",
+      "Muralidharan R",
+      "Aarav Jain"
+    ],
+    "institution": "VIT Vellore",
+    "city": "Coimbatore, Tamil Nadu",
+    "sdg": 17
+  },
+  {
+    "id": 35,
+    "teamName": "Ctrl Alt Delete",
+    "teamLeader": "Arthi S",
+    "excel_teamName": "Ctrl Alt Delete",
+    "excel_tlName": "Arthi S",
+    "tl_email": "arthi.mca25@cmrit.ac.in",
+    "tl_phone": "9353274025",
+    "total_members": 4,
+    "members_list": [
+      "Arthi S",
+      "A Anusri",
+      "Anvita G",
+      "Denzil Neelakanth"
+    ],
+    "institution": "CMRIT",
+    "city": "Coimbatore, Tamil Nadu",
+    "sdg": 1
+  },
+  {
+    "id": 36,
+    "teamName": "AlgoBizz",
+    "teamLeader": "Shreyash Amit Randive",
+    "excel_teamName": "AlgoBizz",
+    "excel_tlName": "Shreyash Amit Randive",
+    "tl_email": "shreyashrandive41@gmail.com",
+    "tl_phone": "9309815481",
+    "total_members": 4,
+    "members_list": [
+      "Shreyash Amit Randive",
+      "Tanmay Tikkas",
+      "No member",
+      "No member"
+    ],
+    "institution": "SVPCET, Nagpur",
+    "city": "Kopargaon, Maharashtra",
+    "sdg": 2
+  },
+  {
+    "id": 37,
+    "teamName": "EcoNova",
+    "teamLeader": "SafrinRifa S",
+    "excel_teamName": "EcoNova",
+    "excel_tlName": "SafrinRifa S",
+    "tl_email": "25bscs132safrinrifas@skacas.ac.in",
+    "tl_phone": "9384480334",
+    "total_members": 4,
+    "members_list": [
+      "SafrinRifa S",
+      "Jahnavi S",
+      "Abirami B",
+      "Sathana AV"
+    ],
+    "institution": "SKACAS",
+    "city": "Nashik, Maharashtra",
+    "sdg": 3
+  },
+  {
+    "id": 38,
+    "teamName": "Tech Titans",
+    "teamLeader": "harshini",
+    "excel_teamName": "Tech Titans",
+    "excel_tlName": "harshini",
+    "tl_email": "harshini221830@gmail.com",
+    "tl_phone": "7010381572",
+    "total_members": 4,
+    "members_list": [
+      "harshini",
+      "Bavan P",
+      "Mahesh Shankar G S",
+      "Nethra A"
+    ],
+    "institution": "KPRCAS",
+    "city": "Tiruppur, Tamil Nadu",
+    "sdg": 4
+  },
+  {
+    "id": 39,
+    "teamName": "Alpha Minds",
+    "teamLeader": "Harini L",
+    "excel_teamName": "Alpha Minds",
+    "excel_tlName": "Harini L",
+    "tl_email": "iharini18@gmail.com",
+    "tl_phone": "6379538827",
+    "total_members": 4,
+    "members_list": [
+      "Harini L",
+      "Mithra R",
+      "Dhanusri B",
+      "No member"
+    ],
+    "institution": "Dr.N.G.P.Arts and Science College",
+    "city": "Vellore, Tamil Nadu",
+    "sdg": 5
+  },
+  {
+    "id": 40,
+    "teamName": "ByteBloom",
+    "teamLeader": "Kokila Murugadass",
+    "excel_teamName": "ByteBloom",
+    "excel_tlName": "Kokila Murugadass",
+    "tl_email": "kokilamurugadass@gmail.com",
+    "tl_phone": "9442312676",
+    "total_members": 4,
+    "members_list": [
+      "Kokila Murugadass",
+      "ANGELIN SWEETY P",
+      "DHARSHINI C",
+      "No member"
+    ],
+    "institution": "Kgisl Institute of Technology",
+    "city": "Coimbatore, Tamil Nadu",
+    "sdg": 6
+  },
+  {
+    "id": 41,
+    "teamName": "SUSTAINNOVATORS",
+    "teamLeader": "GOGUL A",
+    "excel_teamName": "SUSTAINNOVATORS",
+    "excel_tlName": "GOGUL A",
+    "tl_email": "251050123796@srcas.ac.in",
+    "tl_phone": "9942243838",
+    "total_members": 4,
+    "members_list": [
+      "GOGUL A",
+      "S JAIDEV",
+      "No member",
+      "No member"
+    ],
+    "institution": "SRCAS",
+    "city": "Coimbatore, Tamil Nadu",
+    "sdg": 7
+  },
+  {
+    "id": 42,
+    "teamName": "Novus",
+    "teamLeader": "Fasrin A S",
+    "excel_teamName": "Novus",
+    "excel_tlName": "Fasrin A S",
+    "tl_email": "asfasrin@gmail.com",
+    "tl_phone": "8531997207",
+    "total_members": 4,
+    "members_list": [
+      "Fasrin A S",
+      "Avantheka Saanthalingam",
+      "Jeevvika N",
+      "AJAY R"
+    ],
+    "institution": "Dr.NGP Institute of Technology",
+    "city": "Coimbatore, Tamil Nadu",
+    "sdg": 8
+  },
+  {
+    "id": 43,
+    "teamName": "HackRythm",
+    "teamLeader": "Hashwin M",
+    "excel_teamName": "HackRythm",
+    "excel_tlName": "Hashwin M",
+    "tl_email": "hashwinmuthukumar@gmail.com",
+    "tl_phone": "9677574136",
+    "total_members": 4,
+    "members_list": [
+      "Hashwin M",
+      "Bhavesh Jayan",
+      "Sidharth M",
+      "Gurucharan Bankuru Bankuru"
+    ],
+    "institution": "Amrita Vishwa Vidyapeetham",
+    "city": "Tiruppur, Tamil Nadu",
+    "sdg": 9
+  },
+  {
+    "id": 44,
+    "teamName": "PIXEL MIND",
+    "teamLeader": "Libi",
+    "excel_teamName": "PIXEL MIND",
+    "excel_tlName": "Libi",
+    "tl_email": "lirev96@gmail.com",
+    "tl_phone": "8610162523",
+    "total_members": 4,
+    "members_list": [
+      "Libi",
+      "PRAVINRAJ G",
+      "MRITYUNJAI G",
+      "KARTHIKEYAN C K"
+    ],
+    "institution": "ST. JOSEPH'S COLLEGE OF ENGINEERING",
+    "city": "Chennai, Tamil Nadu",
+    "sdg": 10
+  },
+  {
+    "id": 45,
+    "teamName": "VERIDIAN SPARKS",
+    "teamLeader": "055-MEKALA S",
+    "excel_teamName": "VERIDIAN SPARKS",
+    "excel_tlName": "055-MEKALA S",
+    "tl_email": "727724eucy055@skcet.ac.in",
+    "tl_phone": "8248491384",
+    "total_members": 4,
+    "members_list": [
+      "055-MEKALA S",
+      "Kabitha Devi R P",
+      "Jayachandran S",
+      "Karanjith Ravindar"
+    ],
+    "institution": "Sri krishna college of Engineering and technology in comibatore",
+    "city": "Coimbatore, Tamil Nadu",
+    "sdg": 11
+  },
+  {
+    "id": 46,
+    "teamName": "Syntax Solver",
+    "teamLeader": "Akshay Somani",
+    "excel_teamName": "Syntax Solver",
+    "excel_tlName": "Akshay Somani",
+    "tl_email": "akshaysomani1804@gmail.com",
+    "tl_phone": "7046981077",
+    "total_members": 4,
+    "members_list": [
+      "Akshay Somani",
+      "Joy Patel",
+      "Yug Patel",
+      "No member"
+    ],
+    "institution": "LDRP-ITR/KSV",
+    "city": "Gandhinagar, Gujarat",
+    "sdg": 12
+  },
+  {
+    "id": 47,
+    "teamName": "Strawhats",
+    "teamLeader": "Snehal Lohar",
+    "excel_teamName": "Strawhats",
+    "excel_tlName": "Snehal Lohar",
+    "tl_email": "snehallohar49@gmail.com",
+    "tl_phone": "8956311772",
+    "total_members": 4,
+    "members_list": [
+      "Snehal Lohar",
+      "Amay Ghivare",
+      "Vaishnavi Sharma",
+      "Padmanbh Dhavle"
+    ],
+    "institution": "Mit vishwaprayag university",
+    "city": "Solapur, Maharashtra",
+    "sdg": 13
+  },
+  {
+    "id": 48,
+    "teamName": "TrioCoders",
+    "teamLeader": "AARTHI S",
+    "excel_teamName": "TrioCoders",
+    "excel_tlName": "AARTHI S",
+    "tl_email": "aarthiselvaraj05@gmail.com",
+    "tl_phone": "8637456475",
+    "total_members": 4,
+    "members_list": [
+      "AARTHI S",
+      "Dharshani Thangavel",
+      "Abiramy S",
+      "No member"
+    ],
+    "institution": "VSB Engineering College,Karur",
+    "city": "Tiruppur, Tamil Nadu",
+    "sdg": 14
+  },
+  {
+    "id": 49,
+    "teamName": "Pandas",
+    "teamLeader": "Noel Ninan Sheri",
+    "excel_teamName": "Pandas",
+    "excel_tlName": "Noel Ninan Sheri",
+    "tl_email": "noelninan.sheri2023@vitstudent.ac.in",
+    "tl_phone": "7736713778",
+    "total_members": 4,
+    "members_list": [
+      "Noel Ninan Sheri",
+      "Harshith B",
+      "Aaron Alphons Thomas",
+      "Keerthiswaran KR"
+    ],
+    "institution": "VIT Vellore",
+    "city": "Kochi, Kerala",
+    "sdg": 15
+  },
+  {
+    "id": 50,
+    "teamName": "VelocityX",
+    "teamLeader": "Sneka Venkateswari M",
+    "excel_teamName": "VelocityX",
+    "excel_tlName": "Sneka Venkateswari M",
+    "tl_email": "snekavenkateswarim@gmail.com",
+    "tl_phone": "8778396599",
+    "total_members": 4,
+    "members_list": [
+      "Sneka Venkateswari M",
+      "Vishal T",
+      "Yuvaraj I",
+      "No member"
+    ],
+    "institution": "Dr.Mahalingam College of Engineering and Technology",
+    "city": "Coimbatore, Tamil Nadu",
+    "sdg": 16
+  },
+  {
+    "id": 51,
+    "teamName": "MeTriX",
+    "teamLeader": "Nitheesh",
+    "excel_teamName": "MeTriX",
+    "excel_tlName": "Nitheesh",
+    "tl_email": "nitheeshcitbecse@gmail.com",
+    "tl_phone": "8270733494",
+    "total_members": 4,
+    "members_list": [
+      "Nitheesh",
+      "Roshan Patel",
+      "Vipul Raj Shah",
+      "Kanishka"
+    ],
+    "institution": "Chennai institute of technology",
+    "city": "Chennai, Tamil Nadu",
+    "sdg": 17
+  },
+  {
+    "id": 52,
+    "teamName": "Kore",
+    "teamLeader": "Anugrah Vibi",
+    "excel_teamName": "Kore",
+    "excel_tlName": "Anugrah Vibi",
+    "tl_email": "anugrahvibi07@gmail.com",
+    "tl_phone": "9544461918",
+    "total_members": 4,
+    "members_list": [
+      "Anugrah Vibi",
+      "Athul vr",
+      "emil shain",
+      "nidin raj m"
+    ],
+    "institution": "Christ college of engineering irinajlikuda",
+    "city": "Thrissur, Kerala",
+    "sdg": 1
+  },
+  {
+    "id": 53,
+    "teamName": "Code Junior",
+    "teamLeader": "AJAYPRAVIN N.E",
+    "excel_teamName": "Code Junior",
+    "excel_tlName": "AJAYPRAVIN N.E",
+    "tl_email": "neajaypravin@gmail.com",
+    "tl_phone": "9150773538",
+    "total_members": 4,
+    "members_list": [
+      "AJAYPRAVIN N.E",
+      "Harijith M",
+      "Sanjaykumar M",
+      "Logavinayagam P"
+    ],
+    "institution": "Sri Eshwar College of Engnieering",
+    "city": "Erode, Tamil Nadu",
+    "sdg": 2
+  },
+  {
+    "id": 54,
+    "teamName": "Code Crafters",
+    "teamLeader": "Aswitha Kondalraj",
+    "excel_teamName": "Code Crafters",
+    "excel_tlName": "Aswitha Kondalraj",
+    "tl_email": "aswitha2410656@ssn.edu.in",
+    "tl_phone": "7397157598",
+    "total_members": 4,
+    "members_list": [
+      "Aswitha Kondalraj",
+      "Harshini Bharathi R",
+      "Badhri Narayanan M",
+      "Bavin Aadithiya"
+    ],
+    "institution": "Sri sivasubramaniya nadar college of engineering",
+    "city": "Chennai, Tamil Nadu",
+    "sdg": 3
+  },
+  {
+    "id": 55,
+    "teamName": "Crypto Crafters",
+    "teamLeader": "ARUNTHATHI R",
+    "excel_teamName": "Crypto Crafters",
+    "excel_tlName": "ARUNTHATHI R",
+    "tl_email": "24z120@psgitech.ac.in",
+    "tl_phone": "9626053500",
+    "total_members": 4,
+    "members_list": [
+      "ARUNTHATHI R",
+      "ABHINAYA R",
+      "HEMADHARSINI P",
+      "HARINI N S"
+    ],
+    "institution": "PSG Institute of Technology and Applied Research",
+    "city": "Coimbatore, Tamil Nadu",
+    "sdg": 4
+  },
+  {
+    "id": 56,
+    "teamName": "CodeMantra",
+    "teamLeader": "Neev Modh",
+    "excel_teamName": "CodeMantra",
+    "excel_tlName": "Neev Modh",
+    "tl_email": "neevmodh205@gmail.com",
+    "tl_phone": "7016111267",
+    "total_members": 4,
+    "members_list": [
+      "Neev Modh",
+      "Om Vaghela",
+      "Dhruv Gami",
+      "No member"
+    ],
+    "institution": "Nirma University",
+    "city": "Ahmedabad, Gujarat",
+    "sdg": 5
+  },
+  {
+    "id": 57,
+    "teamName": "OrangeOtters",
+    "teamLeader": "SHRAVANYA ANDHALE",
+    "excel_teamName": "OrangeOtters",
+    "excel_tlName": "SHRAVANYA ANDHALE",
+    "tl_email": "2023.shravanya.andhale@ves.ac.in",
+    "tl_phone": "9653345310",
+    "total_members": 4,
+    "members_list": [
+      "SHRAVANYA ANDHALE",
+      "Sanket Patil",
+      "No member",
+      "No member"
+    ],
+    "institution": "VESIT MUMBAI",
+    "city": "Mumbai, Maharashtra",
+    "sdg": 6
+  },
+  {
+    "id": 58,
+    "teamName": "TEAM NEXUS",
+    "teamLeader": "MOHANKUMAR S",
+    "excel_teamName": "TEAM NEXUS",
+    "excel_tlName": "MOHANKUMAR S",
+    "tl_email": "shanmugasundaram670@gmail.com",
+    "tl_phone": "8056675967",
+    "total_members": 4,
+    "members_list": [
+      "MOHANKUMAR S",
+      "Nithish R",
+      "Swetha S",
+      "Varshana S"
+    ],
+    "institution": "SNS INSTITUTIONS",
+    "city": "Coimbatore, Tamil Nadu",
+    "sdg": 7
+  },
+  {
+    "id": 59,
+    "teamName": "TENET",
+    "teamLeader": "Vishnu",
+    "excel_teamName": "TENET",
+    "excel_tlName": "Vishnu",
+    "tl_email": "vishayyagari@gmail.com",
+    "tl_phone": "7993558059",
+    "total_members": 4,
+    "members_list": [
+      "Vishnu",
+      "T.CHARAN CHOWDARY",
+      "K HEMASREE KRISHNA",
+      "K.HITESH LAAHIRI"
+    ],
+    "institution": "AMRITA VISHWA VIDYAPEETHAM NAGERCOIL",
+    "city": "NAGERCOIL, Tamil Nadu",
+    "sdg": 8
+  },
+  {
+    "id": 60,
+    "teamName": "Vertex Three",
+    "teamLeader": "Sadaf Ansari",
+    "excel_teamName": "Vertex Three",
+    "excel_tlName": "Sadaf Ansari",
+    "tl_email": "sadafansari2006@gmail.com",
+    "tl_phone": "8104232842",
+    "total_members": 4,
+    "members_list": [
+      "Sadaf Ansari",
+      "Mahek Khan",
+      "Munazza Jaweed",
+      "No member"
+    ],
+    "institution": "Anjuman-I-Islam's Kalsekar Technical Campus",
+    "city": "Navi Mumbai, Maharashtra",
+    "sdg": 9
+  },
+  {
+    "id": 61,
+    "teamName": "GeneX",
+    "teamLeader": "Chintamaneni Harini sai",
+    "excel_teamName": "GeneX",
+    "excel_tlName": "Chintamaneni Harini sai",
+    "tl_email": "chintamaneniharinisai@gmail.com",
+    "tl_phone": "8790694695",
+    "total_members": 4,
+    "members_list": [
+      "Chintamaneni Harini sai",
+      "Leela Chaitanya Chunduri",
+      "Dharani Jagarlamudi",
+      "Rohit Lam"
+    ],
+    "institution": "Vasireddy Venkatadri Institute of Technology",
+    "city": "Guntur, Andhra Pradesh",
+    "sdg": 10
+  },
+  {
+    "id": 62,
+    "teamName": "NeuraNova",
+    "teamLeader": "logeswari",
+    "excel_teamName": "NeuraNova",
+    "excel_tlName": "logeswari",
+    "tl_email": "logeswari30122006@gmail.com",
+    "tl_phone": "9486253320",
+    "total_members": 4,
+    "members_list": [
+      "logeswari",
+      "jayadharani M",
+      "Janani N",
+      "Midhula V"
+    ],
+    "institution": "sri eshwar college of engineering",
+    "city": "Coimbatore, Tamil Nadu",
+    "sdg": 11
+  },
+  {
+    "id": 63,
+    "teamName": "InnoWave",
+    "teamLeader": "Muhammad Jasir",
+    "excel_teamName": "InnoWave",
+    "excel_tlName": "Muhammad Jasir",
+    "tl_email": "muhammadjasir126@gmail.com",
+    "tl_phone": "7358561414",
+    "total_members": 4,
+    "members_list": [
+      "Muhammad Jasir",
+      "Mohanraj M",
+      "Mohammad Areeb",
+      "No member"
+    ],
+    "institution": "Chennai Institute of Technology",
+    "city": "Chennai, Tamil Nadu",
+    "sdg": 12
+  },
+  {
+    "id": 64,
+    "teamName": "Fourier",
+    "teamLeader": "Ashutosh Kumar",
+    "excel_teamName": "Fourier",
+    "excel_tlName": "Ashutosh Kumar",
+    "tl_email": "kmashutosh12kr@gmail.com",
+    "tl_phone": "9162303522",
+    "total_members": 4,
+    "members_list": [
+      "Ashutosh Kumar",
+      "Prakash Kumar",
+      "Akash Kumar",
+      "Akash Kumar"
+    ],
+    "institution": "Rajkiya Engineering College Banda",
+    "city": "Banda, Uttar Pradesh",
+    "sdg": 13
+  },
+  {
+    "id": 65,
+    "teamName": "Kashbyte",
+    "teamLeader": "Yasir Physics 40",
+    "excel_teamName": "Kashbyte",
+    "excel_tlName": "Yasir Physics 40",
+    "tl_email": "ratherseenu16@gmail.com",
+    "tl_phone": "6005441991",
+    "total_members": 4,
+    "members_list": [
+      "Yasir Physics 40",
+      "Maha Mateen",
+      "No member",
+      "No member"
+    ],
+    "institution": "cluster university",
+    "city": "Srinagar, Jammu and Kashmir",
+    "sdg": 14
+  },
+  {
+    "id": 66,
+    "teamName": "CtrlN",
+    "teamLeader": "MUSAHITH ARAFATH S",
+    "excel_teamName": "CtrlN",
+    "excel_tlName": "MUSAHITH ARAFATH S",
+    "tl_email": "192524400.simats@saveetha.com",
+    "tl_phone": "9843870968",
+    "total_members": 4,
+    "members_list": [
+      "MUSAHITH ARAFATH S",
+      "Deepika B",
+      "Prethepa K R",
+      "Logeshwaran R"
+    ],
+    "institution": "SIMATS ENGINEERING",
+    "city": "Chennai, Tamil Nadu",
+    "sdg": 15
+  },
+  {
+    "id": 67,
+    "teamName": "Codex",
+    "teamLeader": "Rithvi",
+    "excel_teamName": "Codex",
+    "excel_tlName": "Rithvi",
+    "tl_email": "rithvi.mrithvi.m@gmail.com",
+    "tl_phone": "9043824569",
+    "total_members": 4,
+    "members_list": [
+      "Rithvi",
+      "Kiruthika",
+      "Sheeba I",
+      "Saruhashini P"
+    ],
+    "institution": "Nehru arts and science",
+    "city": "Coimbatore, Tamil Nadu",
+    "sdg": 16
+  },
+  {
+    "id": 68,
+    "teamName": "PhoenixRisers",
+    "teamLeader": "Royce Dcunha",
+    "excel_teamName": "PhoenixRisers",
+    "excel_tlName": "Royce Dcunha",
+    "tl_email": "royce.dcunha2007@gmail.com",
+    "tl_phone": "8459441374",
+    "total_members": 4,
+    "members_list": [
+      "Royce Dcunha",
+      "Bless Mascarenhas",
+      "Arya Mhatre",
+      "Rohit Moris"
+    ],
+    "institution": "Fr. Conceicao rodrigues college of engineering, Bandra(west)",
+    "city": "Mumbai, Maharashtra",
+    "sdg": 17
+  },
+  {
+    "id": 69,
+    "teamName": "FEEDONE",
+    "teamLeader": "G Sri Nivas",
+    "excel_teamName": "FEEDONE",
+    "excel_tlName": "G Sri Nivas",
+    "tl_email": "sudhasrinivash147@gmail.com",
+    "tl_phone": "7395940075",
+    "total_members": 4,
+    "members_list": [
+      "G Sri Nivas",
+      "Sarvana Marimuthu",
+      "C Solairaj",
+      "B Nikil"
+    ],
+    "institution": "N.S.N COLLEGE OF ENGINEERING AND TECHNOLOGY",
+    "city": "KARUR, Tamil Nadu",
+    "sdg": 1
+  },
+  {
+    "id": 70,
+    "teamName": "Aniketos",
+    "teamLeader": "THARVIN M",
+    "excel_teamName": "Aniketos",
+    "excel_tlName": "THARVIN M",
+    "tl_email": "24z271@psgitech.ac.in",
+    "tl_phone": "8667630626",
+    "total_members": 4,
+    "members_list": [
+      "THARVIN M",
+      "SARAN VISHAKAN",
+      "SURIYA PRAKASH",
+      "SANJAY R"
+    ],
+    "institution": "PSG INSTITUTE OF TECHNOLOGY AND APPLIED RESEARCH",
+    "city": "Coimbatore, Tamil Nadu",
+    "sdg": 2
+  },
+  {
+    "id": 71,
+    "teamName": "THE ShEEOs",
+    "teamLeader": "Arya Salunkhe",
+    "excel_teamName": "THE SheEOs",
+    "excel_tlName": "Arya Salunkhe",
+    "tl_email": "aryasalunkhe2807@gmail.com",
+    "tl_phone": "9921818320",
+    "total_members": 4,
+    "members_list": [
+      "Arya Salunkhe",
+      "Purva Khanapurkar",
+      "Debanshi Priyadarshini",
+      "Sai Patil"
+    ],
+    "institution": "MKSSSs Cummins College of Engineering for Women ,Pune",
+    "city": "Pune, Maharashtra",
+    "sdg": 3
+  },
+  {
+    "id": 72,
+    "teamName": "Vinayak",
+    "teamLeader": "Nilesh Kukreja C_29",
+    "excel_teamName": "Vinayak",
+    "excel_tlName": "Nilesh Kukreja C_29",
+    "tl_email": "nileshkukreja205@gmail.com",
+    "tl_phone": "7020305871",
+    "total_members": 4,
+    "members_list": [
+      "Nilesh Kukreja C_29",
+      "Shruti Choudhari",
+      "Saptagiri Punjal",
+      "Sanskruti Bhosale"
+    ],
+    "institution": "N K Orchid College of Engineering and Technology Solapur",
+    "city": "Solapur, Maharashtra",
+    "sdg": 4
+  },
+  {
+    "id": 73,
+    "teamName": "Cyber warriors",
+    "teamLeader": "Sasikanth D",
+    "excel_teamName": "Cyber warriors",
+    "excel_tlName": "Sasikanth D",
+    "tl_email": "naanthaleo6@gmail.com",
+    "tl_phone": "6381100169",
+    "total_members": 4,
+    "members_list": [
+      "Sasikanth D",
+      "Nandhini",
+      "Nethra",
+      "Pradheepa"
+    ],
+    "institution": "Rathinam Technical campus",
+    "city": "Coimbatore, Tamil Nadu",
+    "sdg": 5
+  },
+  {
+    "id": 74,
+    "teamName": "GreenGrid",
+    "teamLeader": "Ashifa Nazrin I",
+    "excel_teamName": "GreenGrid",
+    "excel_tlName": "Ashifa Nazrin I",
+    "tl_email": "ashh4276@gmail.com",
+    "tl_phone": "9025711163",
+    "total_members": 4,
+    "members_list": [
+      "Ashifa Nazrin I",
+      "Elakiya M",
+      "K Shahith Mohamed",
+      "No member"
+    ],
+    "institution": "Sri Eshwar College of Engineering",
+    "city": "Coimbatore, Tamil Nadu",
+    "sdg": 6
+  },
+  {
+    "id": 75,
+    "teamName": "TECH LORDS",
+    "teamLeader": "SANJAY S",
+    "excel_teamName": "TECH LORDS",
+    "excel_tlName": "SANJAY S",
+    "tl_email": "ssanjay41571@gmail.com",
+    "tl_phone": "8870741800",
+    "total_members": 4,
+    "members_list": [
+      "SANJAY S",
+      "Sridhar N",
+      "Perumal A",
+      "Nisha P"
+    ],
+    "institution": "SNS COLLEGE OF TECHNOLOGY",
+    "city": "Coimbatore, Tamil Nadu",
+    "sdg": 7
+  },
+  {
+    "id": 76,
+    "teamName": "Nova Tech",
+    "teamLeader": "Angel D'Souza",
+    "excel_teamName": "Nova Tech",
+    "excel_tlName": "Angel D'Souza",
+    "tl_email": "angeldsouza985@gmail.com",
+    "tl_phone": "8618359487",
+    "total_members": 4,
+    "members_list": [
+      "Angel D'Souza",
+      "Varsha R",
+      "A.krittika",
+      "Likhitha HS"
+    ],
+    "institution": "Alliance University",
+    "city": "Bengaluru, Karnataka",
+    "sdg": 8
+  },
+  {
+    "id": 77,
+    "teamName": "Team starks",
+    "teamLeader": "PRAGADEESH S",
+    "excel_teamName": "Team starks",
+    "excel_tlName": "PRAGADEESH S",
+    "tl_email": "pragad555990@gmail.com",
+    "tl_phone": "9363865517",
+    "total_members": 4,
+    "members_list": [
+      "PRAGADEESH S",
+      "Rithik M",
+      "Ranjith S",
+      "Naveen K"
+    ],
+    "institution": "RTC",
+    "city": "Coimbatore, Tamil Nadu",
+    "sdg": 9
+  },
+  {
+    "id": 78,
+    "teamName": "Visionx",
+    "teamLeader": "Kaviya.k",
+    "excel_teamName": "Visionx",
+    "excel_tlName": "Kaviya.k",
+    "tl_email": "251ce026@srcw.ac.in",
+    "tl_phone": "9943690288",
+    "total_members": 4,
+    "members_list": [
+      "Kaviya.k",
+      "Kaviya Dharshini",
+      "Kanishma.Y",
+      "Kanimozhi.R"
+    ],
+    "institution": "Srcw",
+    "city": "Coimbatore, Tamil Nadu",
+    "sdg": 10
+  },
+  {
+    "id": 79,
+    "teamName": "Valyrian Intelligence",
+    "teamLeader": "Raj B",
+    "excel_teamName": "Valyrian Intelligence",
+    "excel_tlName": "Raj B",
+    "tl_email": "itisrajb@gmail.com",
+    "tl_phone": "6379446676",
+    "total_members": 4,
+    "members_list": [
+      "Raj B",
+      "Sarvesh A K",
+      "Rithish Barath S R",
+      "Hemkumar R"
+    ],
+    "institution": "Coimbatore Institute of Technology",
+    "city": "Coimbatore, Tamil Nadu",
+    "sdg": 11
+  },
+  {
+    "id": 80,
+    "teamName": "Game changer",
+    "teamLeader": "Ajay Raj",
+    "excel_teamName": "Game changer",
+    "excel_tlName": "Ajay Raj",
+    "tl_email": "ajayraj2942006@gmail.com",
+    "tl_phone": "8925096240",
+    "total_members": 4,
+    "members_list": [
+      "Ajay Raj",
+      "Ashwathaman.BP",
+      "No member",
+      "No member"
+    ],
+    "institution": "Coimbatore institute of engineering and technology",
+    "city": "Coimbatore, Tamil Nadu",
+    "sdg": 12
+  },
+  {
+    "id": 81,
+    "teamName": "Farm Vision",
+    "teamLeader": "Guru Varshaan",
+    "excel_teamName": "Farm Vision",
+    "excel_tlName": "Guru Varshaan",
+    "tl_email": "guruv4747@gmail.com",
+    "tl_phone": "6381187686",
+    "total_members": 4,
+    "members_list": [
+      "Guru Varshaan",
+      "Sanjay B",
+      "Shivanchi G",
+      "P Prakalya Janani"
+    ],
+    "institution": "Coimbatore Institute of Technology",
+    "city": "Coimbatore, Tamil Nadu",
+    "sdg": 13
+  },
+  {
+    "id": 82,
+    "teamName": "AgriZenith",
+    "teamLeader": "Kaviya Mathiyalagan",
+    "excel_teamName": "AgriZenith",
+    "excel_tlName": "Kaviya Mathiyalagan",
+    "tl_email": "kaviyamathiyalagan1318@gmail.com",
+    "tl_phone": "7604915042",
+    "total_members": 4,
+    "members_list": [
+      "Kaviya Mathiyalagan",
+      "Parvathi S",
+      "Oviya J",
+      "No member"
+    ],
+    "institution": "Sri Ramakrishna institute of technology",
+    "city": "Coimbatore, Tamil Nadu",
+    "sdg": 14
+  },
+  {
+    "id": 83,
+    "teamName": "Alpha minds",
+    "teamLeader": "KAVI BHARATHI.P 24-B.Sc CS",
+    "excel_teamName": "Alpha minds",
+    "excel_tlName": "KAVI BHARATHI.P 24-B.Sc CS",
+    "tl_email": "241ce016@srcw.ac.in",
+    "tl_phone": "7449265707",
+    "total_members": 4,
+    "members_list": [
+      "KAVI BHARATHI.P 24-B.Sc CS",
+      "Sandhiya. W",
+      "Immaculate Jasmine D",
+      "Ranjani K"
+    ],
+    "institution": "SRCW",
+    "city": "Coimbatore, Tamil Nadu",
+    "sdg": 15
+  },
+  {
+    "id": 84,
+    "teamName": "DEJAVU",
+    "teamLeader": "08 - BARATH BR",
+    "excel_teamName": "DEJAVU",
+    "excel_tlName": "08 - BARATH BR",
+    "tl_email": "2403717673821008@cit.edu.in",
+    "tl_phone": "8056322769",
+    "total_members": 4,
+    "members_list": [
+      "08 - BARATH BR",
+      "Amrithavarshini T",
+      "Niranjan K",
+      "No member"
+    ],
+    "institution": "Coimbatore Institute of Technology",
+    "city": "Coimbatore, Tamil Nadu",
+    "sdg": 16
+  },
+  {
+    "id": 85,
+    "teamName": "Nova nexus",
+    "teamLeader": "Netra V",
+    "excel_teamName": "Nova nexus",
+    "excel_tlName": "Netra V",
+    "tl_email": "netra56710@gmail.com",
+    "tl_phone": "7904188185",
+    "total_members": 4,
+    "members_list": [
+      "Netra V",
+      "Sreemathi K",
+      "Samiksha K",
+      "No member"
+    ],
+    "institution": "KPR INSTITUTE OF ENGINEERING AND TECHNOLOGY",
+    "city": "Coimbatore, Tamil Nadu",
+    "sdg": 17
+  },
+  {
+    "id": 86,
+    "teamName": "Datamaxxers",
+    "teamLeader": "Rakesh S",
+    "excel_teamName": "Datamaxxers",
+    "excel_tlName": "Rakesh S",
+    "tl_email": "rakeshselvaraj0108@gmail.com",
+    "tl_phone": "9940560697",
+    "total_members": 4,
+    "members_list": [
+      "Rakesh S",
+      "A Shree Kailash",
+      "No member",
+      "No member"
+    ],
+    "institution": "CHENNAI INSTITUTE OF TECCHNOLOGY",
+    "city": "Chennai, Tamil Nadu",
+    "sdg": 1
+  },
+  {
+    "id": 87,
+    "teamName": "404 Brain Not Found",
+    "teamLeader": "Anurag Padhi",
+    "excel_teamName": "404 Brain Not Found",
+    "excel_tlName": "Anurag Padhi",
+    "tl_email": "anuragpadhidash@gmail.com",
+    "tl_phone": "8103425210",
+    "total_members": 4,
+    "members_list": [
+      "Anurag Padhi",
+      "Ranish Shrivastava",
+      "No member",
+      "No member"
+    ],
+    "institution": "Christ University",
+    "city": "Bengaluru, Karnataka",
+    "sdg": 2
+  },
+  {
+    "id": 88,
+    "teamName": "TECH BLASTERS",
+    "teamLeader": "Kishore Chakaravarthy",
+    "excel_teamName": "TECH BLASTERS",
+    "excel_tlName": "Kishore Chakaravarthy",
+    "tl_email": "kishorechakaravarthy@gmail.com",
+    "tl_phone": "9087651377",
+    "total_members": 4,
+    "members_list": [
+      "Kishore Chakaravarthy",
+      "Gokul Krishnan S V",
+      "Nikritha K",
+      "Navapoornima S"
+    ],
+    "institution": "KalaignarKarunanidhi Institute Of Technology",
+    "city": "Coimbatore, Tamil Nadu",
+    "sdg": 3
+  },
+  {
+    "id": 89,
+    "teamName": "The Data Divas",
+    "teamLeader": "Shreya M CSE",
+    "excel_teamName": "The Data Divas",
+    "excel_tlName": "Shreya M CSE",
+    "tl_email": "shreyam.cse2024@citchennai.net",
+    "tl_phone": "6374175744",
+    "total_members": 4,
+    "members_list": [
+      "Shreya M CSE",
+      "Sharu Krisha H",
+      "Srie Varshika",
+      "Sorooopalaxmi B"
+    ],
+    "institution": "Chennai Institute of Technology",
+    "city": "Chennai, Tamil Nadu",
+    "sdg": 4
+  },
+  {
+    "id": 90,
+    "teamName": "MetaX",
+    "teamLeader": "Vijesh",
+    "excel_teamName": "MetaX",
+    "excel_tlName": "Vijesh",
+    "tl_email": "viju7122006@gmail.com",
+    "tl_phone": "9384596466",
+    "total_members": 4,
+    "members_list": [
+      "Vijesh",
+      "Sanjay S",
+      "Nisha M",
+      "No member"
+    ],
+    "institution": "KGISL INSTITUTE OF TECHNOLOGY",
+    "city": "Coimbatore, Tamil Nadu",
+    "sdg": 5
+  },
+  {
+    "id": 91,
+    "teamName": "Bitflux",
+    "teamLeader": "Utkarsh Kumar",
+    "excel_teamName": "Bitflux",
+    "excel_tlName": "Utkarsh Kumar",
+    "tl_email": "unofficialutkarsh.06@gmail.com",
+    "tl_phone": "7352717183",
+    "total_members": 4,
+    "members_list": [
+      "Utkarsh Kumar",
+      "Naman Daga",
+      "No member",
+      "No member"
+    ],
+    "institution": "Manipal Institute of Technology",
+    "city": "Bengaluru, Karnataka",
+    "sdg": 6
+  },
+  {
+    "id": 92,
+    "teamName": "TeamNerds",
+    "teamLeader": "நன்மாறன் ம",
+    "excel_teamName": "TeamNerds",
+    "excel_tlName": "நன்மாறன் ம",
+    "tl_email": "nanmaranm55@gmail.com",
+    "tl_phone": "9943785900",
+    "total_members": 4,
+    "members_list": [
+      "நன்மாறன் ம",
+      "M Mohamed Amanullah",
+      "A Fayisha Aafrin Shameela",
+      "JP Abinaya"
+    ],
+    "institution": "KIT-COIMBATORE",
+    "city": "Coimbatore, Tamil Nadu",
+    "sdg": 7
+  },
+  {
+    "id": 93,
+    "teamName": "Eclipse Syndicate",
+    "teamLeader": "Sanjay R",
+    "excel_teamName": "Eclipse Syndicate",
+    "excel_tlName": "Sanjay R",
+    "tl_email": "sanjayravichandran600@gmail.com",
+    "tl_phone": "9942883595",
+    "total_members": 4,
+    "members_list": [
+      "Sanjay R",
+      "Madhan S",
+      "Madhavan P",
+      "No member"
+    ],
+    "institution": "KG College of Arts and Science",
+    "city": "Coimbatore, Tamil Nadu",
+    "sdg": 8
+  },
+  {
+    "id": 94,
+    "teamName": "velora",
+    "teamLeader": "Naveen Naveen",
+    "excel_teamName": "velora",
+    "excel_tlName": "Naveen Naveen",
+    "tl_email": "mmnaveen202006@gmail.com",
+    "tl_phone": "9047667094",
+    "total_members": 4,
+    "members_list": [
+      "Naveen Naveen",
+      "Parameswari R",
+      "Jerlin J",
+      "Harisha S K"
+    ],
+    "institution": "Saveetha School of Engineering",
+    "city": "Chennai, Tamil Nadu",
+    "sdg": 9
+  },
+  {
+    "id": 95,
+    "teamName": "Team DigiSeva",
+    "teamLeader": "Devansh Goenka",
+    "excel_teamName": "Team DigiSeva",
+    "excel_tlName": "Devansh Goenka",
+    "tl_email": "devanshgoenka03@gmail.com",
+    "tl_phone": "7482908025",
+    "total_members": 4,
+    "members_list": [
+      "Devansh Goenka",
+      "KRISH",
+      "No member",
+      "No member"
+    ],
+    "institution": "SRM UNIVERSITY KTR",
+    "city": "Chennai, Tamil Nadu",
+    "sdg": 10
+  },
+  {
+    "id": 96,
+    "teamName": "RTECH",
+    "teamLeader": "CHANDRU P",
+    "excel_teamName": "RTECH",
+    "excel_tlName": "CHANDRU P",
+    "tl_email": "chatech27@gmail.com",
+    "tl_phone": "8870529483",
+    "total_members": 4,
+    "members_list": [
+      "CHANDRU P",
+      "Nelopher A",
+      "SUDHARSAN D",
+      "PRABU KUMAR S P"
+    ],
+    "institution": "RATHINAM TECHNICAL CAMPUS",
+    "city": "Coimbatore, Tamil Nadu",
+    "sdg": 11
+  },
+  {
+    "id": 97,
+    "teamName": "Euphoria",
+    "teamLeader": "R RITHIN CSE",
+    "excel_teamName": "Euphoria",
+    "excel_tlName": "R RITHIN CSE",
+    "tl_email": "rrithin.cse2024@citchennai.net",
+    "tl_phone": "9344618751",
+    "total_members": 4,
+    "members_list": [
+      "R RITHIN CSE",
+      "PRAGANYA A",
+      "VASANTHAVEL K",
+      "G R NITESHRAJ"
+    ],
+    "institution": "CHENNAI INSTITUTE OF TECHNOLOGY",
+    "city": "Chennai, Tamil Nadu",
+    "sdg": 12
+  },
+  {
+    "id": 98,
+    "teamName": "SentinelX",
+    "teamLeader": "LAKSHMI SRI DIVYA RAVIPROLU",
+    "excel_teamName": "SentinelX",
+    "excel_tlName": "LAKSHMI SRI DIVYA RAVIPROLU",
+    "tl_email": "raviprolu.lakshmisridivya@gmail.com",
+    "tl_phone": "8667268436",
+    "total_members": 4,
+    "members_list": [
+      "LAKSHMI SRI DIVYA RAVIPROLU",
+      "SAI SUSMITHA B",
+      "No member",
+      "No member"
+    ],
+    "institution": "R.M.D. ENGINEERING COLLEGE",
+    "city": "Chennai, Tamil Nadu",
+    "sdg": 13
+  },
+  {
+    "id": 99,
+    "teamName": "ECLIPSE",
+    "teamLeader": "Joshua Hebron J",
+    "excel_teamName": "ECLIPSE",
+    "excel_tlName": "Joshua Hebron J",
+    "tl_email": "joshua.240156@vlsi.ritchennai.edu.in",
+    "tl_phone": "7305056989",
+    "total_members": 4,
+    "members_list": [
+      "Joshua Hebron J",
+      "Lakshitha S",
+      "No member",
+      "No member"
+    ],
+    "institution": "rajalakshmi institute of technology",
+    "city": "Chennai, Tamil Nadu",
+    "sdg": 14
+  },
+  {
+    "id": 100,
+    "teamName": "Nexus Nova",
+    "teamLeader": "JOSHUA ANTONY",
+    "excel_teamName": "Nexus Nova",
+    "excel_tlName": "JOSHUA ANTONY",
+    "tl_email": "joshuaavs0@gmail.com",
+    "tl_phone": "8825432176",
+    "total_members": 4,
+    "members_list": [
+      "JOSHUA ANTONY",
+      "Shalini Js",
+      "No member",
+      "No member"
+    ],
+    "institution": "Chennai institute of technology",
+    "city": "Chennai, Tamil Nadu",
+    "sdg": 15
+  }
+]

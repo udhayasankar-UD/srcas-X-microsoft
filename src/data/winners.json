@@ -1,0 +1,57 @@
+{
+    "mainWinners": [
+        {
+            "rank": 1,
+            "teamName": "Heisenbug",
+            "institution": "PSG College of Technology",
+            "city": "Coimbatore",
+            "prize": 100000,
+            "sdg": 4,
+            "icon": "🏆"
+        },
+        {
+            "rank": 2,
+            "teamName": "GenZ exe",
+            "institution": "Sri Ramakrishna College of Arts & Science",
+            "city": "Coimbatore",
+            "prize": 50000,
+            "sdg": 3,
+            "icon": "🥈"
+        },
+        {
+            "rank": 3,
+            "teamName": "Nova nexus",
+            "institution": "KPR INSTITUTE OF ENGINEERING AND TECHNOLOGY",
+            "city": "Coimbatore",
+            "prize": 30000,
+            "sdg": 7,
+            "icon": "🥉"
+        }
+    ],
+    "consolationWinners": [
+        {
+            "teamName": "Greenovate",
+            "institution": "SNS College of Technology",
+            "city": "Coimbatore",
+            "prize": 10000,
+            "sdg": 13,
+            "iconType": "leaf"
+        },
+        {
+            "teamName": "Data Dynasty",
+            "institution": "Sri Shakthi Institute of Engineering",
+            "city": "Coimbatore",
+            "prize": 10000,
+            "sdg": 9,
+            "iconType": "code"
+        },
+        {
+            "teamName": "Visionaries",
+            "institution": "Sri Krishna College of Engineering",
+            "city": "Coimbatore",
+            "prize": 10000,
+            "sdg": 11,
+            "iconType": "bulb"
+        }
+    ]
+}

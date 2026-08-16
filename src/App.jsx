@@ -28,6 +28,7 @@ const AdminJury = lazy(() => import('./pages/admin/AdminJury'));
 const LegalPage = lazy(() => import('./pages/LegalPage'));
 const AnalyticsPage = lazy(() => import('./pages/AnalyticsPage'));
 const ShortlistedPage = lazy(() => import('./pages/ShortlistedPage'));
+const WinnersPage = lazy(() => import('./pages/WinnersPage'));
 
 /**
  * ScrollToTop Component
@@ -85,7 +86,7 @@ function ScrollToTopButton() {
           onMouseLeave={e => e.currentTarget.style.background = '#111'}
         >
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M12 19V5M5 12l7-7 7 7"/>
+            <path d="M12 19V5M5 12l7-7 7 7" />
           </svg>
         </motion.button>
       )}
@@ -97,7 +98,7 @@ function App() {
   return (
     <Router>
       <ScrollToTop />
-      <Suspense fallback={<div style={{minHeight:'100vh', display:'flex', alignItems:'center', justifyContent:'center'}}>Loading...</div>}>
+      <Suspense fallback={<div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Loading...</div>}>
         <Routes>
           {/* Direct redirects to shortlisted page */}
           <Route path="/register" element={<Navigate to="/shortlisted" replace />} />
@@ -135,6 +136,7 @@ function App() {
                 <Route path="/privacy" element={<LegalPage />} />
                 <Route path="/analytics" element={<AnalyticsPage />} />
                 <Route path="/shortlisted" element={<ShortlistedPage />} />
+                <Route path="/winners" element={<WinnersPage />} />
               </Routes>
               <Footer />
             </div>

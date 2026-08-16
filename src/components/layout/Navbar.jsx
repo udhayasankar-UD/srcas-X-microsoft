@@ -33,22 +33,23 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../lib/useAuth';
 
 // ─── Site color tokens (black & white) ──────────────────────────────────────
-const ACTIVE    = '#111111';
+const ACTIVE = '#111111';
 const ACTIVE_BG = '#F3F3F3';
-const BG_PANEL  = 'rgba(255,255,255,0.88)';
-const BORDER    = 'rgba(0,0,0,0.12)';
+const BG_PANEL = 'rgba(255,255,255,0.88)';
+const BORDER = 'rgba(0,0,0,0.12)';
 
 // ─── Nav items ────────────────────────────────────────────────────────────────
 const getNavItems = () => [
-  { id: 'home',        label: 'Home',               icon: House,         path: '/', hash: '#hero' },
-  { id: 'shortlisted', label: 'Shortlisted',         icon: Award,         path: '/shortlisted', hash: '' },
-  { id: 'partners',    label: 'Partners',            icon: Handshake,     path: '/partners', hash: '' },
-  { id: 'highlights',  label: 'Highlights',          icon: Star,          path: '/highlights', hash: '' },
-  { id: 'prizes',      label: 'Prizes',              icon: Trophy,        path: '/prizes', hash: '' },
-  { id: 'problems',    label: 'Problem Statements',  icon: BookOpen,      path: '/', hash: '#problems' },
-  { id: 'humans',      label: 'Humans',              icon: Users,         path: '/humans', hash: '' },
-  { id: 'faq',         label: 'FAQ',                 icon: HelpCircle,    path: '/faq', hash: '' },
-  { id: 'contact',     label: 'Contact',             icon: Phone,         path: '/contact', hash: '' },
+  { id: 'home', label: 'Home', icon: House, path: '/', hash: '#hero' },
+  { id: 'winners', label: 'Winners', icon: Trophy, path: '/winners', hash: '' },
+  { id: 'shortlisted', label: 'Shortlisted', icon: Award, path: '/shortlisted', hash: '' },
+  { id: 'partners', label: 'Partners', icon: Handshake, path: '/partners', hash: '' },
+  { id: 'highlights', label: 'Highlights', icon: Star, path: '/highlights', hash: '' },
+  { id: 'prizes', label: 'Prizes', icon: Trophy, path: '/prizes', hash: '' },
+  { id: 'problems', label: 'Problem Statements', icon: BookOpen, path: '/', hash: '#problems' },
+  { id: 'humans', label: 'Humans', icon: Users, path: '/humans', hash: '' },
+  { id: 'faq', label: 'FAQ', icon: HelpCircle, path: '/faq', hash: '' },
+  { id: 'contact', label: 'Contact', icon: Phone, path: '/contact', hash: '' },
 ];
 
 // ─── Active-section tracker ───────────────────────────────────────────────────
@@ -59,12 +60,12 @@ function useActiveSection() {
   useEffect(() => {
     // Non-home routes — set immediately from pathname
     const routeMap = {
-      '/prizes':      'prizes',
-      '/highlights':  'highlights',
-      '/partners':    'partners',
-      '/humans':      'humans',
-      '/faq':         'faq',
-      '/contact':     'contact',
+      '/prizes': 'prizes',
+      '/highlights': 'highlights',
+      '/partners': 'partners',
+      '/humans': 'humans',
+      '/faq': 'faq',
+      '/contact': 'contact',
       '/shortlisted': 'shortlisted',
     };
 
@@ -116,7 +117,7 @@ function NavDockItem({
   baseItemSize,
   isActive,
 }) {
-  const ref       = useRef(null);
+  const ref = useRef(null);
   const isHovered = useMotionValue(0);
 
   const mouseDistance = useTransform(mouseY, (val) => {
@@ -214,9 +215,9 @@ const DesktopNavBar = ({ user }) => {
   const location = useLocation();
 
   const [collapsed, setCollapsed] = useState(false);
-  const [hovered,   setHovered]   = useState(false);
+  const [hovered, setHovered] = useState(false);
   const collapseTimer = useRef(null);
-  const leaveTimer    = useRef(null);
+  const leaveTimer = useRef(null);
 
   useEffect(() => {
     collapseTimer.current = setTimeout(() => setCollapsed(true), 7000);
@@ -238,13 +239,13 @@ const DesktopNavBar = ({ user }) => {
 
   const expanded = !collapsed || hovered;
 
-  const spring        = { mass: 0.1, stiffness: 150, damping: 12 };
-  const baseItemSize  = 52;
+  const spring = { mass: 0.1, stiffness: 150, damping: 12 };
+  const baseItemSize = 52;
   const magnification = 72;
-  const distance      = 130;
-  const panelWidth    = baseItemSize + 28; // 80px
-  const peekWidth     = 32;
-  const hiddenX       = -(panelWidth - peekWidth);
+  const distance = 130;
+  const panelWidth = baseItemSize + 28; // 80px
+  const peekWidth = 32;
+  const hiddenX = -(panelWidth - peekWidth);
 
   const mouseY = useMotionValue(Infinity);
 
@@ -284,7 +285,7 @@ const DesktopNavBar = ({ user }) => {
       onMouseLeave={handleMouseLeave}
       onMouseMove={({ clientY }) => mouseY.set(clientY)}
     >
-      
+
       <motion.div
         animate={{ x: expanded ? 0 : -(panelWidth + 20 - peekWidth) }}
         transition={{ type: 'spring', stiffness: 200, damping: 34, mass: 1 }}
@@ -341,7 +342,7 @@ const DesktopNavBar = ({ user }) => {
         />
 
         {getNavItems(user).map((item) => {
-          const isActive   = activeSection === item.id;
+          const isActive = activeSection === item.id;
           const LucideIcon = item.icon;
           return (
             <NavDockItem
@@ -373,8 +374,8 @@ const DesktopNavBar = ({ user }) => {
 
 // ─── Mobile: Floating hamburger bottom-right ──────────────────────────────────
 const MobileNavBar = ({ user }) => {
-  const activeSection  = useActiveSection();
-  const [isOpen, setIsOpen]         = useState(false);
+  const activeSection = useActiveSection();
+  const [isOpen, setIsOpen] = useState(false);
   const [showLabels, setShowLabels] = useState(false);
   const menuRef = useRef(null);
   const navigate = useNavigate();
@@ -393,7 +394,7 @@ const MobileNavBar = ({ user }) => {
   const handleNav = (item) => {
     setShowLabels(false);
     setTimeout(() => setIsOpen(false), 200);
-    
+
     if (item.path !== location.pathname) {
       navigate(item.path);
       if (item.hash && item.id !== 'home') {
@@ -455,7 +456,7 @@ const MobileNavBar = ({ user }) => {
           style={{ background: '#111' }}
         >
           {isOpen
-            ? <X    size={18} color="#fff" />
+            ? <X size={18} color="#fff" />
             : <Menu size={22} color="#fff" />
           }
         </button>
@@ -468,7 +469,7 @@ const MobileNavBar = ({ user }) => {
           ].join(' ')}
         >
           {getNavItems(user).map((item) => {
-            const isActive   = activeSection === item.id;
+            const isActive = activeSection === item.id;
             const LucideIcon = item.icon;
 
             return (
@@ -522,9 +523,9 @@ const Navbar = () => {
       {/* Floating Action Button - Top Right */}
       {activeSection !== 'home' && (
         <div className="fixed top-6 right-8 z-50 hidden sm:flex items-center gap-3">
-          <a href="/shortlisted" style={{ textDecoration: 'none' }}>
-            <button className="nav-register-btn">
-              Finalist teams
+          <a href="/winners" style={{ textDecoration: 'none' }}>
+            <button className="nav-register-btn" style={{ background: '#16a34a', color: '#fff', border: 'none' }}>
+              View Winners
             </button>
           </a>
         </div>
